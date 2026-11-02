@@ -563,16 +563,20 @@ const say=t=>speak(t);
 function hush(){gen++;afterSpeak=null;pending=0;if(TTS)speechSynthesis.cancel()}
 function unlockAudio(){if(TTS){const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}}
 const speaking=()=>TTS&&(speechSynthesis.speaking||pending>0);
+// Chrome bricht Online-Stimmen nach ~15 s ab: alle 10 s kurz anstupsen
+if(TTS&&/Chrome/.test(navigator.userAgent)&&!/iP(hone|ad|od)/.test(navigator.userAgent))setInterval(()=>{const v=voice();if(speechSynthesis.speaking&&v&&!v.localService){speechSynthesis.pause();speechSynthesis.resume()}},10000);
 
 /* ================= Zuhören ================= */
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,listening=false,convo=false,recActive=false,ignoreUntil=0,lastHeard=0;
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,listening=false,convo=false,recActive=false,ignoreUntil=0,lastHeard=0,silTimer=0,flushed=false,lastFlush={t:"",at:0};
 /* Durchgehendes Zuhören: einmal antippen, dann bleibt das Mikrofon im Gespräch offen. Während Atlas spricht, wird nichts ausgewertet. */
 function ensureRec(){if(!SR||away)return false;if(recActive)return true;
   rec=new SR();rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;
-  rec.onstart=()=>{recActive=true};
-  rec.onresult=e=>{if(!convo||busy||speaking()||Date.now()<ignoreUntil)return;let interim="";
-    for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal){const t=r[0].transcript.trim();if(t){lastHeard=Date.now();$("heard").textContent=t;handleUtterance(t)}}else interim+=r[0].transcript}
-    if(interim){lastHeard=Date.now();$("heard").textContent=interim;vis.energy=Math.min(1,vis.energy+.3)}};
+  rec.onstart=()=>{recActive=true;flushed=false};
+  rec.onresult=e=>{clearTimeout(silTimer);if(flushed||!convo||busy||speaking()||Date.now()<ignoreUntil)return;let interim="";
+    for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal){const t=r[0].transcript.trim();if(t&&!(t===lastFlush.t&&Date.now()-lastFlush.at<4000)){lastHeard=Date.now();$("heard").textContent=t;handleUtterance(t)}}else interim+=r[0].transcript}
+    if(interim){lastHeard=Date.now();$("heard").textContent=interim;vis.energy=Math.min(1,vis.energy+.3);
+      // kurze Stille nach dem Sprechen = Satz fertig. Nicht auf das späte "final" warten, das spart 1–2 Sekunden.
+      const t=interim.trim();silTimer=setTimeout(()=>{if(flushed||!convo||busy||speaking()||t.length<2)return;flushed=true;lastFlush={t,at:Date.now()};try{rec.stop()}catch{}handleUtterance(t)},850)}};
   rec.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
   rec.onend=()=>{recActive=false;if((convo||stream)&&!away)setTimeout(()=>{if(recActive||away)return;try{rec.start()}catch{if(convo){listening=false;convo=false;setMode("idle","Kugel antippen zum Weitersprechen")}}},300)};
   try{rec.start();return true}catch{return false}}
@@ -582,8 +586,8 @@ function endConvo(label){convo=false;listening=false;$("heard").textContent="";s
 setInterval(()=>{if(convo&&!busy&&!speaking()&&Date.now()-lastHeard>60000)endConvo()},5000);
 function handleUtterance(t){$("heard").textContent=t;
   if(/^(stopp?|danke,? das war'?s|tschüss|ende)\b/i.test(t)){convo=false;listening=false;speak(pick(["Alles klar.","Gern. Bis später.","Passt, ich bin da, wenn du mich brauchst."]));addLog("mensch",t);return}
-  const brief=/briefing/i.test(t);if(brief&&isMain())speak("Alles klar, ich hol mir deinen Tag.");
-  listening=false;converse(t,{maxTokens:brief?1600:700})}
+  const brief=/briefing/i.test(t);
+  listening=false;converse(t,{maxTokens:brief?1600:700,pre:brief&&isMain()?"Alles klar, ich hol mir deinen Tag.":""})}
 function stopAll(){convo=false;listening=false;try{rec&&rec.abort()}catch{}hush();abortCtl?.abort();busy=false;setMode("idle",idleLabel())}
 
 /* ================= Claude ================= */
@@ -657,7 +661,7 @@ Kalender/Mails: ${bridge?"verbunden (briefing_daten)":"noch nicht eingerichtet"}
   return persona()+`
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""} Er bleibt meist nur kurz im Raum: warm, direkt, knapp, trockener Humor, kein Gerede. Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
 Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Erledigtes hakst du mit „abhaken“ ab, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
-BRIEFING, wenn er danach fragt: 1. briefing_daten aufrufen. 2. Mit der Websuche ein, zwei neue Studien oder Erkenntnisse der letzten Monate zu seinen Themen suchen (aus seiner Routine und seinen Supplements). 3. Dann in dieser Reihenfolge sprechen: was heute ansteht (mit Uhrzeiten), was er für morgen vorbereiten sollte, welche Mails eine Reaktion brauchen (Newsletter und Werbung weglassen), was in Routine und Supplements noch offen ist, Studien-Update in höchstens zwei Sätzen mit kurzer Quellenangabe. Höchstens 170 Wörter, am Ende eine kurze Frage.
+BRIEFING, wenn er danach fragt: 1. briefing_daten aufrufen. 2. Mit der Websuche ein, zwei neue Studien oder Erkenntnisse der letzten Monate zu seinen Themen suchen (aus seiner Routine und seinen Supplements). 3. Dann in dieser Reihenfolge sprechen: was heute ansteht (mit Uhrzeiten), was er für morgen vorbereiten sollte, welche Mails eine Reaktion brauchen: JEDE davon nennen, keine weglassen, je mit Absender und worum es geht (nur Newsletter und Werbung weglassen), was in Routine und Supplements noch offen ist, Studien-Update in höchstens zwei Sätzen mit kurzer Quellenangabe. Kurz und klar, aber vollständig: lieber etwas länger als etwas vergessen. Am Ende eine kurze Frage. Fragt er nach Details, gib sie ausführlich.
 ${memBlock}
 Stand heute ${M.name}: ${JSON.stringify(statusOf(M))}
 Weitere Erwachsene heute:
@@ -691,7 +695,9 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;let buf="",que
   const say1=s=>{s=clean(s);if(!s||!TTS)return;queued++;const u=mkUtt(s);
     u.onstart=()=>{if(my!==gen)return;started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
     u.onend=u.onerror=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
-  return{feed(d){all+=d;buf+=d;let m;while((m=buf.match(/^[\s\S]*?[.!?…:](\s+|$)/))&&m[0].trim().length>1){if(!/\s$/.test(m[0])&&buf.length===m[0].length)break;add(m[0]);buf=buf.slice(m[0].length)}},
+  return{feed(d){all+=d;buf+=d;let m;
+      if(!started&&queued<=0&&!bundle&&buf.length>70){const c=buf.match(/^[\s\S]{40,}?[,;–](\s+)/);if(c){add(c[0]);buf=buf.slice(c[0].length)}}
+      while((m=buf.match(/^[\s\S]*?[.!?…:](\s+|$)/))&&m[0].trim().length>1){if(!/\s$/.test(m[0])&&buf.length===m[0].length)break;add(m[0]);buf=buf.slice(m[0].length)}},
     end(cb){then=cb;if(buf.trim())bundle=bundle?bundle+" "+buf.trim():buf.trim();buf="";done=true;if(bundle)flush();if(queued<=0){finish();return}
       setTimeout(()=>{if(my===gen&&!started){if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke und Tonausgabe am Gerät prüfen.")}finish()}},3500);
       setTimeout(()=>{if(my===gen)finish()},5000+all.length*90/Math.max(.5,S.rate))},
@@ -704,7 +710,7 @@ function historyMsgs(){
   const out=[];for(const m of hist){const l=out[out.length-1];if(l&&l.role===m.role)l.content+="\n"+m.content;else out.push({...m})}return out}
 let abortCtl=null,busy=false;
 function whenIdle(fn){const tick=()=>{if(!busy&&!speaking()&&!listening)fn();else setTimeout(tick,300)};setTimeout(tick,200)}
-async function converse(text,{internal=false,maxTokens=700}={}){
+async function converse(text,{internal=false,maxTokens=700,pre=""}={}){
   if(away)return;
   if(!S.key){openSheet("setup");showErr("Bitte zuerst den API-Schlüssel eintragen.");return}
   if(busy)return;busy=true;showErr("");
@@ -712,7 +718,7 @@ async function converse(text,{internal=false,maxTokens=700}={}){
   setMode("think","Denkt nach");abortCtl=new AbortController();
   const tools=toolsFor(),msgs=historyMsgs();let answer="";
   try{
-    const sys=systemPrompt(),model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();
+    const sys=systemPrompt(),model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();if(pre)sp.feed(pre+" ");
     for(let round=0;round<8;round++){
       let res;
       try{res=await apiStream({model,max_tokens:maxTokens,system:sys,tools,messages:msgs},abortCtl.signal,d=>sp.feed(d))}
@@ -955,7 +961,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261102-1553";
+const APP_VERSION="20261102-1616";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
