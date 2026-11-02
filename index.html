@@ -531,17 +531,25 @@ const idleLabel=()=>away?"Abwesenheitsmodus":stream?"Raum-Modus · wartet":"Bere
 
 /* ================= Stimme ================= */
 const TTS="speechSynthesis" in window;let voices=[];
-function loadVoices(){if(!TTS)return;voices=speechSynthesis.getVoices().filter(v=>/^de/i.test(v.lang));const sc=v=>(/premium|enhanced|erweitert|siri|neural/i.test(v.name)?10:0)+(/anna|helena|petra|markus|viktor|yannick/i.test(v.name)?2:0);voices.sort((a,b)=>sc(b)-sc(a))}
+// wie im Morgen-Briefing: Premium steckt am iPhone in der voiceURI, nicht im Namen
+const vid=v=>v.voiceURI||v.name,vtxt=v=>v.name+" "+(v.voiceURI||"");
+const vtier=v=>/premium/i.test(vtxt(v))?2:/enhanced|erweitert|natural|neural|siri|wavenet|online/i.test(vtxt(v))?1:0;
+const VJUNK=/grandma|grandpa|eddy|flo\b|reed|rocko|sandy|shelley|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|albert|fred|junior|ralph|kathy|compact/i;
+function loadVoices(){if(!TTS)return;const de=speechSynthesis.getVoices().filter(v=>/^de/i.test(v.lang));voices=de.filter(v=>!VJUNK.test(vtxt(v)));if(!voices.length)voices=de;const sc=v=>vtier(v)*10+(/de-AT/i.test(v.lang)?3:0)+(/google/i.test(v.name)?2:0)+(v.localService?1:0);voices.sort((a,b)=>sc(b)-sc(a))}
 if(TTS){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
-const voice=()=>voices.find(v=>v.name===S.voice)||voices[0]||null;
+const voice=()=>voices.find(v=>vid(v)===S.voice)||voices.find(v=>v.name===S.voice&&vtier(v)===2)||voices.find(v=>v.name===S.voice)||voices[0]||null;
+const vlabel=v=>`${v.name}${vtier(v)===2?" · Premium":vtier(v)===1?" · Erweitert":""} (${v.lang})`;
+function mkUtt(t){const u=new SpeechSynthesisUtterance(t);const v=voice();u.lang=v?v.lang:"de-DE";if(v)u.voice=v;u.rate=S.rate;u.pitch=1;return u}
+// Sätze zu Abschnitten bis ~230 Zeichen bündeln: weniger Pausen, flüssiger
+function chunk(a,max=230){const out=[];let c="";for(const x of a){const y=x.trim();if(!y)continue;if(c&&c.length+y.length>max){out.push(c);c=y}else c=c?c+" "+y:y}if(c)out.push(c);return out}
 let pending=0,afterSpeak=null,gen=0;
 const clean=s=>String(s).replace(/https?:\/\/\S+/g,"").replace(/\[[^\]]*\]\([^)]*\)/g,"").replace(/[*#_`>•|]/g,"").replace(/\s+/g," ").trim();
 function speak(text,then){text=clean(text);$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
-  const my=++gen;speechSynthesis.cancel();const parts=text.match(/[^.!?…]+[.!?…]*\s*/g)||[text];afterSpeak=then||null;pending=parts.length;let started=false;
+  const my=++gen;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
   const finish=()=>{if(my!==gen||pending<0)return;pending=0;setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;f&&f()};
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
-    for(const p of parts){const u=new SpeechSynthesisUtterance(p.trim());u.lang="de-DE";const v=voice();if(v)u.voice=v;u.rate=S.rate;
+    for(const p of parts){const u=mkUtt(p);
       u.onstart=()=>{if(my!==gen)return;started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
       u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
@@ -677,11 +685,14 @@ async function apiStream(body,signal,onText){
 /* Spricht Satz für Satz, während die Antwort noch entsteht */
 function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;let buf="",queued=0,done=false,started=false,then=null,all="";
   const finish=()=>{if(my!==gen)return;gen++;setMode("idle",idleLabel());const f=then;then=null;f&&f()};
-  const say1=s=>{s=clean(s);if(!s||!TTS)return;queued++;const u=new SpeechSynthesisUtterance(s);u.lang="de-DE";const v=voice();if(v)u.voice=v;u.rate=S.rate;
+  let bundle="";const flush=()=>{const b=bundle;bundle="";say1(b)};
+  // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
+  const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
+  const say1=s=>{s=clean(s);if(!s||!TTS)return;queued++;const u=mkUtt(s);
     u.onstart=()=>{if(my!==gen)return;started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
-    u.onend=u.onerror=()=>{if(my!==gen)return;if(--queued<=0&&done)finish()};try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
-  return{feed(d){all+=d;buf+=d;let m;while((m=buf.match(/^[\s\S]*?[.!?…:](\s+|$)/))&&m[0].trim().length>1){if(!/\s$/.test(m[0])&&buf.length===m[0].length)break;say1(m[0]);buf=buf.slice(m[0].length)}},
-    end(cb){then=cb;say1(buf);buf="";done=true;if(queued<=0){finish();return}
+    u.onend=u.onerror=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
+  return{feed(d){all+=d;buf+=d;let m;while((m=buf.match(/^[\s\S]*?[.!?…:](\s+|$)/))&&m[0].trim().length>1){if(!/\s$/.test(m[0])&&buf.length===m[0].length)break;add(m[0]);buf=buf.slice(m[0].length)}},
+    end(cb){then=cb;if(buf.trim())bundle=bundle?bundle+" "+buf.trim():buf.trim();buf="";done=true;if(bundle)flush();if(queued<=0){finish();return}
       setTimeout(()=>{if(my===gen&&!started){if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke und Tonausgabe am Gerät prüfen.")}finish()}},3500);
       setTimeout(()=>{if(my===gen)finish()},5000+all.length*90/Math.max(.5,S.rate))},
     get spoken(){return all.length>0}}}
@@ -872,7 +883,7 @@ function renderSetup(){
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
   $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
-  const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";voices.forEach(v=>{const o=document.createElement("option");o.value=v.name;o.textContent=`${v.name} (${v.lang})`;sv.append(o)});sv.value=voice()?.name||"";
+  const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
   $("kTest").onclick=async()=>{const k=cleanKey($("sKey").value);$("kRes").textContent="Teste…";
@@ -882,7 +893,7 @@ function renderSetup(){
     catch(e){$("kRes").textContent="Keine Verbindung: "+(e.message||e.name)+" · Länge des Schlüssels: "+k.length}};
   $("sTest").addEventListener("click",()=>{const d=$("sDiag");if(!TTS){d.textContent="Dieser Browser hat keine Sprachausgabe.";return}
     const all=speechSynthesis.getVoices(),de=all.filter(v=>/^de/i.test(v.lang));let log=[`Stimmen gesamt: ${all.length}, deutsch: ${de.length}`,`Gewählt: ${$("sVoice").value||"(Standard)"}`];d.textContent=log.join("\n");
-    const u=new SpeechSynthesisUtterance("Test eins zwei drei.");u.lang="de-DE";const v=de.find(x=>x.name===$("sVoice").value);if(v)u.voice=v;
+    const u=new SpeechSynthesisUtterance("Test eins zwei drei.");const v=de.find(x=>vid(x)===$("sVoice").value);u.lang=v?v.lang:"de-DE";if(v)u.voice=v;
     const t0=Date.now();u.onstart=()=>{log.push("Start nach "+(Date.now()-t0)+" ms");d.textContent=log.join("\n")};u.onend=()=>{log.push("Ende. Hörst du nichts, liegt es an der Tonausgabe des Geräts.");d.textContent=log.join("\n")};
     u.onerror=e=>{log.push("Fehler: "+(e.error||"?"));d.textContent=log.join("\n")};
     setTimeout(()=>{speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),150)},4500);
@@ -944,7 +955,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261102-1515";
+const APP_VERSION="20261102-1553";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
