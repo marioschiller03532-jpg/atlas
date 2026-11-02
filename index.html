@@ -864,7 +864,8 @@ function listenForCode(){
         if(codeTries>=3){codeBlock=Date.now()+5*60000;codeTries=0;speak("Das war nicht richtig. Das Tablet bleibt jetzt fünf Minuten gesperrt.")}else speak("Das war nicht richtig.")}};
     try{rec.start()}catch{}})}
 // Keine Zoom-, Kontextmenü- oder Ziehgesten
-["gesturestart","contextmenu"].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
+document.addEventListener("gesturestart",e=>e.preventDefault());
+document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closest&&t.closest("input,textarea")))e.preventDefault()});
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Start ================= */
