@@ -387,7 +387,7 @@ const SESSION=Date.now().toString(36);
 function showErr(m){$("err").textContent=m||"";$("err").hidden=!m}
 
 /* ================= Einstellungen & Profile ================= */
-const S=Object.assign({key:"",model:"claude-sonnet-5-5",aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,noSearch:false},ls.get("settings",{}));
+const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,noSearch:false},ls.get("settings",{}));
 const saveSettings=()=>ls.set("settings",S);
 const TYP={haupt:"Hauptnutzer",erwachsen:"Erwachsen",kind:"Kind",gast:"Gast"};
 const DEFAULT_PROFILES=[
@@ -658,6 +658,32 @@ const cleanKey=k=>String(k||"").replace(/[^\x21-\x7E]/g,"");
 async function api(body,signal){
   const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",signal,headers:{"content-type":"application/json","x-api-key":cleanKey(S.key),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify(body)});
   if(!r.ok){const e=new Error(await r.text());e.status=r.status;throw e}return r.json()}
+async function apiStream(body,signal,onText){
+  const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",signal,headers:{"content-type":"application/json","x-api-key":cleanKey(S.key),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({...body,stream:true})});
+  if(!r.ok){const e=new Error(await r.text());e.status=r.status;throw e}
+  const rd=r.body.getReader(),dec=new TextDecoder();let buf="",msg={content:[],stop_reason:null};
+  const handle=ev=>{const t=ev.type;
+    if(t==="message_start"){msg={...ev.message,content:[]}}
+    else if(t==="content_block_start"){const b={...ev.content_block};if(b.type==="tool_use"||b.type==="server_tool_use"){b._json="";if(!b.input||!Object.keys(b.input).length)b.input={}}if(b.type==="text"){b.text=b.text||"";delete b.citations}msg.content[ev.index]=b}
+    else if(t==="content_block_delta"){const b=msg.content[ev.index],d=ev.delta;if(!b)return;
+      if(d.type==="text_delta"){b.text+=d.text;onText&&onText(d.text)}else if(d.type==="input_json_delta")b._json+=d.partial_json;else if(d.type==="thinking_delta")b.thinking=(b.thinking||"")+d.thinking;else if(d.type==="signature_delta")b.signature=d.signature}
+    else if(t==="content_block_stop"){const b=msg.content[ev.index];if(b&&"_json" in b){if(b._json){try{b.input=JSON.parse(b._json)}catch{}}delete b._json}}
+    else if(t==="message_delta"){if(ev.delta&&ev.delta.stop_reason)msg.stop_reason=ev.delta.stop_reason}
+    else if(t==="error"){const e=new Error(JSON.stringify(ev.error||ev));e.status=ev.error&&ev.error.type==="overloaded_error"?529:500;throw e}};
+  for(;;){const {value,done}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});let i;
+    while((i=buf.indexOf("\n\n"))>=0){const chunk=buf.slice(0,i);buf=buf.slice(i+2);const line=chunk.split("\n").find(l=>l.startsWith("data:"));if(!line)continue;let ev;try{ev=JSON.parse(line.slice(5))}catch{continue}handle(ev)}}
+  msg.content=msg.content.filter(Boolean);return msg}
+/* Spricht Satz für Satz, während die Antwort noch entsteht */
+function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;let buf="",queued=0,done=false,started=false,then=null,all="";
+  const finish=()=>{if(my!==gen)return;gen++;setMode("idle",idleLabel());const f=then;then=null;f&&f()};
+  const say1=s=>{s=clean(s);if(!s||!TTS)return;queued++;const u=new SpeechSynthesisUtterance(s);u.lang="de-DE";const v=voice();if(v)u.voice=v;u.rate=S.rate;
+    u.onstart=()=>{if(my!==gen)return;started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+    u.onend=u.onerror=()=>{if(my!==gen)return;if(--queued<=0&&done)finish()};try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
+  return{feed(d){all+=d;buf+=d;let m;while((m=buf.match(/^[\s\S]*?[.!?…:](\s+|$)/))&&m[0].trim().length>1){if(!/\s$/.test(m[0])&&buf.length===m[0].length)break;say1(m[0]);buf=buf.slice(m[0].length)}},
+    end(cb){then=cb;say1(buf);buf="";done=true;if(queued<=0){finish();return}
+      setTimeout(()=>{if(my===gen&&!started){if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke und Tonausgabe am Gerät prüfen.")}finish()}},3500);
+      setTimeout(()=>{if(my===gen)finish()},5000+all.length*90/Math.max(.5,S.rate))},
+    get spoken(){return all.length>0}}}
 const textOf=res=>(res.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
 function historyMsgs(){
   const src=isMain()?log:log.filter(m=>m.person===cur.name);
@@ -674,19 +700,21 @@ async function converse(text,{internal=false,maxTokens=700}={}){
   setMode("think","Denkt nach");abortCtl=new AbortController();
   const tools=toolsFor(),msgs=historyMsgs();let answer="";
   try{
+    const sys=systemPrompt(),model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();
     for(let round=0;round<8;round++){
       let res;
-      try{res=await api({model:S.model,max_tokens:maxTokens,system:systemPrompt(),tools,messages:msgs},abortCtl.signal)}
+      try{res=await apiStream({model,max_tokens:maxTokens,system:sys,tools,messages:msgs},abortCtl.signal,d=>sp.feed(d))}
       catch(e){if(e.status===400&&/web_search/i.test(e.message)&&tools.includes(WEB)){S.noSearch=true;saveSettings();tools.splice(tools.indexOf(WEB),1);continue}throw e}
-      answer+=" "+textOf(res);
+      answer+=" "+textOf(res);sp.feed(" ");
       if(res.stop_reason==="pause_turn"){msgs.push({role:"assistant",content:res.content});continue}
       if(res.stop_reason!=="tool_use")break;
       msgs.push({role:"assistant",content:res.content});
       const results=[];for(const b of res.content)if(b.type==="tool_use")results.push({type:"tool_result",tool_use_id:b.id,content:String(await runTool(b.name,b.input||{}))});
       msgs.push({role:"user",content:results});
     }
-    answer=clean(answer)||"Erledigt.";addLog("assistent",answer);busy=false;scheduleProto();
-    speak(answer,()=>{ignoreUntil=Date.now()+700;if(convo)listen()});
+    answer=clean(answer);if(!answer){answer="Erledigt.";sp.feed(answer)}
+    addLog("assistent",answer);busy=false;scheduleProto();
+    sp.end(()=>{ignoreUntil=Date.now()+700;if(convo)listen()});
   }catch(e){busy=false;setMode("idle",idleLabel());if(e.name==="AbortError")return;
     const m=e.message||"";showErr(e.status===401?"API-Schlüssel ist ungültig. Bitte unter Mehr → Einstellungen prüfen.":e.status===429?"Zu viele Anfragen oder Limit erreicht. Kurz warten.":/credit|balance/i.test(m)?"Kein Guthaben mehr im Anthropic-Konto.":e.status===404?"Modell nicht gefunden. Unter Einstellungen ein anderes wählen.":e.status===529||e.status===503?"Claude ist gerade überlastet. Gleich nochmal.":e.status?("Fehler "+e.status+": "+m.slice(0,160)):("Keine Verbindung zu Claude ("+(e.message||e.name||"unbekannt")+"). Unter Mehr → Einstellungen → „Claude testen“ prüfen."))}}
 
@@ -821,7 +849,8 @@ function renderSetup(){
   const el=$("pane-setup");loadVoices();
   el.innerHTML=`<section class="card"><h2>Grundlagen</h2>
     <div class="field"><label for="sKey">Anthropic-API-Schlüssel</label><input type="password" id="sKey" placeholder="sk-ant-…" autocomplete="off"><div class="note">Bleibt nur auf diesem Gerät.</div><div class="row"><button class="btn small" type="button" id="kTest">Claude testen</button><span class="note" id="kRes"></span></div></div>
-    <div class="grid2"><div class="field"><label for="sModel">Modell</label><select id="sModel"><option value="claude-sonnet-5-5">Sonnet 5.5 (empfohlen)</option><option value="claude-haiku-5-5">Haiku 5.5 (schneller, günstiger)</option><option value="claude-opus-5-5">Opus 5.5 (am stärksten)</option></select></div>
+    <div class="grid2"><div class="field"><label for="sFast">Modell fürs Gespräch</label><select id="sFast"><option value="claude-haiku-5-5">Haiku 5.5 (schnell, empfohlen)</option><option value="claude-sonnet-5-5">Sonnet 5.5 (gründlicher)</option></select></div>
+    <div class="field"><label for="sModel">Modell für Briefing und Protokolle</label><select id="sModel"><option value="claude-sonnet-5-5">Sonnet 5.5 (empfohlen)</option><option value="claude-haiku-5-5">Haiku 5.5 (schneller, günstiger)</option><option value="claude-opus-5-5">Opus 5.5 (am stärksten)</option></select></div>
     <div class="field"><label for="sName">Name des Assistenten</label><input type="text" id="sName"></div></div>
     <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="ruhe">Ruhige Kugel (empfohlen)</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
     <div class="field"><label for="sFx">Effekt beim Sprechen</label><select id="sFx"><option value="supernova">Supernova (ruhige Kugel)</option><option value="urknall">Urknall (ruhige Kugel)</option><option value="pur">Pur (Partikel-Kern)</option><option value="funken">Funken (Partikel-Kern)</option><option value="atmen">Atmen (Partikel-Kern)</option><option value="hud">Jarvis-HUD (Partikel-Kern)</option></select></div></div>
@@ -840,7 +869,7 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("sKey").value=S.key;$("sModel").value=S.model;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
+  $("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";voices.forEach(v=>{const o=document.createElement("option");o.value=v.name;o.textContent=`${v.name} (${v.lang})`;sv.append(o)});sv.value=voice()?.name||"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
@@ -869,7 +898,7 @@ function renderSetup(){
     if($("pd"+i))$("pd"+i).onclick=()=>{draft.splice(i,1);drawProfiles()}})};
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
-  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.aname=$("sName").value.trim()||"Atlas";S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
+  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.aname=$("sName").value.trim()||"Atlas";S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
