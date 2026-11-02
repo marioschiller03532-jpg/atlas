@@ -542,12 +542,14 @@ function speak(text,then){text=clean(text);$("said").textContent=text;if(!TTS||!
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
     for(const p of parts){const u=new SpeechSynthesisUtterance(p.trim());u.lang="de-DE";const v=voice();if(v)u.voice=v;u.rate=S.rate;
       u.onstart=()=>{if(my!==gen)return;started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
-      u.onend=u.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u)}},150);
+      u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
+      u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
+      speechSynthesis.speak(u)}},150);
   // Absicherung: startet die Stimme nicht, geht es trotzdem weiter (Text steht ja da)
   setTimeout(()=>{if(my===gen&&!started&&pending>0){if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
   // Notbremse, falls das Ende nie gemeldet wird
   setTimeout(()=>{if(my===gen&&pending>0)finish()},4000+text.length*90/Math.max(.5,S.rate))}
-let soundWarned=false;
+let soundWarned=false,lastTTSerr="";
 const say=t=>speak(t);
 function hush(){gen++;afterSpeak=null;pending=0;if(TTS)speechSynthesis.cancel()}
 function unlockAudio(){if(TTS){const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}}
@@ -827,7 +829,7 @@ function renderSetup(){
     <div class="field"><label for="sVoice">Stimme</label><select id="sVoice"></select></div></div>
     <div class="field"><label for="sRate">Sprechtempo</label><input type="range" id="sRate" min="0.8" max="1.2" step="0.02"></div>
     <div class="note">Natürlicher klingt eine Premium-Stimme: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch → z. B. „Anna (Premium)“ laden.</div>
-    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div></section>
+    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
   <section class="card"><h2>Raum-Modus</h2>
     <div class="grid2"><div class="field"><label for="sCool">Neu begrüßen, wenn der Raum so lange leer war (Minuten)</label><input type="number" id="sCool" min="1" max="240"></div>
     <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div></div>
@@ -847,6 +849,13 @@ function renderSetup(){
     try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:$("sModel").value,max_tokens:20,messages:[{role:"user",content:"Sag nur: Verbindung steht."}]})});
       const t=await r.text();if(r.ok){$("kRes").textContent="Klappt: "+(JSON.parse(t).content?.[0]?.text||"ok")}else $("kRes").textContent="Fehler "+r.status+": "+t.slice(0,200)}
     catch(e){$("kRes").textContent="Keine Verbindung: "+(e.message||e.name)+" · Länge des Schlüssels: "+k.length}};
+  $("sTest").addEventListener("click",()=>{const d=$("sDiag");if(!TTS){d.textContent="Dieser Browser hat keine Sprachausgabe.";return}
+    const all=speechSynthesis.getVoices(),de=all.filter(v=>/^de/i.test(v.lang));let log=[`Stimmen gesamt: ${all.length}, deutsch: ${de.length}`,`Gewählt: ${$("sVoice").value||"(Standard)"}`];d.textContent=log.join("\n");
+    const u=new SpeechSynthesisUtterance("Test eins zwei drei.");u.lang="de-DE";const v=de.find(x=>x.name===$("sVoice").value);if(v)u.voice=v;
+    const t0=Date.now();u.onstart=()=>{log.push("Start nach "+(Date.now()-t0)+" ms");d.textContent=log.join("\n")};u.onend=()=>{log.push("Ende. Hörst du nichts, liegt es an der Tonausgabe des Geräts.");d.textContent=log.join("\n")};
+    u.onerror=e=>{log.push("Fehler: "+(e.error||"?"));d.textContent=log.join("\n")};
+    setTimeout(()=>{speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),150)},4500);
+    setTimeout(()=>{if(log.length<3){log.push("Kein Start nach 3 s: speaking="+speechSynthesis.speaking+", pending="+speechSynthesis.pending+", paused="+speechSynthesis.paused);d.textContent=log.join("\n")}},8000)});
   $("sTest").onclick=()=>{unlockAudio();const o={v:S.voice,r:S.rate};S.voice=$("sVoice").value;S.rate=+$("sRate").value;speak(`Hallo ${main().name}, so klinge ich. Passt das für dich?`);S.voice=o.v;S.rate=o.r};
   const ed=$("profEd");let draft=JSON.parse(JSON.stringify(profiles)),syncs=[];
   const drawProfiles=()=>{ed.innerHTML="";syncs=[];draft.forEach((p,i)=>{const box=document.createElement("div");box.className="prof";
