@@ -532,19 +532,26 @@ function unlockAudio(){if(TTS){const u=new SpeechSynthesisUtterance(" ");u.volum
 const speaking=()=>TTS&&(speechSynthesis.speaking||pending>0);
 
 /* ================= Zuhören ================= */
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,listening=false,convo=false;
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,listening=false,convo=false,recActive=false,ignoreUntil=0,lastHeard=0;
+/* Durchgehendes Zuhören: einmal antippen, dann bleibt das Mikrofon im Gespräch offen. Während Atlas spricht, wird nichts ausgewertet. */
+function ensureRec(){if(!SR||away)return false;if(recActive)return true;
+  rec=new SR();rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;
+  rec.onstart=()=>{recActive=true};
+  rec.onresult=e=>{if(!convo||busy||speaking()||Date.now()<ignoreUntil)return;let interim="";
+    for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal){const t=r[0].transcript.trim();if(t){lastHeard=Date.now();$("heard").textContent=t;handleUtterance(t)}}else interim+=r[0].transcript}
+    if(interim){lastHeard=Date.now();$("heard").textContent=interim;vis.energy=Math.min(1,vis.energy+.3)}};
+  rec.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
+  rec.onend=()=>{recActive=false;if((convo||stream)&&!away)setTimeout(()=>{if(recActive||away)return;try{rec.start()}catch{if(convo){listening=false;convo=false;setMode("idle","Kugel antippen zum Weitersprechen")}}},300)};
+  try{rec.start();return true}catch{return false}}
 function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safari (iPad) oder Chrome verwenden.");return}
-  if(listening||busy)return;hush();rec=new SR();rec.lang="de-DE";rec.interimResults=true;rec.continuous=false;let final="",heard="";
-  rec.onstart=()=>{listening=true;setMode("listen","Hört zu");$("heard").textContent="…"};
-  rec.onresult=e=>{let t="";final="";for(const r of e.results){t+=r[0].transcript;if(r.isFinal)final+=r[0].transcript}heard=t;$("heard").textContent=t;vis.energy=Math.min(1,vis.energy+.3)};
-  rec.onerror=e=>{listening=false;if(e.error==="not-allowed")showErr("Mikrofon ist nicht erlaubt. In den Geräte-Einstellungen bei Safari das Mikrofon erlauben.")};
-  rec.onend=()=>{listening=false;const t=(final||heard).trim();if(t)handleUtterance(t);else{setMode("idle",idleLabel());$("heard").textContent=""}};
-  try{rec.start()}catch{}}
+  if(busy)return;convo=true;listening=true;lastHeard=Date.now();ensureRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
+function endConvo(label){convo=false;listening=false;$("heard").textContent="";setMode("idle",label||idleLabel())}
+setInterval(()=>{if(convo&&!busy&&!speaking()&&Date.now()-lastHeard>60000)endConvo()},5000);
 function handleUtterance(t){$("heard").textContent=t;
-  if(/^(stopp?|danke,? das war'?s|tschüss|ende)\b/i.test(t)){convo=false;speak(pick(["Alles klar.","Gern. Bis später.","Passt, ich bin da, wenn du mich brauchst."]));addLog("mensch",t);return}
+  if(/^(stopp?|danke,? das war'?s|tschüss|ende)\b/i.test(t)){convo=false;listening=false;speak(pick(["Alles klar.","Gern. Bis später.","Passt, ich bin da, wenn du mich brauchst."]));addLog("mensch",t);return}
   const brief=/briefing/i.test(t);if(brief&&isMain())speak("Alles klar, ich hol mir deinen Tag.");
-  converse(t,{maxTokens:brief?1600:700})}
-function stopAll(){convo=false;try{rec&&rec.abort()}catch{}listening=false;hush();abortCtl?.abort();busy=false;setMode("idle",idleLabel())}
+  listening=false;converse(t,{maxTokens:brief?1600:700})}
+function stopAll(){convo=false;listening=false;try{rec&&rec.abort()}catch{}hush();abortCtl?.abort();busy=false;setMode("idle",idleLabel())}
 
 /* ================= Claude ================= */
 const T={
@@ -655,7 +662,7 @@ async function converse(text,{internal=false,maxTokens=700}={}){
       msgs.push({role:"user",content:results});
     }
     answer=clean(answer)||"Erledigt.";addLog("assistent",answer);busy=false;scheduleProto();
-    speak(answer,()=>{if(convo&&/\?\s*$/.test(answer))setTimeout(listen,300)});
+    speak(answer,()=>{ignoreUntil=Date.now()+700;if(convo)listen()});
   }catch(e){busy=false;setMode("idle",idleLabel());if(e.name==="AbortError")return;
     const m=e.message||"";showErr(e.status===401?"API-Schlüssel ist ungültig. Bitte unter Mehr → Einstellungen prüfen.":e.status===429?"Zu viele Anfragen oder Limit erreicht. Kurz warten.":/credit|balance/i.test(m)?"Kein Guthaben mehr im Anthropic-Konto.":e.status===404?"Modell nicht gefunden. Unter Einstellungen ein anderes wählen.":e.status===529||e.status===503?"Claude ist gerade überlastet. Gleich nochmal.":e.status?("Fehler "+e.status+": "+m.slice(0,160)):("Keine Verbindung zu Claude ("+(e.message||e.name||"unbekannt")+"). Unter Mehr → Einstellungen → „Claude testen“ prüfen."))}}
 
@@ -667,7 +674,7 @@ function greet(){
   addLog("intern","(Jemand ist in den Raum gekommen. Begrüßt wurde zuerst "+M.name+".)");addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300))}
 let stream=null,lastMotion=0,lastGreet=0,prevFrame=null,motionTimer=null,wake=null;
 const small=document.createElement("canvas");small.width=48;small.height=36;const sctx=small.getContext("2d",{willReadFrequently:true});
-async function startRoom(){unlockAudio();
+async function startRoom(){unlockAudio();ensureRec();
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play()}
   catch{if(away)$("awayBar").textContent="Abwesenheitsmodus · Kugel antippen, um die Bewegungserkennung zu starten";else showErr("Kamera ist nicht erlaubt. Ohne Kamera keine Bewegungserkennung, alles andere funktioniert.");return}
   try{wake=await navigator.wakeLock?.request("screen")}catch{}
@@ -684,7 +691,7 @@ function checkMotion(){if(!stream)return;
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
 
 /* ================= Bedienung ================= */
-$("vis").onclick=()=>{unlockAudio();if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();convo=true;listen();return}if(listening){try{rec.stop()}catch{}return}if(busy)return;convo=true;
+$("vis").onclick=()=>{unlockAudio();if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("roomBtn").onclick=()=>stream?stopRoom():startRoom();
 $("stopBtn").onclick=stopAll;
@@ -844,6 +851,7 @@ function endAway(){away=false;ls.set("away",false);applyAway();awayLog("ende")}
 function awayVisitor(){awayLog("bewegung");notify(`Atlas: Bewegung im Biohacking-Raum um ${hhmm()} Uhr (Abwesenheitsmodus).`);
   speak(pick([`Hallo! ${main().name} ist gerade nicht da. Ich bin ${S.aname}, das Tablet ist gesperrt.`,`Hallo. ${main().name} ist nicht da. Der Raum ist im Abwesenheitsmodus.`]))}
 function listenForCode(){
+  convo=false;listening=false;try{rec&&rec.abort()}catch{}recActive=false;
   if(!SR){$("awayBar").textContent="Spracheingabe fehlt in diesem Browser";return}
   if(Date.now()<codeBlock){speak("Zu viele Versuche. Bitte später nochmal.");return}
   speak("Sprachcode bitte.",()=>{rec=new SR();rec.lang="de-DE";rec.interimResults=false;rec.continuous=false;let got="";
