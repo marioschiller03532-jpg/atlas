@@ -848,7 +848,7 @@ function wireBackup(){
 function renderSetup(){
   const el=$("pane-setup");loadVoices();
   el.innerHTML=`<section class="card"><h2>Grundlagen</h2>
-    <div class="field"><label for="sKey">Anthropic-API-Schlüssel</label><input type="password" id="sKey" placeholder="sk-ant-…" autocomplete="off"><div class="note">Bleibt nur auf diesem Gerät.</div><div class="row"><button class="btn small" type="button" id="kTest">Claude testen</button><span class="note" id="kRes"></span></div></div>
+    <div class="field"><label for="sKey">Anthropic-API-Schlüssel</label><input type="password" id="sKey" placeholder="sk-ant-…" autocomplete="off"><div class="note">Bleibt nur auf diesem Gerät. App-Version: <span id="appVer"></span></div><div class="row"><button class="btn small" type="button" id="kTest">Claude testen</button><span class="note" id="kRes"></span></div></div>
     <div class="grid2"><div class="field"><label for="sFast">Modell fürs Gespräch</label><select id="sFast"><option value="claude-haiku-5-5">Haiku 5.5 (schnell, empfohlen)</option><option value="claude-sonnet-5-5">Sonnet 5.5 (gründlicher)</option></select></div>
     <div class="field"><label for="sModel">Modell für Briefing und Protokolle</label><select id="sModel"><option value="claude-sonnet-5-5">Sonnet 5.5 (empfohlen)</option><option value="claude-haiku-5-5">Haiku 5.5 (schneller, günstiger)</option><option value="claude-opus-5-5">Opus 5.5 (am stärksten)</option></select></div>
     <div class="field"><label for="sName">Name des Assistenten</label><input type="text" id="sName"></div></div>
@@ -869,7 +869,7 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
+  $("appVer").textContent=APP_VERSION;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";voices.forEach(v=>{const o=document.createElement("option");o.value=v.name;o.textContent=`${v.name} (${v.lang})`;sv.append(o)});sv.value=voice()?.name||"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
@@ -940,6 +940,13 @@ function listenForCode(){
 document.addEventListener("gesturestart",e=>e.preventDefault());
 document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closest&&t.closest("input,textarea")))e.preventDefault()});
 document.addEventListener("dragstart",e=>e.preventDefault());
+
+/* ================= Automatische Updates ================= */
+const APP_VERSION="20261102-1502";
+async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
+  if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
+setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")checkUpdate()});
 
 /* ================= Start ================= */
 function applyNames(){$("aname").textContent=S.aname;document.title=S.aname;setMode(vis.mode,idleLabel())}
