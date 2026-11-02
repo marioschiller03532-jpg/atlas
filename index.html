@@ -537,7 +537,8 @@ const vtier=v=>/premium/i.test(vtxt(v))?2:/enhanced|erweitert|natural|neural|sir
 const VJUNK=/grandma|grandpa|eddy|flo\b|reed|rocko|sandy|shelley|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|albert|fred|junior|ralph|kathy|compact/i;
 function loadVoices(){if(!TTS)return;const de=speechSynthesis.getVoices().filter(v=>/^de/i.test(v.lang));voices=de.filter(v=>!VJUNK.test(vtxt(v)));if(!voices.length)voices=de;const sc=v=>vtier(v)*10+(/de-AT/i.test(v.lang)?3:0)+(/google/i.test(v.name)?2:0)+(v.localService?1:0);voices.sort((a,b)=>sc(b)-sc(a))}
 if(TTS){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
-const voice=()=>voices.find(v=>vid(v)===S.voice)||voices.find(v=>v.name===S.voice&&vtier(v)===2)||voices.find(v=>v.name===S.voice)||voices[0]||null;
+// "system" = keine Stimme vorgeben: das Gerät nimmt seine eingestellte Systemstimme (z. B. Siri-Stimme 2)
+const voice=()=>S.voice==="system"?null:voices.find(v=>vid(v)===S.voice)||voices.find(v=>v.name===S.voice&&vtier(v)===2)||voices.find(v=>v.name===S.voice)||voices[0]||null;
 const vlabel=v=>`${v.name}${vtier(v)===2?" · Premium":vtier(v)===1?" · Erweitert":""} (${v.lang})`;
 function mkUtt(t){const u=new SpeechSynthesisUtterance(t);const v=voice();u.lang=v?v.lang:"de-DE";if(v)u.voice=v;u.rate=S.rate;u.pitch=1;return u}
 // Sätze zu Abschnitten bis ~230 Zeichen bündeln: weniger Pausen, flüssiger
@@ -889,7 +890,7 @@ function renderSetup(){
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
   $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
-  const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=cv?vid(cv):"";
+  const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
   $("kTest").onclick=async()=>{const k=cleanKey($("sKey").value);$("kRes").textContent="Teste…";
@@ -961,7 +962,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261102-1616";
+const APP_VERSION="20261102-1947";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
