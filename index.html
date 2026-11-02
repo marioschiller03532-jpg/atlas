@@ -495,10 +495,10 @@ Nur was wirklich gesagt wurde, nichts erfinden. Knapp, höchstens 220 Wörter, k
 GESPRÄCH:
 `;
 const transcript=L=>L.filter(m=>m.rolle!=="intern").map(m=>`${m.uhr||""} ${m.rolle==="assistent"?S.aname+" (zu "+m.person+")":m.person}: ${m.text}`).join("\n").slice(-60000);
-async function summarize(d,L){const tr=transcript(L);if(!tr.trim()||!S.key)return null;const res=await api({model:S.model,max_tokens:1000,messages:[{role:"user",content:PROTO(d)+tr}]});return textOf(res).trim()||null}
+async function summarize(d,L){const tr=transcript(L);if(!tr.trim()||!S.key)return null;const res=await api({model:S.fastModel||S.model,max_tokens:800,messages:[{role:"user",content:PROTO(d)+tr}]});return textOf(res).trim()||null}
 async function saveProto(d,sid,text){const p={text,aktualisiert:new Date().toISOString()};await putSealed(`proto:${d}:${sid}`,p);if(privKey){const arr=(mem.protos[d]=mem.protos[d]||[]).filter(x=>x.sid!==sid);arr.push({sid,...p});mem.protos[d]=arr}}
 let protoTimer=null,protoLen=0,protoBusy=false;
-function scheduleProto(){clearTimeout(protoTimer);protoTimer=setTimeout(sessionProto,3*60000)}
+function scheduleProto(){clearTimeout(protoTimer);protoTimer=setTimeout(sessionProto,10*60000)}
 async function sessionProto(){if(protoBusy||!vault())return;const n=log.filter(m=>m.rolle==="mensch").length;if(!n||log.length===protoLen)return;protoBusy=true;
   try{const t=await summarize(today,log);if(t){await saveProto(today,SESSION,t);protoLen=log.length;if(!$("sheet").hidden&&pane==="tresor")renderPane()}}catch{}finally{protoBusy=false}}
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"){clearTimeout(protoTimer);sessionProto()}});
@@ -512,7 +512,7 @@ async function consolidate(){ // vergangene Tage zu einem Protokoll zusammenfüh
         const sess=(mem.protos[d]||[]).filter(x=>x.sid!=="tag").sort((a,b)=>a.aktualisiert<b.aktualisiert?-1:1);
         let final=null;
         if(sess.length===1)final=sess[0].text;
-        else if(sess.length>1){const res=await api({model:S.model,max_tokens:1000,messages:[{role:"user",content:`Führe diese Teilprotokolle vom ${fmtDay(d)} zu EINEM Tagesprotokoll zusammen. Gleiches Format (Überschriften in Großbuchstaben, Stichpunkte mit „– “), Doppeltes streichen, nichts erfinden, höchstens 250 Wörter.\n\n`+sess.map(s=>s.text).join("\n\n---\n\n")}]});final=textOf(res).trim()}
+        else if(sess.length>1){const res=await api({model:S.fastModel||S.model,max_tokens:800,messages:[{role:"user",content:`Führe diese Teilprotokolle vom ${fmtDay(d)} zu EINEM Tagesprotokoll zusammen. Gleiches Format (Überschriften in Großbuchstaben, Stichpunkte mit „– “), Doppeltes streichen, nichts erfinden, höchstens 250 Wörter.\n\n`+sess.map(s=>s.text).join("\n\n---\n\n")}]});final=textOf(res).trim()}
         if(!final)continue;await saveProto(d,"tag",final)}
       for(const k of ls.keys(`log:${d}:`))ls.del(k);
       for(const k of ls.keys(`proto:${d}:`))if(!k.endsWith(":tag"))ls.del(k);
@@ -651,9 +651,9 @@ Du sprichst mit ${p.name}, einem Gast. Sei freundlich, frag, was ${p.name} brauc
   const others=profiles.filter(x=>x.typ==="erwachsen").map(x=>`${x.name}: ${JSON.stringify(statusOf(x))}`).join("\n")||"keine";
   let memBlock;
   if(privKey){const ds=Object.keys(mem.protos).sort();const earlier=(mem.protos[today]||[]).filter(x=>x.sid!==SESSION).map(x=>x.text).join("\n\n");
-    const recent=ds.filter(d=>d<today).slice(-6).map(d=>`[${fmtDay(d)}]\n`+mem.protos[d].map(x=>x.text).join("\n")).join("\n\n");
+    const recent=ds.filter(d=>d<today).slice(-3).map(d=>`[${fmtDay(d)}]\n`+mem.protos[d].map(x=>x.text).join("\n")).join("\n\n");
     memBlock=`DEIN GEDÄCHTNIS (Tresor offen):
-Notizen: ${mem.notes.slice(-80).map(n=>"- "+n.text+" ("+n.zeit.slice(0,10)+")").join("\n").slice(-7000)||"keine"}
+Notizen: ${mem.notes.slice(-80).map(n=>"- "+n.text+" ("+n.zeit.slice(0,10)+")").join("\n").slice(-4000)||"keine"}
 Früher heute: ${earlier.slice(-3000)||"nichts"}
 Protokolle der letzten Tage:
 ${recent.slice(-9000)||"keine"}
@@ -706,7 +706,7 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;let buf="",que
 const textOf=res=>(res.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
 function historyMsgs(){
   const src=isMain()?log:log.filter(m=>m.person===cur.name);
-  const hist=src.slice(-26).map(m=>({role:m.rolle==="assistent"?"assistant":"user",content:(m.rolle==="mensch"&&isMain()&&m.person!==cur.name?`[${m.person}] `:"")+m.text}));
+  const hist=src.slice(-14).map(m=>({role:m.rolle==="assistent"?"assistant":"user",content:(m.rolle==="mensch"&&isMain()&&m.person!==cur.name?`[${m.person}] `:"")+m.text}));
   while(hist.length&&hist[0].role!=="user")hist.shift();
   const out=[];for(const m of hist){const l=out[out.length-1];if(l&&l.role===m.role)l.content+="\n"+m.content;else out.push({...m})}return out}
 let abortCtl=null,busy=false;
@@ -717,13 +717,13 @@ async function converse(text,{internal=false,maxTokens=700,pre=""}={}){
   if(busy)return;busy=true;showErr("");
   addLog(internal?"intern":"mensch",text);
   setMode("think","Denkt nach");abortCtl=new AbortController();
-  const tools=toolsFor(),msgs=historyMsgs();let answer="";
+  const brief=maxTokens>=1600,tools=toolsFor().map(t=>t===WEB?{...WEB,max_uses:brief?2:1}:t),msgs=historyMsgs();let answer="";
   try{
     const sys=systemPrompt(),model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();if(pre)sp.feed(pre+" ");
     for(let round=0;round<8;round++){
       let res;
-      try{res=await apiStream({model,max_tokens:maxTokens,system:sys,tools,messages:msgs},abortCtl.signal,d=>sp.feed(d))}
-      catch(e){if(e.status===400&&/web_search/i.test(e.message)&&tools.includes(WEB)){S.noSearch=true;saveSettings();tools.splice(tools.indexOf(WEB),1);continue}throw e}
+      try{res=await apiStream({model,max_tokens:maxTokens,system:brief?[{type:"text",text:sys,cache_control:{type:"ephemeral"}}]:sys,tools,messages:msgs},abortCtl.signal,d=>sp.feed(d))}
+      catch(e){const wi=tools.findIndex(t=>t.name==="web_search");if(e.status===400&&/web_search/i.test(e.message)&&wi>=0){S.noSearch=true;saveSettings();tools.splice(wi,1);continue}throw e}
       answer+=" "+textOf(res);sp.feed(" ");
       if(res.stop_reason==="pause_turn"){msgs.push({role:"assistant",content:res.content});continue}
       if(res.stop_reason!=="tool_use")break;
@@ -962,7 +962,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261102-1947";
+const APP_VERSION="20261102-1953";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
