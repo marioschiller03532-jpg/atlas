@@ -387,7 +387,7 @@ const SESSION=Date.now().toString(36);
 function showErr(m){$("err").textContent=m||"";$("err").hidden=!m}
 
 /* ================= Einstellungen & Profile ================= */
-const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,noSearch:false},ls.get("settings",{}));
+const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",quick:true,aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,noSearch:false},ls.get("settings",{}));
 const saveSettings=()=>ls.set("settings",S);
 const TYP={haupt:"Hauptnutzer",erwachsen:"Erwachsen",kind:"Kind",gast:"Gast"};
 const DEFAULT_PROFILES=[
@@ -403,7 +403,7 @@ const isMain=()=>cur.typ==="haupt";
 function setPerson(name){
   const p=findProfile(name);const prev=cur;
   cur=p||{id:"gast-"+norm(name).replace(/ /g,"-"),name:String(name||"Gast").trim()||"Gast",typ:"gast",info:"",routine:[],supps:[],notes:[]};
-  if(prev.typ==="haupt"&&cur.typ!=="haupt"&&privKey)lockVault();
+  if(!S.quick&&prev.typ==="haupt"&&cur.typ!=="haupt"&&privKey)lockVault();
   renderPerson();if(!$("sheet").hidden)renderPane();return cur}
 function renderPerson(){const c=$("personChip");c.textContent=cur.name;c.classList.toggle("kind",cur.typ==="kind")}
 
@@ -428,17 +428,18 @@ async function createVault(code){
   const salt=rnd(16),iv=rnd(12),iter=310000,k=await kek(code,salt,iter);
   const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},k,pk8);
   ls.set("vault",{v:1,iter,salt:toB64(salt),iv:toB64(iv),ct:toB64(ct),pub:toB64(spki)});
-  pubKey=kp.publicKey;privKey=kp.privateKey;unlockedAt=Date.now();mem={notes:[],protos:{}};
+  pubKey=kp.publicKey;privKey=kp.privateKey;unlockedAt=Date.now();mem={notes:[],protos:{}};if(S.quick)ls.set("devkey",toB64(pk8));
   if(log.length)persistLog();renderLock()}
 async function getPub(){if(pubKey)return pubKey;const v=vault();if(!v)return null;pubKey=await crypto.subtle.importKey("spki",fromB64(v.pub),RSA,false,["encrypt"]);return pubKey}
 async function unlockVault(code){
   const v=vault();if(!v)return false;const k=await kek(code,fromB64(v.salt),v.iter);let pk8;
   try{pk8=await crypto.subtle.decrypt({name:"AES-GCM",iv:fromB64(v.iv)},k,fromB64(v.ct))}catch{return false}
-  privKey=await crypto.subtle.importKey("pkcs8",pk8,RSA,true,["decrypt"]);unlockedAt=Date.now();
+  privKey=await crypto.subtle.importKey("pkcs8",pk8,RSA,true,["decrypt"]);unlockedAt=Date.now();if(S.quick)ls.set("devkey",toB64(pk8));
   await loadMemory();renderLock();consolidate();return true}
+async function quickUnlock(){const d=ls.get("devkey",null);if(!S.quick||!d||!vault()||privKey)return false;try{privKey=await crypto.subtle.importKey("pkcs8",fromB64(d),RSA,true,["decrypt"]);unlockedAt=Date.now();await loadMemory();renderLock();consolidate();return true}catch{ls.del("devkey");return false}}
 async function changeCode(code){const v=vault(),pk8=await crypto.subtle.exportKey("pkcs8",privKey),salt=rnd(16),iv=rnd(12),k=await kek(code,salt,v.iter);
   const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},k,pk8);ls.set("vault",{...v,salt:toB64(salt),iv:toB64(iv),ct:toB64(ct)})}
-function lockVault(){privKey=null;bridge=null;mem={notes:[],protos:{}};renderLock();if(!$("sheet").hidden&&pane!=="heute")renderPane()}
+function lockVault(forget){if(forget)ls.del("devkey");privKey=null;bridge=null;mem={notes:[],protos:{}};renderLock();if(!$("sheet").hidden&&pane!=="heute")renderPane()}
 async function seal(obj){const pk=await getPub();if(!pk)return null;
   const aes=await crypto.subtle.generateKey({name:"AES-GCM",length:256},true,["encrypt"]),raw=await crypto.subtle.exportKey("raw",aes);
   const ek=await crypto.subtle.encrypt(RSA,pk,raw),iv=rnd(12),ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},aes,te.encode(JSON.stringify(obj)));
@@ -460,7 +461,7 @@ function askCode(after,mode){if(away)return;codeAfter=after||null;codeMode=mode|
   $("codeNote").textContent=codeMode==="create"?"Mit diesem Code schützt du Protokolle, Notizen, Kalender und Mails. Mindestens 6 Zeichen. Gut merken: Ohne Code sind die Daten nicht lesbar, auch nicht für mich.":codeMode==="change"?"Mindestens 6 Zeichen.":"Dein Gedächtnis-Tresor ist gesperrt.";
   $("codeIn2").hidden=!create;$("codeReset").hidden=create;$("codeIn").value=$("codeIn2").value="";$("codeErr").hidden=true;$("codeOk").textContent=create?"Festlegen":"Öffnen";
   $("codeModal").hidden=false;setTimeout(()=>$("codeIn").focus(),50)}
-$("codeReset").onclick=()=>{$("codeModal").hidden=true;confirmBox("Tresor neu anlegen?","Alle Protokolle, Notizen und die Kalender-Verbindung auf diesem Gerät werden gelöscht. Einstellungen, Personen und der API-Schlüssel bleiben. Danach legst du einen neuen Code fest.",()=>{for(const p of ["vault","note:","proto:","log:","bridge","away:","voicecode"])for(const k of ls.keys(p))ls.del(k);ls.del("vault");ls.del("bridge");ls.del("voicecode");pubKey=null;privKey=null;mem={notes:[],protos:{}};renderLock();askCode(null,"create")})};
+$("codeReset").onclick=()=>{$("codeModal").hidden=true;confirmBox("Tresor neu anlegen?","Alle Protokolle, Notizen und die Kalender-Verbindung auf diesem Gerät werden gelöscht. Einstellungen, Personen und der API-Schlüssel bleiben. Danach legst du einen neuen Code fest.",()=>{for(const p of ["vault","note:","proto:","log:","bridge","away:","voicecode","devkey"])for(const k of ls.keys(p))ls.del(k);ls.del("vault");ls.del("bridge");ls.del("voicecode");pubKey=null;privKey=null;mem={notes:[],protos:{}};renderLock();askCode(null,"create")})};
 $("codeCancel").onclick=()=>{$("codeModal").hidden=true;codeAfter=null};
 $("codeForm").onsubmit=async e=>{e.preventDefault();const raw=$("codeIn").value,c=raw.trim(),err=m=>{$("codeErr").textContent=m;$("codeErr").hidden=false};
   if(codeMode!=="unlock"){if(c.length<6)return err("Mindestens 6 Zeichen.");if(c!==$("codeIn2").value.trim())return err("Die beiden Eingaben sind nicht gleich.");
@@ -474,7 +475,7 @@ $("codeForm").onsubmit=async e=>{e.preventDefault();const raw=$("codeIn").value,
   if(a==="briefing")whenIdle(()=>converse("(System: Code korrekt, der Tresor ist offen. Mach jetzt das Briefing.)",{internal:true,maxTokens:1600}));
   else if(a==="verlauf")whenIdle(()=>converse("(System: Code korrekt, der Tresor ist offen. Beantworte jetzt meine letzte Frage, nutze verlauf_suchen.)",{internal:true}));
   else if(a&&a.startsWith("sheet"))openSheet(a.split(":")[1]||"heute")};
-$("lockBtn").onclick=()=>{if(privKey){lockVault();say("Tresor gesperrt.")}else if(!isMain()){showErr("Der Tresor gehört "+main().name+".")}else askCode("sheet")};
+$("lockBtn").onclick=()=>{if(privKey){lockVault(true);say("Tresor gesperrt.")}else if(!isMain()){showErr("Der Tresor gehört "+main().name+".")}else askCode("sheet")};
 
 /* ================= Gespräch, Protokolle, Gedächtnis ================= */
 let log=[];  // nur im Arbeitsspeicher, verschlüsselt gesichert
@@ -777,7 +778,7 @@ function renderToday(){
     <button class="btn primary" type="button" id="aBrief">Briefing</button>
     <button class="btn" type="button" id="aRoom">${stream?"Raum-Modus aus":"Raum-Modus an"}</button>
     <button class="btn" type="button" id="aStop">Stopp</button>
-    <button class="btn" type="button" id="aLock">Sperren und schließen</button></div>
+    <button class="btn" type="button" id="aLock">Mit Code sperren</button></div>
     <form class="row" id="aType"><input type="text" id="aTypeIn" placeholder="Atlas etwas schreiben…" style="flex:1" autocomplete="off"><button class="btn small">Senden</button></form></section>
   <section class="card"><h2>Mit wem spricht ${esc(S.aname)}?</h2><div class="pchips" id="whoChips"></div><div class="note">Normalerweise stellt sich jeder per Stimme vor („Ich bin Anna“). Hier geht es auch per Tippen.</div></section>
   <section class="card"><div class="row" style="justify-content:space-between"><h2>Heute · ${esc(p.name)}</h2>${cur.typ==="haupt"?'<div class="pchips" id="viewChips"></div>':""}</div>
@@ -786,7 +787,7 @@ function renderToday(){
   $("aBrief").onclick=()=>{$("sheet").hidden=true;$("briefBtn").click()};
   $("aRoom").onclick=()=>{stream?stopRoom():startRoom();setTimeout(renderToday,400)};
   $("aStop").onclick=()=>{stopAll();$("sheet").hidden=true};
-  $("aLock").onclick=()=>{lockVault();$("sheet").hidden=true};
+  $("aLock").onclick=()=>{lockVault(true);$("sheet").hidden=true};
   $("aType").onsubmit=e=>{e.preventDefault();const v=$("aTypeIn").value.trim();if(!v)return;$("aTypeIn").value="";$("sheet").hidden=true;unlockAudio();convo=false;handleUtterance(v)};
   const who=$("whoChips");profiles.forEach(x=>{const b=document.createElement("button");b.textContent=x.name;b.setAttribute("aria-pressed",x.id===cur.id);
     b.onclick=()=>{setPerson(x.name);renderToday()};who.append(b)});
@@ -804,7 +805,7 @@ async function renderTresor(){
   const protoHtml=days.length?days.map((d,i)=>{const ps=mem.protos[d].slice().sort((a,b)=>a.aktualisiert<b.aktualisiert?-1:1);const tag=ps.find(x=>x.sid==="tag");const show=tag?[tag]:ps;
     return `<details class="proto" ${i===0?"open":""}><summary>${esc(fmtDay(d))}<span>${tag?"Tagesprotokoll":show.length+" Teil"+(show.length>1?"e":"")}</span></summary>${show.map(x=>`<div class="t">${esc(x.text)}</div>`).join("")}</details>`}).join(""):'<div class="note">Noch kein Protokoll. Das erste entsteht ein paar Minuten nach eurem ersten Gespräch.</div>';
   el.innerHTML=`<section class="card"><div class="row" style="justify-content:space-between"><h2>Tresor offen</h2><div class="row"><button class="btn small" id="lk">Sperren</button><button class="btn small" id="cc">Code ändern</button></div></div>
-    <div class="note">Sperrt sich automatisch nach ${S.lockHours} Stunden und sobald jemand anderes mit ${esc(S.aname)} spricht.</div></section>
+    <div class="note">${S.quick?"Zu Hause bleibt der Tresor offen, ohne Code. Den Code brauchst du nur nach „Mit Code sperren“ oder wenn das Gerät neu eingerichtet wird. Im Abwesenheitsmodus öffnet nur dein Sprachcode.":"Sperrt sich automatisch nach "+S.lockHours+" Stunden und sobald jemand anderes mit "+esc(S.aname)+" spricht."}</div></section>
   <section class="card"><div class="row" style="justify-content:space-between"><h2>Tagesprotokolle</h2><button class="btn small" id="pn">Heute jetzt zusammenfassen</button></div>${protoHtml}</section>
   <section class="card"><h2>Gedächtnis · Notizen</h2><ul class="mlist" id="nl"></ul><form class="row" id="nf"><input type="text" id="ni" placeholder="Etwas zum Merken eintragen" style="flex:1"><button class="btn small">Merken</button></form></section>
   <section class="card"><h2>Gespräch heute (seit ${hhmm(new Date(parseInt(SESSION,36)))})</h2><div class="convo" id="cv"></div></section>
@@ -815,7 +816,7 @@ async function renderTresor(){
     <div class="field"><label for="nfWord">Meldewort für E-Mail-Benachrichtigung (aus der Google-Brücke)</label><input type="password" id="nfWord" autocomplete="off" placeholder="${bridge?"MELDEWORT aus dem Skript":"erst Google-Brücke einrichten"}" ${bridge?"":"disabled"}></div>
     <div class="row"><button class="btn small" id="nfSave" type="button" ${bridge?"":"disabled"}>Benachrichtigung speichern</button><button class="btn small primary" id="awGo" type="button">Abwesenheitsmodus starten</button></div>
     <div id="awLog"></div></section>`+backupCard();
-  $("lk").onclick=()=>lockVault();$("cc").onclick=()=>askCode(null,"change");
+  $("lk").onclick=()=>lockVault(true);$("cc").onclick=()=>askCode(null,"change");
   $("pn").onclick=async()=>{if(!log.some(m=>m.rolle==="mensch"))return;$("pn").textContent="Fasse zusammen…";protoLen=-1;await sessionProto();renderTresor()};
   mem.notes.slice().reverse().forEach(n=>{const li=document.createElement("li");li.innerHTML=`<span></span><time>${esc(new Date(n.zeit).toLocaleDateString("de-AT",{day:"numeric",month:"short"}))}</time><button aria-label="Löschen">×</button>`;li.querySelector("span").textContent=n.text;
     li.querySelector("button").onclick=()=>confirmBox("Notiz löschen?",n.text,()=>{ls.del(n.k);mem.notes=mem.notes.filter(x=>x!==n);renderTresor()});$("nl").append(li)});
@@ -862,14 +863,15 @@ function renderSetup(){
   <section class="card"><h2>Raum-Modus</h2>
     <div class="grid2"><div class="field"><label for="sCool">Neu begrüßen, wenn der Raum so lange leer war (Minuten)</label><input type="number" id="sCool" min="1" max="240"></div>
     <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div></div>
-    <div class="field"><label for="sLock">Tresor automatisch sperren nach (Stunden)</label><input type="number" id="sLock" min="1" max="48"></div></section>
+    <label class="row" for="sQuick" style="gap:10px"><input type="checkbox" id="sQuick" style="width:22px;height:22px"> Zu Hause ohne Code (Code nur nach Sperren oder im Abwesenheitsmodus)</label>
+    <div class="field"><label for="sLock">Sonst automatisch sperren nach (Stunden)</label><input type="number" id="sLock" min="1" max="48"></div></section>
   <section class="card"><h2>Kalender & Mails (Google-Brücke)</h2>
     ${privKey?`<div class="field"><label for="bUrl">Web-App-Adresse (endet auf /exec)</label><input type="url" id="bUrl" placeholder="https://script.google.com/macros/s/…/exec"></div><div class="field"><label for="bTok">Geheimwort</label><input type="password" id="bTok" autocomplete="off"></div><div class="row"><button class="btn small" type="button" id="bTest">Verbindung testen</button><span class="note" id="bRes"></span></div><div class="note">Wird verschlüsselt im Tresor gespeichert.</div>`:`<div class="note">Zum Einrichten erst den Tresor öffnen (🔒 oben).</div>`}</section>
   <section class="card"><h2>Personen</h2><div class="note">Eine Zeile pro Routine-Schritt bzw. Supplement. Kinder bekommen keine Listen.</div><div id="profEd" style="display:grid;gap:10px"></div><div class="row"><button class="btn small" type="button" id="pAdd">+ Person</button></div></section>
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("appVer").textContent=APP_VERSION;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
+  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";voices.forEach(v=>{const o=document.createElement("option");o.value=v.name;o.textContent=`${v.name} (${v.lang})`;sv.append(o)});sv.value=voice()?.name||"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
@@ -898,7 +900,7 @@ function renderSetup(){
     if($("pd"+i))$("pd"+i).onclick=()=>{draft.splice(i,1);drawProfiles()}})};
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
-  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.aname=$("sName").value.trim()||"Atlas";S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
+  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
@@ -920,7 +922,7 @@ function notify(text){const n=ls.get("notify",null);if(!n||!n.url||!n.word||Date
   fetch(n.url+(n.url.includes("?")?"&":"?")+"a=melden&m="+encodeURIComponent(n.word)+"&text="+encodeURIComponent(text),{mode:"no-cors"}).catch(()=>{})}
 async function startAway(){if(!voiceCode())return;convo=false;try{rec&&rec.abort()}catch{}listening=false;abortCtl?.abort();busy=false;
   away=true;ls.set("away",true);lockVault();if(cur.typ!=="haupt")setPerson(main().name);applyAway();awayLog("start");if(!stream)startRoom()}
-function endAway(){away=false;ls.set("away",false);applyAway();awayLog("ende")}
+function endAway(){away=false;ls.set("away",false);applyAway();awayLog("ende");quickUnlock()}
 function awayVisitor(){awayLog("bewegung");notify(`Atlas: Bewegung im Biohacking-Raum um ${hhmm()} Uhr (Abwesenheitsmodus).`);
   speak(pick([`Hallo! ${main().name} ist gerade nicht da. Ich bin ${S.aname}, das Tablet ist gesperrt.`,`Hallo. ${main().name} ist nicht da. Der Raum ist im Abwesenheitsmodus.`]))}
 function listenForCode(){
@@ -942,7 +944,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261102-1506";
+const APP_VERSION="20261102-1515";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
@@ -951,10 +953,10 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 /* ================= Start ================= */
 function applyNames(){$("aname").textContent=S.aname;document.title=S.aname;setMode(vis.mode,idleLabel())}
 function tick(){const d=new Date();$("clock").textContent=hhmm(d);$("dateline").textContent=d.toLocaleDateString("de-AT",{weekday:"long",day:"numeric",month:"long"});
-  if(privKey&&Date.now()-unlockedAt>S.lockHours*3600e3)lockVault();
+  if(!S.quick&&privKey&&Date.now()-unlockedAt>S.lockHours*3600e3)lockVault();
   if(dayKey()!==today){const old=today,L=log.slice();clearTimeout(protoTimer);
     (async()=>{try{const t=await summarize(old,L);if(t)await saveProto(old,SESSION,t)}catch{}})();today=dayKey();log=[];protoLen=0;persistChain=Promise.resolve()}}
-setInterval(tick,15000);tick();applyNames();renderPerson();renderLock();applyAway();if(away)startRoom();
+setInterval(tick,15000);tick();applyNames();renderPerson();renderLock();applyAway();if(!away)quickUnlock();if(away)startRoom();
 if(!window.isSecureContext||!crypto.subtle)showErr("Dieses Gerät erlaubt hier keine Verschlüsselung. Bitte über eine https-Adresse öffnen.");
 if(!SR)$("state").textContent="Bereit · Spracheingabe nur in Safari oder Chrome";
 </script>
