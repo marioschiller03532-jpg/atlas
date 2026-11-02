@@ -166,10 +166,11 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
   <form class="modal-in" id="codeForm">
     <h3 id="codeTitle">Code eingeben</h3>
     <div class="note" id="codeNote">Dein Gedächtnis-Tresor ist gesperrt.</div>
-    <input type="password" id="codeIn" class="big" inputmode="numeric" autocomplete="off" aria-label="Code">
-    <input type="password" id="codeIn2" class="big" inputmode="numeric" autocomplete="off" placeholder="wiederholen" aria-label="Code wiederholen" hidden>
+    <input type="password" id="codeIn" class="big" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Code">
+    <input type="password" id="codeIn2" class="big" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="wiederholen" aria-label="Code wiederholen" hidden>
     <div class="err" id="codeErr" hidden></div>
     <div class="row"><button class="btn primary" id="codeOk">Öffnen</button><button class="btn" type="button" id="codeCancel">Abbrechen</button></div>
+    <button class="btn small" type="button" id="codeReset" style="background:none;border:0;color:var(--muted);justify-self:start;padding:4px 0">Code vergessen? Tresor neu anlegen</button>
   </form>
 </div>
 
@@ -457,8 +458,9 @@ let codeMode="unlock",codeAfter=null,fails=0,blockUntil=0;
 function askCode(after,mode){if(away)return;codeAfter=after||null;codeMode=mode||(vault()?"unlock":"create");
   const create=codeMode!=="unlock";$("codeTitle").textContent=codeMode==="create"?"Tresor-Code festlegen":codeMode==="change"?"Neuen Code festlegen":"Code eingeben";
   $("codeNote").textContent=codeMode==="create"?"Mit diesem Code schützt du Protokolle, Notizen, Kalender und Mails. Mindestens 6 Zeichen. Gut merken: Ohne Code sind die Daten nicht lesbar, auch nicht für mich.":codeMode==="change"?"Mindestens 6 Zeichen.":"Dein Gedächtnis-Tresor ist gesperrt.";
-  $("codeIn2").hidden=!create;$("codeIn").value=$("codeIn2").value="";$("codeErr").hidden=true;$("codeOk").textContent=create?"Festlegen":"Öffnen";
+  $("codeIn2").hidden=!create;$("codeReset").hidden=create;$("codeIn").value=$("codeIn2").value="";$("codeErr").hidden=true;$("codeOk").textContent=create?"Festlegen":"Öffnen";
   $("codeModal").hidden=false;setTimeout(()=>$("codeIn").focus(),50)}
+$("codeReset").onclick=()=>{$("codeModal").hidden=true;confirmBox("Tresor neu anlegen?","Alle Protokolle, Notizen und die Kalender-Verbindung auf diesem Gerät werden gelöscht. Einstellungen, Personen und der API-Schlüssel bleiben. Danach legst du einen neuen Code fest.",()=>{for(const p of ["vault","note:","proto:","log:","bridge","away:","voicecode"])for(const k of ls.keys(p))ls.del(k);ls.del("vault");ls.del("bridge");ls.del("voicecode");pubKey=null;privKey=null;mem={notes:[],protos:{}};renderLock();askCode(null,"create")})};
 $("codeCancel").onclick=()=>{$("codeModal").hidden=true;codeAfter=null};
 $("codeForm").onsubmit=async e=>{e.preventDefault();const c=$("codeIn").value,err=m=>{$("codeErr").textContent=m;$("codeErr").hidden=false};
   if(codeMode!=="unlock"){if(c.length<6)return err("Mindestens 6 Zeichen.");if(c!==$("codeIn2").value)return err("Die beiden Eingaben sind nicht gleich.");
