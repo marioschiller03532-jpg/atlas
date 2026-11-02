@@ -462,12 +462,12 @@ function askCode(after,mode){if(away)return;codeAfter=after||null;codeMode=mode|
   $("codeModal").hidden=false;setTimeout(()=>$("codeIn").focus(),50)}
 $("codeReset").onclick=()=>{$("codeModal").hidden=true;confirmBox("Tresor neu anlegen?","Alle Protokolle, Notizen und die Kalender-Verbindung auf diesem Gerät werden gelöscht. Einstellungen, Personen und der API-Schlüssel bleiben. Danach legst du einen neuen Code fest.",()=>{for(const p of ["vault","note:","proto:","log:","bridge","away:","voicecode"])for(const k of ls.keys(p))ls.del(k);ls.del("vault");ls.del("bridge");ls.del("voicecode");pubKey=null;privKey=null;mem={notes:[],protos:{}};renderLock();askCode(null,"create")})};
 $("codeCancel").onclick=()=>{$("codeModal").hidden=true;codeAfter=null};
-$("codeForm").onsubmit=async e=>{e.preventDefault();const c=$("codeIn").value,err=m=>{$("codeErr").textContent=m;$("codeErr").hidden=false};
-  if(codeMode!=="unlock"){if(c.length<6)return err("Mindestens 6 Zeichen.");if(c!==$("codeIn2").value)return err("Die beiden Eingaben sind nicht gleich.");
+$("codeForm").onsubmit=async e=>{e.preventDefault();const raw=$("codeIn").value,c=raw.trim(),err=m=>{$("codeErr").textContent=m;$("codeErr").hidden=false};
+  if(codeMode!=="unlock"){if(c.length<6)return err("Mindestens 6 Zeichen.");if(c!==$("codeIn2").value.trim())return err("Die beiden Eingaben sind nicht gleich.");
     $("codeOk").disabled=true;try{codeMode==="create"?await createVault(c):await changeCode(c)}catch{$("codeOk").disabled=false;return err("Verschlüsselung geht hier nicht. Bitte über eine https-Adresse öffnen.")}$("codeOk").disabled=false;
     $("codeModal").hidden=true;if(!$("sheet").hidden)renderPane();return}
   if(Date.now()<blockUntil)return err("Zu viele Versuche. Bitte eine Minute warten.");
-  $("codeOk").disabled=true;let ok=false;try{ok=await unlockVault(c)}catch{}$("codeOk").disabled=false;
+  $("codeOk").disabled=true;let ok=false;try{ok=await unlockVault(c)||(raw!==c&&await unlockVault(raw))}catch{}$("codeOk").disabled=false;
   if(!ok){fails++;if(fails>=5){blockUntil=Date.now()+60000;fails=0}return err("Falscher Code.")}
   fails=0;$("codeModal").hidden=true;if(!$("sheet").hidden)renderPane();
   const a=codeAfter;codeAfter=null;
@@ -942,7 +942,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261102-1502";
+const APP_VERSION="20261102-1506";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
