@@ -420,7 +420,7 @@ const toB64=buf=>{const b=new Uint8Array(buf);let s="";for(let i=0;i<b.length;i+
 const fromB64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const rnd=n=>crypto.getRandomValues(new Uint8Array(n));
 const RSA={name:"RSA-OAEP",hash:"SHA-256"};
-let pubKey=null,privKey=null,unlockedAt=0,bridge=null,mem={notes:[],protos:{}};
+let pubKey=null,privKey=null,unlockedAt=0,bridge=null,mem={notes:[],protos:{},prefs:[]};
 const vault=()=>ls.get("vault",null);
 async function kek(code,salt,iter){const base=await crypto.subtle.importKey("raw",te.encode(code),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:iter,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
 async function createVault(code){
@@ -429,7 +429,7 @@ async function createVault(code){
   const salt=rnd(16),iv=rnd(12),iter=310000,k=await kek(code,salt,iter);
   const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},k,pk8);
   ls.set("vault",{v:1,iter,salt:toB64(salt),iv:toB64(iv),ct:toB64(ct),pub:toB64(spki)});
-  pubKey=kp.publicKey;privKey=kp.privateKey;unlockedAt=Date.now();mem={notes:[],protos:{}};if(S.quick)ls.set("devkey",toB64(pk8));
+  pubKey=kp.publicKey;privKey=kp.privateKey;unlockedAt=Date.now();mem={notes:[],protos:{},prefs:[]};if(S.quick)ls.set("devkey",toB64(pk8));
   if(log.length)persistLog();renderLock()}
 async function getPub(){if(pubKey)return pubKey;const v=vault();if(!v)return null;pubKey=await crypto.subtle.importKey("spki",fromB64(v.pub),RSA,false,["encrypt"]);return pubKey}
 async function unlockVault(code){
@@ -440,7 +440,7 @@ async function unlockVault(code){
 async function quickUnlock(){const d=ls.get("devkey",null);if(!S.quick||!d||!vault()||privKey)return false;try{privKey=await crypto.subtle.importKey("pkcs8",fromB64(d),RSA,true,["decrypt"]);unlockedAt=Date.now();await loadMemory();renderLock();consolidate();return true}catch{ls.del("devkey");return false}}
 async function changeCode(code){const v=vault(),pk8=await crypto.subtle.exportKey("pkcs8",privKey),salt=rnd(16),iv=rnd(12),k=await kek(code,salt,v.iter);
   const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},k,pk8);ls.set("vault",{...v,salt:toB64(salt),iv:toB64(iv),ct:toB64(ct)})}
-function lockVault(forget){if(forget)ls.del("devkey");privKey=null;bridge=null;mem={notes:[],protos:{}};renderLock();if(!$("sheet").hidden&&pane!=="heute")renderPane()}
+function lockVault(forget){if(forget)ls.del("devkey");privKey=null;bridge=null;mem={notes:[],protos:{},prefs:[]};renderLock();if(!$("sheet").hidden&&pane!=="heute")renderPane()}
 async function seal(obj){const pk=await getPub();if(!pk)return null;
   const aes=await crypto.subtle.generateKey({name:"AES-GCM",length:256},true,["encrypt"]),raw=await crypto.subtle.exportKey("raw",aes);
   const ek=await crypto.subtle.encrypt(RSA,pk,raw),iv=rnd(12),ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},aes,te.encode(JSON.stringify(obj)));
@@ -448,7 +448,8 @@ async function seal(obj){const pk=await getPub();if(!pk)return null;
 async function unseal(s){if(!privKey||!s||!s.ek)return null;try{const raw=await crypto.subtle.decrypt(RSA,privKey,fromB64(s.ek));const aes=await crypto.subtle.importKey("raw",raw,"AES-GCM",false,["decrypt"]);return JSON.parse(td.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:fromB64(s.iv)},aes,fromB64(s.ct))))}catch{return null}}
 async function putSealed(k,obj){const s=await seal(obj);return s?ls.set(k,s):false}
 async function loadMemory(){
-  const m={notes:[],protos:{}};
+  const m={notes:[],protos:{},prefs:[]};
+  for(const k of ls.keys("pref:")){const n=await unseal(ls.get(k));if(n)m.prefs.push({...n,k})}
   for(const k of ls.keys("note:")){const n=await unseal(ls.get(k));if(n)m.notes.push({...n,k})}
   m.notes.sort((a,b)=>a.zeit<b.zeit?-1:1);
   for(const k of ls.keys("proto:")){const [,d,sid]=k.split(":");const p=await unseal(ls.get(k));if(p)(m.protos[d]=m.protos[d]||[]).push({sid,...p})}
@@ -462,7 +463,7 @@ function askCode(after,mode){if(away)return;codeAfter=after||null;codeMode=mode|
   $("codeNote").textContent=codeMode==="create"?"Mit diesem Code schützt du Protokolle, Notizen, Kalender und Mails. Mindestens 6 Zeichen. Gut merken: Ohne Code sind die Daten nicht lesbar, auch nicht für mich.":codeMode==="change"?"Mindestens 6 Zeichen.":"Dein Gedächtnis-Tresor ist gesperrt.";
   $("codeIn2").hidden=!create;$("codeReset").hidden=create;$("codeIn").value=$("codeIn2").value="";$("codeErr").hidden=true;$("codeOk").textContent=create?"Festlegen":"Öffnen";
   $("codeModal").hidden=false;setTimeout(()=>$("codeIn").focus(),50)}
-$("codeReset").onclick=()=>{$("codeModal").hidden=true;confirmBox("Tresor neu anlegen?","Alle Protokolle, Notizen und die Kalender-Verbindung auf diesem Gerät werden gelöscht. Einstellungen, Personen und der API-Schlüssel bleiben. Danach legst du einen neuen Code fest.",()=>{for(const p of ["vault","note:","proto:","log:","bridge","away:","voicecode","devkey"])for(const k of ls.keys(p))ls.del(k);ls.del("vault");ls.del("bridge");ls.del("voicecode");pubKey=null;privKey=null;mem={notes:[],protos:{}};renderLock();askCode(null,"create")})};
+$("codeReset").onclick=()=>{$("codeModal").hidden=true;confirmBox("Tresor neu anlegen?","Alle Protokolle, Notizen und die Kalender-Verbindung auf diesem Gerät werden gelöscht. Einstellungen, Personen und der API-Schlüssel bleiben. Danach legst du einen neuen Code fest.",()=>{for(const p of ["vault","note:","pref:","proto:","log:","bridge","away:","voicecode","devkey"])for(const k of ls.keys(p))ls.del(k);ls.del("vault");ls.del("bridge");ls.del("voicecode");pubKey=null;privKey=null;mem={notes:[],protos:{}};renderLock();askCode(null,"create")})};
 $("codeCancel").onclick=()=>{$("codeModal").hidden=true;codeAfter=null};
 $("codeForm").onsubmit=async e=>{e.preventDefault();const raw=$("codeIn").value,c=raw.trim(),err=m=>{$("codeErr").textContent=m;$("codeErr").hidden=false};
   if(codeMode!=="unlock"){if(c.length<6)return err("Mindestens 6 Zeichen.");if(c!==$("codeIn2").value.trim())return err("Die beiden Eingaben sind nicht gleich.");
@@ -632,15 +633,38 @@ function localTick(t){if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return null;co
   const s=statusOf(cur),open=s.routine.filter(x=>!x.erledigt).length+s.supplements.filter(x=>!x.genommen).length;
   const names=hits.map(h=>h.v.split(/\s[–-]\s/)[0]);
   return `${names.join(" und ")} ${names.length>1?"sind":"ist"} abgehakt.`+(open?` Noch ${open} offen.`:" Damit ist alles erledigt für heute!")}
-// Geprüfter Antwort-Speicher: nur allgemeine Wissensfragen, nichts Persönliches, nichts Sensibles, mit Ablaufzeit
+// ---- 1) Allgemeiner Antwort-Cache: nur zeitloses Allgemeinwissen, max. 14 Tage
 const PERSONAL=/\b(ich|mir|mich|mein\w*|du|dir|dich|dein\w*|wir|uns|unser\w*|heute|gestern|morgen|jetzt|gerade|eva|jonas|leni)\b/i;
-const SENSITIVE=/sex|libido|erot|potenz|krank|schmerz|medikament|diagnos|blut|depress|angst|stuhl|verdau|herz|glut|geld|konto|passwort|code/i;
+const SENSITIVE=/sex|libido|erot|potenz|krank|schmerz|medikament|diagnos|blut|depress|angst|stuhl|verdau|herz|glut|geld|konto|passwort|code|schwanger|dosis|dosier|wie viel|wieviel|nebenwirk|wechselwirk/i;
 const CACHE_TTL=14*864e5;let pendingCache=null;
-const cacheable=(q,a)=>toks(q).length>=3&&!PERSONAL.test(q)&&!SENSITIVE.test(q)&&!SENSITIVE.test(a)&&a.length>20&&a.length<450&&!profiles.some(p=>a.includes(p.name));
-function cacheFind(q){if(PERSONAL.test(q)||SENSITIVE.test(q))return null;const T=toks(q),now=Date.now();let best=null;
-  for(const e of ls.get("acache",[])){if(now-e.at>CACHE_TTL)continue;const sc=sim(T,e.t);if(sc>=.85&&(!best||sc>best.sc))best={...e,sc}}return best}
-function cacheCommit(){if(!pendingCache)return;const L=ls.get("acache",[]).filter(e=>Date.now()-e.at<CACHE_TTL&&sim(e.t,pendingCache.t)<.85);L.push(pendingCache);ls.set("acache",L.slice(-100));pendingCache=null}
-const CORRECTION=/^(nein|falsch|stimmt nicht|quatsch|bloedsinn|bl.dsinn|das ist falsch|nicht richtig|so nicht)/i;
+// Fragen, die dasselbe wissen wollen: "Was ist Glycin?" = "Wofür brauche ich Glycin?" = "Erklär mir Glycin."
+const DEF_RE=/^(?:was (?:ist|sind|macht|bewirkt|bringt|tut) (?:eigentlich |genau |denn )?|wofuer (?:brauche ich|braucht man|ist|sind|nimmt man|brauch ich) |wozu (?:ist|sind|braucht man|brauche ich|dient|dienen) |erklaer(?:e|en)? (?:mir |uns )?(?:mal |kurz )?(?:was |wie )?|sag mir was (?:ist )?|was weisst du (?:ueber|von) |was kannst du mir (?:ueber|zu) (?:sagen |erzaehlen )?)(.+?)(?: (?:gut|eigentlich|genau|ist|sind|sagen|erzaehlen|macht|bewirkt|funktioniert))*$/;
+const ART=new Set("der die das den dem des ein eine einen einem einer so".split(" ")),PRON=new Set("das es dies dieses der die den denn er sie ihn ihm".split(" "));
+function defKey(q){const T=toks(q).join(" ");const m=T.match(DEF_RE);if(!m)return null;const sub=m[1].split(" ").filter(w=>!ART.has(w));
+  if(!sub.length||sub.length>4||sub.every(w=>PRON.has(w))||PERSONAL.test(sub.join(" ")))return null;return "def:"+sub.join(" ")}
+function cacheKeyOf(q){const d=defKey(q);if(d)return d;if(PERSONAL.test(q))return null;const T=toks(q);if(T.length<4||T.some(w=>PRON.has(w))||/^(und|aber|danke|also|dann|oder|noch|auch|mit)$/.test(T[0]))return null;return "q:"+T.join(" ")}
+// Stoffnamen streng vergleichen: Glycin ist nicht Glycerin (nur 1 Erkennungsfehler bei langen Wörtern erlaubt)
+const sameSub=(a,b)=>a.length===b.length&&a.every((w,i)=>w===b[i]||(w.length>=8&&b[i].length>=8&&lev(w,b[i])<=1));
+const cacheable=(q,a)=>toks(q).length>=2&&!SENSITIVE.test(q)&&!SENSITIVE.test(a)&&a.length>20&&a.length<500&&!profiles.some(p=>a.includes(p.name))&&!!cacheKeyOf(q);
+function cacheFind(q){if(SENSITIVE.test(q))return null;const key=cacheKeyOf(q);if(!key)return null;const now=Date.now(),L=ls.get("acache",[]).filter(e=>now-e.at<CACHE_TTL);
+  if(key.startsWith("def:")){const sub=key.slice(4).split(" ");return L.find(e=>e.key&&e.key.startsWith("def:")&&sameSub(sub,e.key.slice(4).split(" ")))||null}
+  // sonst nur fast wortgleiche Fragen derselben Art
+  const T=toks(q);return L.find(e=>e.key&&e.key.startsWith("q:")&&sim(T,e.key.slice(2).split(" "))>=.9)||null}
+function cacheCommit(){if(!pendingCache)return;const L=ls.get("acache",[]).filter(e=>e.key&&Date.now()-e.at<CACHE_TTL&&e.key!==pendingCache.key);L.push(pendingCache);ls.set("acache",L.slice(-150));pendingCache=null}
+const CORRECTION=/^(nein|falsch|stimmt nicht|quatsch|bloedsinn|bl.dsinn|das ist falsch|nicht richtig|so nicht|das stimmt so nicht)/i;
+// ---- 2) Persönlicher Speicher: nur Bestätigtes, im Tresor verschlüsselt
+async function savePref(inp){if(S.prefStore===false)return "NICHT gespeichert: Der persönliche Speicher ist in den Einstellungen ausgeschaltet. Sag ihm das kurz.";
+  if(!isMain())return "Nicht erlaubt.";if(!vault()||!privKey)return "NICHT gespeichert: Tresor nicht offen.";
+  const titel=String(inp.titel||"").trim(),text=String(inp.text||"").trim(),art=inp.art||"Sonstiges";if(!titel||!text)return "leer";
+  const sens=art==="Gesundheit"||SENSITIVE.test(titel+" "+text);
+  if(sens&&inp.zugestimmt!==true)return "NICHT gespeichert: sensibel. Frag ihn ausdrücklich, ob du das speichern darfst, und speichere erst nach seinem klaren Ja mit zugestimmt=true.";
+  const old=mem.prefs.find(x=>sim(toks(x.titel),toks(titel))>=.8);const e={titel,text,art,sensibel:sens,zeit:new Date().toISOString()};
+  const k=old?old.k:"pref:"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);await putSealed(k,e);
+  mem.prefs=mem.prefs.filter(x=>x!==old);mem.prefs.push({...e,k});return (old?"Aktualisiert: ":"Gespeichert: ")+titel}
+// "Wie geht nochmal meine Morgenroutine?" -> bestätigten Eintrag direkt vorlesen
+const PREF_Q=/^(?:wie (?:geht|ging|war|ist|laeuft|lief) (?:nochmal |noch mal |eigentlich )?|was (?:ist|war) (?:nochmal |noch mal )?|erinner mich an |sag mir (?:nochmal )?|wie mache ich (?:nochmal )?)(?:mein|meine|meinen|meiner|den|die|das) (.+)$/;
+function prefFind(q){if(!privKey||!mem.prefs.length)return null;const m=toks(q).join(" ").match(PREF_Q);if(!m)return null;const T=m[1].split(" ");
+  let best=null;for(const p of mem.prefs){const sc=sim(T,toks(p.titel));if(sc>=.75&&(!best||sc>best.sc))best={p,sc}}return best&&best.p}
 function localAnswer(t){
   // Rückmeldung zur letzten Claude-Antwort: keine Korrektur -> in den Speicher übernehmen
   if(pendingCache){if(CORRECTION.test(t))pendingCache=null;else cacheCommit()}
@@ -649,6 +673,7 @@ function localAnswer(t){
   // Hat Atlas gerade etwas gefragt, ist "gut" oder "danke" eine Antwort darauf -> Claude soll darauf eingehen
   const lastA=[...log].reverse().find(m=>m.rolle==="assistent"),asked=lastA&&/\?\s*$/.test(lastA.text)&&Date.now()-Date.parse(lastA.zeit)<10*60e3;
   const it=detect(t);if(it&&!(asked&&!["uhrzeit","datum","offen","tschuess"].includes(it.id)))return {text:POOL[it.id](),art:it.id,end:it.id==="tschuess"};
+  const pf=isMain()&&prefFind(t);if(pf)return {text:`${pf.titel}: ${pf.text}`,art:"persoenlich"};
   const c=cacheFind(t);if(c)return {text:c.a,art:"speicher"};
   return null}
 function handleUtterance(t){$("heard").textContent=t;perf={end:perf.flushAt||performance.now(),mode:modeOf(t)};
@@ -658,6 +683,8 @@ function handleUtterance(t){$("heard").textContent=t;perf={end:perf.flushAt||per
       speak(L.text,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}}
   const yes=offerStudy&&/^(ja|jo|gern|gerne|passt|okay|ok|klar|leg los|bitte|freilich|sicher)\b/i.test(t);offerStudy=false;
   const brief=yes||/studie|briefing|was gibt'?s neues|neuigkeiten|forschung/i.test(t);
+  if(brief&&!yes){const old=ls.get("studytxt:"+today,"");if(old&&!/mehr|weitere|andere|neu suchen|nochmal suchen|aktualisier/i.test(t)){addLog("mensch",t);addLog("assistent",old);listening=false;perf.mode="lokal";
+      speak("Das Update von heute hab ich schon für dich. "+old+" Willst du, dass ich nach weiteren Studien suche?",()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}}
   if(brief)ls.set("study:"+today,1);
   listening=false;converse(yes?"Ja, sag mir die neuen Studien.":t,{maxTokens:brief?1600:700,mode:brief?"experte":modeOf(t),pre:brief?"Moment, ich schau, was es Neues gibt.":""})}
 let offerStudy=false;
@@ -670,6 +697,7 @@ function stopAll(){convo=false;listening=false;try{rec&&rec.abort()}catch{}hush(
 /* ================= Claude ================= */
 const T={
  person_wechseln:{name:"person_wechseln",description:"Stellt um, mit wem du gerade sprichst. Sofort nutzen, wenn jemand sagt, wer er ist, oder dass er nicht der Begrüßte ist (z. B. „Nein, ich bin Anna“, „Max ist da“).",input_schema:{type:"object",properties:{name:{type:"string"}},required:["name"]}},
+ persoenlich_speichern:{name:"persoenlich_speichern",description:"Persönlicher Speicher für BESTÄTIGTE Vorlieben, Abläufe, Einstellungen und wiederkehrende Arbeitsanweisungen von Mario. NUR aufrufen, wenn er ausdrücklich sagt, dass du es so speichern sollst, oder auf deine Rückfrage klar zustimmt. Gesundheitsdaten und andere sensible Infos nur mit zugestimmt=true, nachdem er ausdrücklich Ja gesagt hat. Gleicher Titel = Eintrag wird aktualisiert.",input_schema:{type:"object",properties:{titel:{type:"string",description:"kurz, z. B. Morgenroutine, Eisbad-Ablauf, Antwortstil"},text:{type:"string",description:"der bestätigte Inhalt, eigenständig verständlich"},art:{type:"string",enum:["Ablauf","Einstellung","Anweisung","Gesundheit","Sonstiges"]},zugestimmt:{type:"boolean",description:"true nur, wenn er dem Speichern ausdrücklich zugestimmt hat"}},required:["titel","text","art"]}},
  merken:{name:"merken",description:"Speichert dauerhaft eine wichtige Information über die Person, mit der du sprichst (Entscheidung, Vorhaben, Vorliebe, Idee). Nutzen, wenn etwas später wichtig ist oder jemand sagt: merk dir das.",input_schema:{type:"object",properties:{text:{type:"string",description:"Kurzer, eigenständig verständlicher Satz"}},required:["text"]}},
  abhaken:{name:"abhaken",description:"Hakt für die aktuelle Person einen Routine-Schritt oder ein Supplement von heute als erledigt ab (erledigt=false macht es rückgängig). Gibt den neuen Stand zurück.",input_schema:{type:"object",properties:{name:{type:"string"},erledigt:{type:"boolean"}},required:["name"]}},
  liste_aendern:{name:"liste_aendern",description:"Ändert die feste Routine- oder Supplement-Liste einer Person dauerhaft. Ohne person gilt die aktuelle Person. Der Hauptnutzer darf auch die Listen der anderen ändern. Gibt die neue Liste zurück.",input_schema:{type:"object",properties:{person:{type:"string"},liste:{type:"string",enum:["routine","supplements"]},hinzufuegen:{type:"array",items:{type:"string"}},entfernen:{type:"array",items:{type:"string"}}},required:["liste"]}},
@@ -679,12 +707,13 @@ const T={
  briefing_daten:{name:"briefing_daten",description:"Holt Marios Termine von heute und morgen (alle Kalender inkl. Familienkalender) und die Mails der letzten 24 Stunden. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{}}}
 };
 const WEB={type:"web_search_20250305",name:"web_search",max_uses:3,user_location:{type:"approximate",country:"AT",timezone:"Europe/Vienna"}};
-function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
+function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(T.persoenlich_speichern,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
 const match=(a,b)=>{a=norm(a);b=norm(b);return !!a&&!!b&&(a.includes(b)||b.includes(a))};
 async function runTool(name,inp){
   switch(name){
   case "person_wechseln":{const p=setPerson(inp.name);return p.typ==="haupt"?`Du sprichst jetzt mit ${p.name} (Hauptnutzer).${privKey?"":" Tresor gesperrt."} Ab der nächsten Antwort gelten seine Regeln.`:`Du sprichst jetzt mit ${p.name} (${TYP[p.typ]}). Ab sofort gelten die Regeln für ${p.name}; keine privaten Daten von ${main().name}.`}
   case "merken":return addNote(inp.text);
+  case "persoenlich_speichern":return savePref(inp);
   case "abhaken":{if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return "Nicht verfügbar.";const d=dayOf(cur),on=inp.erledigt!==false;
     const r=cur.routine.find(s=>match(s,inp.name)),sp=cur.supps.find(s=>match(s,inp.name));
     if(!r&&!sp)return "Nicht in der Liste: "+inp.name+". Stand: "+JSON.stringify(statusOf(cur));
@@ -750,7 +779,10 @@ DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, priva
 Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
 Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Erledigtes hakst du mit „abhaken“ ab, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
 TEMPO: Bei Begrüßungen, Alltagsgesprächen und einfachen Fragen antwortest du sofort und kurz, ohne Einleitung. Ausführlich nur bei Wissenschaft, Gesundheit, Analysen oder wenn er es will. Fragt er nach Früherem, das du nicht vor dir hast, nutze verlauf_suchen.
-${STUDY_RULE}`;
+${STUDY_RULE}
+${privKey&&mem.prefs.length?"BESTÄTIGTER PERSÖNLICHER SPEICHER (gilt, bis er etwas anderes sagt):\n"+mem.prefs.map(x=>"- "+x.titel+": "+x.text).join("\n").slice(0,5000):""}
+PERSÖNLICHER SPEICHER: ${S.prefStore===false?"ist ausgeschaltet, speichere dort nichts.":"Will er einen Ablauf, eine Einstellung oder Arbeitsanweisung dauerhaft so haben, frag kurz „Soll ich mir das so speichern?“ und nutze persoenlich_speichern erst nach seinem Ja (oder wenn er es selbst ausdrücklich verlangt). Gesundheitsdaten nur nach ausdrücklicher Zustimmung."}
+SPEICHERMARKE: Ist die Frage allgemeines, zeitloses Wissen (keine Person, kein Datum, nichts Aktuelles, keine individuelle Gesundheitsfrage) und gilt deine Antwort für jeden genau gleich, schreib ganz am Ende die Zeichen ⟦⟧. Sonst nie. Sie werden nicht vorgelesen.`;
   const dyn=`Jetzt: ${nowStr()}. Personen im Haus: ${profiles.map(p=>p.name+" ("+TYP[p.typ]+")").join(", ")}.
 Studien-Update heute: ${ls.get("study:"+today,0)?"schon gehört":"noch nicht. Ist es Vormittag, biete es nach seiner ersten Antwort in einem kurzen Satz an (Frage am Ende)."}
 ${mode==="schnell"?(privKey?"Notizen (neueste): "+(mem.notes.slice(-10).map(n=>"- "+n.text).join("\n")||"keine"):"Gedächtnis-Tresor gesperrt."):memBlock}
@@ -818,8 +850,9 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
       sys=P?[{type:"text",text:P.stat,cache_control:{type:"ephemeral"}},{type:"text",text:P.dyn}]:brief?[{type:"text",text:sys0,cache_control:{type:"ephemeral"}}]:sys0,model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();if(pre)sp.feed(pre+" ");
     for(let round=0;round<8;round++){
       let res;
-      try{res=await apiStream({model,max_tokens:quick?400:maxTokens,system:sys,tools,messages:msgs,...(quick?{thinking:{type:"disabled"}}:{})},abortCtl.signal,d=>{if(!perf.tok)perf.tok=performance.now();sp.feed(d)})}
+      try{res=await apiStream({model,max_tokens:quick?400:maxTokens,system:sys,tools,messages:msgs,...(quick?{thinking:{type:"disabled"}}:{})},abortCtl.signal,d=>{if(!perf.tok)perf.tok=performance.now();sp.feed(d.replace(/[⟦⟧]/g,""))})}
       catch(e){if(quick&&e.status===400&&/thinking/i.test(e.message||"")){quick=false;round--;continue}const wi=tools.findIndex(t=>t.name==="web_search");if(e.status===400&&/web_search/i.test(e.message)&&wi>=0){S.noSearch=true;saveSettings();tools.splice(wi,1);continue}throw e}
+      if(res.content.some(b=>b.type==="server_tool_use"))usedTool=true;
       answer+=" "+textOf(res);sp.feed(" ");
       if(res.stop_reason==="pause_turn"){msgs.push({role:"assistant",content:res.content});continue}
       if(res.stop_reason!=="tool_use")break;
@@ -827,9 +860,10 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
       usedTool=true;const results=[];for(const b of res.content)if(b.type==="tool_use")results.push({type:"tool_result",tool_use_id:b.id,content:String(await runTool(b.name,b.input||{}))});
       msgs.push({role:"user",content:results});
     }
-    answer=clean(answer);if(!answer){answer="Erledigt.";sp.feed(answer)}
+    const marked=/⟦\s*⟧/.test(answer);answer=clean(answer.replace(/[⟦⟧]/g,""));if(!answer){answer="Erledigt.";sp.feed(answer)}
     addLog("assistent",answer);busy=false;scheduleProto();
-    pendingCache=quick&&!usedTool&&isMain()&&cacheable(text,answer)?{t:toks(text),q:text,a:answer,at:Date.now()}:null;
+    pendingCache=marked&&!internal&&!brief&&!usedTool&&isMain()&&cacheable(text,answer)?{key:cacheKeyOf(text),q:text,a:answer,at:Date.now()}:null;
+    if(brief)ls.set("studytxt:"+today,answer);
     if(isMain()&&!ls.get("study:"+today,0)&&/studie/i.test(answer)&&/\?\s*$/.test(answer))offerStudy=true;
     sp.end(()=>{ignoreUntil=Date.now()+350;if(convo)listen()});
   }catch(e){busy=false;setMode("idle",idleLabel());if(e.name==="AbortError")return;
@@ -887,6 +921,16 @@ $("askYes").onclick=()=>{$("askModal").hidden=true;const f=ask;ask=null;f&&f()};
 let pane="heute",viewP=null;
 function openSheet(t){if(away)return;if(vault()&&!privKey&&S.key){askCode("sheet:"+(t||"heute"));return}if(t==="tresor"&&!isMain()){showErr("Der Tresor gehört "+main().name+".");t="heute"}pane=t;$("sheet").hidden=false;
   document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));["heute","tresor","setup"].forEach(x=>$("pane-"+x).hidden=x!==t);renderPane()}
+function drawPrefs(){const box=$("prefBox");if(!box)return;
+  if(!privKey){box.innerHTML='<div class="note">Persönlicher Speicher ist im Tresor. Tresor öffnen, um ihn anzusehen.</div>';return}
+  box.innerHTML=`<h3 style="margin:14px 0 6px">Persönlicher Speicher (${mem.prefs.length})</h3>`+(mem.prefs.length?"":'<div class="note">Noch nichts Bestätigtes gespeichert. Sag zum Beispiel: „Atlas, speicher dir: Meine Morgenroutine ist …“</div>');
+  mem.prefs.slice().sort((a,b)=>a.titel.localeCompare(b.titel)).forEach(p=>{const d=document.createElement("div");d.className="field";d.style.marginTop="10px";
+    d.innerHTML=`<label>${esc(p.art)}${p.sensibel?" · sensibel":""}</label><input type="text" value="${esc(p.titel)}"><textarea rows="3">${esc(p.text)}</textarea><div class="row"><button class="btn small" type="button">Ändern speichern</button><button class="btn small" type="button">Löschen</button></div>`;
+    const [ti]=d.getElementsByTagName("input"),[tx]=d.getElementsByTagName("textarea"),[bs,bd]=d.getElementsByTagName("button");
+    bs.onclick=async()=>{const e={titel:ti.value.trim()||p.titel,text:tx.value.trim()||p.text,art:p.art,sensibel:p.sensibel,zeit:new Date().toISOString()};await putSealed(p.k,e);Object.assign(p,e);bs.textContent="Gespeichert ✓"};
+    bd.onclick=()=>confirmBox("Eintrag löschen?",p.titel,()=>{ls.del(p.k);mem.prefs=mem.prefs.filter(x=>x!==p);drawPrefs()});box.append(d)});
+  if(mem.prefs.length){const b=document.createElement("button");b.className="btn small";b.type="button";b.style.marginTop="12px";b.textContent="Persönlichen Speicher komplett löschen";
+    b.onclick=()=>confirmBox("Persönlichen Speicher komplett löschen?","Alle "+mem.prefs.length+" bestätigten Einträge werden gelöscht. Notizen und Protokolle bleiben.",()=>{for(const p of mem.prefs)ls.del(p.k);mem.prefs=[];drawPrefs()});box.append(b)}}
 function renderPane(){if(pane==="heute")renderToday();else if(pane==="tresor")renderTresor();else renderSetup()}
 function renderToday(){
   const el=$("pane-heute"),adults=profiles.filter(p=>p.typ==="haupt"||p.typ==="erwachsen");
@@ -979,12 +1023,17 @@ function renderSetup(){
     <div class="field"><label for="sVoice">Stimme</label><select id="sVoice"></select></div></div>
     <div class="field"><label for="sRate">Sprechtempo</label><input type="range" id="sRate" min="0.8" max="1.2" step="0.02"></div>
     <div class="note">Natürlicher klingt eine Premium-Stimme: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch → z. B. „Anna (Premium)“ laden.</div>
-    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="row"><button class="btn small" id="sCacheClr" type="button">Antwort-Speicher leeren</button><span class="note" id="sCacheInfo"></span></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
+    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
   <section class="card"><h2>Raum-Modus</h2>
     <div class="grid2"><div class="field"><label for="sCool">Neu begrüßen, wenn der Raum so lange leer war (Minuten)</label><input type="number" id="sCool" min="1" max="240"></div>
     <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div></div>
     <label class="row" for="sQuick" style="gap:10px"><input type="checkbox" id="sQuick" style="width:22px;height:22px"> Zu Hause ohne Code (Code nur nach Sperren oder im Abwesenheitsmodus)</label>
     <div class="field"><label for="sLock">Sonst automatisch sperren nach (Stunden)</label><input type="number" id="sLock" min="1" max="48"></div></section>
+  <section class="card"><h2>Speicher</h2>
+    <div class="note">Allgemeiner Antwort-Cache: zeitloses Allgemeinwissen, das Atlas selbst als allgemein gültig markiert hat und das du nicht korrigiert hast. Läuft nach 14 Tagen ab.</div>
+    <div class="row"><button class="btn small" id="sCacheClr" type="button">Allgemeinen Antwortspeicher leeren</button><span class="note" id="sCacheInfo"></span></div>
+    <label class="row" for="sPrefOn" style="gap:10px;margin-top:14px"><input type="checkbox" id="sPrefOn" style="width:22px;height:22px"> Persönliche Infos speichern erlauben (nur nach deiner Bestätigung, Gesundheit nur mit ausdrücklicher Zustimmung)</label>
+    <div id="prefBox"></div></section>
   <section class="card"><h2>Einrichtung übernehmen</h2>
     <div class="field"><label for="sImp">Einrichtungs-Code einfügen</label><textarea id="sImp" rows="3" placeholder="ATLAS1:…"></textarea><div class="note">Übernimmt Persönlichkeit, Supplements und Stimme. Bleibt nur auf diesem Gerät.</div></div>
     <div class="row"><button class="btn small" type="button" id="sImpBtn">Übernehmen</button><span class="note" id="sImpMsg"></span></div></section>
@@ -1024,7 +1073,9 @@ function renderSetup(){
     if($("pd"+i))$("pd"+i).onclick=()=>{draft.splice(i,1);drawProfiles()}})};
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
-  $("sCacheInfo").textContent=ls.get("acache",[]).length+" gespeicherte Antworten";$("sCacheClr").onclick=()=>{ls.del("acache");pendingCache=null;$("sCacheInfo").textContent="Geleert."};
+  $("sCacheInfo").textContent=ls.get("acache",[]).filter(e=>e.key&&Date.now()-e.at<CACHE_TTL).length+" gespeicherte Antworten";$("sCacheClr").onclick=()=>{ls.del("acache");pendingCache=null;$("sCacheInfo").textContent="Geleert."};
+  $("sPrefOn").checked=S.prefStore!==false;$("sPrefOn").onchange=()=>{S.prefStore=$("sPrefOn").checked;saveSettings()};
+  drawPrefs();
   $("sImpBtn").onclick=()=>{const m=$("sImpMsg");try{const raw=$("sImp").value.replace(/\s+/g,"");if(!raw.startsWith("ATLAS1:"))throw 0;
     const b=atob(raw.slice(7).replace(/-/g,"+").replace(/_/g,"/")),j=JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))));
     if(typeof j.persona==="string")S.persona=j.persona.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
@@ -1074,7 +1125,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-0715";
+const APP_VERSION="20261103-1312";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
