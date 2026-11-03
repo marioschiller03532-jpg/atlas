@@ -209,7 +209,7 @@ function makeOrb(cv,opt){
   // Schwarm: Teilchen auf geneigten Bahnen
   const RINGS=[0,1,2,3,4].map(k=>({inc:0.35+k*0.55,node:k*1.26,r:1.05+k*0.09,spd:(k%2?-1:1)*(0.35+k*0.08),n:110}));
   const SW=[];RINGS.forEach((R,ri)=>{for(let i=0;i<R.n;i++)SW.push({ri,ph:i/R.n*6.283+Math.random()*0.05,j:Math.random()})});
-  let rot=0,last=performance.now(),flow=0,flash=0,armed=false,spread=0,open=0,lmix=0,phase=0,prevMode="idle",emitAcc=0,bang=0,nova=0,nameA=1,thinkA=0,listenA=0;const STARS=[];const waves=[];const t0=last;
+  let rot=0,last=performance.now(),flow=0,flash=0,armed=false,spread=0,open=0,lmix=0,phase=0,prevMode="idle",emitAcc=0,bang=0,nova=0,nameA=1,thinkA=0,listenA=0,sleepA=0;const STARS=[];const waves=[];const t0=last;
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const rgb=c=>c.join(",");
   function colors(t){const p=ORB_PALETTES[st.palette]||ORB_PALETTES.glut;let a,b,c;
@@ -281,23 +281,26 @@ function makeOrb(cv,opt){
     // Ruhige Kugel: geordnete Punkte, langsame Drehung, sanftes Öffnen und Schließen beim Sprechen. Kein Flackern.
     const tgt=st.mode==="speak"?1:st.mode==="listen"?0.06:0;
     open+=(tgt-open)*Math.min(1,dt*2.2);lmix+=((st.mode==="listen"?1:0)-lmix)*Math.min(1,dt*1.5);
-    phase+=dt*(st.mode==="speak"?2.4:0.9);
-    rot+=dt*(0.1+0.06*open);
-    const pulse=st.mode==="speak"?0.06*Math.sin(phase):0.018*Math.sin(phase);
+    sleepA+=((st.mode==="sleep"?1:0)-sleepA)*Math.min(1,dt*0.8);
+    phase+=dt*(st.mode==="speak"?2.4:0.9-0.6*sleepA);
+    rot+=dt*(0.1+0.06*open)*(1-0.7*sleepA);
+    const pulse=st.mode==="speak"?0.06*Math.sin(phase):(0.018+0.03*sleepA)*Math.sin(phase);
     const SN=st.fx==="supernova";
     const R=S*(SN?0.24:0.27)*(1+0.24*open+pulse+0.3*nova*(1-nova));
     const p=ORB_PALETTES[st.palette]||ORB_PALETTES.glut;
     const base=p.dynamic?(t*4)%360:0;
-    const colAt=y=>{if(p.dynamic)return hsl(base+y*55+lmix*130,0.75,0.66);const A=lmix?mixc(p.a,p.c,lmix):p.a,B=lmix?mixc(p.b,p.c,lmix*0.5):p.b,u=(y+1)/2;return mixc(A,B,u)};
+    const colAt0=y=>{if(p.dynamic)return hsl(base+y*55+lmix*130,0.75,0.66);const A=lmix?mixc(p.a,p.c,lmix):p.a,B=lmix?mixc(p.b,p.c,lmix*0.5):p.b,u=(y+1)/2;return mixc(A,B,u)};
+    // Schlaf: tiefes Nachtblau, gedämpft, langsames Atmen
+    const colAt=y=>sleepA>0.01?mixc(colAt0(y),mixc([52,78,190],[120,90,210],(y+1)/2),sleepA*0.92):colAt0(y);
     const mid=colAt(0).join(",");
-    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(R*1.8,S*0.5));g.addColorStop(0,`rgba(${mid},${0.2+0.12*open})`);g.addColorStop(.5,`rgba(${mid},${0.06+0.05*open})`);g.addColorStop(1,`rgba(${mid},0)`);
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(R*1.8,S*0.5));g.addColorStop(0,`rgba(${mid},${(0.2+0.12*open)*(1-0.5*sleepA)})`);g.addColorStop(.5,`rgba(${mid},${0.06+0.05*open})`);g.addColorStop(1,`rgba(${mid},0)`);
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
     const cr=Math.cos(rot),sr=Math.sin(rot),ct=Math.cos(.38),stl=Math.sin(.38);
     ctx.globalCompositeOperation="lighter";
     const bands=[];for(let k=0;k<12;k++)bands.push(colAt(-1+k/5.5).join(","));
     for(const q of P1){const [x,y,d0]=project(q[0],q[1],q[2],cr,sr,ct,stl),d=Math.max(0,Math.min(1,d0));
       const col=bands[Math.min(11,Math.max(0,Math.round((q[1]+1)*5.5)))];
-      ctx.fillStyle=`rgba(${col},${(0.1+0.7*d)*(1-0.4*open)})`;ctx.beginPath();ctx.arc(cx+x*R,cy+y*R,S*(0.0018+0.0026*d),0,6.283);ctx.fill()}
+      ctx.fillStyle=`rgba(${col},${(0.1+0.7*d)*(1-0.4*open)*(1-0.55*sleepA)})`;ctx.beginPath();ctx.arc(cx+x*R,cy+y*R,S*(0.0018+0.0026*d),0,6.283);ctx.fill()}
     // Urknall: Teilchen strömen beim Sprechen vom Mittelpunkt nach außen
     const spawn=(n,reach0,reachV,life0,shell)=>{for(let i=0;i<n&&STARS.length<900;i++){const u=Math.random()*2-1,th=Math.random()*6.283,r=Math.sqrt(1-u*u);STARS.push({x:r*Math.cos(th),y:u,z:r*Math.sin(th),age:0,life:(life0||2.2)+Math.random()*1.6,reach:(reach0||0.55)+Math.random()*(reachV||0.4),shell:!!shell})}};
     if(st.mode==="speak"&&prevMode!=="speak"){bang=1;if(SN){nova=1;spawn(380,1.35,0.4,1.4,true);spawn(120)}else spawn(160)}
@@ -325,7 +328,7 @@ function makeOrb(cv,opt){
     // Mittelpunkt: ruhiger Lichtpunkt, beim Urknall kurz heller
     const hr=R*(0.32+0.12*open+0.25*bang),cg=ctx.createRadialGradient(cx,cy,0,cx,cy,hr);cg.addColorStop(0,`rgba(${mid},${0.45+0.3*bang})`);cg.addColorStop(1,`rgba(${mid},0)`);
     ctx.fillStyle=cg;ctx.beginPath();ctx.arc(cx,cy,hr,0,6.283);ctx.fill();
-    nameA+=(((st.mode==="idle"||st.mode==="listen")?1:0)-nameA)*Math.min(1,dt*2);
+    nameA+=(((st.mode==="idle"||st.mode==="listen"||st.mode==="sleep")?1:0)-nameA)*Math.min(1,dt*2);
     const dr=S*(0.011+0.003*Math.sin(phase*0.5)+0.006*open+0.01*bang+(SN?0.02*nova:0))*(1-0.85*nameA);
     if(dr>0.5){ctx.fillStyle="rgba(255,252,246,0.96)";ctx.beginPath();ctx.arc(cx,cy,dr,0,6.283);ctx.fill()}
     // Name im Ruhezustand mitten im Punkt
@@ -333,7 +336,7 @@ function makeOrb(cv,opt){
       ctx.font=`600 ${fs}px "Unbounded","Arial Black",system-ui,sans-serif`;ctx.textBaseline="middle";ctx.textAlign="left";
       const ws=[...txt].map(ch=>ctx.measureText(ch).width),tw=ws.reduce((a,b)=>a+b,0)+sp*(ws.length-1);
       const hg=ctx.createRadialGradient(cx,cy,0,cx,cy,tw*0.9);hg.addColorStop(0,`rgba(${mid},${0.3*nameA})`);hg.addColorStop(1,`rgba(${mid},0)`);ctx.fillStyle=hg;ctx.beginPath();ctx.arc(cx,cy,tw*0.9,0,6.283);ctx.fill();
-      ctx.shadowColor=`rgba(${mid},0.9)`;ctx.shadowBlur=S*0.02;ctx.fillStyle=`rgba(255,252,246,${0.95*nameA})`;
+      ctx.shadowColor=`rgba(${mid},0.9)`;ctx.shadowBlur=S*0.02;ctx.fillStyle=`rgba(255,252,246,${0.95*nameA*(1-0.55*sleepA)})`;
       let x=cx-tw/2;[...txt].forEach((ch,i)=>{ctx.fillText(ch,x,cy+fs*0.04);x+=ws[i]+sp});ctx.shadowBlur=0}}
   function gitter(t,dt,W,H,S,cx,cy){
     const {a,b,c}=colors(t),E=st.energy;rot+=dt*(st.mode==="think"?1.6:st.mode==="speak"?0.6:0.18);
@@ -396,7 +399,7 @@ const SESSION=Date.now().toString(36);
 function showErr(m){$("err").textContent=m||"";$("err").hidden=!m}
 
 /* ================= Einstellungen & Profile ================= */
-const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",quick:true,aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,pause:1.6,noSearch:false},ls.get("settings",{}));
+const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",quick:true,aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,pause:1.6,sleepMin:20,noSearch:false},ls.get("settings",{}));
 const saveSettings=()=>ls.set("settings",S);
 const TYP={haupt:"Hauptnutzer",erwachsen:"Erwachsen",kind:"Kind",gast:"Gast"};
 const DEFAULT_PROFILES=[
@@ -536,7 +539,7 @@ async function addNote(text){const t=String(text||"").trim();if(!t)return "leer"
 
 /* ================= Erscheinung ================= */
 const vis=makeOrb($("vis"),{variant:S.orb,palette:S.palette,fx:S.fx});vis.label=S.aname.toUpperCase();
-function setMode(m,label){vis.mode=m;const s=$("state");s.textContent=label;s.classList.toggle("listen",m==="listen")}
+function setMode(m,label){if(m==="idle"&&typeof sleeping!=="undefined"&&sleeping)m="sleep";vis.mode=m;const s=$("state");s.textContent=label;s.classList.toggle("listen",m==="listen")}
 const idleLabel=()=>away?"Abwesenheitsmodus":stream?"Raum-Modus · wartet":"Bereit · Kugel antippen";
 
 /* ================= Stimme ================= */
@@ -915,20 +918,36 @@ async function startRoom(){unlockAudio();ensureRec();
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play()}
   catch{if(away)$("awayBar").textContent="Abwesenheitsmodus · Kugel antippen, um die Bewegungserkennung zu starten";else showErr("Kamera ist nicht erlaubt. Ohne Kamera keine Bewegungserkennung, alles andere funktioniert.");return}
   try{wake=await navigator.wakeLock?.request("screen")}catch{}
-  $("roomBtn").textContent="Raum-Modus an";$("roomBtn").classList.add("on");$("roomBtn").classList.remove("primary");lastMotion=Date.now();lastGreet=0;
+  $("roomBtn").textContent="Raum-Modus an";$("roomBtn").classList.add("on");$("roomBtn").classList.remove("primary");lastMotion=Date.now();lastGreet=0;sleeping=false;prevFrame=null;hits=0;
   setMode("idle",idleLabel());motionTimer=setInterval(checkMotion,500)}
-function stopRoom(){clearInterval(motionTimer);motionTimer=null;stream?.getTracks().forEach(t=>t.stop());stream=null;try{wake?.release()}catch{}
+function stopRoom(){clearInterval(motionTimer);motionTimer=null;sleeping=false;prevFrame=null;stream?.getTracks().forEach(t=>t.stop());stream=null;try{wake?.release()}catch{}
   $("roomBtn").textContent="Raum-Modus";$("roomBtn").classList.remove("on");$("roomBtn").classList.add("primary");setMode("idle",idleLabel())}
+/* Bewegung statt Licht: Die App sieht nur Kamerabilder (keinen Lichtsensor, keine Personenerkennung).
+   Darum: Helligkeit jedes Bildes ausgleichen, Lichtsprünge und Ganzbild-Änderungen verwerfen, Bewegung erst nach 2 Treffern in Folge zählen. */
+let sleeping=false,lightHold=0,hits=0,prevMean=0;
+const sleepMs=()=>Math.max(1,+S.sleepMin||20)*60000;
+function goSleep(){if(sleeping)return;sleeping=true;if(convo)endConvo();setMode("sleep","Schläft")}
+function wakeUp(){if(!sleeping)return false;sleeping=false;setMode("idle",idleLabel());return true}
 function checkMotion(){if(!stream)return;
-  sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,g=new Uint8Array(48*36);for(let i=0;i<g.length;i++)g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;
-  if(prevFrame){let ch=0;const th=40-S.sens*3;for(let i=0;i<g.length;i++)if(Math.abs(g[i]-prevFrame[i])>th)ch++;
-    if(ch/g.length>0.06-S.sens*0.005){const quiet=Date.now()-lastMotion>S.cool*60000;lastMotion=Date.now();
-      if((quiet||!lastGreet)&&Date.now()-lastGreet>60000&&!busy&&!listening&&!speaking()){lastGreet=Date.now();away?awayVisitor():greet()}}}
-  prevFrame=g}
+  sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,n=48*36,g=new Float32Array(n);let m=0;for(let i=0;i<n;i++){g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;m+=g[i]}m/=n;
+  const now=Date.now(),idleFor=now-lastMotion;
+  if(!away&&!sleeping&&!convo&&!busy&&!speaking()&&idleFor>sleepMs())goSleep();
+  if(!prevFrame){prevFrame=g;prevMean=m;return}
+  // Median der Helligkeitsänderung = gleichmäßige Lichtänderung (eine Person verändert nur einen Teil des Bildes)
+  const raw=new Float32Array(n);for(let i=0;i<n;i++)raw[i]=g[i]-prevFrame[i];const sorted=Float32Array.from(raw).sort(),shift=sorted[n>>1];
+  prevFrame=g;prevMean=m;
+  if(Math.abs(shift)>15){lightHold=now+2500;hits=0;return}   // Licht an/aus
+  if(now<lightHold){hits=0;return}                           // Kamera regelt Belichtung nach
+  let ch=0;const th=40-S.sens*3;for(let i=0;i<n;i++)if(Math.abs(raw[i]-shift)>th)ch++;
+  const f=ch/n;
+  if(f>0.6){hits=0;lightHold=now+1500;return}                 // fast alles auf einmal = Licht/Wackeln
+  if(f>0.06-S.sens*0.005){hits++;if(hits<2)return}else{hits=0;return}
+  hits=0;const quiet=idleFor>S.cool*60000;lastMotion=now;const woke=wakeUp();
+  if((quiet||woke||!lastGreet)&&now-lastGreet>60000&&!busy&&!listening&&!speaking()){lastGreet=now;away?awayVisitor():greet()}}
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
 
 /* ================= Bedienung ================= */
-$("vis").onclick=()=>{unlockAudio();if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
+$("vis").onclick=()=>{unlockAudio();if(wakeUp()){lastMotion=Date.now()}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
 $("roomBtn").onclick=()=>stream?stopRoom():startRoom();
@@ -1057,6 +1076,7 @@ function renderSetup(){
     <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
   <section class="card"><h2>Raum-Modus</h2>
     <div class="grid2"><div class="field"><label for="sCool">Neu begrüßen, wenn der Raum so lange leer war (Minuten)</label><input type="number" id="sCool" min="1" max="240"></div>
+    <div class="field"><label for="sSleep">Schlafmodus nach so vielen Minuten ohne Bewegung</label><input type="number" id="sSleep" min="1" max="240"></div>
     <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div></div>
     <label class="row" for="sQuick" style="gap:10px"><input type="checkbox" id="sQuick" style="width:22px;height:22px"> Zu Hause ohne Code (Code nur nach Sperren oder im Abwesenheitsmodus)</label>
     <div class="field"><label for="sLock">Sonst automatisch sperren nach (Stunden)</label><input type="number" id="sLock" min="1" max="48"></div></section>
@@ -1074,7 +1094,7 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
+  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
     $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
@@ -1112,7 +1132,7 @@ function renderSetup(){
     if(typeof j.persona==="string")S.persona=j.persona.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
     const M=main();if(Array.isArray(j.supps))M.supps=j.supps.map(String).filter(Boolean);if(Array.isArray(j.routine))M.routine=j.routine.map(String).filter(Boolean);saveProfiles();
     $("sImp").value="";renderPane();setTimeout(()=>{const x=$("sImpMsg");if(x)x.textContent="Übernommen ✓"},50)}catch{m.textContent="Code ungültig. Bitte komplett kopieren."}};
-  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
+  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.sleepMin=Math.max(1,+$("sSleep").value||20);S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
@@ -1156,7 +1176,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-1558";
+const APP_VERSION="20261103-1602";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
