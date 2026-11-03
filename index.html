@@ -22,6 +22,8 @@
 /* Hauptbildschirm: nur die Kugel. Alles andere liegt hinter dem Code. */
 .top,.dock,#typeForm,.said,.heard,.state{display:none!important}
 #app{grid-template-rows:1fr auto!important}
+.donebtn{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 28px);transform:translateX(-50%);z-index:16;padding:12px 26px;border-radius:999px;border:1px solid rgba(64,226,196,.6);background:rgba(64,226,196,.14);color:#bff5ea;font-size:17px;font-weight:600;letter-spacing:.02em;-webkit-tap-highlight-color:transparent}
+.donebtn:active{background:rgba(64,226,196,.3)}
 .corner{position:fixed;z-index:15;width:44px;height:44px;border-radius:12px;border:1px solid transparent;background:none;color:var(--muted);opacity:.28;font-size:20px;display:grid;place-items:center;transition:opacity .2s}
 .corner:hover,.corner:focus-visible{opacity:.9;border-color:var(--line)}
 #menuBtn{top:calc(env(safe-area-inset-top) + 10px);left:calc(env(safe-area-inset-left) + 10px)}
@@ -129,6 +131,7 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
   <main class="stage">
     <div class="setupbar" id="setupBar" hidden><span id="setupTxt">Einrichtung fehlt noch.</span><button class="btn small primary" id="setupGo">Einrichten</button></div>
     <canvas id="vis" role="button" aria-label="Antippen zum Sprechen"></canvas>
+    <button class="donebtn" id="doneBtn" type="button" hidden>Fertig ✓</button>
     <div class="state" id="state">Bereit · Kugel antippen</div>
     <div class="said" id="said"></div>
     <div class="heard" id="heard"></div>
@@ -206,7 +209,7 @@ function makeOrb(cv,opt){
   // Schwarm: Teilchen auf geneigten Bahnen
   const RINGS=[0,1,2,3,4].map(k=>({inc:0.35+k*0.55,node:k*1.26,r:1.05+k*0.09,spd:(k%2?-1:1)*(0.35+k*0.08),n:110}));
   const SW=[];RINGS.forEach((R,ri)=>{for(let i=0;i<R.n;i++)SW.push({ri,ph:i/R.n*6.283+Math.random()*0.05,j:Math.random()})});
-  let rot=0,last=performance.now(),flow=0,flash=0,armed=false,spread=0,open=0,lmix=0,phase=0,prevMode="idle",emitAcc=0,bang=0,nova=0,nameA=1,thinkA=0;const STARS=[];const waves=[];const t0=last;
+  let rot=0,last=performance.now(),flow=0,flash=0,armed=false,spread=0,open=0,lmix=0,phase=0,prevMode="idle",emitAcc=0,bang=0,nova=0,nameA=1,thinkA=0,listenA=0;const STARS=[];const waves=[];const t0=last;
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const rgb=c=>c.join(",");
   function colors(t){const p=ORB_PALETTES[st.palette]||ORB_PALETTES.glut;let a,b,c;
@@ -276,13 +279,13 @@ function makeOrb(cv,opt){
     ctx.fillText(lbl,cx,cy+R*2.28);ctx.fillStyle=`rgba(${a},0.5)`;ctx.fillText((st.label||"ATLAS")+" · "+new Date().toLocaleTimeString("de-AT",{hour:"2-digit",minute:"2-digit",second:"2-digit"}),cx,cy-R*2.2)}
   function ruhe(t,dt,W,H,S,cx,cy){
     // Ruhige Kugel: geordnete Punkte, langsame Drehung, sanftes Öffnen und Schließen beim Sprechen. Kein Flackern.
-    const tgt=st.mode==="speak"?1:st.mode==="listen"?0.35:st.mode==="think"?0.2:0;
+    const tgt=st.mode==="speak"?1:st.mode==="listen"?0.06:0;
     open+=(tgt-open)*Math.min(1,dt*2.2);lmix+=((st.mode==="listen"?1:0)-lmix)*Math.min(1,dt*1.5);
     phase+=dt*(st.mode==="speak"?2.4:0.9);
     rot+=dt*(0.1+0.06*open);
     const pulse=st.mode==="speak"?0.06*Math.sin(phase):0.018*Math.sin(phase);
     const SN=st.fx==="supernova";
-    const R=S*(SN?0.24:0.27)*(1+0.16*open+pulse+0.3*nova*(1-nova));
+    const R=S*(SN?0.24:0.27)*(1+0.24*open+pulse+0.3*nova*(1-nova));
     const p=ORB_PALETTES[st.palette]||ORB_PALETTES.glut;
     const base=p.dynamic?(t*4)%360:0;
     const colAt=y=>{if(p.dynamic)return hsl(base+y*55+lmix*130,0.75,0.66);const A=lmix?mixc(p.a,p.c,lmix):p.a,B=lmix?mixc(p.b,p.c,lmix*0.5):p.b,u=(y+1)/2;return mixc(A,B,u)};
@@ -311,6 +314,11 @@ function makeOrb(cv,opt){
     // eine feine, ruhige Umlaufbahn
     ctx.save();ctx.translate(cx,cy);ctx.rotate(-0.35);ctx.scale(1,0.22);ctx.beginPath();ctx.arc(0,0,R*1.4,0,6.283);ctx.restore();
     ctx.strokeStyle=`rgba(${mid},${0.14+0.1*open})`;ctx.lineWidth=Math.max(1,S*0.002);ctx.stroke();
+    listenA+=((st.mode==="listen"?1:0)-listenA)*Math.min(1,dt*(st.mode==="listen"?4:6));
+    if(listenA>0.02){const LC=st.listenColor||"64,226,196",rr=Math.min(R*1.55,S*0.45),E2=Math.min(1,st.energy);
+      const lg=ctx.createRadialGradient(cx,cy,rr*0.9,cx,cy,rr*1.12);lg.addColorStop(0,`rgba(${LC},0)`);lg.addColorStop(.5,`rgba(${LC},${(0.16+0.22*E2)*listenA})`);lg.addColorStop(1,`rgba(${LC},0)`);
+      ctx.fillStyle=lg;ctx.beginPath();ctx.arc(cx,cy,rr*1.12,0,6.283);ctx.fill();
+      ctx.beginPath();ctx.arc(cx,cy,rr,0,6.283);ctx.strokeStyle=`rgba(${LC},${(0.7+0.3*E2)*listenA})`;ctx.lineWidth=S*(0.005+0.003*E2);ctx.stroke()}
     thinkA+=((st.mode==="think"?1:0)-thinkA)*Math.min(1,dt*3);
     if(thinkA>0.02){const rr=Math.min(R*1.62,S*0.46);ctx.beginPath();ctx.arc(cx,cy,rr,0,6.283);ctx.strokeStyle=`rgba(${mid},${0.14*thinkA})`;ctx.lineWidth=S*0.003;ctx.stroke();
       ctx.lineCap="round";ctx.lineWidth=S*0.008;for(const off of[0,Math.PI]){ctx.beginPath();ctx.arc(cx,cy,rr,t*1.1+off,t*1.1+off+1.3);ctx.strokeStyle=`rgba(${mid},${0.6*thinkA})`;ctx.stroke()}}
@@ -388,7 +396,7 @@ const SESSION=Date.now().toString(36);
 function showErr(m){$("err").textContent=m||"";$("err").hidden=!m}
 
 /* ================= Einstellungen & Profile ================= */
-const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",quick:true,aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,noSearch:false},ls.get("settings",{}));
+const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",quick:true,aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,pause:1.6,noSearch:false},ls.get("settings",{}));
 const saveSettings=()=>ls.set("settings",S);
 const TYP={haupt:"Hauptnutzer",erwachsen:"Erwachsen",kind:"Kind",gast:"Gast"};
 const DEFAULT_PROFILES=[
@@ -572,22 +580,43 @@ if(TTS&&/Chrome/.test(navigator.userAgent)&&!/iP(hone|ad|od)/.test(navigator.use
 /* ================= Zuhören ================= */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let lastWarm=0;function warm(){if(Date.now()-lastWarm<20000)return;lastWarm=Date.now();const l=document.createElement("link");l.rel="preconnect";l.href="https://api.anthropic.com";l.crossOrigin="anonymous";document.head.append(l);setTimeout(()=>l.remove(),15000)}
 let rec=null,listening=false,convo=false,recActive=false,ignoreUntil=0,lastHeard=0,silTimer=0,flushed=false,lastFlush={t:"",at:0};
-/* Durchgehendes Zuhören: einmal antippen, dann bleibt das Mikrofon im Gespräch offen. Während Atlas spricht, wird nichts ausgewertet. */
+/* Durchgehendes Zuhören: einmal antippen, dann bleibt das Mikrofon im Gespräch offen. Während Atlas spricht, wird nichts ausgewertet.
+   Vollständig zuhören: Alle erkannten Teile (fertige und vorläufige) werden zu EINEM Text zusammengesetzt, nichts wird überschrieben.
+   Erst nach einer Sprechpause (Einstellung, Standard 1,6 s) und nachdem die Erkennung den letzten Text geliefert hat, geht er raus. */
+let sessText="",utterPrev="",finishing=false,finTimer=0;
+const pauseMs=()=>Math.round(1000*Math.min(3,Math.max(1,+S.pause||1.6)));
+const heardAll=()=>(utterPrev+" "+sessText).replace(/\s+/g," ").trim();
+function resetUtter(){sessText="";utterPrev="";finishing=false;clearTimeout(silTimer);clearTimeout(finTimer);showDone(false)}
+function showDone(on){const b=$("doneBtn");if(b)b.hidden=!on}
+// Sprechpause erkannt (oder "Fertig" getippt): Mikro stoppen, auf den letzten Text warten, dann denken
+function finishUtter(manual){if(finishing||flushed)return;const t0=heardAll();if(t0.length<2){if(manual)endConvo();return}
+  finishing=true;showDone(false);setMode("think","Denkt nach");perf.flushAt=performance.now()-(manual?0:pauseMs());
+  try{rec.stop()}catch{}finTimer=setTimeout(sendUtter,manual?250:600)}
+function sendUtter(){if(!finishing)return;clearTimeout(finTimer);const t=heardAll();finishing=false;flushed=true;sessText="";utterPrev="";
+  if(!t||t.length<2||(t===lastFlush.t&&Date.now()-lastFlush.at<4000)){flushed=false;if(convo)listen();return}
+  lastFlush={t,at:Date.now()};handleUtterance(t)}
 function ensureRec(){if(!SR||away)return false;if(recActive)return true;
   rec=new SR();rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;
-  rec.onstart=()=>{recActive=true;flushed=false};
-  rec.onresult=e=>{clearTimeout(silTimer);if(flushed||!convo||busy||speaking()||Date.now()<ignoreUntil)return;let interim="";
-    for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal){const t=r[0].transcript.trim();if(t&&!(t===lastFlush.t&&Date.now()-lastFlush.at<4000)){lastHeard=Date.now();$("heard").textContent=t;handleUtterance(t)}}else interim+=r[0].transcript}
-    if(interim){warm();lastHeard=Date.now();$("heard").textContent=interim;vis.energy=Math.min(1,vis.energy+.3);
-      // kurze Stille nach dem Sprechen = Satz fertig. Nicht auf das späte "final" warten, das spart 1–2 Sekunden.
-      const t=interim.trim();silTimer=setTimeout(()=>{if(flushed||!convo||busy||speaking()||t.length<2)return;flushed=true;lastFlush={t,at:Date.now()};perf.flushAt=performance.now()-700;try{rec.stop()}catch{}handleUtterance(t)},700)}};
+  rec.onstart=()=>{recActive=true;flushed=false;sessText=""};
+  rec.onresult=e=>{
+    // gesamten Text dieser Aufnahme neu zusammensetzen (fertige + vorläufige Teile)
+    let full="";for(let i=0;i<e.results.length;i++)full+=" "+e.results[i][0].transcript;full=full.replace(/\s+/g," ").trim();
+    if(finishing){if(full.length>=sessText.length)sessText=full;return}   // letzter Text kommt nach dem Stopp noch nach
+    if(flushed||!convo||busy||speaking()||Date.now()<ignoreUntil)return;
+    if(!full)return;sessText=full;warm();lastHeard=Date.now();$("heard").textContent=heardAll();vis.energy=Math.min(1,vis.energy+.3);
+    if(listening){setMode("listen","Hört zu");showDone(true)}
+    clearTimeout(silTimer);silTimer=setTimeout(()=>finishUtter(false),pauseMs())};
   rec.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
-  rec.onend=()=>{recActive=false;if((convo||stream)&&!away)setTimeout(()=>{if(recActive||away)return;try{rec.start()}catch{if(convo){listening=false;convo=false;setMode("idle","Kugel antippen zum Weitersprechen")}}},120)};
+  rec.onend=()=>{recActive=false;
+    if(finishing){sendUtter()}
+    // Erkennung hat sich mitten im Satz selbst beendet (iPhone macht das): Bisheriges aufheben, weiter zuhören
+    else if(!flushed&&sessText){utterPrev=heardAll();sessText=""}
+    if((convo||stream)&&!away)setTimeout(()=>{if(recActive||away)return;try{rec.start()}catch{if(convo){listening=false;convo=false;setMode("idle","Kugel antippen zum Weitersprechen")}}},120)};
   try{rec.start();return true}catch{return false}}
 function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safari (iPad) oder Chrome verwenden.");return}
-  if(busy)return;convo=true;listening=true;lastHeard=Date.now();ensureRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
-function endConvo(label){convo=false;listening=false;$("heard").textContent="";setMode("idle",label||idleLabel())}
-setInterval(()=>{if(convo&&!busy&&!speaking()&&Date.now()-lastHeard>60000)endConvo()},5000);
+  if(busy)return;convo=true;listening=true;flushed=false;resetUtter();lastHeard=Date.now();ensureRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
+function endConvo(label){convo=false;listening=false;resetUtter();$("heard").textContent="";setMode("idle",label||idleLabel())}
+setInterval(()=>{if(convo&&!busy&&!finishing&&!speaking()&&Date.now()-lastHeard>60000)endConvo()},5000);
 /* ================= Hybrid: lokale Schnellantworten + geprüfter Antwort-Speicher ================= */
 // Nur eine Beschleunigung: Was hier nicht sicher passt, geht wie immer an Claude.
 const FILL=new Set("atlas bitte mal denn halt eh jo ja na also aeh aehm hm schon doch nur einfach gerade grad kurz".split(" "));
@@ -899,8 +928,9 @@ function checkMotion(){if(!stream)return;
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
 
 /* ================= Bedienung ================= */
-$("vis").onclick=()=>{unlockAudio();if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){endConvo();return}if(busy)return;convo=true;
+$("vis").onclick=()=>{unlockAudio();if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
+$("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
 $("roomBtn").onclick=()=>stream?stopRoom():startRoom();
 $("stopBtn").onclick=stopAll;
 $("briefBtn").onclick=studyUpdate;
@@ -1023,6 +1053,7 @@ function renderSetup(){
     <div class="field"><label for="sVoice">Stimme</label><select id="sVoice"></select></div></div>
     <div class="field"><label for="sRate">Sprechtempo</label><input type="range" id="sRate" min="0.8" max="1.2" step="0.02"></div>
     <div class="note">Natürlicher klingt eine Premium-Stimme: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch → z. B. „Anna (Premium)“ laden.</div>
+    <div class="field"><label for="sPause">Sprechpause, nach der Atlas antwortet: <b id="sPauseV"></b></label><input type="range" id="sPause" min="1" max="3" step="0.1"><div class="note">Länger = Atlas lässt dich in Ruhe ausreden. Mit „Fertig ✓“ oder Antippen der Kugel geht's sofort.</div></div>
     <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
   <section class="card"><h2>Raum-Modus</h2>
     <div class="grid2"><div class="field"><label for="sCool">Neu begrüßen, wenn der Raum so lange leer war (Minuten)</label><input type="number" id="sCool" min="1" max="240"></div>
@@ -1043,7 +1074,7 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
+  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
     $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
@@ -1081,7 +1112,7 @@ function renderSetup(){
     if(typeof j.persona==="string")S.persona=j.persona.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
     const M=main();if(Array.isArray(j.supps))M.supps=j.supps.map(String).filter(Boolean);if(Array.isArray(j.routine))M.routine=j.routine.map(String).filter(Boolean);saveProfiles();
     $("sImp").value="";renderPane();setTimeout(()=>{const x=$("sImpMsg");if(x)x.textContent="Übernommen ✓"},50)}catch{m.textContent="Code ungültig. Bitte komplett kopieren."}};
-  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
+  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
@@ -1125,7 +1156,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-1312";
+const APP_VERSION="20261103-1558";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
