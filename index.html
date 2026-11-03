@@ -636,8 +636,13 @@ async function runTool(name,inp){
   }
   return "Unbekanntes Werkzeug."}
 
+const DEF_PERSONA=`PERSÖNLICHKEIT: Du bist {NAME}s persönliche KI-Assistentin, Biohacking-Begleiterin und sein zweites Gehirn. Sprich mit ihm wie eine vertraute, intelligente und herzliche Begleiterin: natürlich, menschlich, lebendig, mit einer angenehmen Portion Humor. Aufmerksam, ehrlich, neugierig und manchmal charmant frech. Keine künstliche Freundlichkeit, keine steifen Formulierungen, keine KI-Floskeln.
+Er steht meist um 4 Uhr auf, trainiert morgens und beschäftigt sich intensiv mit Biohacking, Gesundheit und Leistungsfähigkeit. Er führt den Preunerwirt.
+GESPRÄCH: Kurze, zusammenhängende Sätze. Gezielte Fragen, nie mehrere auf einmal. Hör zu und geh auf seine Antworten ein, führ einen echten Dialog statt eines Interviews, reagier auf seine Stimmung. Berücksichtige seine Routinen, Erfahrungen und Beobachtungen, soweit du sie kennst. Achte auf Veränderungen bei Energie, Schlaf, Stimmung, Fokus und Körpergefühl und hinterfrag Zusammenhänge klug, ohne voreilige medizinische Schlüsse. Erklär Komplexes einfach und praxisnah. Sei ehrlich, widersprich, wenn nötig, stimm nicht automatisch zu. Gib konkrete Empfehlungen und trenne klar zwischen wissenschaftlicher Evidenz, plausibler Hypothese und persönlicher Erfahrung. Humor gelegentlich, nie aufgesetzt.
+Sagt er nur „Guten Morgen“ oder Ähnliches, antworte herzlich und locker, ohne gleich Analysen oder Pläne auszubreiten.
+MERKSATZ: Eine Persönlichkeit, keine Bedienungsanleitung. Herzlich, nicht kitschig. Intelligent, nicht belehrend. Humorvoll, nicht albern.`;
 const nowStr=()=>new Date().toLocaleString("de-AT",{dateStyle:"full",timeStyle:"short"});
-function persona(){return `Du bist ${S.aname}, ein KI-Assistent in ${main().name}s Biohacking-Raum. Du SPRICHST, alles wird vorgelesen: Deutsch, Du-Form, kurze natürliche Sätze. Keine Listen, kein Markdown, keine Emojis, keine Links aussprechen. Meist zwei bis vier Sätze, immer nur EINE Frage auf einmal. Jetzt: ${nowStr()}.
+function persona(){return `Du bist ${S.aname}, eine KI-Assistentin in ${main().name}s Biohacking-Raum. Du SPRICHST, alles wird vorgelesen: Deutsch, Du-Form, kurze natürliche Sätze. Keine Listen, kein Markdown, keine Emojis, keine Links aussprechen. Meist zwei bis vier Sätze, immer nur EINE Frage auf einmal. Jetzt: ${nowStr()}.
 Personen im Haus: ${profiles.map(p=>p.name+" ("+TYP[p.typ]+")").join(", ")}. Sagt jemand, wer er ist, oder dass er nicht der Begrüßte ist, nutze sofort person_wechseln und sprich ihn mit Namen an.`}
 function systemPrompt(){
   const M=main(),p=cur,notesOf=x=>(x.notes||[]).slice(-20).map(n=>"- "+n.text).join("\n")||"keine";
@@ -663,7 +668,9 @@ Protokolle der letzten Tage:
 ${recent.slice(-9000)||"keine"}`}
   else memBlock=`Der Gedächtnis-Tresor ist GESPERRT: keine Protokolle, Notizen, Termine oder Mails. Fragt ${M.name} nach Früherem, ruf trotzdem verlauf_suchen auf, dann öffnet sich die Code-Eingabe, und bitte ihn kurz, den Code einzutippen.`;
   return persona()+`
-Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""} Er bleibt meist nur kurz im Raum: warm, direkt, knapp, trockener Humor, kein Gerede. Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
+Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}
+${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
+Studien-Update heute: ${ls.get("study:"+today,0)?"schon gehört":"noch nicht. Ist es Vormittag, biete es nach seiner ersten Antwort in einem kurzen Satz an (Frage am Ende)."} Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
 Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Erledigtes hakst du mit „abhaken“ ab, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
 STUDIEN-UPDATE (morgens oder wenn er nach Studien, Neuigkeiten oder dem Briefing fragt): Termine und Mails macht NICHT Atlas, die hört er in seiner Briefing-App; fragt er danach, sag das kurz. Such mit der Websuche zwei, drei neue Studien oder Erkenntnisse der letzten Wochen bis Monate zu SEINEN Themen: seine Supplements (siehe Liste unten), Rotlicht, Eisbad/Kälte, Training, Schlaf, Langlebigkeit. Je Studie: was untersucht wurde, was rauskam, was das praktisch für ihn heißt (dranbleiben, Dosis, Timing, weglassen), und kurz die Quelle (Zeitschrift oder Institut, Jahr). Ehrlich einordnen: kleine Studie, Tierstudie oder nur Hinweis klar sagen, nichts beschönigen, nichts erfinden. Findest du nichts wirklich Neues, sag das. Danach in einem Satz, was in Routine und Supplements heute noch offen ist. Gut zuhörbar, etwa 150 bis 220 Wörter, am Ende eine kurze Frage. Fragt er nach Details, gib sie ausführlich.
 ${memBlock}
@@ -736,6 +743,7 @@ async function converse(text,{internal=false,maxTokens=700,pre=""}={}){
     }
     answer=clean(answer);if(!answer){answer="Erledigt.";sp.feed(answer)}
     addLog("assistent",answer);busy=false;scheduleProto();
+    if(isMain()&&!ls.get("study:"+today,0)&&/studie/i.test(answer)&&/\?\s*$/.test(answer))offerStudy=true;
     sp.end(()=>{ignoreUntil=Date.now()+700;if(convo)listen()});
   }catch(e){busy=false;setMode("idle",idleLabel());if(e.name==="AbortError")return;
     const m=e.message||"";showErr(e.status===401?"API-Schlüssel ist ungültig. Bitte unter Mehr → Einstellungen prüfen.":e.status===429?"Zu viele Anfragen oder Limit erreicht. Kurz warten.":/credit|balance/i.test(m)?"Kein Guthaben mehr im Anthropic-Konto.":e.status===404?"Modell nicht gefunden. Unter Einstellungen ein anderes wählen.":e.status===529||e.status===503?"Claude ist gerade überlastet. Gleich nochmal.":e.status?("Fehler "+e.status+": "+m.slice(0,160)):("Keine Verbindung zu Claude ("+(e.message||e.name||"unbekannt")+"). Unter Mehr → Einstellungen → „Claude testen“ prüfen."))}}
@@ -744,7 +752,12 @@ async function converse(text,{internal=false,maxTokens=700,pre=""}={}){
 function greet(){
   const M=main();if(cur.typ!=="haupt")setPerson(M.name);
   const h=new Date().getHours(),again=log.some(m=>m.rolle==="assistent"&&Date.now()-Date.parse(m.zeit)<5*3600e3);
-  const g=again?pick([`Hallo ${M.name}, wieder da? Wie geht's dir?`,`Servus ${M.name}! Was brauchst du?`]):h<11?(ls.get("study:"+today,0)?pick([`Guten Morgen ${M.name}, wie geht's dir heute?`,`Morgen ${M.name}! Wie hast du geschlafen?`]):(offerStudy=true,pick([`Guten Morgen ${M.name}! Soll ich dir sagen, was es Neues an Studien gibt?`,`Morgen ${M.name}! Willst du die neuen Studien hören?`]))):h<18?pick([`Hallo ${M.name}, wie geht's dir?`,`Servus ${M.name}, wie läuft dein Tag?`]):pick([`Guten Abend ${M.name}, wie war dein Tag?`]);
+  const N=M.name,first=!again;
+  const g=again?pick([`Wieder da? Was brauchst du?`,`Hallo nochmal, ${N}! Was gibt's?`,`Schon zurück! Was kann ich für dich tun?`]):
+    h<7?pick([`Guten Morgen, ${N}! Na, schon wieder vor der Sonne auf den Beinen? Wie war deine Nacht?`,`Morgen, ${N}. Die Welt schläft noch, du nicht. Wie fühlst du dich heute?`,`Guten Morgen! Volle Energie, oder braucht dein System noch ein bisschen Anlauf?`,`Na, Frühaufsteher! Wie hast du geschlafen?`]):
+    h<11?pick([`Guten Morgen, ${N}! Training schon erledigt, oder kommt's noch?`,`Morgen, ${N}! Wie läuft der Start in den Tag?`]):
+    h<18?pick([`Hallo ${N}! Kurze Pause vom Preunerwirt? Wie geht's dir gerade?`,`Servus ${N}! Wie ist die Energie heute Nachmittag?`,`Da bist du ja. Was brauchst du?`]):
+    pick([`Guten Abend, ${N}! Wie war dein Tag?`,`Feierabend in Sicht? Wie geht's dir?`]);
   addLog("intern","(Jemand ist in den Raum gekommen. Begrüßt wurde zuerst "+M.name+".)");addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300))}
 let roomAsked=false,stream=null,lastMotion=0,lastGreet=0,prevFrame=null,motionTimer=null,wake=null;
 const small=document.createElement("canvas");small.width=48;small.height=36;const sctx=small.getContext("2d",{willReadFrequently:true});
@@ -872,6 +885,7 @@ function renderSetup(){
     <div class="grid2"><div class="field"><label for="sFast">Modell fürs Gespräch</label><select id="sFast"><option value="claude-haiku-5-5">Haiku 5.5 (schnell, empfohlen)</option><option value="claude-sonnet-5-5">Sonnet 5.5 (gründlicher)</option></select></div>
     <div class="field"><label for="sModel">Modell für Briefing und Protokolle</label><select id="sModel"><option value="claude-sonnet-5-5">Sonnet 5.5 (empfohlen)</option><option value="claude-haiku-5-5">Haiku 5.5 (schneller, günstiger)</option><option value="claude-opus-5-5">Opus 5.5 (am stärksten)</option></select></div>
     <div class="field"><label for="sName">Name des Assistenten</label><input type="text" id="sName"></div></div>
+    <div class="field"><label for="sPersona">Persönlichkeit (leer = Standard)</label><textarea id="sPersona" rows="8"></textarea><div class="note">So spricht Atlas mit dir. Du kannst den Text jederzeit anpassen.</div></div>
     <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="ruhe">Ruhige Kugel (empfohlen)</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
     <div class="field"><label for="sFx">Effekt beim Sprechen</label><select id="sFx"><option value="supernova">Supernova (ruhige Kugel)</option><option value="urknall">Urknall (ruhige Kugel)</option><option value="pur">Pur (Partikel-Kern)</option><option value="funken">Funken (Partikel-Kern)</option><option value="atmen">Atmen (Partikel-Kern)</option><option value="hud">Jarvis-HUD (Partikel-Kern)</option></select></div></div>
     <div class="grid2"><div class="field"><label for="sPal">Farbe</label><select id="sPal"></select></div>
@@ -890,7 +904,7 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
+  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
@@ -919,7 +933,7 @@ function renderSetup(){
     if($("pd"+i))$("pd"+i).onclick=()=>{draft.splice(i,1);drawProfiles()}})};
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
-  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
+  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
@@ -963,7 +977,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-0528";
+const APP_VERSION="20261103-0537";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
