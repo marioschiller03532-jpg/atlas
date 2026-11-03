@@ -138,7 +138,7 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
     <form id="typeForm" hidden><input type="text" id="typeIn" placeholder="Schreib Atlas etwas…" autocomplete="off"><button class="btn primary">Senden</button></form>
     <nav class="dock">
       <button class="btn primary" id="roomBtn">Raum-Modus</button>
-      <button class="btn" id="briefBtn">Briefing</button>
+      <button class="btn" id="briefBtn">Studien-Update</button>
       <button class="btn" id="typeBtn">Tippen</button>
       <button class="btn" id="stopBtn">Stopp</button>
       <button class="btn" id="moreBtn">Mehr</button>
@@ -472,7 +472,7 @@ $("codeForm").onsubmit=async e=>{e.preventDefault();const raw=$("codeIn").value,
   if(!ok){fails++;if(fails>=5){blockUntil=Date.now()+60000;fails=0}return err("Falscher Code.")}
   fails=0;$("codeModal").hidden=true;if(!$("sheet").hidden)renderPane();
   const a=codeAfter;codeAfter=null;
-  if(a==="briefing")whenIdle(()=>converse("(System: Code korrekt, der Tresor ist offen. Mach jetzt das Briefing.)",{internal:true,maxTokens:1600}));
+  if(a==="briefing")whenIdle(studyUpdate);
   else if(a==="verlauf")whenIdle(()=>converse("(System: Code korrekt, der Tresor ist offen. Beantworte jetzt meine letzte Frage, nutze verlauf_suchen.)",{internal:true}));
   else if(a&&a.startsWith("sheet"))openSheet(a.split(":")[1]||"heute")};
 $("lockBtn").onclick=()=>{if(privKey){lockVault(true);say("Tresor gesperrt.")}else if(!isMain()){showErr("Der Tresor gehört "+main().name+".")}else askCode("sheet")};
@@ -587,8 +587,12 @@ function endConvo(label){convo=false;listening=false;$("heard").textContent="";s
 setInterval(()=>{if(convo&&!busy&&!speaking()&&Date.now()-lastHeard>60000)endConvo()},5000);
 function handleUtterance(t){$("heard").textContent=t;
   if(/^(stopp?|danke,? das war'?s|tschüss|ende)\b/i.test(t)){convo=false;listening=false;speak(pick(["Alles klar.","Gern. Bis später.","Passt, ich bin da, wenn du mich brauchst."]));addLog("mensch",t);return}
-  const brief=/briefing/i.test(t);
-  listening=false;converse(t,{maxTokens:brief?1600:700,pre:brief&&isMain()?"Alles klar, ich hol mir deinen Tag.":""})}
+  const yes=offerStudy&&/^(ja|jo|gern|gerne|passt|okay|ok|klar|leg los|bitte|freilich|sicher)\b/i.test(t);offerStudy=false;
+  const brief=yes||/studie|briefing|was gibt'?s neues|neuigkeiten|forschung/i.test(t);
+  if(brief)ls.set("study:"+today,1);
+  listening=false;converse(yes?"Ja, sag mir die neuen Studien.":t,{maxTokens:brief?1600:700,pre:brief?"Moment, ich schau, was es Neues gibt.":""})}
+let offerStudy=false;
+function studyUpdate(){if(away)return;unlockAudio();ls.set("study:"+today,1);if(!isMain())setPerson(main().name);convo=true;converse("Sag mir die neuen Studien.",{maxTokens:1600,pre:"Moment, ich schau, was es Neues gibt."})}
 function stopAll(){convo=false;listening=false;try{rec&&rec.abort()}catch{}hush();abortCtl?.abort();busy=false;setMode("idle",idleLabel())}
 
 /* ================= Claude ================= */
@@ -603,7 +607,7 @@ const T={
  briefing_daten:{name:"briefing_daten",description:"Holt Marios Termine von heute und morgen (alle Kalender inkl. Familienkalender) und die Mails der letzten 24 Stunden. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{}}}
 };
 const WEB={type:"web_search_20250305",name:"web_search",max_uses:3,user_location:{type:"approximate",country:"AT",timezone:"Europe/Vienna"}};
-function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(T.abhaken,T.liste_aendern,T.verlauf_suchen,T.briefing_daten,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
+function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
 const match=(a,b)=>{a=norm(a);b=norm(b);return !!a&&!!b&&(a.includes(b)||b.includes(a))};
 async function runTool(name,inp){
   switch(name){
@@ -656,13 +660,12 @@ Du sprichst mit ${p.name}, einem Gast. Sei freundlich, frag, was ${p.name} brauc
 Notizen: ${mem.notes.slice(-80).map(n=>"- "+n.text+" ("+n.zeit.slice(0,10)+")").join("\n").slice(-4000)||"keine"}
 Früher heute: ${earlier.slice(-3000)||"nichts"}
 Protokolle der letzten Tage:
-${recent.slice(-9000)||"keine"}
-Kalender/Mails: ${bridge?"verbunden (briefing_daten)":"noch nicht eingerichtet"}`}
-  else memBlock=`Der Gedächtnis-Tresor ist GESPERRT: keine Protokolle, Notizen, Termine oder Mails. Fragt ${M.name} nach dem Briefing oder nach Früherem, ruf trotzdem briefing_daten bzw. verlauf_suchen auf, dann öffnet sich die Code-Eingabe, und bitte ihn kurz, den Code einzutippen.`;
+${recent.slice(-9000)||"keine"}`}
+  else memBlock=`Der Gedächtnis-Tresor ist GESPERRT: keine Protokolle, Notizen, Termine oder Mails. Fragt ${M.name} nach Früherem, ruf trotzdem verlauf_suchen auf, dann öffnet sich die Code-Eingabe, und bitte ihn kurz, den Code einzutippen.`;
   return persona()+`
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""} Er bleibt meist nur kurz im Raum: warm, direkt, knapp, trockener Humor, kein Gerede. Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
 Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Erledigtes hakst du mit „abhaken“ ab, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
-BRIEFING, wenn er danach fragt: 1. briefing_daten aufrufen. 2. Mit der Websuche ein, zwei neue Studien oder Erkenntnisse der letzten Monate zu seinen Themen suchen (aus seiner Routine und seinen Supplements). 3. Dann in dieser Reihenfolge sprechen: was heute ansteht (mit Uhrzeiten), was er für morgen vorbereiten sollte, welche Mails eine Reaktion brauchen: JEDE davon nennen, keine weglassen, je mit Absender und worum es geht (nur Newsletter und Werbung weglassen), was in Routine und Supplements noch offen ist, Studien-Update in höchstens zwei Sätzen mit kurzer Quellenangabe. Kurz und klar, aber vollständig: lieber etwas länger als etwas vergessen. Am Ende eine kurze Frage. Fragt er nach Details, gib sie ausführlich.
+STUDIEN-UPDATE (morgens oder wenn er nach Studien, Neuigkeiten oder dem Briefing fragt): Termine und Mails macht NICHT Atlas, die hört er in seiner Briefing-App; fragt er danach, sag das kurz. Such mit der Websuche zwei, drei neue Studien oder Erkenntnisse der letzten Wochen bis Monate zu SEINEN Themen: seine Supplements (siehe Liste unten), Rotlicht, Eisbad/Kälte, Training, Schlaf, Langlebigkeit. Je Studie: was untersucht wurde, was rauskam, was das praktisch für ihn heißt (dranbleiben, Dosis, Timing, weglassen), und kurz die Quelle (Zeitschrift oder Institut, Jahr). Ehrlich einordnen: kleine Studie, Tierstudie oder nur Hinweis klar sagen, nichts beschönigen, nichts erfinden. Findest du nichts wirklich Neues, sag das. Danach in einem Satz, was in Routine und Supplements heute noch offen ist. Gut zuhörbar, etwa 150 bis 220 Wörter, am Ende eine kurze Frage. Fragt er nach Details, gib sie ausführlich.
 ${memBlock}
 Stand heute ${M.name}: ${JSON.stringify(statusOf(M))}
 Weitere Erwachsene heute:
@@ -741,7 +744,7 @@ async function converse(text,{internal=false,maxTokens=700,pre=""}={}){
 function greet(){
   const M=main();if(cur.typ!=="haupt")setPerson(M.name);
   const h=new Date().getHours(),again=log.some(m=>m.rolle==="assistent"&&Date.now()-Date.parse(m.zeit)<5*3600e3);
-  const g=again?pick([`Hallo ${M.name}, wieder da? Wie geht's dir?`,`Servus ${M.name}! Was brauchst du?`]):h<11?pick([`Guten Morgen ${M.name}, wie geht's dir heute?`,`Morgen ${M.name}! Wie hast du geschlafen?`]):h<18?pick([`Hallo ${M.name}, wie geht's dir?`,`Servus ${M.name}, wie läuft dein Tag?`]):pick([`Guten Abend ${M.name}, wie war dein Tag?`]);
+  const g=again?pick([`Hallo ${M.name}, wieder da? Wie geht's dir?`,`Servus ${M.name}! Was brauchst du?`]):h<11?(ls.get("study:"+today,0)?pick([`Guten Morgen ${M.name}, wie geht's dir heute?`,`Morgen ${M.name}! Wie hast du geschlafen?`]):(offerStudy=true,pick([`Guten Morgen ${M.name}! Soll ich dir sagen, was es Neues an Studien gibt?`,`Morgen ${M.name}! Willst du die neuen Studien hören?`]))):h<18?pick([`Hallo ${M.name}, wie geht's dir?`,`Servus ${M.name}, wie läuft dein Tag?`]):pick([`Guten Abend ${M.name}, wie war dein Tag?`]);
   addLog("intern","(Jemand ist in den Raum gekommen. Begrüßt wurde zuerst "+M.name+".)");addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300))}
 let roomAsked=false,stream=null,lastMotion=0,lastGreet=0,prevFrame=null,motionTimer=null,wake=null;
 const small=document.createElement("canvas");small.width=48;small.height=36;const sctx=small.getContext("2d",{willReadFrequently:true});
@@ -766,9 +769,7 @@ $("vis").onclick=()=>{unlockAudio();if(!stream&&!away&&S.key&&!roomAsked){roomAs
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("roomBtn").onclick=()=>stream?stopRoom():startRoom();
 $("stopBtn").onclick=stopAll;
-$("briefBtn").onclick=()=>{if(away)return;unlockAudio();if(!isMain())setPerson(main().name);convo=true;
-  if(vault()&&!privKey){speak("Gib kurz deinen Code ein, dann leg ich los.");askCode("briefing");return}
-  speak("Alles klar, ich hol mir deinen Tag.");converse("Lass uns ein Briefing machen.",{maxTokens:1600})};
+$("briefBtn").onclick=studyUpdate;
 $("typeBtn").onclick=()=>{const f=$("typeForm");f.hidden=!f.hidden;if(!f.hidden)$("typeIn").focus()};
 $("typeForm").onsubmit=e=>{e.preventDefault();const v=$("typeIn").value.trim();if(!v)return;$("typeIn").value="";unlockAudio();convo=false;handleUtterance(v)};
 $("personChip").onclick=()=>{openSheet("heute")};
@@ -793,7 +794,7 @@ function renderToday(){
   if(cur.typ!=="haupt"&&adults.includes(cur))viewP=cur;
   const p=viewP,d=dayOf(p);
   el.innerHTML=`<section class="card"><h2>Steuerung</h2><div class="actions">
-    <button class="btn primary" type="button" id="aBrief">Briefing</button>
+    <button class="btn primary" type="button" id="aBrief">Studien-Update</button>
     <button class="btn" type="button" id="aRoom">${stream?"Raum-Modus aus":"Raum-Modus an"}</button>
     <button class="btn" type="button" id="aStop">Stopp</button>
     <button class="btn" type="button" id="aLock">Mit Code sperren</button></div>
@@ -962,7 +963,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261102-1953";
+const APP_VERSION="20261103-0528";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
