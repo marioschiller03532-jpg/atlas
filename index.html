@@ -670,6 +670,7 @@ ${recent.slice(-9000)||"keine"}`}
   return persona()+`
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}
 ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
+DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
 Studien-Update heute: ${ls.get("study:"+today,0)?"schon gehört":"noch nicht. Ist es Vormittag, biete es nach seiner ersten Antwort in einem kurzen Satz an (Frage am Ende)."} Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
 Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Erledigtes hakst du mit „abhaken“ ab, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
 STUDIEN-UPDATE (morgens oder wenn er nach Studien, Neuigkeiten oder dem Briefing fragt): Termine und Mails macht NICHT Atlas, die hört er in seiner Briefing-App; fragt er danach, sag das kurz. Such mit der Websuche zwei, drei neue Studien oder Erkenntnisse der letzten Wochen bis Monate zu SEINEN Themen: seine Supplements (siehe Liste unten), Rotlicht, Eisbad/Kälte, Training, Schlaf, Langlebigkeit. Je Studie: was untersucht wurde, was rauskam, was das praktisch für ihn heißt (dranbleiben, Dosis, Timing, weglassen), und kurz die Quelle (Zeitschrift oder Institut, Jahr). Ehrlich einordnen: kleine Studie, Tierstudie oder nur Hinweis klar sagen, nichts beschönigen, nichts erfinden. Findest du nichts wirklich Neues, sag das. Danach in einem Satz, was in Routine und Supplements heute noch offen ist. Gut zuhörbar, etwa 150 bis 220 Wörter, am Ende eine kurze Frage. Fragt er nach Details, gib sie ausführlich.
@@ -977,7 +978,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-0537";
+const APP_VERSION="20261103-0542";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
