@@ -552,7 +552,7 @@ function speak(text,then){text=clean(text);$("said").textContent=text;if(!TTS||!
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
     for(const p of parts){const u=mkUtt(p);
-      u.onstart=()=>{if(my!==gen)return;started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+      u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
       u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
       speechSynthesis.speak(u)}},wasBusy?150:0);
@@ -587,8 +587,75 @@ function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safar
   if(busy)return;convo=true;listening=true;lastHeard=Date.now();ensureRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
 function endConvo(label){convo=false;listening=false;$("heard").textContent="";setMode("idle",label||idleLabel())}
 setInterval(()=>{if(convo&&!busy&&!speaking()&&Date.now()-lastHeard>60000)endConvo()},5000);
+/* ================= Hybrid: lokale Schnellantworten + geprüfter Antwort-Speicher ================= */
+// Nur eine Beschleunigung: Was hier nicht sicher passt, geht wie immer an Claude.
+const FILL=new Set("atlas bitte mal denn halt eh jo ja na also aeh aehm hm schon doch nur einfach gerade grad kurz".split(" "));
+const toks=t=>norm(String(t).replace(/ä/gi,"ae").replace(/ö/gi,"oe").replace(/ü/gi,"ue").replace(/ß/g,"ss")).split(/\s+/).filter(w=>w&&!FILL.has(w));
+function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;if(!m||!n)return m||n;let p=Array.from({length:n+1},(_,i)=>i);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+const near=(a,b)=>a===b||(a.length>3&&b.length>3&&lev(a,b)<=(Math.max(a.length,b.length)>6?2:1));
+// Ähnlichkeit zweier Sätze: Anteil der Wörter, die (fast) gleich vorkommen – unabhängig von Reihenfolge und kleinen Erkennungsfehlern
+function sim(A,B){if(!A.length||!B.length)return 0;let hit=0;const used=new Set();for(const a of A){const j=B.findIndex((b,k)=>!used.has(k)&&near(a,b));if(j>=0){hit++;used.add(j)}}return hit/Math.max(A.length,B.length)}
+const INTENTS=[
+ {id:"gruss",max:5,ex:["guten morgen","morgen","servus","hallo","gruess dich","gruess gott","hi","hey","moin","guten abend","guten tag","griass di","servas","hallo atlas"]},
+ {id:"befinden",max:6,ex:["wie gehts dir","wie geht es dir","wie gehts","alles gut bei dir","wie laeuft es bei dir","na wie gehts"]},
+ {id:"danke",max:5,ex:["danke","dankeschoen","danke dir","vielen dank","merci","danke schoen","passt danke","super danke"]},
+ {id:"ok",max:3,ex:["okay","ok","passt","alles klar","gut","super","verstanden","perfekt","in ordnung","jawohl"]},
+ {id:"tschuess",max:5,ex:["tschuess","bis spaeter","ciao","baba","pfiat di","bis dann","bis morgen","gute nacht","ich geh jetzt","servus bis spaeter"]},
+ {id:"uhrzeit",max:7,ex:["wie spaet ist es","wie viel uhr ist es","wieviel uhr haben wir","uhrzeit","sag mir die uhrzeit"]},
+ {id:"datum",max:8,ex:["welcher tag ist heute","welches datum haben wir","der wievielte ist heute","was fuer ein tag ist heute","datum"]},
+ {id:"offen",max:9,ex:["was ist noch offen","was fehlt noch","was muss ich noch nehmen","welche supplements fehlen noch","was hab ich noch nicht","was steht noch an","was ist offen heute"]}];
+const POOL={
+ gruss:()=>pick(["Servus! Schön, dass du da bist. Was brauchst du?","Hallo! Ich bin ganz Ohr.","Da bist du ja. Was steht an?","Grüß dich! Was kann ich für dich tun?"]),
+ befinden:()=>pick(["Mir geht's bestens, danke. Und bei dir, wie läuft's?","Läuft rund hier, kein Absturz in Sicht. Und wie geht's dir?","Gut, danke! Viel wichtiger: Wie fühlst du dich heute?"]),
+ danke:()=>pick(["Gern!","Immer gern.","Passt, dafür bin ich da.","Gerne doch."]),
+ ok:()=>pick(["Passt.","Gut.","Alles klar."]),
+ tschuess:()=>pick(["Bis später!","Servus, bis bald.","Mach's gut, ich bin da, wenn du mich brauchst.","Ciao, bis zum nächsten Mal."]),
+ uhrzeit:()=>{const d=new Date();return `Es ist ${d.getHours()} Uhr${d.getMinutes()?" "+d.getMinutes():""}.`},
+ datum:()=>"Heute ist "+new Date().toLocaleDateString("de-AT",{weekday:"long",day:"numeric",month:"long"})+".",
+ offen:()=>{const s=statusOf(cur),core=x=>x.split(/\s[–-]\s/)[0],r=s.routine.filter(x=>!x.erledigt).map(x=>x.schritt),p=s.supplements.filter(x=>!x.genommen).map(x=>core(x.name));
+   if(!r.length&&!p.length)return "Alles erledigt für heute. Stark!";
+   const h=new Date().getHours(),slot=h<11?/morgens|kaffee/i:h<17?/mittags/i:/abends/i,now=s.supplements.filter(x=>!x.genommen&&slot.test(x.name)).map(x=>core(x.name));
+   return (r.length?`Offen in der Routine: ${r.join(", ")}. `:"")+(p.length?(now.length?`Jetzt dran wären: ${now.join(", ")}. `:"")+`Insgesamt noch ${p.length} Supplements offen.`:"Supplements sind alle drin.")}};
+function detect(t){const T=toks(t);if(!T.length)return null;let best=null;
+  for(const it of INTENTS){if(T.length>it.max)continue;for(const e of it.ex){const sc=sim(T,toks(e));if(sc>=.8&&(!best||sc>best.sc))best={id:it.id,sc}}}return best}
+// "Kreatin und Glycin hab ich genommen" -> lokal abhaken, wenn eindeutig
+function localTick(t){if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return null;const n=" "+toks(t).join(" ")+" ";
+  if(!/ (genommen|gemacht|erledigt|fertig|drin|getrunken|geschluckt|abhaken|hakt? ab|absolviert) /.test(n)||/ (nicht|kein|keine|noch nicht|vergessen) /.test(n))return null;
+  const items=[...cur.routine.map(x=>({k:"routine",v:x})),...cur.supps.map(x=>({k:"supps",v:x}))];const core=x=>toks(x.split(/\s[–-]\s/)[0]).join(" ");
+  const hits=items.filter(x=>{const c=core(x.v);return c&&(n.includes(" "+c+" ")||c.split(" ").every(w=>n.split(" ").some(u=>near(u,w))))});
+  if(!hits.length)return null;
+  // mehrdeutig? z. B. nur "Magnesium" bei drei Magnesium-Formen -> lieber Claude fragen
+  const words=n.trim().split(" ");for(const h of hits){const c=core(h.v).split(" ");if(c.length>1&&!c.every(w=>words.some(u=>near(u,w))))return null}
+  const amb=items.filter(x=>!hits.includes(x)&&hits.some(h=>{const a=core(h.v).split(" ")[0];return a.length>4&&core(x.v).split(" ")[0]===a}));
+  if(amb.length&&hits.some(h=>core(h.v).split(" ").length===1))return null;
+  const d=dayOf(cur);for(const h of hits)d[h.k]=[...new Set([...d[h.k],h.v])];setDay(cur,d);
+  const s=statusOf(cur),open=s.routine.filter(x=>!x.erledigt).length+s.supplements.filter(x=>!x.genommen).length;
+  const names=hits.map(h=>h.v.split(/\s[–-]\s/)[0]);
+  return `${names.join(" und ")} ${names.length>1?"sind":"ist"} abgehakt.`+(open?` Noch ${open} offen.`:" Damit ist alles erledigt für heute!")}
+// Geprüfter Antwort-Speicher: nur allgemeine Wissensfragen, nichts Persönliches, nichts Sensibles, mit Ablaufzeit
+const PERSONAL=/\b(ich|mir|mich|mein\w*|du|dir|dich|dein\w*|wir|uns|unser\w*|heute|gestern|morgen|jetzt|gerade|eva|jonas|leni)\b/i;
+const SENSITIVE=/sex|libido|erot|potenz|krank|schmerz|medikament|diagnos|blut|depress|angst|stuhl|verdau|herz|glut|geld|konto|passwort|code/i;
+const CACHE_TTL=14*864e5;let pendingCache=null;
+const cacheable=(q,a)=>toks(q).length>=3&&!PERSONAL.test(q)&&!SENSITIVE.test(q)&&!SENSITIVE.test(a)&&a.length>20&&a.length<450&&!profiles.some(p=>a.includes(p.name));
+function cacheFind(q){if(PERSONAL.test(q)||SENSITIVE.test(q))return null;const T=toks(q),now=Date.now();let best=null;
+  for(const e of ls.get("acache",[])){if(now-e.at>CACHE_TTL)continue;const sc=sim(T,e.t);if(sc>=.85&&(!best||sc>best.sc))best={...e,sc}}return best}
+function cacheCommit(){if(!pendingCache)return;const L=ls.get("acache",[]).filter(e=>Date.now()-e.at<CACHE_TTL&&sim(e.t,pendingCache.t)<.85);L.push(pendingCache);ls.set("acache",L.slice(-100));pendingCache=null}
+const CORRECTION=/^(nein|falsch|stimmt nicht|quatsch|bloedsinn|bl.dsinn|das ist falsch|nicht richtig|so nicht)/i;
+function localAnswer(t){
+  // Rückmeldung zur letzten Claude-Antwort: keine Korrektur -> in den Speicher übernehmen
+  if(pendingCache){if(CORRECTION.test(t))pendingCache=null;else cacheCommit()}
+  if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return null;
+  const tick=localTick(t);if(tick)return {text:tick,art:"abhaken"};
+  // Hat Atlas gerade etwas gefragt, ist "gut" oder "danke" eine Antwort darauf -> Claude soll darauf eingehen
+  const lastA=[...log].reverse().find(m=>m.rolle==="assistent"),asked=lastA&&/\?\s*$/.test(lastA.text)&&Date.now()-Date.parse(lastA.zeit)<10*60e3;
+  const it=detect(t);if(it&&!(asked&&!["uhrzeit","datum","offen","tschuess"].includes(it.id)))return {text:POOL[it.id](),art:it.id,end:it.id==="tschuess"};
+  const c=cacheFind(t);if(c)return {text:c.a,art:"speicher"};
+  return null}
 function handleUtterance(t){$("heard").textContent=t;perf={end:perf.flushAt||performance.now(),mode:modeOf(t)};
   if(/^(stopp?|danke,? das war'?s|tschüss|ende)\b/i.test(t)){convo=false;listening=false;speak(pick(["Alles klar.","Gern. Bis später.","Passt, ich bin da, wenn du mich brauchst."]));addLog("mensch",t);return}
+  if(!offerStudy){const L=localAnswer(t);if(L){perf.mode="lokal";addLog("mensch",t);addLog("assistent",L.text);listening=false;
+      if(L.end){convo=false;speak(L.text);return}
+      speak(L.text,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}}
   const yes=offerStudy&&/^(ja|jo|gern|gerne|passt|okay|ok|klar|leg los|bitte|freilich|sicher)\b/i.test(t);offerStudy=false;
   const brief=yes||/studie|briefing|was gibt'?s neues|neuigkeiten|forschung/i.test(t);
   if(brief)ls.set("study:"+today,1);
@@ -596,7 +663,7 @@ function handleUtterance(t){$("heard").textContent=t;perf={end:perf.flushAt||per
 let offerStudy=false;
 function studyUpdate(){if(away)return;unlockAudio();ls.set("study:"+today,1);if(!isMain())setPerson(main().name);convo=true;converse("Sag mir die neuen Studien.",{maxTokens:1600,pre:"Moment, ich schau, was es Neues gibt."})}
 // Schnell- oder Expertenmodus automatisch: Fachliches und Längeres -> volles Gedächtnis + Websuche, sonst schlank und sofort
-const EXPERT=/studie|forschung|evidenz|wirk|dosis|dosier|wechselwirk|nebenwirk|warum|wieso|weshalb|erklär|analys|recherch|vergleich|supplement|medizin|blutwert|labor|hormon|libido|testo|mitochond|peptid|bioregul|protokoll|gestern|vorgestern|letzte woche|früher|erinner|weißt du noch|plan|konzept|strategie|glut|idee|schreib|formulier|rechne|kalorie|makro|neu(es|igkeit)|aktuell|news/i;
+const EXPERT=/schwindel|schwindlig|müde|erschöpft|kopfweh|kopfschmerz|schmerz|übel|herzrasen|herz|blutdruck|krank|symptom|schlecht geschlafen|nervös|unruhig|studie|forschung|evidenz|wirk|dosis|dosier|wechselwirk|nebenwirk|warum|wieso|weshalb|erklär|analys|recherch|vergleich|supplement|medizin|blutwert|labor|hormon|libido|testo|mitochond|peptid|bioregul|protokoll|gestern|vorgestern|letzte woche|früher|erinner|weißt du noch|plan|konzept|strategie|glut|idee|schreib|formulier|rechne|kalorie|makro|neu(es|igkeit)|aktuell|news/i;
 const modeOf=t=>EXPERT.test(t)||t.split(/\s+/).length>18?"experte":"schnell";
 function stopAll(){convo=false;listening=false;try{rec&&rec.abort()}catch{}hush();abortCtl?.abort();busy=false;setMode("idle",idleLabel())}
 
@@ -745,7 +812,7 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
   addLog(internal?"intern":"mensch",text);
   setMode("think","Denkt nach");abortCtl=new AbortController();
   const brief=maxTokens>=1600;let quick=!brief&&mode==="schnell";perf.req=performance.now();
-  const tools=toolsFor().filter(t=>!(quick&&t===WEB)).map(t=>t===WEB?{...WEB,max_uses:brief?2:1}:t),msgs=historyMsgs(quick?8:14);let answer="";
+  let usedTool=false;const tools=toolsFor().filter(t=>!(quick&&t===WEB)).map(t=>t===WEB?{...WEB,max_uses:brief?2:1}:t),msgs=historyMsgs(quick?8:14);let answer="";
   try{
     const sys0=systemPrompt(quick?"schnell":"experte"),P=systemPrompt.parts,
       sys=P?[{type:"text",text:P.stat,cache_control:{type:"ephemeral"}},{type:"text",text:P.dyn}]:brief?[{type:"text",text:sys0,cache_control:{type:"ephemeral"}}]:sys0,model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();if(pre)sp.feed(pre+" ");
@@ -757,11 +824,12 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
       if(res.stop_reason==="pause_turn"){msgs.push({role:"assistant",content:res.content});continue}
       if(res.stop_reason!=="tool_use")break;
       msgs.push({role:"assistant",content:res.content});
-      const results=[];for(const b of res.content)if(b.type==="tool_use")results.push({type:"tool_result",tool_use_id:b.id,content:String(await runTool(b.name,b.input||{}))});
+      usedTool=true;const results=[];for(const b of res.content)if(b.type==="tool_use")results.push({type:"tool_result",tool_use_id:b.id,content:String(await runTool(b.name,b.input||{}))});
       msgs.push({role:"user",content:results});
     }
     answer=clean(answer);if(!answer){answer="Erledigt.";sp.feed(answer)}
     addLog("assistent",answer);busy=false;scheduleProto();
+    pendingCache=quick&&!usedTool&&isMain()&&cacheable(text,answer)?{t:toks(text),q:text,a:answer,at:Date.now()}:null;
     if(isMain()&&!ls.get("study:"+today,0)&&/studie/i.test(answer)&&/\?\s*$/.test(answer))offerStudy=true;
     sp.end(()=>{ignoreUntil=Date.now()+350;if(convo)listen()});
   }catch(e){busy=false;setMode("idle",idleLabel());if(e.name==="AbortError")return;
@@ -911,7 +979,7 @@ function renderSetup(){
     <div class="field"><label for="sVoice">Stimme</label><select id="sVoice"></select></div></div>
     <div class="field"><label for="sRate">Sprechtempo</label><input type="range" id="sRate" min="0.8" max="1.2" step="0.02"></div>
     <div class="note">Natürlicher klingt eine Premium-Stimme: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch → z. B. „Anna (Premium)“ laden.</div>
-    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
+    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="row"><button class="btn small" id="sCacheClr" type="button">Antwort-Speicher leeren</button><span class="note" id="sCacheInfo"></span></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
   <section class="card"><h2>Raum-Modus</h2>
     <div class="grid2"><div class="field"><label for="sCool">Neu begrüßen, wenn der Raum so lange leer war (Minuten)</label><input type="number" id="sCool" min="1" max="240"></div>
     <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div></div>
@@ -927,7 +995,7 @@ function renderSetup(){
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
   $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
-    $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
+    $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
@@ -956,6 +1024,7 @@ function renderSetup(){
     if($("pd"+i))$("pd"+i).onclick=()=>{draft.splice(i,1);drawProfiles()}})};
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
+  $("sCacheInfo").textContent=ls.get("acache",[]).length+" gespeicherte Antworten";$("sCacheClr").onclick=()=>{ls.del("acache");pendingCache=null;$("sCacheInfo").textContent="Geleert."};
   $("sImpBtn").onclick=()=>{const m=$("sImpMsg");try{const raw=$("sImp").value.replace(/\s+/g,"");if(!raw.startsWith("ATLAS1:"))throw 0;
     const b=atob(raw.slice(7).replace(/-/g,"+").replace(/_/g,"/")),j=JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))));
     if(typeof j.persona==="string")S.persona=j.persona.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
@@ -1005,7 +1074,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-0612";
+const APP_VERSION="20261103-0715";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
