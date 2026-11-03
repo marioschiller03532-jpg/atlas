@@ -899,6 +899,9 @@ function renderSetup(){
     <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div></div>
     <label class="row" for="sQuick" style="gap:10px"><input type="checkbox" id="sQuick" style="width:22px;height:22px"> Zu Hause ohne Code (Code nur nach Sperren oder im Abwesenheitsmodus)</label>
     <div class="field"><label for="sLock">Sonst automatisch sperren nach (Stunden)</label><input type="number" id="sLock" min="1" max="48"></div></section>
+  <section class="card"><h2>Einrichtung übernehmen</h2>
+    <div class="field"><label for="sImp">Einrichtungs-Code einfügen</label><textarea id="sImp" rows="3" placeholder="ATLAS1:…"></textarea><div class="note">Übernimmt Persönlichkeit, Supplements und Stimme. Bleibt nur auf diesem Gerät.</div></div>
+    <div class="row"><button class="btn small" type="button" id="sImpBtn">Übernehmen</button><span class="note" id="sImpMsg"></span></div></section>
   <section class="card"><h2>Kalender & Mails (Google-Brücke)</h2>
     ${privKey?`<div class="field"><label for="bUrl">Web-App-Adresse (endet auf /exec)</label><input type="url" id="bUrl" placeholder="https://script.google.com/macros/s/…/exec"></div><div class="field"><label for="bTok">Geheimwort</label><input type="password" id="bTok" autocomplete="off"></div><div class="row"><button class="btn small" type="button" id="bTest">Verbindung testen</button><span class="note" id="bRes"></span></div><div class="note">Wird verschlüsselt im Tresor gespeichert.</div>`:`<div class="note">Zum Einrichten erst den Tresor öffnen (🔒 oben).</div>`}</section>
   <section class="card"><h2>Personen</h2><div class="note">Eine Zeile pro Routine-Schritt bzw. Supplement. Kinder bekommen keine Listen.</div><div id="profEd" style="display:grid;gap:10px"></div><div class="row"><button class="btn small" type="button" id="pAdd">+ Person</button></div></section>
@@ -934,6 +937,11 @@ function renderSetup(){
     if($("pd"+i))$("pd"+i).onclick=()=>{draft.splice(i,1);drawProfiles()}})};
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
+  $("sImpBtn").onclick=()=>{const m=$("sImpMsg");try{const raw=$("sImp").value.replace(/\s+/g,"");if(!raw.startsWith("ATLAS1:"))throw 0;
+    const b=atob(raw.slice(7).replace(/-/g,"+").replace(/_/g,"/")),j=JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))));
+    if(typeof j.persona==="string")S.persona=j.persona.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
+    const M=main();if(Array.isArray(j.supps))M.supps=j.supps.map(String).filter(Boolean);if(Array.isArray(j.routine))M.routine=j.routine.map(String).filter(Boolean);saveProfiles();
+    $("sImp").value="";renderPane();setTimeout(()=>{const x=$("sImpMsg");if(x)x.textContent="Übernommen ✓"},50)}catch{m.textContent="Code ungültig. Bitte komplett kopieren."}};
   $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
@@ -978,7 +986,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-0542";
+const APP_VERSION="20261103-0550";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
