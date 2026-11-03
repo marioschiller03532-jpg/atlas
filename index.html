@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
+<link rel="preconnect" href="https://api.anthropic.com" crossorigin>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -546,7 +547,7 @@ function chunk(a,max=230){const out=[];let c="";for(const x of a){const y=x.trim
 let pending=0,afterSpeak=null,gen=0;
 const clean=s=>String(s).replace(/https?:\/\/\S+/g,"").replace(/\[[^\]]*\]\([^)]*\)/g,"").replace(/[*#_`>•|]/g,"").replace(/\s+/g," ").trim();
 function speak(text,then){text=clean(text);$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
-  const my=++gen;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
+  const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
   const finish=()=>{if(my!==gen||pending<0)return;pending=0;setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;f&&f()};
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
@@ -554,7 +555,7 @@ function speak(text,then){text=clean(text);$("said").textContent=text;if(!TTS||!
       u.onstart=()=>{if(my!==gen)return;started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
       u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
-      speechSynthesis.speak(u)}},150);
+      speechSynthesis.speak(u)}},wasBusy?150:0);
   // Absicherung: startet die Stimme nicht, geht es trotzdem weiter (Text steht ja da)
   setTimeout(()=>{if(my===gen&&!started&&pending>0){if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
   // Notbremse, falls das Ende nie gemeldet wird
@@ -568,31 +569,35 @@ const speaking=()=>TTS&&(speechSynthesis.speaking||pending>0);
 if(TTS&&/Chrome/.test(navigator.userAgent)&&!/iP(hone|ad|od)/.test(navigator.userAgent))setInterval(()=>{const v=voice();if(speechSynthesis.speaking&&v&&!v.localService){speechSynthesis.pause();speechSynthesis.resume()}},10000);
 
 /* ================= Zuhören ================= */
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,listening=false,convo=false,recActive=false,ignoreUntil=0,lastHeard=0,silTimer=0,flushed=false,lastFlush={t:"",at:0};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let lastWarm=0;function warm(){if(Date.now()-lastWarm<20000)return;lastWarm=Date.now();const l=document.createElement("link");l.rel="preconnect";l.href="https://api.anthropic.com";l.crossOrigin="anonymous";document.head.append(l);setTimeout(()=>l.remove(),15000)}
+let rec=null,listening=false,convo=false,recActive=false,ignoreUntil=0,lastHeard=0,silTimer=0,flushed=false,lastFlush={t:"",at:0};
 /* Durchgehendes Zuhören: einmal antippen, dann bleibt das Mikrofon im Gespräch offen. Während Atlas spricht, wird nichts ausgewertet. */
 function ensureRec(){if(!SR||away)return false;if(recActive)return true;
   rec=new SR();rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;
   rec.onstart=()=>{recActive=true;flushed=false};
   rec.onresult=e=>{clearTimeout(silTimer);if(flushed||!convo||busy||speaking()||Date.now()<ignoreUntil)return;let interim="";
     for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal){const t=r[0].transcript.trim();if(t&&!(t===lastFlush.t&&Date.now()-lastFlush.at<4000)){lastHeard=Date.now();$("heard").textContent=t;handleUtterance(t)}}else interim+=r[0].transcript}
-    if(interim){lastHeard=Date.now();$("heard").textContent=interim;vis.energy=Math.min(1,vis.energy+.3);
+    if(interim){warm();lastHeard=Date.now();$("heard").textContent=interim;vis.energy=Math.min(1,vis.energy+.3);
       // kurze Stille nach dem Sprechen = Satz fertig. Nicht auf das späte "final" warten, das spart 1–2 Sekunden.
-      const t=interim.trim();silTimer=setTimeout(()=>{if(flushed||!convo||busy||speaking()||t.length<2)return;flushed=true;lastFlush={t,at:Date.now()};try{rec.stop()}catch{}handleUtterance(t)},850)}};
+      const t=interim.trim();silTimer=setTimeout(()=>{if(flushed||!convo||busy||speaking()||t.length<2)return;flushed=true;lastFlush={t,at:Date.now()};perf.flushAt=performance.now()-700;try{rec.stop()}catch{}handleUtterance(t)},700)}};
   rec.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
-  rec.onend=()=>{recActive=false;if((convo||stream)&&!away)setTimeout(()=>{if(recActive||away)return;try{rec.start()}catch{if(convo){listening=false;convo=false;setMode("idle","Kugel antippen zum Weitersprechen")}}},300)};
+  rec.onend=()=>{recActive=false;if((convo||stream)&&!away)setTimeout(()=>{if(recActive||away)return;try{rec.start()}catch{if(convo){listening=false;convo=false;setMode("idle","Kugel antippen zum Weitersprechen")}}},120)};
   try{rec.start();return true}catch{return false}}
 function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safari (iPad) oder Chrome verwenden.");return}
   if(busy)return;convo=true;listening=true;lastHeard=Date.now();ensureRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
 function endConvo(label){convo=false;listening=false;$("heard").textContent="";setMode("idle",label||idleLabel())}
 setInterval(()=>{if(convo&&!busy&&!speaking()&&Date.now()-lastHeard>60000)endConvo()},5000);
-function handleUtterance(t){$("heard").textContent=t;
+function handleUtterance(t){$("heard").textContent=t;perf={end:perf.flushAt||performance.now(),mode:modeOf(t)};
   if(/^(stopp?|danke,? das war'?s|tschüss|ende)\b/i.test(t)){convo=false;listening=false;speak(pick(["Alles klar.","Gern. Bis später.","Passt, ich bin da, wenn du mich brauchst."]));addLog("mensch",t);return}
   const yes=offerStudy&&/^(ja|jo|gern|gerne|passt|okay|ok|klar|leg los|bitte|freilich|sicher)\b/i.test(t);offerStudy=false;
   const brief=yes||/studie|briefing|was gibt'?s neues|neuigkeiten|forschung/i.test(t);
   if(brief)ls.set("study:"+today,1);
-  listening=false;converse(yes?"Ja, sag mir die neuen Studien.":t,{maxTokens:brief?1600:700,pre:brief?"Moment, ich schau, was es Neues gibt.":""})}
+  listening=false;converse(yes?"Ja, sag mir die neuen Studien.":t,{maxTokens:brief?1600:700,mode:brief?"experte":modeOf(t),pre:brief?"Moment, ich schau, was es Neues gibt.":""})}
 let offerStudy=false;
 function studyUpdate(){if(away)return;unlockAudio();ls.set("study:"+today,1);if(!isMain())setPerson(main().name);convo=true;converse("Sag mir die neuen Studien.",{maxTokens:1600,pre:"Moment, ich schau, was es Neues gibt."})}
+// Schnell- oder Expertenmodus automatisch: Fachliches und Längeres -> volles Gedächtnis + Websuche, sonst schlank und sofort
+const EXPERT=/studie|forschung|evidenz|wirk|dosis|dosier|wechselwirk|nebenwirk|warum|wieso|weshalb|erklär|analys|recherch|vergleich|supplement|medizin|blutwert|labor|hormon|libido|testo|mitochond|peptid|bioregul|protokoll|gestern|vorgestern|letzte woche|früher|erinner|weißt du noch|plan|konzept|strategie|glut|idee|schreib|formulier|rechne|kalorie|makro|neu(es|igkeit)|aktuell|news/i;
+const modeOf=t=>EXPERT.test(t)||t.split(/\s+/).length>18?"experte":"schnell";
 function stopAll(){convo=false;listening=false;try{rec&&rec.abort()}catch{}hush();abortCtl?.abort();busy=false;setMode("idle",idleLabel())}
 
 /* ================= Claude ================= */
@@ -644,7 +649,7 @@ MERKSATZ: Eine Persönlichkeit, keine Bedienungsanleitung. Herzlich, nicht kitsc
 const nowStr=()=>new Date().toLocaleString("de-AT",{dateStyle:"full",timeStyle:"short"});
 function persona(){return `Du bist ${S.aname}, eine KI-Assistentin in ${main().name}s Biohacking-Raum. Du SPRICHST, alles wird vorgelesen: Deutsch, Du-Form, kurze natürliche Sätze. Keine Listen, kein Markdown, keine Emojis, keine Links aussprechen. Meist zwei bis vier Sätze, immer nur EINE Frage auf einmal. Jetzt: ${nowStr()}.
 Personen im Haus: ${profiles.map(p=>p.name+" ("+TYP[p.typ]+")").join(", ")}. Sagt jemand, wer er ist, oder dass er nicht der Begrüßte ist, nutze sofort person_wechseln und sprich ihn mit Namen an.`}
-function systemPrompt(){
+function systemPrompt(mode){systemPrompt.parts=null;
   const M=main(),p=cur,notesOf=x=>(x.notes||[]).slice(-20).map(n=>"- "+n.text).join("\n")||"keine";
   if(p.typ==="kind")return persona()+`
 Du sprichst mit ${p.name}, einem Kind von ${M.name}${p.info?" ("+p.info+")":""}. Sei ein lustiger, freundlicher Begleiter: ganz kurze, einfache Sätze, warm und spielerisch. Frag zum Beispiel, wie der Tag war oder was heute toll war, oder biete ein kleines Rätsel, einen Witz oder eine spannende Tatsache über Tiere, das Weltall oder den Körper an. Lob viel, sei geduldig.
@@ -667,17 +672,25 @@ Früher heute: ${earlier.slice(-3000)||"nichts"}
 Protokolle der letzten Tage:
 ${recent.slice(-9000)||"keine"}`}
   else memBlock=`Der Gedächtnis-Tresor ist GESPERRT: keine Protokolle, Notizen, Termine oder Mails. Fragt ${M.name} nach Früherem, ruf trotzdem verlauf_suchen auf, dann öffnet sich die Code-Eingabe, und bitte ihn kurz, den Code einzutippen.`;
-  return persona()+`
+  const P=mainParts(mode,memBlock,others);systemPrompt.parts=P;return P.stat+"\n"+P.dyn}
+// Fester Teil (ändert sich nicht von Frage zu Frage -> Claude kann ihn zwischenspeichern) und wechselnder Teil
+const STUDY_RULE=`STUDIEN-UPDATE (morgens oder wenn er nach Studien, Neuigkeiten oder dem Briefing fragt): Termine und Mails macht NICHT Atlas, die hört er in seiner Briefing-App; fragt er danach, sag das kurz. Such mit der Websuche zwei, drei neue Studien oder Erkenntnisse der letzten Wochen bis Monate zu SEINEN Themen: seine Supplements (siehe Liste unten), Rotlicht, Eisbad/Kälte, Training, Schlaf, Langlebigkeit. Je Studie: was untersucht wurde, was rauskam, was das praktisch für ihn heißt (dranbleiben, Dosis, Timing, weglassen), und kurz die Quelle (Zeitschrift oder Institut, Jahr). Ehrlich einordnen: kleine Studie, Tierstudie oder nur Hinweis klar sagen, nichts beschönigen, nichts erfinden. Findest du nichts wirklich Neues, sag das. Danach in einem Satz, was in Routine und Supplements heute noch offen ist. Gut zuhörbar, etwa 150 bis 220 Wörter, am Ende eine kurze Frage. Fragt er nach Details, gib sie ausführlich.`;
+function mainParts(mode,memBlock,others){const M=main();
+  const stat=`Du bist ${S.aname}, eine KI-Assistentin in ${M.name}s Biohacking-Raum. Du SPRICHST, alles wird vorgelesen: Deutsch, Du-Form, kurze natürliche Sätze. Keine Listen, kein Markdown, keine Emojis, keine Links aussprechen. Meist zwei bis vier Sätze, immer nur EINE Frage auf einmal. Sagt jemand, wer er ist, oder dass er nicht der Begrüßte ist, nutze sofort person_wechseln und sprich ihn mit Namen an.
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}
 ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
 DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
-Studien-Update heute: ${ls.get("study:"+today,0)?"schon gehört":"noch nicht. Ist es Vormittag, biete es nach seiner ersten Antwort in einem kurzen Satz an (Frage am Ende)."} Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
+Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
 Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Erledigtes hakst du mit „abhaken“ ab, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
-STUDIEN-UPDATE (morgens oder wenn er nach Studien, Neuigkeiten oder dem Briefing fragt): Termine und Mails macht NICHT Atlas, die hört er in seiner Briefing-App; fragt er danach, sag das kurz. Such mit der Websuche zwei, drei neue Studien oder Erkenntnisse der letzten Wochen bis Monate zu SEINEN Themen: seine Supplements (siehe Liste unten), Rotlicht, Eisbad/Kälte, Training, Schlaf, Langlebigkeit. Je Studie: was untersucht wurde, was rauskam, was das praktisch für ihn heißt (dranbleiben, Dosis, Timing, weglassen), und kurz die Quelle (Zeitschrift oder Institut, Jahr). Ehrlich einordnen: kleine Studie, Tierstudie oder nur Hinweis klar sagen, nichts beschönigen, nichts erfinden. Findest du nichts wirklich Neues, sag das. Danach in einem Satz, was in Routine und Supplements heute noch offen ist. Gut zuhörbar, etwa 150 bis 220 Wörter, am Ende eine kurze Frage. Fragt er nach Details, gib sie ausführlich.
-${memBlock}
+TEMPO: Bei Begrüßungen, Alltagsgesprächen und einfachen Fragen antwortest du sofort und kurz, ohne Einleitung. Ausführlich nur bei Wissenschaft, Gesundheit, Analysen oder wenn er es will. Fragt er nach Früherem, das du nicht vor dir hast, nutze verlauf_suchen.
+${STUDY_RULE}`;
+  const dyn=`Jetzt: ${nowStr()}. Personen im Haus: ${profiles.map(p=>p.name+" ("+TYP[p.typ]+")").join(", ")}.
+Studien-Update heute: ${ls.get("study:"+today,0)?"schon gehört":"noch nicht. Ist es Vormittag, biete es nach seiner ersten Antwort in einem kurzen Satz an (Frage am Ende)."}
+${mode==="schnell"?(privKey?"Notizen (neueste): "+(mem.notes.slice(-10).map(n=>"- "+n.text).join("\n")||"keine"):"Gedächtnis-Tresor gesperrt."):memBlock}
 Stand heute ${M.name}: ${JSON.stringify(statusOf(M))}
 Weitere Erwachsene heute:
-${others}`}
+${others}`;
+  return {stat,dyn}}
 
 const cleanKey=k=>String(k||"").replace(/[^\x21-\x7E]/g,"");
 async function api(body,signal){
@@ -705,7 +718,7 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;let buf="",que
   // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
   const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
   const say1=s=>{s=clean(s);if(!s||!TTS)return;queued++;const u=mkUtt(s);
-    u.onstart=()=>{if(my!==gen)return;started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+    u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
     u.onend=u.onerror=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
   return{feed(d){all+=d;buf+=d;let m;
       if(!started&&queued<=0&&!bundle&&buf.length>70){const c=buf.match(/^[\s\S]{40,}?[,;–](\s+)/);if(c){add(c[0]);buf=buf.slice(c[0].length)}}
@@ -715,26 +728,31 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;let buf="",que
       setTimeout(()=>{if(my===gen)finish()},5000+all.length*90/Math.max(.5,S.rate))},
     get spoken(){return all.length>0}}}
 const textOf=res=>(res.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
-function historyMsgs(){
+function historyMsgs(n=14){
   const src=isMain()?log:log.filter(m=>m.person===cur.name);
-  const hist=src.slice(-14).map(m=>({role:m.rolle==="assistent"?"assistant":"user",content:(m.rolle==="mensch"&&isMain()&&m.person!==cur.name?`[${m.person}] `:"")+m.text}));
+  const hist=src.slice(-n).map(m=>({role:m.rolle==="assistent"?"assistant":"user",content:(m.rolle==="mensch"&&isMain()&&m.person!==cur.name?`[${m.person}] `:"")+m.text}));
   while(hist.length&&hist[0].role!=="user")hist.shift();
   const out=[];for(const m of hist){const l=out[out.length-1];if(l&&l.role===m.role)l.content+="\n"+m.content;else out.push({...m})}return out}
-let abortCtl=null,busy=false;
+let abortCtl=null,busy=false,perf={};
+// Antwortzeiten messen: Ende deiner Frage -> Claude-Anfrage -> erstes Wort -> erster Ton
+function perfDone(){if(!perf.end||!perf.audio)return;const r=x=>x?Math.round(x-perf.end):null;const e={zeit:new Date().toISOString(),modus:perf.mode,bisAnfrage:r(perf.req),bisErstesWort:r(perf.tok),bisTon:r(perf.audio)};
+  const L=ls.get("perf",[]);L.push(e);ls.set("perf",L.slice(-30));perf={}}
 function whenIdle(fn){const tick=()=>{if(!busy&&!speaking()&&!listening)fn();else setTimeout(tick,300)};setTimeout(tick,200)}
-async function converse(text,{internal=false,maxTokens=700,pre=""}={}){
+async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"}={}){
   if(away)return;
   if(!S.key){openSheet("setup");showErr("Bitte zuerst den API-Schlüssel eintragen.");return}
   if(busy)return;busy=true;showErr("");
   addLog(internal?"intern":"mensch",text);
   setMode("think","Denkt nach");abortCtl=new AbortController();
-  const brief=maxTokens>=1600,tools=toolsFor().map(t=>t===WEB?{...WEB,max_uses:brief?2:1}:t),msgs=historyMsgs();let answer="";
+  const brief=maxTokens>=1600;let quick=!brief&&mode==="schnell";perf.req=performance.now();
+  const tools=toolsFor().filter(t=>!(quick&&t===WEB)).map(t=>t===WEB?{...WEB,max_uses:brief?2:1}:t),msgs=historyMsgs(quick?8:14);let answer="";
   try{
-    const sys=systemPrompt(),model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();if(pre)sp.feed(pre+" ");
+    const sys0=systemPrompt(quick?"schnell":"experte"),P=systemPrompt.parts,
+      sys=P?[{type:"text",text:P.stat,cache_control:{type:"ephemeral"}},{type:"text",text:P.dyn}]:brief?[{type:"text",text:sys0,cache_control:{type:"ephemeral"}}]:sys0,model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();if(pre)sp.feed(pre+" ");
     for(let round=0;round<8;round++){
       let res;
-      try{res=await apiStream({model,max_tokens:maxTokens,system:brief?[{type:"text",text:sys,cache_control:{type:"ephemeral"}}]:sys,tools,messages:msgs},abortCtl.signal,d=>sp.feed(d))}
-      catch(e){const wi=tools.findIndex(t=>t.name==="web_search");if(e.status===400&&/web_search/i.test(e.message)&&wi>=0){S.noSearch=true;saveSettings();tools.splice(wi,1);continue}throw e}
+      try{res=await apiStream({model,max_tokens:quick?400:maxTokens,system:sys,tools,messages:msgs,...(quick?{thinking:{type:"disabled"}}:{})},abortCtl.signal,d=>{if(!perf.tok)perf.tok=performance.now();sp.feed(d)})}
+      catch(e){if(quick&&e.status===400&&/thinking/i.test(e.message||"")){quick=false;round--;continue}const wi=tools.findIndex(t=>t.name==="web_search");if(e.status===400&&/web_search/i.test(e.message)&&wi>=0){S.noSearch=true;saveSettings();tools.splice(wi,1);continue}throw e}
       answer+=" "+textOf(res);sp.feed(" ");
       if(res.stop_reason==="pause_turn"){msgs.push({role:"assistant",content:res.content});continue}
       if(res.stop_reason!=="tool_use")break;
@@ -745,7 +763,7 @@ async function converse(text,{internal=false,maxTokens=700,pre=""}={}){
     answer=clean(answer);if(!answer){answer="Erledigt.";sp.feed(answer)}
     addLog("assistent",answer);busy=false;scheduleProto();
     if(isMain()&&!ls.get("study:"+today,0)&&/studie/i.test(answer)&&/\?\s*$/.test(answer))offerStudy=true;
-    sp.end(()=>{ignoreUntil=Date.now()+700;if(convo)listen()});
+    sp.end(()=>{ignoreUntil=Date.now()+350;if(convo)listen()});
   }catch(e){busy=false;setMode("idle",idleLabel());if(e.name==="AbortError")return;
     const m=e.message||"";showErr(e.status===401?"API-Schlüssel ist ungültig. Bitte unter Mehr → Einstellungen prüfen.":e.status===429?"Zu viele Anfragen oder Limit erreicht. Kurz warten.":/credit|balance/i.test(m)?"Kein Guthaben mehr im Anthropic-Konto.":e.status===404?"Modell nicht gefunden. Unter Einstellungen ein anderes wählen.":e.status===529||e.status===503?"Claude ist gerade überlastet. Gleich nochmal.":e.status?("Fehler "+e.status+": "+m.slice(0,160)):("Keine Verbindung zu Claude ("+(e.message||e.name||"unbekannt")+"). Unter Mehr → Einstellungen → „Claude testen“ prüfen."))}}
 
@@ -893,7 +911,7 @@ function renderSetup(){
     <div class="field"><label for="sVoice">Stimme</label><select id="sVoice"></select></div></div>
     <div class="field"><label for="sRate">Sprechtempo</label><input type="range" id="sRate" min="0.8" max="1.2" step="0.02"></div>
     <div class="note">Natürlicher klingt eine Premium-Stimme: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch → z. B. „Anna (Premium)“ laden.</div>
-    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
+    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
   <section class="card"><h2>Raum-Modus</h2>
     <div class="grid2"><div class="field"><label for="sCool">Neu begrüßen, wenn der Raum so lange leer war (Minuten)</label><input type="number" id="sCool" min="1" max="240"></div>
     <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div></div>
@@ -908,7 +926,8 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
+  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
+    $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
@@ -986,7 +1005,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-0550";
+const APP_VERSION="20261103-0612";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
