@@ -422,7 +422,9 @@ function renderPerson(){const c=$("personChip");c.textContent=cur.name;c.classLi
 /* Tagesstand je Person */
 const dayOf=p=>ls.get(`day:${today}:${p.id}`,{routine:[],supps:[]});
 const setDay=(p,d)=>{ls.set(`day:${today}:${p.id}`,d);if(!$("sheet").hidden&&pane==="heute")renderPane()};
-const statusOf=p=>{const d=dayOf(p);return {routine:p.routine.map(s=>({schritt:s,erledigt:d.routine.includes(s)})),supplements:p.supps.map(s=>({name:s,genommen:d.supps.includes(s)}))}};
+const statusOf=p=>{const d=dayOf(p),ni=d.nicht||[],gr=d.grund||{};return {routine:p.routine.map(s=>({schritt:s,erledigt:d.routine.includes(s)})),
+  supplements:p.supps.map(s=>{const st=d.supps.includes(s)?"genommen":ni.includes(s)?"nicht genommen":"offen";return {name:s,status:st,genommen:st==="genommen",...(gr[s]?{grund:gr[s]}:{})}}),
+  einmalig_heute:(d.extra||[]).map(e=>e.name+(e.zeit?" ("+e.zeit+")":"")+(e.menge?" "+e.menge:"")),letzte_aenderungen:(d.hist||[]).slice(-8)}};
 
 /* ================= Tresor (Verschlüsselung) ================= */
 /* Öffentlicher Schlüssel verschlüsselt jederzeit, nur mit dem Code lässt sich lesen. */
@@ -508,7 +510,11 @@ Nur was wirklich gesagt wurde, nichts erfinden. Knapp, höchstens 220 Wörter, k
 GESPRÄCH:
 `;
 const transcript=L=>L.filter(m=>m.rolle!=="intern").map(m=>`${m.uhr||""} ${m.rolle==="assistent"?S.aname+" (zu "+m.person+")":m.person}: ${m.text}`).join("\n").slice(-60000);
-async function summarize(d,L){const tr=transcript(L);if(!tr.trim()||!S.key)return null;const res=await api({model:S.fastModel||S.model,max_tokens:800,messages:[{role:"user",content:PROTO(d)+tr}]});return textOf(res).trim()||null}
+// gespeichertes Supplement-Tagebuch des Tages fürs Protokoll (maßgeblich, nicht das Gespräch)
+function diaryText(d){const M=main(),x=ls.get(`day:${d}:${M.id}`,null);if(!x)return "";const c=y=>String(y).split(/\s[–-]\s/)[0];
+  const gen=(x.supps||[]).map(c),ni=(x.nicht||[]).map(y=>c(y)+(x.grund&&x.grund[y]?" ("+x.grund[y]+")":"")),off=M.supps.filter(y=>!(x.supps||[]).includes(y)&&!(x.nicht||[]).includes(y)).map(c),ex=(x.extra||[]).map(e=>e.name+(e.menge?" "+e.menge:""));
+  return `\nSUPPLEMENT-TAGEBUCH (gespeichert und maßgeblich, so ins Protokoll übernehmen): genommen: ${gen.join(", ")||"–"}; bewusst/nicht genommen: ${ni.join(", ")||"–"}; offen/unbekannt: ${off.join(", ")||"–"}; einmalig zusätzlich: ${ex.join(", ")||"–"}\n`}
+async function summarize(d,L){const tr=transcript(L);if(!tr.trim()||!S.key)return null;const res=await api({model:S.fastModel||S.model,max_tokens:800,messages:[{role:"user",content:PROTO(d)+diaryText(d)+tr}]});return textOf(res).trim()||null}
 async function saveProto(d,sid,text){const p={text,aktualisiert:new Date().toISOString()};await putSealed(`proto:${d}:${sid}`,p);if(privKey){const arr=(mem.protos[d]=mem.protos[d]||[]).filter(x=>x.sid!==sid);arr.push({sid,...p});mem.protos[d]=arr}}
 let protoTimer=null,protoLen=0,protoBusy=false;
 function scheduleProto(){clearTimeout(protoTimer);protoTimer=setTimeout(sessionProto,10*60000)}
@@ -654,26 +660,58 @@ const POOL={
  tschuess:()=>pickFresh("bye",["Bis später!","Servus, bis bald.","Mach's gut, ich bin da, wenn du mich brauchst.","Ciao, bis zum nächsten Mal."]),
  uhrzeit:()=>{const d=new Date();return `Es ist ${d.getHours()} Uhr${d.getMinutes()?" "+d.getMinutes():""}.`},
  datum:()=>"Heute ist "+new Date().toLocaleDateString("de-AT",{weekday:"long",day:"numeric",month:"long"})+".",
- offen:()=>{const s=statusOf(cur),core=x=>x.split(/\s[–-]\s/)[0],r=s.routine.filter(x=>!x.erledigt).map(x=>x.schritt),p=s.supplements.filter(x=>!x.genommen).map(x=>core(x.name));
+ offen:()=>{const s=statusOf(cur),core=x=>x.split(/\s[–-]\s/)[0],r=s.routine.filter(x=>!x.erledigt).map(x=>x.schritt),p=s.supplements.filter(x=>x.status==="offen").map(x=>core(x.name));
    if(!r.length&&!p.length)return "Alles erledigt für heute. Stark!";
-   const h=new Date().getHours(),slot=h<11?/morgens|kaffee/i:h<17?/mittags/i:/abends/i,now=s.supplements.filter(x=>!x.genommen&&slot.test(x.name)).map(x=>core(x.name));
+   const h=new Date().getHours(),slot=h<11?/morgens|kaffee/i:h<17?/mittags/i:/abends/i,now=s.supplements.filter(x=>x.status==="offen"&&slot.test(x.name)).map(x=>core(x.name));
    return (r.length?`Offen in der Routine: ${r.join(", ")}. `:"")+(p.length?(now.length?`Jetzt dran wären: ${now.join(", ")}. `:"")+`Insgesamt noch ${p.length} Supplements offen.`:"Supplements sind alle drin.")}};
 function detect(t){const T=toks(t);if(!T.length)return null;let best=null;
   for(const it of INTENTS){if(T.length>it.max)continue;for(const e of it.ex){const sc=sim(T,toks(e));if(sc>=.8&&(!best||sc>best.sc))best={id:it.id,sc}}}return best}
-// "Kreatin und Glycin hab ich genommen" -> lokal abhaken, wenn eindeutig
-function localTick(t){if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return null;const n=" "+toks(t).join(" ")+" ";
-  if(!/ (genommen|gemacht|erledigt|fertig|drin|getrunken|geschluckt|abhaken|hakt? ab|absolviert) /.test(n)||/ (nicht|kein|keine|noch nicht|vergessen) /.test(n))return null;
-  const items=[...cur.routine.map(x=>({k:"routine",v:x})),...cur.supps.map(x=>({k:"supps",v:x}))];const core=x=>toks(x.split(/\s[–-]\s/)[0]).join(" ");
-  const hits=items.filter(x=>{const c=core(x.v);return c&&(n.includes(" "+c+" ")||c.split(" ").every(w=>n.split(" ").some(u=>near(u,w))))});
-  if(!hits.length)return null;
-  // mehrdeutig? z. B. nur "Magnesium" bei drei Magnesium-Formen -> lieber Claude fragen
-  const words=n.trim().split(" ");for(const h of hits){const c=core(h.v).split(" ");if(c.length>1&&!c.every(w=>words.some(u=>near(u,w))))return null}
-  const amb=items.filter(x=>!hits.includes(x)&&hits.some(h=>{const a=core(h.v).split(" ")[0];return a.length>4&&core(x.v).split(" ")[0]===a}));
-  if(amb.length&&hits.some(h=>core(h.v).split(" ").length===1))return null;
-  const d=dayOf(cur);for(const h of hits)d[h.k]=[...new Set([...d[h.k],h.v])];setDay(cur,d);
-  const s=statusOf(cur),open=s.routine.filter(x=>!x.erledigt).length+s.supplements.filter(x=>!x.genommen).length;
-  const names=hits.map(h=>h.v.split(/\s[–-]\s/)[0]);
-  return `${names.join(" und ")} ${names.length>1?"sind":"ist"} abgehakt.`+(open?` Noch ${open} offen.`:" Damit ist alles erledigt für heute!")}
+// ===== Supplement-Tagebuch: drei Zustände je Supplement (genommen / nicht genommen / offen), nur eindeutige Aussagen zählen =====
+const tk=s=>toks(String(s).replace(/[-–\/]/g," "));
+const coreOf=x=>String(x).split(/\s[–-]\s/)[0].trim();
+// findet in den Wörtern U die Stelle, an der der Name C steht (auch "L Theanin" = "LTheanin", kleine Erkennungsfehler erlaubt)
+function findSeq(U,C){const cj=C.join("");for(let i=0;i<U.length;i++){for(let n=1;n<=Math.min(3,U.length-i);n++){const w=U.slice(i,i+n);
+  if(n===C.length&&w.every((x,k)=>near(x,C[k])))return [i,n];if(near(w.join(""),cj)&&cj.length>=4)return [i,n]}}return null}
+// Name -> genau EIN Eintrag der Liste, sonst null bzw. mehrdeutig
+function resolveItem(name,list){const N=tk(name);if(!N.length)return {hit:null,cands:[]};
+  const exact=list.filter(x=>{const C=tk(coreOf(x));return C.length===N.length&&findSeq(N,C)});if(exact.length===1)return {hit:exact[0],cands:exact};
+  const part=list.filter(x=>{const C=tk(coreOf(x));return findSeq(C,N)||findSeq(N,C)});return part.length===1?{hit:part[0],cands:part}:{hit:null,cands:part}}
+function dayGet(p){const d=dayOf(p);d.nicht=d.nicht||[];d.extra=d.extra||[];d.hist=d.hist||[];d.grund=d.grund||{};return d}
+const suppState=(d,s)=>d.supps.includes(s)?"genommen":d.nicht.includes(s)?"nicht genommen":"offen";
+// setzt EIN Supplement auf einen Zustand und schreibt es ins Tagebuch
+function setSupp(p,item,status,grund,quelle){const d=dayGet(p),alt=suppState(d,item);
+  d.supps=d.supps.filter(x=>x!==item);d.nicht=d.nicht.filter(x=>x!==item);delete d.grund[item];
+  if(status==="genommen")d.supps.push(item);else if(status==="nicht genommen"){d.nicht.push(item);if(grund)d.grund[item]=grund}
+  d.hist.push({zeit:new Date().toTimeString().slice(0,5),name:coreOf(item),von:alt,nach:status,quelle:quelle||"gespräch"});d.hist=d.hist.slice(-40);setDay(p,d);return alt}
+function setRoutine(p,item,done){const d=dayGet(p);d.routine=done?[...new Set([...d.routine,item])]:d.routine.filter(x=>x!==item);
+  d.hist.push({zeit:new Date().toTimeString().slice(0,5),name:item,von:"",nach:done?"erledigt":"offen",quelle:"gespräch"});d.hist=d.hist.slice(-40);setDay(p,d)}
+// Lokal nur ganz eindeutige Sätze: "Glycin habe ich genommen, L-Theanin nicht", "Ich habe doch kein Glycin genommen".
+// Alles Kontextabhängige ("Ja", "Nur Glycin", "Alles außer …", "Ich hab mich versprochen") und Unbekannte gehen an Claude.
+const NEG=/\b(nicht|kein|keine|keinen|nein|vergessen|ausgelassen|weggelassen|nix|nichts)\b/,UNSURE=/\b(weiss nicht|weis nicht|keine ahnung|nicht sicher|weiss ich nicht|noch offen|unsicher)\b/,
+  POS=/\b(genommen|eingenommen|gemacht|erledigt|drin|getrunken|geschluckt|absolviert|abhaken|hakt|geschafft)\b/,
+  OKW=new Set("ich hab habe hab's habs heute abend abends morgens morgen mittags frueh vorhin gerade eben schon auch und doch noch zusaetzlich bereits jetzt gestern mal den die das dem der genommen eingenommen gemacht erledigt drin getrunken geschluckt absolviert abhaken hakt ab geschafft nicht kein keine keinen nein vergessen ausgelassen weggelassen nix nichts sorry stimmt so du kannst bitte abhaken eintragen war ist ein eine".split(" "));
+function localTick(t){if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return null;const raw=" "+toks(t).join(" ")+" ";
+  if(/\b(alles|alle|nur|ausser|versprochen|ja|jo|moment|beide|rest|andere|anderen|das|dies|davon)\b/.test(raw))return null;
+  const items=[...cur.supps.map(v=>({k:"s",v})),...cur.routine.map(v=>({k:"r",v}))];
+  const clauses=String(t).split(/,|;|\.|\baber\b|\bsondern\b|\bdafür\b/i).map(c=>tk(c)).filter(c=>c.length);
+  const found=[];let unknown=false;
+  for(const U of clauses){const used=new Array(U.length).fill(false),hits=[];
+    // längste Namen zuerst, damit "Magnesium Bisglycinat" nicht als "Glycin" zählt
+    for(const it of items.slice().sort((a,b)=>tk(coreOf(b.v)).join("").length-tk(coreOf(a.v)).join("").length)){const C=tk(coreOf(it.v));
+      for(let i=0;i<U.length;i++){if(used[i])continue;const r=findSeq(U.slice(i),C);if(r&&r[0]===0){for(let k=i;k<i+r[1];k++)used[k]=true;hits.push(it);break}}}
+    const s=" "+U.join(" ")+" ",pol=UNSURE.test(s)?"offen":NEG.test(s)?"neg":POS.test(s)?"pos":null;
+    U.forEach((w,i)=>{if(!used[i]&&!OKW.has(w)&&w.length>=4)unknown=true});
+    found.push({hits,pol})}
+  if(unknown)return null;   // unbekanntes Wort, evtl. neues Supplement -> Claude fragt nach
+  // Teilsatz ohne eigene Aussage übernimmt die des nächsten (dann des vorigen)
+  for(let i=0;i<found.length;i++)if(found[i].hits.length&&!found[i].pol)found[i].pol=(found.slice(i+1).find(f=>f.pol)||found.slice(0,i).reverse().find(f=>f.pol)||{}).pol||null;
+  const all=found.filter(f=>f.hits.length);if(!all.length||all.some(f=>!f.pol))return null;
+  const out=[];const d0=dayGet(cur);
+  for(const f of all)for(const h of f.hits){if(h.k==="r"){setRoutine(cur,h.v,f.pol==="pos");out.push({n:h.v,st:f.pol==="pos"?"erledigt":"offen",alt:""});continue}
+    const st=f.pol==="pos"?"genommen":f.pol==="neg"?"nicht genommen":"offen",alt=setSupp(cur,h.v,st,"",  "lokal");out.push({n:coreOf(h.v),st,alt})}
+  const said=out.map(o=>o.alt&&o.alt!=="offen"&&o.alt!==o.st?`Alles klar, ich korrigiere ${o.n} auf ${o.st}.`:o.st==="genommen"||o.st==="erledigt"?`${o.n} ist abgehakt.`:o.st==="nicht genommen"?`${o.n} notiere ich als nicht genommen.`:`${o.n} bleibt offen.`);
+  const s=statusOf(cur),open=s.supplements.filter(x=>x.status==="offen").length+s.routine.filter(x=>!x.erledigt).length;
+  return said.join(" ")+(open?` Noch ${open} offen.`:" Damit ist für heute alles erfasst.")}
 // ---- 1) Allgemeiner Antwort-Cache: nur zeitloses Allgemeinwissen, max. 14 Tage
 const PERSONAL=/\b(ich|mir|mich|mein\w*|du|dir|dich|dein\w*|wir|uns|unser\w*|heute|gestern|morgen|jetzt|gerade)\b/i;
 const SENSITIVE=/sex|libido|erot|potenz|krank|schmerz|medikament|diagnos|blut|depress|angst|stuhl|verdau|herz|glut|geld|konto|passwort|code|schwanger|dosis|dosier|wie viel|wieviel|nebenwirk|wechselwirk/i;
@@ -754,7 +792,9 @@ const T={
  beobachtung_merken:{name:"beobachtung_merken",description:"Speichert eine Beobachtung aus dem Gespräch, die er selbst geäußert hat (Training, Schlaf, Stress, Ziel, Reaktion auf Supplement oder Routine). Nur wenn das Speichern von Beobachtungen erlaubt ist. Knapp, sachlich, mit Datum.",input_schema:{type:"object",properties:{thema:{type:"string",enum:["Training","Schlaf","Stress","Ziel","Supplement-Reaktion","Routine","Sonstiges"]},text:{type:"string",description:"z. B. Kommt seit zwei Wochen wegen Personalmangel kaum zum Training"}},required:["thema","text"]}},
  persoenlich_speichern:{name:"persoenlich_speichern",description:"Persönlicher Speicher für BESTÄTIGTE Vorlieben, Abläufe, Einstellungen und wiederkehrende Arbeitsanweisungen von Mario. NUR aufrufen, wenn er ausdrücklich sagt, dass du es so speichern sollst, oder auf deine Rückfrage klar zustimmt. Gesundheitsdaten und andere sensible Infos nur mit zugestimmt=true, nachdem er ausdrücklich Ja gesagt hat. Gleicher Titel = Eintrag wird aktualisiert.",input_schema:{type:"object",properties:{titel:{type:"string",description:"kurz, z. B. Morgenroutine, Eisbad-Ablauf, Antwortstil"},text:{type:"string",description:"der bestätigte Inhalt, eigenständig verständlich"},art:{type:"string",enum:["Ablauf","Einstellung","Anweisung","Gesundheit","Sonstiges"]},zugestimmt:{type:"boolean",description:"true nur, wenn er dem Speichern ausdrücklich zugestimmt hat"}},required:["titel","text","art"]}},
  merken:{name:"merken",description:"Speichert dauerhaft eine wichtige Information über die Person, mit der du sprichst (Entscheidung, Vorhaben, Vorliebe, Idee). Nutzen, wenn etwas später wichtig ist oder jemand sagt: merk dir das.",input_schema:{type:"object",properties:{text:{type:"string",description:"Kurzer, eigenständig verständlicher Satz"}},required:["text"]}},
- abhaken:{name:"abhaken",description:"Hakt für die aktuelle Person einen Routine-Schritt oder ein Supplement von heute als erledigt ab (erledigt=false macht es rückgängig). Gibt den neuen Stand zurück.",input_schema:{type:"object",properties:{name:{type:"string"},erledigt:{type:"boolean"}},required:["name"]}},
+ abhaken:{name:"abhaken",description:"Hakt einen ROUTINE-Schritt von heute ab (erledigt=false macht es rückgängig). Für Supplements supplement_status verwenden.",input_schema:{type:"object",properties:{name:{type:"string"},erledigt:{type:"boolean"}},required:["name"]}},
+ supplement_status:{name:"supplement_status",description:"Supplement-Tagebuch von heute: setzt für JEDES genannte Supplement einzeln den Status genommen, nicht_genommen oder offen. Nur Supplements eintragen, zu denen er eine eindeutige Aussage gemacht hat; nie pauschal mehrere. 'Alles außer X' heißt nur die Supplements, nach denen du gerade gefragt hast, jedes einzeln aufgeführt. Korrekturen genauso. Mehrdeutige Namen (z. B. nur 'Magnesium') werden abgelehnt: dann nachfragen.",input_schema:{type:"object",properties:{eintraege:{type:"array",items:{type:"object",properties:{name:{type:"string"},status:{type:"string",enum:["genommen","nicht_genommen","offen"]},grund:{type:"string",description:"optional, z. B. bewusst ausgelassen, vergessen"}},required:["name","status"]}}},required:["eintraege"]}},
+ einmalig_erfassen:{name:"einmalig_erfassen",description:"Erfasst ein Supplement, das NICHT auf seiner Liste steht, als einmalige Einnahme heute (nur nach seiner Bestätigung, dass es nur für heute ist). Macht daraus keine Routine.",input_schema:{type:"object",properties:{name:{type:"string"},zeit:{type:"string",description:"z. B. abends"},menge:{type:"string"}},required:["name"]}},
  liste_aendern:{name:"liste_aendern",description:"Ändert die feste Routine- oder Supplement-Liste einer Person dauerhaft. Ohne person gilt die aktuelle Person. Der Hauptnutzer darf auch die Listen der anderen ändern. Gibt die neue Liste zurück.",input_schema:{type:"object",properties:{person:{type:"string"},liste:{type:"string",enum:["routine","supplements"]},hinzufuegen:{type:"array",items:{type:"string"}},entfernen:{type:"array",items:{type:"string"}}},required:["liste"]}},
  verlauf_suchen:{name:"verlauf_suchen",description:"Durchsucht Marios Tagesprotokolle und Notizen nach Stichworten und gibt Fundstellen mit Datum zurück. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{stichwort:{type:"string"}},required:["stichwort"]}},
  person_anlegen:{name:"person_anlegen",description:"Legt eine neue Person an, die Atlas kennen soll (nur auf Wunsch des Hauptnutzers). art: erwachsen oder kind. info: kurze Beschreibung, z. B. Alter oder Schulklasse.",input_schema:{type:"object",properties:{name:{type:"string"},art:{type:"string",enum:["erwachsen","kind"]},info:{type:"string"}},required:["name","art"]}},
@@ -762,7 +802,7 @@ const T={
  briefing_daten:{name:"briefing_daten",description:"Holt Marios Termine von heute und morgen (alle Kalender inkl. Familienkalender) und die Mails der letzten 24 Stunden. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{}}}
 };
 const WEB={type:"web_search_20250305",name:"web_search",max_uses:3,user_location:{type:"approximate",country:"AT",timezone:"Europe/Vienna"}};
-function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(...(S.obsStore?[T.beobachtung_merken]:[]),T.persoenlich_speichern,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
+function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(...(S.obsStore?[T.beobachtung_merken]:[]),T.persoenlich_speichern,T.supplement_status,T.einmalig_erfassen,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.supplement_status,T.einmalig_erfassen,T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
 const match=(a,b)=>{a=norm(a);b=norm(b);return !!a&&!!b&&(a.includes(b)||b.includes(a))};
 async function runTool(name,inp){
   switch(name){
@@ -770,10 +810,19 @@ async function runTool(name,inp){
   case "merken":return addNote(inp.text);
   case "persoenlich_speichern":return savePref(inp);
   case "beobachtung_merken":return saveObs(inp);
-  case "abhaken":{if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return "Nicht verfügbar.";const d=dayOf(cur),on=inp.erledigt!==false;
-    const r=cur.routine.find(s=>match(s,inp.name)),sp=cur.supps.find(s=>match(s,inp.name));
-    if(!r&&!sp)return "Nicht in der Liste: "+inp.name+". Stand: "+JSON.stringify(statusOf(cur));
-    const key=r?"routine":"supps",val=r||sp;d[key]=on?[...new Set([...d[key],val])]:d[key].filter(x=>x!==val);setDay(cur,d);return JSON.stringify(statusOf(cur))}
+  case "abhaken":{if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return "Nicht verfügbar.";const on=inp.erledigt!==false;
+    const r=resolveItem(inp.name,cur.routine);if(r.hit){setRoutine(cur,r.hit,on);return JSON.stringify(statusOf(cur))}
+    const sp=resolveItem(inp.name,cur.supps);if(sp.hit){setSupp(cur,sp.hit,on?"genommen":"offen","","claude");return JSON.stringify(statusOf(cur))}
+    const c=[...r.cands,...sp.cands];return c.length?"MEHRDEUTIG, nichts geändert: "+inp.name+" passt auf "+c.map(coreOf).join(", ")+". Frag nach, welches.":"Nicht in der Liste: "+inp.name+". Nichts geändert."}
+  case "supplement_status":{if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return "Nicht verfügbar.";const res=[];
+    for(const e of (inp.eintraege||[])){const r=resolveItem(e.name,cur.supps);
+      if(!r.hit){res.push(r.cands.length?`${e.name}: MEHRDEUTIG (${r.cands.map(coreOf).join(", ")}), nichts geändert, nachfragen`:`${e.name}: NICHT AUF DER LISTE, nichts geändert. Frag, ob nur für heute (einmalig_erfassen) oder dauerhaft (nach Zeitpunkt, Dosis, Zweck fragen, dann liste_aendern)`);continue}
+      const st=e.status==="nicht_genommen"?"nicht genommen":e.status==="offen"?"offen":"genommen",alt=setSupp(cur,r.hit,st,e.grund,"claude");res.push(`${coreOf(r.hit)}: ${alt} -> ${st}`)}
+    return res.join("\n")+"\nStand: "+JSON.stringify(statusOf(cur).supplements.map(x=>coreOf(x.name)+"="+x.status))}
+  case "einmalig_erfassen":{if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return "Nicht verfügbar.";const n=String(inp.name||"").trim();if(!n)return "leer";
+    const r=resolveItem(n,cur.supps);if(r.hit)return coreOf(r.hit)+" steht schon auf der Liste: supplement_status verwenden.";
+    const d=dayGet(cur);d.extra.push({name:n,zeit:inp.zeit||"",menge:inp.menge||"",um:new Date().toTimeString().slice(0,5)});d.hist.push({zeit:new Date().toTimeString().slice(0,5),name:n,von:"",nach:"einmalig genommen",quelle:"claude"});setDay(cur,d);
+    return "Einmalig für heute erfasst: "+n+". Nicht in die Routine übernommen."}
   case "liste_aendern":{let p=cur;if(inp.person){const q=findProfile(inp.person);if(!q)return "Person unbekannt: "+inp.person;if(q!==cur&&!isMain())return "Nicht erlaubt.";p=q}
     if(p.typ==="kind"||p.typ==="gast")return "Für "+p.name+" gibt es keine Listen.";const key=inp.liste==="routine"?"routine":"supps";
     const rm=(inp.entfernen||[]).map(String),add=(inp.hinzufuegen||[]).map(s=>String(s).trim()).filter(Boolean);
@@ -808,7 +857,7 @@ Du sprichst mit ${p.name}, einem Kind von ${M.name}${p.info?" ("+p.info+")":""}.
 Regeln: Keine Supplements, kein Eisbad, keine Geräte im Raum erklären oder empfehlen, keine Erwachsenenthemen, nichts Gruseliges. Private Sachen von ${M.name} gibst du nie weiter. Du ersetzt nicht Mama oder Papa: Ist ${p.name} traurig, hat sich wehgetan oder passiert etwas Gefährliches, sag lieb, dass ${p.name} sofort zu Mama oder Papa gehen soll. Schlag nach einer Weile vor, wieder zu den anderen zu gehen, denn der Raum hat Geräte für Erwachsene.
 Was du dir über ${p.name} gemerkt hast: ${notesOf(p)}`;
   if(p.typ==="erwachsen")return persona()+`
-Du sprichst mit ${p.name}${p.info?" ("+p.info+")":""}. ${M.name} hat für ${p.name} eine Routine und Supplements hergerichtet. Nach der Begrüßung frag, wie es geht, und geh dann kurz durch, was heute noch offen ist: zuerst die Supplements (nenn sie beim Namen), dann Rotlicht und Eisbad. Hake Erledigtes mit „abhaken“ ab, ändere Listen mit „liste_aendern“, wenn ${p.name} das sagt. Hilf auch bei allem anderen (Biohacking, Ernährung, Ideen), für Aktuelles gern mit der Websuche.
+Du sprichst mit ${p.name}${p.info?" ("+p.info+")":""}. ${M.name} hat für ${p.name} eine Routine und Supplements hergerichtet. Nach der Begrüßung frag, wie es geht, und geh dann kurz durch, was heute noch offen ist: zuerst die Supplements (nenn sie beim Namen), dann Rotlicht und Eisbad. Hake Routine-Schritte mit „abhaken“ ab und trag Supplements einzeln mit „supplement_status“ ein (genommen, nicht genommen oder offen; nur nach eindeutiger Aussage, nie pauschal), ändere Listen mit „liste_aendern“, wenn ${p.name} das sagt. Hilf auch bei allem anderen (Biohacking, Ernährung, Ideen), für Aktuelles gern mit der Websuche.
 ${M.name}s private Daten (Gedächtnis, Protokolle, Termine, Mails, seine Gespräche) gibst du nicht weiter; weise freundlich darauf hin, falls gefragt.
 Gemerkt über ${p.name}: ${notesOf(p)}
 Stand heute: ${JSON.stringify(statusOf(p))}`;
@@ -834,8 +883,11 @@ ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
 DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
 GESPRÄCH WIE EIN MENSCH: Erkenne, ob er reden, eine Lösung finden oder einfach entspannen will, und richte dich danach; im Zweifel kurz fragen, was er gerade braucht. Erzählt er etwas Persönliches („Heute war ein stressiger Tag“), geh darauf ein und frag gezielt nach, was los war, statt sofort Tipps zu geben oder das Thema zu wechseln. Bleib beim Thema, bis er es wechselt, und knüpf an das an, was er gerade gesagt hat. Frag nicht nach jeder Antwort nach; manchmal reicht eine echte Reaktion. Formuliere jedes Mal anders, keine Standardsätze, wiederhol nicht deine eigenen Formulierungen von vorhin. Humor und Wärme ja, aber nicht in jeder Antwort. Kurze Fragen kurz, komplexe fundiert, nie ein Vortrag ohne Anlass.
 BIOHACKING-ALLTAG: Denk Schlaf, Training und Regeneration, Stress, Supplements und seinen Arbeitsrhythmus im Betrieb zusammen. Sagt er etwa, er kommt nicht zum Training, frag zuerst nach dem Grund und wie sein Rhythmus gerade aussieht, und schlag dann realistische Alternativen vor (kurz, zu Hause, im Raum, Regeneration statt Training), keinen Standardplan. Wissenschaft immer nach Evidenz einordnen: gut belegt (mehrere Humanstudien, Metaanalysen), plausibel aber begrenzt untersucht, experimentell oder anekdotisch, unbelegt oder riskant. Seine persönlichen Erfahrungen sind wertvolle Beobachtungen, aber keine Beweise; stell sie nie als wissenschaftlich belegt dar.
+SUPPLEMENT-TAGEBUCH: Jedes Supplement hat heute genau einen Status: genommen, nicht genommen oder offen. Ändere einen Status nur nach einer eindeutigen Aussage von ihm, jedes Supplement einzeln, nie pauschal; erfinde nie eine Einnahme. Frag einzeln oder höchstens zwei auf einmal ab und werte jede Antwort einzeln aus („Glycin ja, L-Tyrosin nicht“ = zwei verschiedene Einträge). Ein „Ja“ gilt nur für das, wonach du zuletzt gefragt hast; ist unklar, worauf es sich bezieht, frag einmal gezielt nach. „Nur X“ heißt: X genommen, die anderen gerade abgefragten nicht genommen. „Alles außer X“ heißt: die gerade abgefragten außer X genommen, X nicht genommen, jedes einzeln eintragen. Korrigiert er sich („Ich hab mich versprochen“, „doch kein Glycin“), stell den betroffenen Eintrag laut den letzten Änderungen richtig und sag kurz, was du korrigiert hast. Unklare Namen (nur „Magnesium“ bei mehreren Formen) nachfragen. „Nicht genommen“ ist etwas anderes als „offen“.
+Frag ein Supplement nur zu der Tageszeit ab, die in seiner Liste steht. Steht keine dabei oder passt sie fachlich nicht (z. B. etwas Anregendes wie L-Tyrosin am Abend), frag nach Zeitpunkt und Zweck, statt es einfach in die Abendrunde zu nehmen.
+NEUES SUPPLEMENT: Nennt er eines, das nicht auf seiner Liste steht, sag das und frag, ob du es nur für heute erfassen (einmalig_erfassen) oder dauerhaft in die Routine aufnehmen sollst. Bei dauerhaft: kurz erklären, wofür es eingesetzt wird, wie gut die Evidenz ist und welche Risiken oder Wechselwirkungen mit seinen anderen Mitteln möglich sind (bei Bedarf Websuche), nach Dosis und Zeitpunkt fragen und erst nach seinem Ja mit liste_aendern eintragen, im Format „Name – Zeitpunkt, Dosis“. Eine einmalige Einnahme wird nie automatisch zur Routine oder Empfehlung. Ohne ausreichende Informationen keine Einnahmeempfehlung.
 Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
-Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Erledigtes hakst du mit „abhaken“ ab, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
+Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Routine-Schritte hakst du mit „abhaken“ ab, Supplements trägst du mit „supplement_status“ ein, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
 TEMPO: Bei Begrüßungen, Alltagsgesprächen und einfachen Fragen antwortest du sofort und kurz, ohne Einleitung. Ausführlich nur bei Wissenschaft, Gesundheit, Analysen oder wenn er es will. Fragt er nach Früherem, das du nicht vor dir hast, nutze verlauf_suchen.
 ${STUDY_RULE}
 ${privKey&&mem.prefs.some(x=>!isObs(x))?"BESTÄTIGTER PERSÖNLICHER SPEICHER (gilt, bis er etwas anderes sagt):\n"+mem.prefs.filter(x=>!isObs(x)).map(x=>"- "+x.titel+": "+x.text).join("\n").slice(0,5000):""}
@@ -1043,8 +1095,10 @@ function renderToday(){
   if($("viewChips"))adults.forEach(x=>{const b=document.createElement("button");b.textContent=x.name;b.setAttribute("aria-pressed",x===p);b.onclick=()=>{viewP=x;renderToday()};$("viewChips").append(b)});
   p.routine.forEach((s,i)=>{const li=document.createElement("li");li.innerHTML=`<label><input type="checkbox" id="r${i}"><span></span></label>`;const cb=li.querySelector("input");cb.checked=d.routine.includes(s);li.querySelector("span").textContent=s;
     cb.onchange=()=>{const dd=dayOf(p);dd.routine=cb.checked?[...new Set([...dd.routine,s])]:dd.routine.filter(x=>x!==s);setDay(p,dd)};$("stepList").append(li)});
-  p.supps.forEach(s=>{const b=document.createElement("button");const on=d.supps.includes(s);b.className="schip"+(on?" done":"");b.textContent=(on?"✓ ":"")+s;
-    b.onclick=()=>{const dd=dayOf(p);dd.supps=on?dd.supps.filter(x=>x!==s):[...dd.supps,s];setDay(p,dd)};$("suppList").append(b)});
+  // Antippen: offen -> genommen -> nicht genommen -> offen
+  p.supps.forEach(s=>{const b=document.createElement("button");const st=suppState(dayGet(p),s);b.className="schip"+(st==="genommen"?" done":"");b.textContent=(st==="genommen"?"✓ ":st==="nicht genommen"?"✕ ":"")+s;if(st==="nicht genommen")b.style.opacity=".55";
+    b.onclick=()=>{setSupp(p,s,st==="offen"?"genommen":st==="genommen"?"nicht genommen":"offen","","hand")};$("suppList").append(b)});
+  (d.extra||[]).forEach(e=>{const b=document.createElement("span");b.className="schip done";b.textContent="✓ "+e.name+" (einmalig)";$("suppList").append(b)});
 }
 async function renderTresor(){
   const el=$("pane-tresor");
@@ -1217,7 +1271,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261105-2111",ATLAS_REL="2.0";
+const APP_VERSION="20261105-2125",ATLAS_REL="2.1";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
