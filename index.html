@@ -675,7 +675,7 @@ function localTick(t){if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return null;co
   const names=hits.map(h=>h.v.split(/\s[–-]\s/)[0]);
   return `${names.join(" und ")} ${names.length>1?"sind":"ist"} abgehakt.`+(open?` Noch ${open} offen.`:" Damit ist alles erledigt für heute!")}
 // ---- 1) Allgemeiner Antwort-Cache: nur zeitloses Allgemeinwissen, max. 14 Tage
-const PERSONAL=/\b(ich|mir|mich|mein\w*|du|dir|dich|dein\w*|wir|uns|unser\w*|heute|gestern|morgen|jetzt|gerade|eva|jonas|leni)\b/i;
+const PERSONAL=/\b(ich|mir|mich|mein\w*|du|dir|dich|dein\w*|wir|uns|unser\w*|heute|gestern|morgen|jetzt|gerade)\b/i;
 const SENSITIVE=/sex|libido|erot|potenz|krank|schmerz|medikament|diagnos|blut|depress|angst|stuhl|verdau|herz|glut|geld|konto|passwort|code|schwanger|dosis|dosier|wie viel|wieviel|nebenwirk|wechselwirk/i;
 const CACHE_TTL=14*864e5;let pendingCache=null;
 // Fragen, die dasselbe wissen wollen: "Was ist Glycin?" = "Wofür brauche ich Glycin?" = "Erklär mir Glycin."
@@ -686,8 +686,9 @@ function defKey(q){const T=toks(q).join(" ");const m=T.match(DEF_RE);if(!m)retur
 function cacheKeyOf(q){const d=defKey(q);if(d)return d;if(PERSONAL.test(q))return null;const T=toks(q);if(T.length<4||T.some(w=>PRON.has(w))||/^(und|aber|danke|also|dann|oder|noch|auch|mit)$/.test(T[0]))return null;return "q:"+T.join(" ")}
 // Stoffnamen streng vergleichen: Glycin ist nicht Glycerin (nur 1 Erkennungsfehler bei langen Wörtern erlaubt)
 const sameSub=(a,b)=>a.length===b.length&&a.every((w,i)=>w===b[i]||(w.length>=8&&b[i].length>=8&&lev(w,b[i])<=1));
-const cacheable=(q,a)=>toks(q).length>=2&&!SENSITIVE.test(q)&&!SENSITIVE.test(a)&&a.length>20&&a.length<500&&!profiles.some(p=>a.includes(p.name))&&!!cacheKeyOf(q);
-function cacheFind(q){if(SENSITIVE.test(q))return null;const key=cacheKeyOf(q);if(!key)return null;const now=Date.now(),L=ls.get("acache",[]).filter(e=>now-e.at<CACHE_TTL);
+const cacheable=(q,a)=>toks(q).length>=2&&!namesIn(q)&&!SENSITIVE.test(q)&&!SENSITIVE.test(a)&&a.length>20&&a.length<500&&!profiles.some(p=>a.includes(p.name))&&!!cacheKeyOf(q);
+const namesIn=q=>profiles.some(p=>p.name&&q.toLowerCase().includes(p.name.toLowerCase()));
+function cacheFind(q){if(SENSITIVE.test(q)||namesIn(q))return null;const key=cacheKeyOf(q);if(!key)return null;const now=Date.now(),L=ls.get("acache",[]).filter(e=>now-e.at<CACHE_TTL);
   if(key.startsWith("def:")){const sub=key.slice(4).split(" ");return L.find(e=>e.key&&e.key.startsWith("def:")&&sameSub(sub,e.key.slice(4).split(" ")))||null}
   // sonst nur fast wortgleiche Fragen derselben Art
   const T=toks(q);return L.find(e=>e.key&&e.key.startsWith("q:")&&sim(T,e.key.slice(2).split(" "))>=.9)||null}
@@ -1216,7 +1217,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261105-2109",ATLAS_REL="2.0";
+const APP_VERSION="20261105-2111",ATLAS_REL="2.0";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);

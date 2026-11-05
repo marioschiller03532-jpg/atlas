@@ -666,7 +666,7 @@ function localTick(t){if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return null;co
   const names=hits.map(h=>h.v.split(/\s[–-]\s/)[0]);
   return `${names.join(" und ")} ${names.length>1?"sind":"ist"} abgehakt.`+(open?` Noch ${open} offen.`:" Damit ist alles erledigt für heute!")}
 // ---- 1) Allgemeiner Antwort-Cache: nur zeitloses Allgemeinwissen, max. 14 Tage
-const PERSONAL=/\b(ich|mir|mich|mein\w*|du|dir|dich|dein\w*|wir|uns|unser\w*|heute|gestern|morgen|jetzt|gerade|eva|jonas|leni)\b/i;
+const PERSONAL=/\b(ich|mir|mich|mein\w*|du|dir|dich|dein\w*|wir|uns|unser\w*|heute|gestern|morgen|jetzt|gerade)\b/i;
 const SENSITIVE=/sex|libido|erot|potenz|krank|schmerz|medikament|diagnos|blut|depress|angst|stuhl|verdau|herz|glut|geld|konto|passwort|code|schwanger|dosis|dosier|wie viel|wieviel|nebenwirk|wechselwirk/i;
 const CACHE_TTL=14*864e5;let pendingCache=null;
 // Fragen, die dasselbe wissen wollen: "Was ist Glycin?" = "Wofür brauche ich Glycin?" = "Erklär mir Glycin."
