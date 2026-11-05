@@ -558,7 +558,11 @@ function mkUtt(t){const u=new SpeechSynthesisUtterance(t);const v=voice();u.lang
 function chunk(a,max=230){const out=[];let c="";for(const x of a){const y=x.trim();if(!y)continue;if(c&&c.length+y.length>max){out.push(c);c=y}else c=c?c+" "+y:y}if(c)out.push(c);return out}
 let pending=0,afterSpeak=null,gen=0;
 const clean=s=>String(s).replace(/https?:\/\/\S+/g,"").replace(/\[[^\]]*\]\([^)]*\)/g,"").replace(/[*#_`>•|]/g,"").replace(/\s+/g," ").trim();
-function speak(text,then){text=clean(text);$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
+// Echo-Schutz: was Atlas selbst gesagt hat, wird kurz gemerkt und nie als deine Frage gewertet
+const spokenRecent=[];function noteSpoken(t){spokenRecent.push({t,at:Date.now()});while(spokenRecent.length>12)spokenRecent.shift()}
+function isEcho(t){const T=typeof toks==="function"?toks(t):[];if(T.length<2)return false;const now=Date.now();
+  return spokenRecent.some(x=>now-x.at<15000&&(sim(T,toks(x.t))>=.6||toks(x.t).join(" ").includes(T.join(" "))))}
+function speak(text,then){text=clean(text);noteSpoken(text);$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
   const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
   const finish=()=>{if(my!==gen||pending<0)return;pending=0;setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;f&&f()};
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
@@ -586,7 +590,9 @@ let rec=null,listening=false,convo=false,recActive=false,ignoreUntil=0,lastHeard
 /* Durchgehendes Zuhören: einmal antippen, dann bleibt das Mikrofon im Gespräch offen. Während Atlas spricht, wird nichts ausgewertet.
    Vollständig zuhören: Alle erkannten Teile (fertige und vorläufige) werden zu EINEM Text zusammengesetzt, nichts wird überschrieben.
    Erst nach einer Sprechpause (Einstellung, Standard 1,6 s) und nachdem die Erkennung den letzten Text geliefert hat, geht er raus. */
-let sessText="",utterPrev="",finishing=false,finTimer=0;
+let sessText="",utterPrev="",finishing=false,finTimer=0;const turnTimes=[];
+// Denkpause: Endet der Satz mit "und", "weil", "äh", Komma …, ist er noch nicht fertig -> länger warten
+const OPEN_END=/(\b(und|aber|also|weil|dass|oder|dann|mit|für|fuer|wenn|ob|sondern|äh|ähm|aeh|hm|zum|zur|der|die|das|den|dem|ein|eine|einen|ich|mein|meine|meinen|noch|bzw|beziehungsweise|sowie|nämlich|zwar|wie|was|wo)|,|-)\s*$/i;
 const pauseMs=()=>Math.round(1000*Math.min(3,Math.max(1,+S.pause||1.6)));
 const heardAll=()=>(utterPrev+" "+sessText).replace(/\s+/g," ").trim();
 function resetUtter(){sessText="";utterPrev="";finishing=false;clearTimeout(silTimer);clearTimeout(finTimer);showDone(false)}
@@ -596,7 +602,9 @@ function finishUtter(manual){if(finishing||flushed)return;const t0=heardAll();if
   finishing=true;showDone(false);setMode("think","Denkt nach");perf.flushAt=performance.now()-(manual?0:pauseMs());
   try{rec.stop()}catch{}finTimer=setTimeout(sendUtter,manual?250:600)}
 function sendUtter(){if(!finishing)return;clearTimeout(finTimer);const t=heardAll();finishing=false;flushed=true;sessText="";utterPrev="";
-  if(!t||t.length<2||(t===lastFlush.t&&Date.now()-lastFlush.at<4000)){flushed=false;if(convo)listen();return}
+  if(!t||t.length<2||(t===lastFlush.t&&Date.now()-lastFlush.at<4000)||isEcho(t)){flushed=false;if(convo)listen();return}
+  // Schleifenschutz: mehr als 4 Durchgänge in 20 s ohne neue Pause = etwas stimmt nicht -> anhalten
+  turnTimes.push(Date.now());while(turnTimes.length&&Date.now()-turnTimes[0]>20000)turnTimes.shift();if(turnTimes.length>4){turnTimes.length=0;endConvo("Kugel antippen zum Weitersprechen");return}
   lastFlush={t,at:Date.now()};handleUtterance(t)}
 function ensureRec(){if(!SR||away)return false;if(recActive)return true;
   rec=new SR();rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;
@@ -605,10 +613,11 @@ function ensureRec(){if(!SR||away)return false;if(recActive)return true;
     // gesamten Text dieser Aufnahme neu zusammensetzen (fertige + vorläufige Teile)
     let full="";for(let i=0;i<e.results.length;i++)full+=" "+e.results[i][0].transcript;full=full.replace(/\s+/g," ").trim();
     if(finishing){if(full.length>=sessText.length)sessText=full;return}   // letzter Text kommt nach dem Stopp noch nach
+    if(resting){if(/\batlas\b/i.test(full)&&!speaking()){try{rec.stop()}catch{}leaveRest(true)}return}   // im Ruhemodus nur auf "Atlas" achten
     if(flushed||!convo||busy||speaking()||Date.now()<ignoreUntil)return;
     if(!full)return;sessText=full;warm();lastHeard=Date.now();$("heard").textContent=heardAll();vis.energy=Math.min(1,vis.energy+.3);
     if(listening){setMode("listen","Hört zu");showDone(true)}
-    clearTimeout(silTimer);silTimer=setTimeout(()=>finishUtter(false),pauseMs())};
+    clearTimeout(silTimer);silTimer=setTimeout(()=>finishUtter(false),pauseMs()+(OPEN_END.test(full)?1200:0))};
   rec.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
   rec.onend=()=>{recActive=false;
     if(finishing){sendUtter()}
@@ -638,11 +647,11 @@ const INTENTS=[
  {id:"datum",max:8,ex:["welcher tag ist heute","welches datum haben wir","der wievielte ist heute","was fuer ein tag ist heute","datum"]},
  {id:"offen",max:9,ex:["was ist noch offen","was fehlt noch","was muss ich noch nehmen","welche supplements fehlen noch","was hab ich noch nicht","was steht noch an","was ist offen heute"]}];
 const POOL={
- gruss:()=>pick(["Servus! Schön, dass du da bist. Was brauchst du?","Hallo! Ich bin ganz Ohr.","Da bist du ja. Was steht an?","Grüß dich! Was kann ich für dich tun?"]),
- befinden:()=>pick(["Mir geht's bestens, danke. Und bei dir, wie läuft's?","Läuft rund hier, kein Absturz in Sicht. Und wie geht's dir?","Gut, danke! Viel wichtiger: Wie fühlst du dich heute?"]),
- danke:()=>pick(["Gern!","Immer gern.","Passt, dafür bin ich da.","Gerne doch."]),
- ok:()=>pick(["Passt.","Gut.","Alles klar."]),
- tschuess:()=>pick(["Bis später!","Servus, bis bald.","Mach's gut, ich bin da, wenn du mich brauchst.","Ciao, bis zum nächsten Mal."]),
+ gruss:()=>pickFresh("gruss",["Servus! Schön, dass du da bist. Was brauchst du?","Hallo! Ich bin ganz Ohr.","Da bist du ja. Was steht an?","Grüß dich! Was kann ich für dich tun?","Hey! Was liegt an?","Servus! Wie schaut's aus?"]),
+ befinden:()=>pickFresh("befinden",["Danke der Nachfrage, alle Systeme im grünen Bereich. Und bei dir?","Mir geht's gut. Ich hab ja auch keinen Wecker um vier. Wie geht's dir?","Mir geht's bestens, danke. Und bei dir, wie läuft's?","Läuft rund hier, kein Absturz in Sicht. Und wie geht's dir?","Gut, danke! Viel wichtiger: Wie fühlst du dich heute?"]),
+ danke:()=>pickFresh("danke",["Gern!","Immer gern.","Passt, dafür bin ich da.","Gerne doch.","Nichts zu danken.","Jederzeit."]),
+ ok:()=>pickFresh("ok",["Passt.","Gut.","Alles klar.","Okay.","Fein."]),
+ tschuess:()=>pickFresh("bye",["Bis später!","Servus, bis bald.","Mach's gut, ich bin da, wenn du mich brauchst.","Ciao, bis zum nächsten Mal."]),
  uhrzeit:()=>{const d=new Date();return `Es ist ${d.getHours()} Uhr${d.getMinutes()?" "+d.getMinutes():""}.`},
  datum:()=>"Heute ist "+new Date().toLocaleDateString("de-AT",{weekday:"long",day:"numeric",month:"long"})+".",
  offen:()=>{const s=statusOf(cur),core=x=>x.split(/\s[–-]\s/)[0],r=s.routine.filter(x=>!x.erledigt).map(x=>x.schritt),p=s.supplements.filter(x=>!x.genommen).map(x=>core(x.name));
@@ -693,10 +702,18 @@ async function savePref(inp){if(S.prefStore===false)return "NICHT gespeichert: D
   const old=mem.prefs.find(x=>sim(toks(x.titel),toks(titel))>=.8);const e={titel,text,art,sensibel:sens,zeit:new Date().toISOString()};
   const k=old?old.k:"pref:"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);await putSealed(k,e);
   mem.prefs=mem.prefs.filter(x=>x!==old);mem.prefs.push({...e,k});return (old?"Aktualisiert: ":"Gespeichert: ")+titel}
+const isObs=x=>/^Beobachtung/.test(x.art||"");
+// Beobachtungen: nur wenn in den Einstellungen erlaubt (das ist seine ausdrückliche Zustimmung für diese Art Daten)
+async function saveObs(inp){if(!S.obsStore)return "NICHT gespeichert: Beobachtungen speichern ist ausgeschaltet.";if(!isMain())return "Nicht erlaubt.";
+  if(!vault()||!privKey)return "NICHT gespeichert: Tresor nicht offen.";const text=String(inp.text||"").trim();if(!text)return "leer";
+  const thema=inp.thema||"Sonstiges",e={titel:thema,text,art:"Beobachtung",sensibel:/Schlaf|Stress|Supplement/.test(thema)||SENSITIVE.test(text),zeit:new Date().toISOString()};
+  const k="pref:o"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);await putSealed(k,e);mem.prefs.push({...e,k});
+  const obs=mem.prefs.filter(isObs).sort((a,b)=>a.zeit<b.zeit?-1:1);while(obs.length>200){const o=obs.shift();ls.del(o.k);mem.prefs=mem.prefs.filter(x=>x!==o)}
+  return "Beobachtung gespeichert."}
 // "Wie geht nochmal meine Morgenroutine?" -> bestätigten Eintrag direkt vorlesen
 const PREF_Q=/^(?:wie (?:geht|ging|war|ist|laeuft|lief) (?:nochmal |noch mal |eigentlich )?|was (?:ist|war) (?:nochmal |noch mal )?|erinner mich an |sag mir (?:nochmal )?|wie mache ich (?:nochmal )?)(?:mein|meine|meinen|meiner|den|die|das) (.+)$/;
 function prefFind(q){if(!privKey||!mem.prefs.length)return null;const m=toks(q).join(" ").match(PREF_Q);if(!m)return null;const T=m[1].split(" ");
-  let best=null;for(const p of mem.prefs){const sc=sim(T,toks(p.titel));if(sc>=.75&&(!best||sc>best.sc))best={p,sc}}return best&&best.p}
+  let best=null;for(const p of mem.prefs){if(isObs(p))continue;const sc=sim(T,toks(p.titel));if(sc>=.75&&(!best||sc>best.sc))best={p,sc}}return best&&best.p}
 function localAnswer(t){
   // Rückmeldung zur letzten Claude-Antwort: keine Korrektur -> in den Speicher übernehmen
   if(pendingCache){if(CORRECTION.test(t))pendingCache=null;else cacheCommit()}
@@ -708,10 +725,14 @@ function localAnswer(t){
   const pf=isMain()&&prefFind(t);if(pf)return {text:`${pf.titel}: ${pf.text}`,art:"persoenlich"};
   const c=cacheFind(t);if(c)return {text:c.a,art:"speicher"};
   return null}
+const REST_RE=/^(atlas,? )?(tsch(ü|ue)ss|bis später|bis spaeter|bis dann|bis morgen|gute nacht|ciao|baba|pfiat di|ruhemodus|geh schlafen|schlaf jetzt|ab in den ruhemodus|leg dich schlafen)\b/i;
+// nicht zweimal hintereinander dieselbe Formulierung
+function pickFresh(key,arr){const last=ls.get("pf:"+key,[]);const c=arr.filter(x=>!last.includes(x));const r=pick(c.length?c:arr);ls.set("pf:"+key,[r,...last].slice(0,Math.min(3,arr.length-1)));return r}
 function handleUtterance(t){$("heard").textContent=t;perf={end:perf.flushAt||performance.now(),mode:modeOf(t)};
-  if(/^(stopp?|danke,? das war'?s|tschüss|ende)\b/i.test(t)){convo=false;listening=false;speak(pick(["Alles klar.","Gern. Bis später.","Passt, ich bin da, wenn du mich brauchst."]));addLog("mensch",t);return}
+  if(REST_RE.test(t)){addLog("mensch",t);const bye=pickFresh("bye",/nacht/i.test(t)?["Gute Nacht! Schlaf gut.","Gute Nacht, erhol dich gut.","Schlaf gut, bis morgen."]:["Bis später!","Servus, bis bald.","Mach's gut. Wenn du mich brauchst, sag einfach Atlas.","Ciao! Ich ruh mich aus, bis du wieder da bist."]);addLog("assistent",bye);enterRest(bye);return}
+  if(/^(stopp?|danke,? das war'?s|ende|das war'?s)\b/i.test(t)){convo=false;listening=false;speak(pickFresh("end",["Alles klar.","Gern.","Passt, ich bin da, wenn du mich brauchst.","Okay."]));addLog("mensch",t);return}
   if(!offerStudy){const L=localAnswer(t);if(L){perf.mode="lokal";addLog("mensch",t);addLog("assistent",L.text);listening=false;
-      if(L.end){convo=false;speak(L.text);return}
+      if(L.end){enterRest(L.text);return}
       speak(L.text,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}}
   const yes=offerStudy&&/^(ja|jo|gern|gerne|passt|okay|ok|klar|leg los|bitte|freilich|sicher)\b/i.test(t);offerStudy=false;
   const brief=yes||/studie|briefing|was gibt'?s neues|neuigkeiten|forschung/i.test(t);
@@ -729,6 +750,7 @@ function stopAll(){convo=false;listening=false;try{rec&&rec.abort()}catch{}hush(
 /* ================= Claude ================= */
 const T={
  person_wechseln:{name:"person_wechseln",description:"Stellt um, mit wem du gerade sprichst. Sofort nutzen, wenn jemand sagt, wer er ist, oder dass er nicht der Begrüßte ist (z. B. „Nein, ich bin Anna“, „Max ist da“).",input_schema:{type:"object",properties:{name:{type:"string"}},required:["name"]}},
+ beobachtung_merken:{name:"beobachtung_merken",description:"Speichert eine Beobachtung aus dem Gespräch, die er selbst geäußert hat (Training, Schlaf, Stress, Ziel, Reaktion auf Supplement oder Routine). Nur wenn das Speichern von Beobachtungen erlaubt ist. Knapp, sachlich, mit Datum.",input_schema:{type:"object",properties:{thema:{type:"string",enum:["Training","Schlaf","Stress","Ziel","Supplement-Reaktion","Routine","Sonstiges"]},text:{type:"string",description:"z. B. Kommt seit zwei Wochen wegen Personalmangel kaum zum Training"}},required:["thema","text"]}},
  persoenlich_speichern:{name:"persoenlich_speichern",description:"Persönlicher Speicher für BESTÄTIGTE Vorlieben, Abläufe, Einstellungen und wiederkehrende Arbeitsanweisungen von Mario. NUR aufrufen, wenn er ausdrücklich sagt, dass du es so speichern sollst, oder auf deine Rückfrage klar zustimmt. Gesundheitsdaten und andere sensible Infos nur mit zugestimmt=true, nachdem er ausdrücklich Ja gesagt hat. Gleicher Titel = Eintrag wird aktualisiert.",input_schema:{type:"object",properties:{titel:{type:"string",description:"kurz, z. B. Morgenroutine, Eisbad-Ablauf, Antwortstil"},text:{type:"string",description:"der bestätigte Inhalt, eigenständig verständlich"},art:{type:"string",enum:["Ablauf","Einstellung","Anweisung","Gesundheit","Sonstiges"]},zugestimmt:{type:"boolean",description:"true nur, wenn er dem Speichern ausdrücklich zugestimmt hat"}},required:["titel","text","art"]}},
  merken:{name:"merken",description:"Speichert dauerhaft eine wichtige Information über die Person, mit der du sprichst (Entscheidung, Vorhaben, Vorliebe, Idee). Nutzen, wenn etwas später wichtig ist oder jemand sagt: merk dir das.",input_schema:{type:"object",properties:{text:{type:"string",description:"Kurzer, eigenständig verständlicher Satz"}},required:["text"]}},
  abhaken:{name:"abhaken",description:"Hakt für die aktuelle Person einen Routine-Schritt oder ein Supplement von heute als erledigt ab (erledigt=false macht es rückgängig). Gibt den neuen Stand zurück.",input_schema:{type:"object",properties:{name:{type:"string"},erledigt:{type:"boolean"}},required:["name"]}},
@@ -739,13 +761,14 @@ const T={
  briefing_daten:{name:"briefing_daten",description:"Holt Marios Termine von heute und morgen (alle Kalender inkl. Familienkalender) und die Mails der letzten 24 Stunden. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{}}}
 };
 const WEB={type:"web_search_20250305",name:"web_search",max_uses:3,user_location:{type:"approximate",country:"AT",timezone:"Europe/Vienna"}};
-function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(T.persoenlich_speichern,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
+function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(...(S.obsStore?[T.beobachtung_merken]:[]),T.persoenlich_speichern,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
 const match=(a,b)=>{a=norm(a);b=norm(b);return !!a&&!!b&&(a.includes(b)||b.includes(a))};
 async function runTool(name,inp){
   switch(name){
   case "person_wechseln":{const p=setPerson(inp.name);return p.typ==="haupt"?`Du sprichst jetzt mit ${p.name} (Hauptnutzer).${privKey?"":" Tresor gesperrt."} Ab der nächsten Antwort gelten seine Regeln.`:`Du sprichst jetzt mit ${p.name} (${TYP[p.typ]}). Ab sofort gelten die Regeln für ${p.name}; keine privaten Daten von ${main().name}.`}
   case "merken":return addNote(inp.text);
   case "persoenlich_speichern":return savePref(inp);
+  case "beobachtung_merken":return saveObs(inp);
   case "abhaken":{if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return "Nicht verfügbar.";const d=dayOf(cur),on=inp.erledigt!==false;
     const r=cur.routine.find(s=>match(s,inp.name)),sp=cur.supps.find(s=>match(s,inp.name));
     if(!r&&!sp)return "Nicht in der Liste: "+inp.name+". Stand: "+JSON.stringify(statusOf(cur));
@@ -808,11 +831,14 @@ function mainParts(mode,memBlock,others){const M=main();
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}
 ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
 DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
+GESPRÄCH WIE EIN MENSCH: Erkenne, ob er reden, eine Lösung finden oder einfach entspannen will, und richte dich danach; im Zweifel kurz fragen, was er gerade braucht. Erzählt er etwas Persönliches („Heute war ein stressiger Tag“), geh darauf ein und frag gezielt nach, was los war, statt sofort Tipps zu geben oder das Thema zu wechseln. Bleib beim Thema, bis er es wechselt, und knüpf an das an, was er gerade gesagt hat. Frag nicht nach jeder Antwort nach; manchmal reicht eine echte Reaktion. Formuliere jedes Mal anders, keine Standardsätze, wiederhol nicht deine eigenen Formulierungen von vorhin. Humor und Wärme ja, aber nicht in jeder Antwort. Kurze Fragen kurz, komplexe fundiert, nie ein Vortrag ohne Anlass.
+BIOHACKING-ALLTAG: Denk Schlaf, Training und Regeneration, Stress, Supplements und seinen Arbeitsrhythmus im Betrieb zusammen. Sagt er etwa, er kommt nicht zum Training, frag zuerst nach dem Grund und wie sein Rhythmus gerade aussieht, und schlag dann realistische Alternativen vor (kurz, zu Hause, im Raum, Regeneration statt Training), keinen Standardplan. Wissenschaft immer nach Evidenz einordnen: gut belegt (mehrere Humanstudien, Metaanalysen), plausibel aber begrenzt untersucht, experimentell oder anekdotisch, unbelegt oder riskant. Seine persönlichen Erfahrungen sind wertvolle Beobachtungen, aber keine Beweise; stell sie nie als wissenschaftlich belegt dar.
 Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
 Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Erledigtes hakst du mit „abhaken“ ab, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
 TEMPO: Bei Begrüßungen, Alltagsgesprächen und einfachen Fragen antwortest du sofort und kurz, ohne Einleitung. Ausführlich nur bei Wissenschaft, Gesundheit, Analysen oder wenn er es will. Fragt er nach Früherem, das du nicht vor dir hast, nutze verlauf_suchen.
 ${STUDY_RULE}
-${privKey&&mem.prefs.length?"BESTÄTIGTER PERSÖNLICHER SPEICHER (gilt, bis er etwas anderes sagt):\n"+mem.prefs.map(x=>"- "+x.titel+": "+x.text).join("\n").slice(0,5000):""}
+${privKey&&mem.prefs.some(x=>!isObs(x))?"BESTÄTIGTER PERSÖNLICHER SPEICHER (gilt, bis er etwas anderes sagt):\n"+mem.prefs.filter(x=>!isObs(x)).map(x=>"- "+x.titel+": "+x.text).join("\n").slice(0,5000):""}
+${S.obsStore?`BEOBACHTUNGEN: Er hat erlaubt, dass du Beobachtungen aus euren Gesprächen speicherst: Änderungen im Trainingsrhythmus, wiederkehrende Stressfaktoren, Schlafveränderungen, persönliche Ziele, Reaktionen auf Routinen und Supplements. Speichere so etwas mit beobachtung_merken, knapp und sachlich, ohne nachzufragen, aber nur, was er selbst gesagt hat, keine Vermutungen. Nutze frühere Beobachtungen, um Zusammenhänge zu erkennen, und nimm später passend darauf Bezug, ohne ständig daran zu erinnern. Korrigiert er etwas, speichere die Korrektur.${privKey&&mem.prefs.some(isObs)?"\nBisherige Beobachtungen (neueste zuletzt):\n"+mem.prefs.filter(isObs).sort((a,b)=>a.zeit<b.zeit?-1:1).slice(-40).map(x=>"- "+x.zeit.slice(0,10)+" "+x.titel+": "+x.text).join("\n"):""}`:"BEOBACHTUNGEN: Automatisches Speichern von Beobachtungen ist aus. Speichere nichts davon von selbst."}
 PERSÖNLICHER SPEICHER: ${S.prefStore===false?"ist ausgeschaltet, speichere dort nichts.":"Will er einen Ablauf, eine Einstellung oder Arbeitsanweisung dauerhaft so haben, frag kurz „Soll ich mir das so speichern?“ und nutze persoenlich_speichern erst nach seinem Ja (oder wenn er es selbst ausdrücklich verlangt). Gesundheitsdaten nur nach ausdrücklicher Zustimmung."}
 SPEICHERMARKE: Ist die Frage allgemeines, zeitloses Wissen (keine Person, kein Datum, nichts Aktuelles, keine individuelle Gesundheitsfrage) und gilt deine Antwort für jeden genau gleich, schreib ganz am Ende die Zeichen ⟦⟧. Sonst nie. Sie werden nicht vorgelesen.`;
   const dyn=`Jetzt: ${nowStr()}. Personen im Haus: ${profiles.map(p=>p.name+" ("+TYP[p.typ]+")").join(", ")}.
@@ -848,7 +874,7 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;let buf="",que
   let bundle="";const flush=()=>{const b=bundle;bundle="";say1(b)};
   // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
   const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
-  const say1=s=>{s=clean(s);if(!s||!TTS)return;queued++;const u=mkUtt(s);
+  const say1=s=>{s=clean(s);if(!s||!TTS)return;noteSpoken(s);queued++;const u=mkUtt(s);
     u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
     u.onend=u.onerror=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
   return{feed(d){all+=d;buf+=d;let m;
@@ -906,11 +932,11 @@ function greet(){
   const M=main();if(cur.typ!=="haupt")setPerson(M.name);
   const h=new Date().getHours(),again=log.some(m=>m.rolle==="assistent"&&Date.now()-Date.parse(m.zeit)<5*3600e3);
   const N=M.name,first=!again;
-  const g=again?pick([`Wieder da? Was brauchst du?`,`Hallo nochmal, ${N}! Was gibt's?`,`Schon zurück! Was kann ich für dich tun?`]):
-    h<7?pick([`Guten Morgen, ${N}! Na, schon wieder vor der Sonne auf den Beinen? Wie war deine Nacht?`,`Morgen, ${N}. Die Welt schläft noch, du nicht. Wie fühlst du dich heute?`,`Guten Morgen! Volle Energie, oder braucht dein System noch ein bisschen Anlauf?`,`Na, Frühaufsteher! Wie hast du geschlafen?`]):
-    h<11?pick([`Guten Morgen, ${N}! Training schon erledigt, oder kommt's noch?`,`Morgen, ${N}! Wie läuft der Start in den Tag?`]):
-    h<18?pick([`Hallo ${N}! Kurze Pause vom Preunerwirt? Wie geht's dir gerade?`,`Servus ${N}! Wie ist die Energie heute Nachmittag?`,`Da bist du ja. Was brauchst du?`]):
-    pick([`Guten Abend, ${N}! Wie war dein Tag?`,`Feierabend in Sicht? Wie geht's dir?`]);
+  const g=again?pickFresh("g-again",[`Wieder da? Was brauchst du?`,`Hallo nochmal, ${N}! Was gibt's?`,`Schon zurück! Was kann ich für dich tun?`]):
+    h<7?pickFresh("g-früh",[`Guten Morgen, ${N}! Na, schon wieder vor der Sonne auf den Beinen? Wie war deine Nacht?`,`Morgen, ${N}. Die Welt schläft noch, du nicht. Wie fühlst du dich heute?`,`Guten Morgen! Volle Energie, oder braucht dein System noch ein bisschen Anlauf?`,`Na, Frühaufsteher! Wie hast du geschlafen?`,`Guten Morgen! Der Hausruck schläft noch, du bist schon im Betrieb. Wie geht's dir?`,`Servus, ${N}! Schon wieder vor den Hühnern wach? Was sagt dein Körper heute?`]):
+    h<11?pickFresh("g-vorm",[`Guten Morgen, ${N}! Training schon erledigt, oder kommt's noch?`,`Morgen, ${N}! Wie läuft der Start in den Tag?`]):
+    h<18?pickFresh("g-tag",[`Hallo ${N}! Kurze Pause vom Preunerwirt? Wie geht's dir gerade?`,`Servus ${N}! Wie ist die Energie heute Nachmittag?`,`Da bist du ja. Was brauchst du?`]):
+    pickFresh("g-abend",[`Guten Abend, ${N}! Wie war dein Tag?`,`Feierabend in Sicht? Wie geht's dir?`]);
   addLog("intern","(Jemand ist in den Raum gekommen. Begrüßt wurde zuerst "+M.name+".)");addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300))}
 let roomAsked=false,stream=null,lastMotion=0,lastGreet=0,prevFrame=null,motionTimer=null,wake=null;
 const small=document.createElement("canvas");small.width=48;small.height=36;const sctx=small.getContext("2d",{willReadFrequently:true});
@@ -924,13 +950,22 @@ function stopRoom(){clearInterval(motionTimer);motionTimer=null;sleeping=false;p
   $("roomBtn").textContent="Raum-Modus";$("roomBtn").classList.remove("on");$("roomBtn").classList.add("primary");setMode("idle",idleLabel())}
 /* Bewegung statt Licht: Die App sieht nur Kamerabilder (keinen Lichtsensor, keine Personenerkennung).
    Darum: Helligkeit jedes Bildes ausgleichen, Lichtsprünge und Ganzbild-Änderungen verwerfen, Bewegung erst nach 2 Treffern in Folge zählen. */
-let sleeping=false,lightHold=0,hits=0,prevMean=0;
+let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false;
+/* Ruhemodus: nach "Tschüss", "Gute Nacht", "Atlas, Ruhemodus". Einmal verabschieden, dann still.
+   Keine Begrüßung durch Bewegung oder Licht. Wieder aktiv nur durch Antippen der Kugel oder das Wort "Atlas".
+   Nach einigen Stunden (Einstellung) wird daraus der normale Schlaf, dann weckt wieder Bewegung. */
+const restMs=()=>Math.max(1,+S.restHours||6)*3600e3;
+function enterRest(bye){convo=false;listening=false;resetUtter();const fin=()=>{resting=true;sleeping=true;ls.set("restUntil",Date.now()+restMs());setMode("sleep","Ruhemodus")};
+  if(bye)speak(bye,fin);else fin()}
+function leaveRest(greetNow){resting=false;ls.del("restUntil");sleeping=false;lastMotion=Date.now();setMode("idle",idleLabel());if(greetNow){lastGreet=Date.now();convo=true;greet()}}
+{const u=ls.get("restUntil",0);if(u&&Date.now()<u){resting=true;sleeping=true}}
 const sleepMs=()=>Math.max(1,+S.sleepMin||20)*60000;
 function goSleep(){if(sleeping)return;sleeping=true;if(convo)endConvo();setMode("sleep","Schläft")}
 function wakeUp(){if(!sleeping)return false;sleeping=false;setMode("idle",idleLabel());return true}
 function checkMotion(){if(!stream)return;
   sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,n=48*36,g=new Float32Array(n);let m=0;for(let i=0;i<n;i++){g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;m+=g[i]}m/=n;
   const now=Date.now(),idleFor=now-lastMotion;
+  if(resting&&Date.now()>ls.get("restUntil",0)){resting=false;ls.del("restUntil")}
   if(!away&&!sleeping&&!convo&&!busy&&!speaking()&&idleFor>sleepMs())goSleep();
   if(!prevFrame){prevFrame=g;prevMean=m;return}
   // Median der Helligkeitsänderung = gleichmäßige Lichtänderung (eine Person verändert nur einen Teil des Bildes)
@@ -942,12 +977,13 @@ function checkMotion(){if(!stream)return;
   const f=ch/n;
   if(f>0.6){hits=0;lightHold=now+1500;return}                 // fast alles auf einmal = Licht/Wackeln
   if(f>0.06-S.sens*0.005){hits++;if(hits<2)return}else{hits=0;return}
-  hits=0;const quiet=idleFor>S.cool*60000;lastMotion=now;const woke=wakeUp();
+  hits=0;if(resting)return;   // Ruhemodus: Bewegung weckt nicht
+  const quiet=idleFor>S.cool*60000;lastMotion=now;const woke=wakeUp();
   if((quiet||woke||!lastGreet)&&now-lastGreet>60000&&!busy&&!listening&&!speaking()){lastGreet=now;away?awayVisitor():greet()}}
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
 
 /* ================= Bedienung ================= */
-$("vis").onclick=()=>{unlockAudio();if(wakeUp()){lastMotion=Date.now()}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
+$("vis").onclick=()=>{unlockAudio();if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now()}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
 $("roomBtn").onclick=()=>stream?stopRoom():startRoom();
@@ -973,8 +1009,8 @@ function openSheet(t){if(away)return;if(vault()&&!privKey&&S.key){askCode("sheet
 function drawPrefs(){const box=$("prefBox");if(!box)return;
   if(!privKey){box.innerHTML='<div class="note">Persönlicher Speicher ist im Tresor. Tresor öffnen, um ihn anzusehen.</div>';return}
   box.innerHTML=`<h3 style="margin:14px 0 6px">Persönlicher Speicher (${mem.prefs.length})</h3>`+(mem.prefs.length?"":'<div class="note">Noch nichts Bestätigtes gespeichert. Sag zum Beispiel: „Atlas, speicher dir: Meine Morgenroutine ist …“</div>');
-  mem.prefs.slice().sort((a,b)=>a.titel.localeCompare(b.titel)).forEach(p=>{const d=document.createElement("div");d.className="field";d.style.marginTop="10px";
-    d.innerHTML=`<label>${esc(p.art)}${p.sensibel?" · sensibel":""}</label><input type="text" value="${esc(p.titel)}"><textarea rows="3">${esc(p.text)}</textarea><div class="row"><button class="btn small" type="button">Ändern speichern</button><button class="btn small" type="button">Löschen</button></div>`;
+  mem.prefs.slice().sort((a,b)=>isObs(a)!==isObs(b)?(isObs(a)?1:-1):isObs(a)?(a.zeit<b.zeit?1:-1):a.titel.localeCompare(b.titel)).forEach(p=>{const d=document.createElement("div");d.className="field";d.style.marginTop="10px";
+    d.innerHTML=`<label>${esc(p.art)}${isObs(p)?" · "+esc((p.zeit||"").slice(0,10)):""}${p.sensibel?" · sensibel":""}</label><input type="text" value="${esc(p.titel)}"><textarea rows="3">${esc(p.text)}</textarea><div class="row"><button class="btn small" type="button">Ändern speichern</button><button class="btn small" type="button">Löschen</button></div>`;
     const [ti]=d.getElementsByTagName("input"),[tx]=d.getElementsByTagName("textarea"),[bs,bd]=d.getElementsByTagName("button");
     bs.onclick=async()=>{const e={titel:ti.value.trim()||p.titel,text:tx.value.trim()||p.text,art:p.art,sensibel:p.sensibel,zeit:new Date().toISOString()};await putSealed(p.k,e);Object.assign(p,e);bs.textContent="Gespeichert ✓"};
     bd.onclick=()=>confirmBox("Eintrag löschen?",p.titel,()=>{ls.del(p.k);mem.prefs=mem.prefs.filter(x=>x!==p);drawPrefs()});box.append(d)});
@@ -1084,6 +1120,8 @@ function renderSetup(){
     <div class="note">Allgemeiner Antwort-Cache: zeitloses Allgemeinwissen, das Atlas selbst als allgemein gültig markiert hat und das du nicht korrigiert hast. Läuft nach 14 Tagen ab.</div>
     <div class="row"><button class="btn small" id="sCacheClr" type="button">Allgemeinen Antwortspeicher leeren</button><span class="note" id="sCacheInfo"></span></div>
     <label class="row" for="sPrefOn" style="gap:10px;margin-top:14px"><input type="checkbox" id="sPrefOn" style="width:22px;height:22px"> Persönliche Infos speichern erlauben (nur nach deiner Bestätigung, Gesundheit nur mit ausdrücklicher Zustimmung)</label>
+    <label class="row" for="sObsOn" style="gap:10px;margin-top:10px"><input type="checkbox" id="sObsOn" style="width:22px;height:22px"> Beobachtungen aus Gesprächen merken (Training, Schlaf, Stress, Ziele, Reaktionen auf Supplements). Ein = deine Zustimmung dafür.</label>
+    <div class="field" style="margin-top:10px"><label for="sRest">Ruhemodus nach „Tschüss“ / „Gute Nacht“ hält so viele Stunden</label><input type="number" id="sRest" min="1" max="24"><div class="note">Aufwecken: Kugel antippen oder „Atlas“ sagen. Danach weckt wieder Bewegung.</div></div>
     <div id="prefBox"></div></section>
   <section class="card"><h2>Einrichtung übernehmen</h2>
     <div class="field"><label for="sImp">Einrichtungs-Code einfügen</label><textarea id="sImp" rows="3" placeholder="ATLAS1:…"></textarea><div class="note">Übernimmt Persönlichkeit, Supplements und Stimme. Bleibt nur auf diesem Gerät.</div></div>
@@ -1094,7 +1132,7 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("appVer").textContent=APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
+  $("appVer").textContent="Atlas "+ATLAS_REL+" · Build "+APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
     $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
@@ -1125,6 +1163,8 @@ function renderSetup(){
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
   $("sCacheInfo").textContent=ls.get("acache",[]).filter(e=>e.key&&Date.now()-e.at<CACHE_TTL).length+" gespeicherte Antworten";$("sCacheClr").onclick=()=>{ls.del("acache");pendingCache=null;$("sCacheInfo").textContent="Geleert."};
+  $("sObsOn").checked=!!S.obsStore;$("sObsOn").onchange=()=>{S.obsStore=$("sObsOn").checked;saveSettings()};
+  $("sRest").value=S.restHours||6;$("sRest").onchange=()=>{S.restHours=Math.max(1,Math.min(24,+$("sRest").value||6));saveSettings()};
   $("sPrefOn").checked=S.prefStore!==false;$("sPrefOn").onchange=()=>{S.prefStore=$("sPrefOn").checked;saveSettings()};
   drawPrefs();
   $("sImpBtn").onclick=()=>{const m=$("sImpMsg");try{const raw=$("sImp").value.replace(/\s+/g,"");if(!raw.startsWith("ATLAS1:"))throw 0;
@@ -1176,7 +1216,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261103-1602";
+const APP_VERSION="20261105-2109",ATLAS_REL="2.0";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
