@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.2 (06.11.2026) – Gesprächsregeln, Spitzname, Pausen
+- Abends (19–4 Uhr) wartet Atlas 0,5 s länger auf das Satzende und spricht etwas ruhiger (Tempo −7 %).
+- Klingt ein Satz unfertig und die Pause wird lang: „Möchtest du noch etwas ergänzen?“ – das Bisherige bleibt erhalten; „Nein“/„Passt“ schickt sofort ab.
+- Echo-Schutz verbessert: Was während Atlas’ eigener Sprache erkannt wird, fließt nie in die nächste Frage ein.
+- Spitzname (Einstellungen): Atlas reagiert auf beide Namen, auch zum Aufwecken aus dem Ruhemodus.
+- Supplements und Bioregulatoren können pausiert werden (⏸, z. B. Kurpause); pausierte werden nicht abgefragt.
+- Rückfall: Version 2.1 unter /alt/2.1/.
+
 ## 2.1 (05.11.2026) – Supplement-Tagebuch
 - Drei Zustände je Supplement: genommen, nicht genommen, offen. Änderung nur nach eindeutiger Aussage, jedes Supplement einzeln, nie pauschal.
 - Lokal (sofort): eindeutige Sätze wie „Glycin genommen, L-Tyrosin nicht“ oder „doch kein Glycin“ (mit Korrektur-Bestätigung). „Bisglycinat“ wird nicht als „Glycin“ gezählt.

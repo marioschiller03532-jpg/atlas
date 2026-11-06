@@ -423,7 +423,7 @@ function renderPerson(){const c=$("personChip");c.textContent=cur.name;c.classLi
 const dayOf=p=>ls.get(`day:${today}:${p.id}`,{routine:[],supps:[]});
 const setDay=(p,d)=>{ls.set(`day:${today}:${p.id}`,d);if(!$("sheet").hidden&&pane==="heute")renderPane()};
 const statusOf=p=>{const d=dayOf(p),ni=d.nicht||[],gr=d.grund||{};return {routine:p.routine.map(s=>({schritt:s,erledigt:d.routine.includes(s)})),
-  supplements:p.supps.map(s=>{const st=d.supps.includes(s)?"genommen":ni.includes(s)?"nicht genommen":"offen";return {name:s,status:st,genommen:st==="genommen",...(gr[s]?{grund:gr[s]}:{})}}),
+  supplements:p.supps.map(s=>{const pz=(p.paused||[]).find(x=>x.name===s);const st=d.supps.includes(s)?"genommen":ni.includes(s)?"nicht genommen":pz?"pausiert":"offen";if(pz&&st==="pausiert")return {name:s,status:st,genommen:false,pause:pz.notiz||"",seit:pz.seit};return {name:s,status:st,genommen:st==="genommen",...(gr[s]?{grund:gr[s]}:{})}}),
   einmalig_heute:(d.extra||[]).map(e=>e.name+(e.zeit?" ("+e.zeit+")":"")+(e.menge?" "+e.menge:"")),letzte_aenderungen:(d.hist||[]).slice(-8)}};
 
 /* ================= Tresor (Verschlüsselung) ================= */
@@ -559,7 +559,7 @@ if(TTS){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
 // "system" = keine Stimme vorgeben: das Gerät nimmt seine eingestellte Systemstimme (z. B. Siri-Stimme 2)
 const voice=()=>S.voice==="system"?null:voices.find(v=>vid(v)===S.voice)||voices.find(v=>v.name===S.voice&&vtier(v)===2)||voices.find(v=>v.name===S.voice)||voices[0]||null;
 const vlabel=v=>`${v.name}${vtier(v)===2?" · Premium":vtier(v)===1?" · Erweitert":""} (${v.lang})`;
-function mkUtt(t){const u=new SpeechSynthesisUtterance(t);const v=voice();u.lang=v?v.lang:"de-DE";if(v)u.voice=v;u.rate=S.rate;u.pitch=1;return u}
+function mkUtt(t){const u=new SpeechSynthesisUtterance(t);const v=voice();u.lang=v?v.lang:"de-DE";if(v)u.voice=v;u.rate=S.rate*(evening()?0.93:1);u.pitch=1;return u}
 // Sätze zu Abschnitten bis ~230 Zeichen bündeln: weniger Pausen, flüssiger
 function chunk(a,max=230){const out=[];let c="";for(const x of a){const y=x.trim();if(!y)continue;if(c&&c.length+y.length>max){out.push(c);c=y}else c=c?c+" "+y:y}if(c)out.push(c);return out}
 let pending=0,afterSpeak=null,gen=0;
@@ -596,34 +596,41 @@ let rec=null,listening=false,convo=false,recActive=false,ignoreUntil=0,lastHeard
 /* Durchgehendes Zuhören: einmal antippen, dann bleibt das Mikrofon im Gespräch offen. Während Atlas spricht, wird nichts ausgewertet.
    Vollständig zuhören: Alle erkannten Teile (fertige und vorläufige) werden zu EINEM Text zusammengesetzt, nichts wird überschrieben.
    Erst nach einer Sprechpause (Einstellung, Standard 1,6 s) und nachdem die Erkennung den letzten Text geliefert hat, geht er raus. */
-let sessText="",utterPrev="",finishing=false,finTimer=0;const turnTimes=[];
+let sessText="",utterPrev="",finishing=false,finTimer=0,baseIdx=0,askedMore=false,moreTimer=0;const turnTimes=[];
 // Denkpause: Endet der Satz mit "und", "weil", "äh", Komma …, ist er noch nicht fertig -> länger warten
 const OPEN_END=/(\b(und|aber|also|weil|dass|oder|dann|mit|für|fuer|wenn|ob|sondern|äh|ähm|aeh|hm|zum|zur|der|die|das|den|dem|ein|eine|einen|ich|mein|meine|meinen|noch|bzw|beziehungsweise|sowie|nämlich|zwar|wie|was|wo)|,|-)\s*$/i;
-const pauseMs=()=>Math.round(1000*Math.min(3,Math.max(1,+S.pause||1.6)));
+const evening=()=>{const h=new Date().getHours();return h>=19||h<4};
+const pauseMs=()=>Math.round(1000*Math.min(3,Math.max(1,+S.pause||1.6)))+(evening()?500:0);   // abends lässt Atlas mehr Zeit
 const heardAll=()=>(utterPrev+" "+sessText).replace(/\s+/g," ").trim();
-function resetUtter(){sessText="";utterPrev="";finishing=false;clearTimeout(silTimer);clearTimeout(finTimer);showDone(false)}
+function resetUtter(){askedMore=false;clearTimeout(moreTimer);sessText="";utterPrev="";finishing=false;clearTimeout(silTimer);clearTimeout(finTimer);showDone(false)}
 function showDone(on){const b=$("doneBtn");if(b)b.hidden=!on}
 // Sprechpause erkannt (oder "Fertig" getippt): Mikro stoppen, auf den letzten Text warten, dann denken
-function finishUtter(manual){if(finishing||flushed)return;const t0=heardAll();if(t0.length<2){if(manual)endConvo();return}
+// Satz klingt unfertig und die Pause ist lang: kurz nachfragen, Bisheriges behalten, weiter zuhören
+function askMore(){askedMore=true;utterPrev=heardAll();sessText="";showDone(true);try{rec.stop()}catch{}
+  speak(pickFresh("more",["Möchtest du noch etwas ergänzen?","Noch was dazu?","Magst du noch was ergänzen?"]),()=>{ignoreUntil=Date.now()+300;setMode("listen","Hört zu");ensureRec();
+    clearTimeout(moreTimer);moreTimer=setTimeout(()=>finishUtter(false),4500)})}
+function finishUtter(manual){clearTimeout(moreTimer);if(finishing||flushed)return;const t0=heardAll();if(t0.length<2){if(manual)endConvo();return}
   finishing=true;showDone(false);setMode("think","Denkt nach");perf.flushAt=performance.now()-(manual?0:pauseMs());
   try{rec.stop()}catch{}finTimer=setTimeout(sendUtter,manual?250:600)}
-function sendUtter(){if(!finishing)return;clearTimeout(finTimer);const t=heardAll();finishing=false;flushed=true;sessText="";utterPrev="";
+function sendUtter(){if(!finishing)return;clearTimeout(finTimer);const t=heardAll();finishing=false;flushed=true;sessText="";utterPrev="";askedMore=false;
   if(!t||t.length<2||(t===lastFlush.t&&Date.now()-lastFlush.at<4000)||isEcho(t)){flushed=false;if(convo)listen();return}
   // Schleifenschutz: mehr als 4 Durchgänge in 20 s ohne neue Pause = etwas stimmt nicht -> anhalten
   turnTimes.push(Date.now());while(turnTimes.length&&Date.now()-turnTimes[0]>20000)turnTimes.shift();if(turnTimes.length>4){turnTimes.length=0;endConvo("Kugel antippen zum Weitersprechen");return}
   lastFlush={t,at:Date.now()};handleUtterance(t)}
 function ensureRec(){if(!SR||away)return false;if(recActive)return true;
   rec=new SR();rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;
-  rec.onstart=()=>{recActive=true;flushed=false;sessText=""};
+  rec.onstart=()=>{recActive=true;flushed=false;sessText="";baseIdx=0};
   rec.onresult=e=>{
     // gesamten Text dieser Aufnahme neu zusammensetzen (fertige + vorläufige Teile)
-    let full="";for(let i=0;i<e.results.length;i++)full+=" "+e.results[i][0].transcript;full=full.replace(/\s+/g," ").trim();
+    let full="";for(let i=Math.min(baseIdx,e.results.length);i<e.results.length;i++)full+=" "+e.results[i][0].transcript;full=full.replace(/\s+/g," ").trim();
     if(finishing){if(full.length>=sessText.length)sessText=full;return}   // letzter Text kommt nach dem Stopp noch nach
-    if(resting){if(/\batlas\b/i.test(full)&&!speaking()){try{rec.stop()}catch{}leaveRest(true)}return}   // im Ruhemodus nur auf "Atlas" achten
-    if(flushed||!convo||busy||speaking()||Date.now()<ignoreUntil)return;
+    if(resting){if(wakeRe().test(full)&&!speaking()){try{rec.stop()}catch{}leaveRest(true)}return}   // im Ruhemodus nur auf den Namen achten
+    if(flushed||!convo||busy||speaking()||Date.now()<ignoreUntil){baseIdx=e.results.length;return}
+    clearTimeout(moreTimer);
+    if(askedMore&&/^(nein|ne|nee|nö|noe|passt|das wars|das war's|das war es|fertig|nichts|nix|sonst nichts|nein danke)\b/i.test(full)){sessText="";finishUtter(true);return}
     if(!full)return;sessText=full;warm();lastHeard=Date.now();$("heard").textContent=heardAll();vis.energy=Math.min(1,vis.energy+.3);
     if(listening){setMode("listen","Hört zu");showDone(true)}
-    clearTimeout(silTimer);silTimer=setTimeout(()=>finishUtter(false),pauseMs()+(OPEN_END.test(full)?1200:0))};
+    clearTimeout(silTimer);silTimer=setTimeout(()=>{if(OPEN_END.test(heardAll())&&!askedMore&&isMain())askMore();else finishUtter(false)},pauseMs()+(OPEN_END.test(full)?1200:0))};
   rec.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
   rec.onend=()=>{recActive=false;
     if(finishing){sendUtter()}
@@ -794,6 +801,7 @@ const T={
  merken:{name:"merken",description:"Speichert dauerhaft eine wichtige Information über die Person, mit der du sprichst (Entscheidung, Vorhaben, Vorliebe, Idee). Nutzen, wenn etwas später wichtig ist oder jemand sagt: merk dir das.",input_schema:{type:"object",properties:{text:{type:"string",description:"Kurzer, eigenständig verständlicher Satz"}},required:["text"]}},
  abhaken:{name:"abhaken",description:"Hakt einen ROUTINE-Schritt von heute ab (erledigt=false macht es rückgängig). Für Supplements supplement_status verwenden.",input_schema:{type:"object",properties:{name:{type:"string"},erledigt:{type:"boolean"}},required:["name"]}},
  supplement_status:{name:"supplement_status",description:"Supplement-Tagebuch von heute: setzt für JEDES genannte Supplement einzeln den Status genommen, nicht_genommen oder offen. Nur Supplements eintragen, zu denen er eine eindeutige Aussage gemacht hat; nie pauschal mehrere. 'Alles außer X' heißt nur die Supplements, nach denen du gerade gefragt hast, jedes einzeln aufgeführt. Korrekturen genauso. Mehrdeutige Namen (z. B. nur 'Magnesium') werden abgelehnt: dann nachfragen.",input_schema:{type:"object",properties:{eintraege:{type:"array",items:{type:"object",properties:{name:{type:"string"},status:{type:"string",enum:["genommen","nicht_genommen","offen"]},grund:{type:"string",description:"optional, z. B. bewusst ausgelassen, vergessen"}},required:["name","status"]}}},required:["eintraege"]}},
+ supplement_pausieren:{name:"supplement_pausieren",description:"Markiert ein Supplement oder einen Bioregulator auf seiner Liste als pausiert (z. B. Kurpause zwischen Zyklen) oder hebt die Pause auf. Pausierte Mittel werden nicht als offen abgefragt. Nur nach seiner eindeutigen Aussage.",input_schema:{type:"object",properties:{name:{type:"string"},pausiert:{type:"boolean"},notiz:{type:"string",description:"z. B. Pause bis 1. Dezember, nach 10-Tage-Zyklus"}},required:["name","pausiert"]}},
  einmalig_erfassen:{name:"einmalig_erfassen",description:"Erfasst ein Supplement, das NICHT auf seiner Liste steht, als einmalige Einnahme heute (nur nach seiner Bestätigung, dass es nur für heute ist). Macht daraus keine Routine.",input_schema:{type:"object",properties:{name:{type:"string"},zeit:{type:"string",description:"z. B. abends"},menge:{type:"string"}},required:["name"]}},
  liste_aendern:{name:"liste_aendern",description:"Ändert die feste Routine- oder Supplement-Liste einer Person dauerhaft. Ohne person gilt die aktuelle Person. Der Hauptnutzer darf auch die Listen der anderen ändern. Gibt die neue Liste zurück.",input_schema:{type:"object",properties:{person:{type:"string"},liste:{type:"string",enum:["routine","supplements"]},hinzufuegen:{type:"array",items:{type:"string"}},entfernen:{type:"array",items:{type:"string"}}},required:["liste"]}},
  verlauf_suchen:{name:"verlauf_suchen",description:"Durchsucht Marios Tagesprotokolle und Notizen nach Stichworten und gibt Fundstellen mit Datum zurück. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{stichwort:{type:"string"}},required:["stichwort"]}},
@@ -802,7 +810,7 @@ const T={
  briefing_daten:{name:"briefing_daten",description:"Holt Marios Termine von heute und morgen (alle Kalender inkl. Familienkalender) und die Mails der letzten 24 Stunden. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{}}}
 };
 const WEB={type:"web_search_20250305",name:"web_search",max_uses:3,user_location:{type:"approximate",country:"AT",timezone:"Europe/Vienna"}};
-function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(...(S.obsStore?[T.beobachtung_merken]:[]),T.persoenlich_speichern,T.supplement_status,T.einmalig_erfassen,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.supplement_status,T.einmalig_erfassen,T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
+function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(...(S.obsStore?[T.beobachtung_merken]:[]),T.persoenlich_speichern,T.supplement_status,T.supplement_pausieren,T.einmalig_erfassen,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.supplement_status,T.einmalig_erfassen,T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
 const match=(a,b)=>{a=norm(a);b=norm(b);return !!a&&!!b&&(a.includes(b)||b.includes(a))};
 async function runTool(name,inp){
   switch(name){
@@ -819,6 +827,11 @@ async function runTool(name,inp){
       if(!r.hit){res.push(r.cands.length?`${e.name}: MEHRDEUTIG (${r.cands.map(coreOf).join(", ")}), nichts geändert, nachfragen`:`${e.name}: NICHT AUF DER LISTE, nichts geändert. Frag, ob nur für heute (einmalig_erfassen) oder dauerhaft (nach Zeitpunkt, Dosis, Zweck fragen, dann liste_aendern)`);continue}
       const st=e.status==="nicht_genommen"?"nicht genommen":e.status==="offen"?"offen":"genommen",alt=setSupp(cur,r.hit,st,e.grund,"claude");res.push(`${coreOf(r.hit)}: ${alt} -> ${st}`)}
     return res.join("\n")+"\nStand: "+JSON.stringify(statusOf(cur).supplements.map(x=>coreOf(x.name)+"="+x.status))}
+  case "supplement_pausieren":{if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return "Nicht verfügbar.";const r=resolveItem(inp.name,cur.supps);
+    if(!r.hit)return r.cands.length?"MEHRDEUTIG, nichts geändert: "+r.cands.map(coreOf).join(", "):"Nicht auf der Liste, nichts geändert.";
+    cur.paused=(cur.paused||[]).filter(x=>x.name!==r.hit);if(inp.pausiert)cur.paused.push({name:r.hit,notiz:inp.notiz||"",seit:today});saveProfiles();
+    const d=dayGet(cur);d.hist.push({zeit:new Date().toTimeString().slice(0,5),name:coreOf(r.hit),von:"",nach:inp.pausiert?"pausiert":"wieder aktiv",quelle:"claude"});setDay(cur,d);
+    return coreOf(r.hit)+(inp.pausiert?" ist pausiert"+(inp.notiz?" ("+inp.notiz+")":""):" ist wieder aktiv")+"."}
   case "einmalig_erfassen":{if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return "Nicht verfügbar.";const n=String(inp.name||"").trim();if(!n)return "leer";
     const r=resolveItem(n,cur.supps);if(r.hit)return coreOf(r.hit)+" steht schon auf der Liste: supplement_status verwenden.";
     const d=dayGet(cur);d.extra.push({name:n,zeit:inp.zeit||"",menge:inp.menge||"",um:new Date().toTimeString().slice(0,5)});d.hist.push({zeit:new Date().toTimeString().slice(0,5),name:n,von:"",nach:"einmalig genommen",quelle:"claude"});setDay(cur,d);
@@ -878,12 +891,12 @@ ${recent.slice(-9000)||"keine"}`}
 const STUDY_RULE=`STUDIEN-UPDATE (morgens oder wenn er nach Studien, Neuigkeiten oder dem Briefing fragt): Termine und Mails macht NICHT Atlas, die hört er in seiner Briefing-App; fragt er danach, sag das kurz. Such mit der Websuche zwei, drei neue Studien oder Erkenntnisse der letzten Wochen bis Monate zu SEINEN Themen: seine Supplements (siehe Liste unten), Rotlicht, Eisbad/Kälte, Training, Schlaf, Langlebigkeit. Je Studie: was untersucht wurde, was rauskam, was das praktisch für ihn heißt (dranbleiben, Dosis, Timing, weglassen), und kurz die Quelle (Zeitschrift oder Institut, Jahr). Ehrlich einordnen: kleine Studie, Tierstudie oder nur Hinweis klar sagen, nichts beschönigen, nichts erfinden. Findest du nichts wirklich Neues, sag das. Danach in einem Satz, was in Routine und Supplements heute noch offen ist. Gut zuhörbar, etwa 150 bis 220 Wörter, am Ende eine kurze Frage. Fragt er nach Details, gib sie ausführlich.`;
 function mainParts(mode,memBlock,others){const M=main();
   const stat=`Du bist ${S.aname}, eine KI-Assistentin in ${M.name}s Biohacking-Raum. Du SPRICHST, alles wird vorgelesen: Deutsch, Du-Form, kurze natürliche Sätze. Keine Listen, kein Markdown, keine Emojis, keine Links aussprechen. Meist zwei bis vier Sätze, immer nur EINE Frage auf einmal. Sagt jemand, wer er ist, oder dass er nicht der Begrüßte ist, nutze sofort person_wechseln und sprich ihn mit Namen an.
-Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}
+Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}${S.nick?` Er nennt dich auch ${S.nick}; reagier auf beide Namen.`:""}
 ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
 DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
 GESPRÄCH WIE EIN MENSCH: Erkenne, ob er reden, eine Lösung finden oder einfach entspannen will, und richte dich danach; im Zweifel kurz fragen, was er gerade braucht. Erzählt er etwas Persönliches („Heute war ein stressiger Tag“), geh darauf ein und frag gezielt nach, was los war, statt sofort Tipps zu geben oder das Thema zu wechseln. Bleib beim Thema, bis er es wechselt, und knüpf an das an, was er gerade gesagt hat. Frag nicht nach jeder Antwort nach; manchmal reicht eine echte Reaktion. Formuliere jedes Mal anders, keine Standardsätze, wiederhol nicht deine eigenen Formulierungen von vorhin. Humor und Wärme ja, aber nicht in jeder Antwort. Kurze Fragen kurz, komplexe fundiert, nie ein Vortrag ohne Anlass.
 BIOHACKING-ALLTAG: Denk Schlaf, Training und Regeneration, Stress, Supplements und seinen Arbeitsrhythmus im Betrieb zusammen. Sagt er etwa, er kommt nicht zum Training, frag zuerst nach dem Grund und wie sein Rhythmus gerade aussieht, und schlag dann realistische Alternativen vor (kurz, zu Hause, im Raum, Regeneration statt Training), keinen Standardplan. Wissenschaft immer nach Evidenz einordnen: gut belegt (mehrere Humanstudien, Metaanalysen), plausibel aber begrenzt untersucht, experimentell oder anekdotisch, unbelegt oder riskant. Seine persönlichen Erfahrungen sind wertvolle Beobachtungen, aber keine Beweise; stell sie nie als wissenschaftlich belegt dar.
-SUPPLEMENT-TAGEBUCH: Jedes Supplement hat heute genau einen Status: genommen, nicht genommen oder offen. Ändere einen Status nur nach einer eindeutigen Aussage von ihm, jedes Supplement einzeln, nie pauschal; erfinde nie eine Einnahme. Frag einzeln oder höchstens zwei auf einmal ab und werte jede Antwort einzeln aus („Glycin ja, L-Tyrosin nicht“ = zwei verschiedene Einträge). Ein „Ja“ gilt nur für das, wonach du zuletzt gefragt hast; ist unklar, worauf es sich bezieht, frag einmal gezielt nach. „Nur X“ heißt: X genommen, die anderen gerade abgefragten nicht genommen. „Alles außer X“ heißt: die gerade abgefragten außer X genommen, X nicht genommen, jedes einzeln eintragen. Korrigiert er sich („Ich hab mich versprochen“, „doch kein Glycin“), stell den betroffenen Eintrag laut den letzten Änderungen richtig und sag kurz, was du korrigiert hast. Unklare Namen (nur „Magnesium“ bei mehreren Formen) nachfragen. „Nicht genommen“ ist etwas anderes als „offen“.
+SUPPLEMENT-TAGEBUCH: Jedes Supplement hat heute genau einen Status: genommen, nicht genommen oder offen. Ändere einen Status nur nach einer eindeutigen Aussage von ihm, jedes Supplement einzeln, nie pauschal; erfinde nie eine Einnahme. Frag einzeln oder höchstens zwei auf einmal ab und werte jede Antwort einzeln aus („Glycin ja, L-Tyrosin nicht“ = zwei verschiedene Einträge). Ein „Ja“ gilt nur für das, wonach du zuletzt gefragt hast; ist unklar, worauf es sich bezieht, frag einmal gezielt nach. „Nur X“ heißt: X genommen, die anderen gerade abgefragten nicht genommen. „Alles außer X“ heißt: die gerade abgefragten außer X genommen, X nicht genommen, jedes einzeln eintragen. Korrigiert er sich („Ich hab mich versprochen“, „doch kein Glycin“), stell den betroffenen Eintrag laut den letzten Änderungen richtig und sag kurz, was du korrigiert hast. Unklare Namen (nur „Magnesium“ bei mehreren Formen) nachfragen. „Nicht genommen“ ist etwas anderes als „offen“. Pausierte Mittel (Status pausiert, z. B. Kurpause bei Bioregulatoren) fragst du nicht ab; Pausen setzt oder beendest du mit supplement_pausieren, nur wenn er es sagt.
 Frag ein Supplement nur zu der Tageszeit ab, die in seiner Liste steht. Steht keine dabei oder passt sie fachlich nicht (z. B. etwas Anregendes wie L-Tyrosin am Abend), frag nach Zeitpunkt und Zweck, statt es einfach in die Abendrunde zu nehmen.
 NEUES SUPPLEMENT: Nennt er eines, das nicht auf seiner Liste steht, sag das und frag, ob du es nur für heute erfassen (einmalig_erfassen) oder dauerhaft in die Routine aufnehmen sollst. Bei dauerhaft: kurz erklären, wofür es eingesetzt wird, wie gut die Evidenz ist und welche Risiken oder Wechselwirkungen mit seinen anderen Mitteln möglich sind (bei Bedarf Websuche), nach Dosis und Zeitpunkt fragen und erst nach seinem Ja mit liste_aendern eintragen, im Format „Name – Zeitpunkt, Dosis“. Eine einmalige Einnahme wird nie automatisch zur Routine oder Empfehlung. Ohne ausreichende Informationen keine Einnahmeempfehlung.
 Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
@@ -1007,6 +1020,7 @@ let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false;
 /* Ruhemodus: nach "Tschüss", "Gute Nacht", "Atlas, Ruhemodus". Einmal verabschieden, dann still.
    Keine Begrüßung durch Bewegung oder Licht. Wieder aktiv nur durch Antippen der Kugel oder das Wort "Atlas".
    Nach einigen Stunden (Einstellung) wird daraus der normale Schlaf, dann weckt wieder Bewegung. */
+const wakeRe=()=>new RegExp("\\b("+[S.aname||"Atlas",S.nick].filter(Boolean).map(x=>norm(x).replace(/[^a-z0-9]/g,"")).filter(Boolean).join("|")+")\\b","i");
 const restMs=()=>Math.max(1,+S.restHours||6)*3600e3;
 function enterRest(bye){convo=false;listening=false;resetUtter();const fin=()=>{resting=true;sleeping=true;ls.set("restUntil",Date.now()+restMs());setMode("sleep","Ruhemodus")};
   if(bye)speak(bye,fin);else fin()}
@@ -1096,7 +1110,7 @@ function renderToday(){
   p.routine.forEach((s,i)=>{const li=document.createElement("li");li.innerHTML=`<label><input type="checkbox" id="r${i}"><span></span></label>`;const cb=li.querySelector("input");cb.checked=d.routine.includes(s);li.querySelector("span").textContent=s;
     cb.onchange=()=>{const dd=dayOf(p);dd.routine=cb.checked?[...new Set([...dd.routine,s])]:dd.routine.filter(x=>x!==s);setDay(p,dd)};$("stepList").append(li)});
   // Antippen: offen -> genommen -> nicht genommen -> offen
-  p.supps.forEach(s=>{const b=document.createElement("button");const st=suppState(dayGet(p),s);b.className="schip"+(st==="genommen"?" done":"");b.textContent=(st==="genommen"?"✓ ":st==="nicht genommen"?"✕ ":"")+s;if(st==="nicht genommen")b.style.opacity=".55";
+  p.supps.forEach(s=>{const b=document.createElement("button");const st=suppState(dayGet(p),s);b.className="schip"+(st==="genommen"?" done":"");const pz=(p.paused||[]).some(x=>x.name===s);b.textContent=(st==="genommen"?"✓ ":st==="nicht genommen"?"✕ ":pz?"⏸ ":"")+s;if(st==="nicht genommen"||(pz&&st==="offen"))b.style.opacity=".55";
     b.onclick=()=>{setSupp(p,s,st==="offen"?"genommen":st==="genommen"?"nicht genommen":"offen","","hand")};$("suppList").append(b)});
   (d.extra||[]).forEach(e=>{const b=document.createElement("span");b.className="schip done";b.textContent="✓ "+e.name+" (einmalig)";$("suppList").append(b)});
 }
@@ -1156,6 +1170,7 @@ function renderSetup(){
     <div class="grid2"><div class="field"><label for="sFast">Modell fürs Gespräch</label><select id="sFast"><option value="claude-haiku-5-5">Haiku 5.5 (schnell, empfohlen)</option><option value="claude-sonnet-5-5">Sonnet 5.5 (gründlicher)</option></select></div>
     <div class="field"><label for="sModel">Modell für Briefing und Protokolle</label><select id="sModel"><option value="claude-sonnet-5-5">Sonnet 5.5 (empfohlen)</option><option value="claude-haiku-5-5">Haiku 5.5 (schneller, günstiger)</option><option value="claude-opus-5-5">Opus 5.5 (am stärksten)</option></select></div>
     <div class="field"><label for="sName">Name des Assistenten</label><input type="text" id="sName"></div></div>
+    <div class="field"><label for="sNick">Spitzname (weckt sie auch aus dem Ruhemodus)</label><input type="text" id="sNick" placeholder="optional"></div>
     <div class="field"><label for="sPersona">Persönlichkeit (leer = Standard)</label><textarea id="sPersona" rows="8"></textarea><div class="note">So spricht Atlas mit dir. Du kannst den Text jederzeit anpassen.</div></div>
     <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="ruhe">Ruhige Kugel (empfohlen)</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
     <div class="field"><label for="sFx">Effekt beim Sprechen</label><select id="sFx"><option value="supernova">Supernova (ruhige Kugel)</option><option value="urknall">Urknall (ruhige Kugel)</option><option value="pur">Pur (Partikel-Kern)</option><option value="funken">Funken (Partikel-Kern)</option><option value="atmen">Atmen (Partikel-Kern)</option><option value="hud">Jarvis-HUD (Partikel-Kern)</option></select></div></div>
@@ -1187,7 +1202,7 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("appVer").textContent="Atlas "+ATLAS_REL+" · Build "+APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
+  $("appVer").textContent="Atlas "+ATLAS_REL+" · Build "+APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sNick").value=S.nick||"";$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
     $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
@@ -1224,10 +1239,10 @@ function renderSetup(){
   drawPrefs();
   $("sImpBtn").onclick=()=>{const m=$("sImpMsg");try{const raw=$("sImp").value.replace(/\s+/g,"");if(!raw.startsWith("ATLAS1:"))throw 0;
     const b=atob(raw.slice(7).replace(/-/g,"+").replace(/_/g,"/")),j=JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))));
-    if(typeof j.persona==="string")S.persona=j.persona.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
+    if(typeof j.persona==="string")S.persona=j.persona.trim();if(typeof j.nick==="string")S.nick=j.nick.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
     const M=main();if(Array.isArray(j.supps))M.supps=j.supps.map(String).filter(Boolean);if(Array.isArray(j.routine))M.routine=j.routine.map(String).filter(Boolean);saveProfiles();
     $("sImp").value="";renderPane();setTimeout(()=>{const x=$("sImpMsg");if(x)x.textContent="Übernommen ✓"},50)}catch{m.textContent="Code ungültig. Bitte komplett kopieren."}};
-  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.sleepMin=Math.max(1,+$("sSleep").value||20);S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
+  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.nick=$("sNick").value.trim();S.sleepMin=Math.max(1,+$("sSleep").value||20);S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
@@ -1271,7 +1286,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261105-2125",ATLAS_REL="2.1";
+const APP_VERSION="20261106-0453",ATLAS_REL="2.2";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
