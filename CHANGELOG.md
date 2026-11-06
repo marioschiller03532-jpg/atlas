@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.4 (06.11.2026) – Supplementlisten-Modus
+- „Atlas, zeig mir meine Supplementierungsliste“ / „… Evas Supplementierungsliste“ öffnet die Liste groß (Tablet quer: rechts neben der Kugel, Handy: unten), gruppiert nach morgens, mittags, abends, ohne feste Zeit, mit Tagesstatus ✓ ✕ ○ ⏸.
+- Liste bleibt offen, während Atlas zuhört, denkt oder spricht und auch nach Gesprächsende; „Fertig mit der Liste“ oder ✕ schließt sie.
+- Im Listenmodus wird nichts automatisch geändert oder abgehakt: Die App lässt Änderungen erst zu, nachdem Atlas sie genau wiederholt und Mario bestätigt hat.
+- Unbekannte Person → Rückfrage statt Raten. Entfernen von Listeneinträgen nur noch bei eindeutigem Namen.
+- Orbit-Glaskugel aus 2.3 unverändert übernommen.
+- Rückfall: Version 2.3 unter /alt/2.3/.
+
 ## 2.3 (06.11.2026) – Orbit-Glaskugel
 - Neue Sprechkugel nach der ORBIT-Vorlage: dunkler Glaskörper, Rand von Mint über Cyan nach Blau/Violett, weicher Schein.
 - Fünf Zustände, sanft ineinander übergeblendet: Bereit (Innenkugel oben links, schwebt leicht) · Hört zu (Linsenkugel mit Rillen, atmet mit der Eingabe) · Denkt nach (zwei Kugeln kreisen langsam) · Spricht (Innenkugel in der Mitte, pulsiert mit der Stimme, feine Wellen) · Schläft/Ruhemodus (wie Bereit, gedimmt in Nachtblau).

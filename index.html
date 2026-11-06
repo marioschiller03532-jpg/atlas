@@ -22,6 +22,17 @@
 /* Hauptbildschirm: nur die Kugel. Alles andere liegt hinter dem Code. */
 .top,.dock,#typeForm,.said,.heard,.state{display:none!important}
 #app{grid-template-rows:1fr auto!important}
+#listView{position:fixed;z-index:14;text-align:left;background:rgba(8,12,22,.9);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:18px 22px;overflow:auto;color:#eef2f7;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+@media (orientation:landscape){#listView{top:24px;right:24px;bottom:24px;width:min(46vw,560px)}body.listOn #vis{transform:translateX(-24vw) scale(.8)}}
+@media (orientation:portrait){#listView{left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);max-height:60vh}body.listOn #vis{transform:translateY(-22vh) scale(.62)}}
+#vis{transition:transform .5s ease}
+.lvHead{display:flex;align-items:center;justify-content:space-between;gap:12px}.lvHead h2{margin:0;font-size:24px;font-weight:650}
+#lvClose{background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:999px;width:40px;height:40px;font-size:18px}
+#lvBody h3{margin:18px 0 6px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#9fb3c8}
+.lvRow{display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:20px;line-height:1.3}
+.lvRow .st{width:26px;flex:none;text-align:center}.lvRow .nm{flex:1}.lvRow .dt{font-size:15px;color:#9fb3c8}
+.lvRow.ni .nm,.lvRow.pz .nm{opacity:.55}.lvFoot{margin-top:14px;font-size:14px;color:#8fa0b3}
+@media (prefers-reduced-motion:reduce){#vis{transition:none}}
 .donebtn{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 28px);transform:translateX(-50%);z-index:16;padding:12px 26px;border-radius:999px;border:1px solid rgba(64,226,196,.6);background:rgba(64,226,196,.14);color:#bff5ea;font-size:17px;font-weight:600;letter-spacing:.02em;-webkit-tap-highlight-color:transparent}
 .donebtn:active{background:rgba(64,226,196,.3)}
 .corner{position:fixed;z-index:15;width:44px;height:44px;border-radius:12px;border:1px solid transparent;background:none;color:var(--muted);opacity:.28;font-size:20px;display:grid;place-items:center;transition:opacity .2s}
@@ -132,6 +143,7 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
     <div class="setupbar" id="setupBar" hidden><span id="setupTxt">Einrichtung fehlt noch.</span><button class="btn small primary" id="setupGo">Einrichten</button></div>
     <canvas id="vis" role="button" aria-label="Antippen zum Sprechen"></canvas>
     <button class="donebtn" id="doneBtn" type="button" hidden>Fertig ✓</button>
+    <section id="listView" hidden aria-live="polite"><div class="lvHead"><h2 id="lvTitle"></h2><button type="button" id="lvClose" aria-label="Liste schließen">✕</button></div><div id="lvBody"></div><div class="lvFoot">Sag „Fertig mit der Liste“ zum Schließen</div></section>
     <div class="state" id="state">Bereit · Kugel antippen</div>
     <div class="said" id="said"></div>
     <div class="heard" id="heard"></div>
@@ -462,7 +474,7 @@ const DEFAULT_PROFILES=[
   {id:"haupt",name:"Mario",typ:"haupt",info:"",routine:["Elektrolyte","Eisbad","Aufwärmen","Rotlicht","Training"],supps:[],notes:[]}
 ];
 let profiles=ls.get("profiles",null)||JSON.parse(JSON.stringify(DEFAULT_PROFILES));
-const saveProfiles=()=>ls.set("profiles",profiles);
+const saveProfiles=()=>{ls.set("profiles",profiles);if(typeof drawList==="function")drawList()};
 const main=()=>profiles.find(p=>p.typ==="haupt")||profiles[0];
 const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g,"").trim();
 function findProfile(name){const n=norm(name);if(!n)return null;return profiles.find(p=>norm(p.name)===n)||profiles.find(p=>n.split(" ").includes(norm(p.name)))||profiles.find(p=>norm(p.name).startsWith(n)&&n.length>=3)||null}
@@ -477,7 +489,7 @@ function renderPerson(){const c=$("personChip");c.textContent=cur.name;c.classLi
 
 /* Tagesstand je Person */
 const dayOf=p=>ls.get(`day:${today}:${p.id}`,{routine:[],supps:[]});
-const setDay=(p,d)=>{ls.set(`day:${today}:${p.id}`,d);if(!$("sheet").hidden&&pane==="heute")renderPane()};
+const setDay=(p,d)=>{ls.set(`day:${today}:${p.id}`,d);if(!$("sheet").hidden&&pane==="heute")renderPane();if(typeof drawList==="function")drawList()};
 const statusOf=p=>{const d=dayOf(p),ni=d.nicht||[],gr=d.grund||{};return {routine:p.routine.map(s=>({schritt:s,erledigt:d.routine.includes(s)})),
   supplements:p.supps.map(s=>{const pz=(p.paused||[]).find(x=>x.name===s);const st=d.supps.includes(s)?"genommen":ni.includes(s)?"nicht genommen":pz?"pausiert":"offen";if(pz&&st==="pausiert")return {name:s,status:st,genommen:false,pause:pz.notiz||"",seit:pz.seit};return {name:s,status:st,genommen:st==="genommen",...(gr[s]?{grund:gr[s]}:{})}}),
   einmalig_heute:(d.extra||[]).map(e=>e.name+(e.zeit?" ("+e.zeit+")":"")+(e.menge?" "+e.menge:"")),letzte_aenderungen:(d.hist||[]).slice(-8)}};
@@ -820,17 +832,40 @@ function localAnswer(t){
   // Rückmeldung zur letzten Claude-Antwort: keine Korrektur -> in den Speicher übernehmen
   if(pendingCache){if(CORRECTION.test(t))pendingCache=null;else cacheCommit()}
   if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")return null;
-  const tick=localTick(t);if(tick)return {text:tick,art:"abhaken"};
+  const tick=listOpen?null:localTick(t);if(tick)return {text:tick,art:"abhaken"};
   // Hat Atlas gerade etwas gefragt, ist "gut" oder "danke" eine Antwort darauf -> Claude soll darauf eingehen
   const lastA=[...log].reverse().find(m=>m.rolle==="assistent"),asked=lastA&&/\?\s*$/.test(lastA.text)&&Date.now()-Date.parse(lastA.zeit)<10*60e3;
   const it=detect(t);if(it&&!(asked&&!["uhrzeit","datum","offen","tschuess"].includes(it.id)))return {text:POOL[it.id](),art:it.id,end:it.id==="tschuess"};
   const pf=isMain()&&prefFind(t);if(pf)return {text:`${pf.titel}: ${pf.text}`,art:"persoenlich"};
   const c=cacheFind(t);if(c)return {text:c.a,art:"speicher"};
   return null}
+// ===== Listenmodus: Supplementliste einer Person groß anzeigen, Gespräch läuft weiter =====
+let listOpen=null;   // Profil, dessen Liste offen ist
+const LIST_OPEN_RE=/\b(zeig|zeige|öffne|oeffne|mach auf)\b.*\b(supplement\w*|einnahme)\s*(liste|plan)\b|\b(supplement\w*|einnahme)(liste|plan)\b.*\b(zeig|zeige|öffne|anzeigen)\b/i,
+  LIST_CLOSE_RE=/\b(fertig mit der liste|liste (schließen|schliessen|zu|zumachen)|schließ die liste|schliess die liste|mach die liste zu|liste weg)\b/i;
+function whoseList(t){const n=" "+norm(t)+" ";if(/ (meine|mein|meiner) /.test(n))return main();
+  for(const p of profiles){const k=norm(p.name);if(k&&(n.includes(" "+k+"s ")||n.includes(" "+k+" ")||n.includes(" von "+k+" ")))return p}return null}
+function slotOf(x){const t=x.toLowerCase();return /morgen|früh|frueh|nüchtern|kaffee/.test(t)?0:/mittag/.test(t)?1:/abend|nacht|schlaf/.test(t)?2:3}
+function drawList(){const v=$("listView");if(!v||!listOpen||v.hidden)return;const p=profiles.find(x=>x.id===listOpen.id)||listOpen;listOpen=p;
+  $("lvTitle").textContent=(p===main()?"Meine":p.name+"s")+" Supplementliste";const body=$("lvBody");body.innerHTML="";
+  if(!p.supps||!p.supps.length){body.innerHTML='<p style="font-size:19px">Für '+esc(p.name)+' sind noch keine Supplements gespeichert.</p>';return}
+  const d=dayGet(p),names=["Morgens","Mittags","Abends","Ohne feste Zeit"],groups=[[],[],[],[]];p.supps.forEach(x=>groups[slotOf(x)].push(x));
+  groups.forEach((g,i)=>{if(!g.length)return;const h=document.createElement("h3");h.textContent=names[i];body.append(h);
+    g.forEach(x=>{const pz=(p.paused||[]).find(q=>q.name===x),st=suppState(d,x),r=document.createElement("div");
+      r.className="lvRow"+(st==="nicht genommen"?" ni":"")+(pz&&st==="offen"?" pz":"");const parts=x.split(/\s[–-]\s/),nm=parts[0],det=parts.slice(1).join(" – ");
+      r.innerHTML=`<span class="st">${st==="genommen"?"✓":st==="nicht genommen"?"✕":pz?"⏸":"○"}</span><span class="nm">${esc(nm)}${det?`<br><span class="dt">${esc(det)}</span>`:""}${pz?`<br><span class="dt">pausiert${pz.notiz?": "+esc(pz.notiz):""}</span>`:""}</span>`;body.append(r)})});
+  if((d.extra||[]).length){const h=document.createElement("h3");h.textContent="Heute zusätzlich (einmalig)";body.append(h);d.extra.forEach(e=>{const r=document.createElement("div");r.className="lvRow";r.innerHTML=`<span class="st">✓</span><span class="nm">${esc(e.name)}${e.menge||e.zeit?`<br><span class="dt">${esc([e.zeit,e.menge].filter(Boolean).join(", "))}</span>`:""}</span>`;body.append(r)})}}
+function openList(p){listOpen=p;$("listView").hidden=false;document.body.classList.add("listOn");drawList()}
+function closeList(){listOpen=null;$("listView").hidden=true;document.body.classList.remove("listOn")}
 const REST_RE=/^(atlas,? )?(tsch(ü|ue)ss|bis später|bis spaeter|bis dann|bis morgen|gute nacht|ciao|baba|pfiat di|ruhemodus|geh schlafen|schlaf jetzt|ab in den ruhemodus|leg dich schlafen)\b/i;
 // nicht zweimal hintereinander dieselbe Formulierung
 function pickFresh(key,arr){const last=ls.get("pf:"+key,[]);const c=arr.filter(x=>!last.includes(x));const r=pick(c.length?c:arr);ls.set("pf:"+key,[r,...last].slice(0,Math.min(3,arr.length-1)));return r}
-function handleUtterance(t){$("heard").textContent=t;perf={end:perf.flushAt||performance.now(),mode:modeOf(t)};
+function handleUtterance(t){$("heard").textContent=t;
+  if(isMain()&&LIST_CLOSE_RE.test(t)&&listOpen){closeList();addLog("mensch",t);const a=pickFresh("lclose",["Liste ist zu.","Alles klar, Liste geschlossen.","Passt, ich mach sie zu."]);addLog("assistent",a);listening=false;speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}
+  if(isMain()&&LIST_OPEN_RE.test(t)){const p=whoseList(t);addLog("mensch",t);listening=false;
+    if(!p){const a=/\b[A-ZÄÖÜ][a-zäöüß]+s\b/.test(t)?"Diese Person habe ich noch nicht angelegt. Soll ich sie anlegen?":"Wessen Liste soll ich zeigen, deine oder die von jemand anderem?";addLog("assistent",a);speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}
+    openList(p);const n=(p.supps||[]).length,a=p===main()?(n?`Hier ist deine Liste, ${n} Supplements. Frag mich ruhig.`:"Für dich sind noch keine Supplements gespeichert."):(n?`Hier ist ${p.name}s Liste, ${n} Supplements.`:`Für ${p.name} sind noch keine Supplements gespeichert.`);
+    addLog("assistent",a);speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}perf={end:perf.flushAt||performance.now(),mode:modeOf(t)};
   if(REST_RE.test(t)){addLog("mensch",t);const bye=pickFresh("bye",/nacht/i.test(t)?["Gute Nacht! Schlaf gut.","Gute Nacht, erhol dich gut.","Schlaf gut, bis morgen."]:["Bis später!","Servus, bis bald.","Mach's gut. Wenn du mich brauchst, sag einfach Atlas.","Ciao! Ich ruh mich aus, bis du wieder da bist."]);addLog("assistent",bye);enterRest(bye);return}
   if(/^(stopp?|danke,? das war'?s|ende|das war'?s)\b/i.test(t)){convo=false;listening=false;speak(pickFresh("end",["Alles klar.","Gern.","Passt, ich bin da, wenn du mich brauchst.","Okay."]));addLog("mensch",t);return}
   if(!offerStudy){const L=localAnswer(t);if(L){perf.mode="lokal";addLog("mensch",t);addLog("assistent",L.text);listening=false;
@@ -855,11 +890,11 @@ const T={
  beobachtung_merken:{name:"beobachtung_merken",description:"Speichert eine Beobachtung aus dem Gespräch, die er selbst geäußert hat (Training, Schlaf, Stress, Ziel, Reaktion auf Supplement oder Routine). Nur wenn das Speichern von Beobachtungen erlaubt ist. Knapp, sachlich, mit Datum.",input_schema:{type:"object",properties:{thema:{type:"string",enum:["Training","Schlaf","Stress","Ziel","Supplement-Reaktion","Routine","Sonstiges"]},text:{type:"string",description:"z. B. Kommt seit zwei Wochen wegen Personalmangel kaum zum Training"}},required:["thema","text"]}},
  persoenlich_speichern:{name:"persoenlich_speichern",description:"Persönlicher Speicher für BESTÄTIGTE Vorlieben, Abläufe, Einstellungen und wiederkehrende Arbeitsanweisungen von Mario. NUR aufrufen, wenn er ausdrücklich sagt, dass du es so speichern sollst, oder auf deine Rückfrage klar zustimmt. Gesundheitsdaten und andere sensible Infos nur mit zugestimmt=true, nachdem er ausdrücklich Ja gesagt hat. Gleicher Titel = Eintrag wird aktualisiert.",input_schema:{type:"object",properties:{titel:{type:"string",description:"kurz, z. B. Morgenroutine, Eisbad-Ablauf, Antwortstil"},text:{type:"string",description:"der bestätigte Inhalt, eigenständig verständlich"},art:{type:"string",enum:["Ablauf","Einstellung","Anweisung","Gesundheit","Sonstiges"]},zugestimmt:{type:"boolean",description:"true nur, wenn er dem Speichern ausdrücklich zugestimmt hat"}},required:["titel","text","art"]}},
  merken:{name:"merken",description:"Speichert dauerhaft eine wichtige Information über die Person, mit der du sprichst (Entscheidung, Vorhaben, Vorliebe, Idee). Nutzen, wenn etwas später wichtig ist oder jemand sagt: merk dir das.",input_schema:{type:"object",properties:{text:{type:"string",description:"Kurzer, eigenständig verständlicher Satz"}},required:["text"]}},
- abhaken:{name:"abhaken",description:"Hakt einen ROUTINE-Schritt von heute ab (erledigt=false macht es rückgängig). Für Supplements supplement_status verwenden.",input_schema:{type:"object",properties:{name:{type:"string"},erledigt:{type:"boolean"}},required:["name"]}},
- supplement_status:{name:"supplement_status",description:"Supplement-Tagebuch von heute: setzt für JEDES genannte Supplement einzeln den Status genommen, nicht_genommen oder offen. Nur Supplements eintragen, zu denen er eine eindeutige Aussage gemacht hat; nie pauschal mehrere. 'Alles außer X' heißt nur die Supplements, nach denen du gerade gefragt hast, jedes einzeln aufgeführt. Korrekturen genauso. Mehrdeutige Namen (z. B. nur 'Magnesium') werden abgelehnt: dann nachfragen.",input_schema:{type:"object",properties:{eintraege:{type:"array",items:{type:"object",properties:{name:{type:"string"},status:{type:"string",enum:["genommen","nicht_genommen","offen"]},grund:{type:"string",description:"optional, z. B. bewusst ausgelassen, vergessen"}},required:["name","status"]}}},required:["eintraege"]}},
- supplement_pausieren:{name:"supplement_pausieren",description:"Markiert ein Supplement oder einen Bioregulator auf seiner Liste als pausiert (z. B. Kurpause zwischen Zyklen) oder hebt die Pause auf. Pausierte Mittel werden nicht als offen abgefragt. Nur nach seiner eindeutigen Aussage.",input_schema:{type:"object",properties:{name:{type:"string"},pausiert:{type:"boolean"},notiz:{type:"string",description:"z. B. Pause bis 1. Dezember, nach 10-Tage-Zyklus"}},required:["name","pausiert"]}},
- einmalig_erfassen:{name:"einmalig_erfassen",description:"Erfasst ein Supplement, das NICHT auf seiner Liste steht, als einmalige Einnahme heute (nur nach seiner Bestätigung, dass es nur für heute ist). Macht daraus keine Routine.",input_schema:{type:"object",properties:{name:{type:"string"},zeit:{type:"string",description:"z. B. abends"},menge:{type:"string"}},required:["name"]}},
- liste_aendern:{name:"liste_aendern",description:"Ändert die feste Routine- oder Supplement-Liste einer Person dauerhaft. Ohne person gilt die aktuelle Person. Der Hauptnutzer darf auch die Listen der anderen ändern. Gibt die neue Liste zurück.",input_schema:{type:"object",properties:{person:{type:"string"},liste:{type:"string",enum:["routine","supplements"]},hinzufuegen:{type:"array",items:{type:"string"}},entfernen:{type:"array",items:{type:"string"}}},required:["liste"]}},
+ abhaken:{name:"abhaken",description:"Hakt einen ROUTINE-Schritt von heute ab (erledigt=false macht es rückgängig). Für Supplements supplement_status verwenden.",input_schema:{type:"object",properties:{bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},name:{type:"string"},erledigt:{type:"boolean"}},required:["name"]}},
+ supplement_status:{name:"supplement_status",description:"Supplement-Tagebuch von heute: setzt für JEDES genannte Supplement einzeln den Status genommen, nicht_genommen oder offen. Nur Supplements eintragen, zu denen er eine eindeutige Aussage gemacht hat; nie pauschal mehrere. 'Alles außer X' heißt nur die Supplements, nach denen du gerade gefragt hast, jedes einzeln aufgeführt. Korrekturen genauso. Mehrdeutige Namen (z. B. nur 'Magnesium') werden abgelehnt: dann nachfragen.",input_schema:{type:"object",properties:{bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},eintraege:{type:"array",items:{type:"object",properties:{name:{type:"string"},status:{type:"string",enum:["genommen","nicht_genommen","offen"]},grund:{type:"string",description:"optional, z. B. bewusst ausgelassen, vergessen"}},required:["name","status"]}}},required:["eintraege"]}},
+ supplement_pausieren:{name:"supplement_pausieren",description:"Markiert ein Supplement oder einen Bioregulator auf seiner Liste als pausiert (z. B. Kurpause zwischen Zyklen) oder hebt die Pause auf. Pausierte Mittel werden nicht als offen abgefragt. Nur nach seiner eindeutigen Aussage.",input_schema:{type:"object",properties:{bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},name:{type:"string"},pausiert:{type:"boolean"},notiz:{type:"string",description:"z. B. Pause bis 1. Dezember, nach 10-Tage-Zyklus"}},required:["name","pausiert"]}},
+ einmalig_erfassen:{name:"einmalig_erfassen",description:"Erfasst ein Supplement, das NICHT auf seiner Liste steht, als einmalige Einnahme heute (nur nach seiner Bestätigung, dass es nur für heute ist). Macht daraus keine Routine.",input_schema:{type:"object",properties:{bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},name:{type:"string"},zeit:{type:"string",description:"z. B. abends"},menge:{type:"string"}},required:["name"]}},
+ liste_aendern:{name:"liste_aendern",description:"Ändert die feste Routine- oder Supplement-Liste einer Person dauerhaft. Ohne person gilt die aktuelle Person. Der Hauptnutzer darf auch die Listen der anderen ändern. Gibt die neue Liste zurück.",input_schema:{type:"object",properties:{bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},person:{type:"string"},liste:{type:"string",enum:["routine","supplements"]},hinzufuegen:{type:"array",items:{type:"string"}},entfernen:{type:"array",items:{type:"string"}}},required:["liste"]}},
  verlauf_suchen:{name:"verlauf_suchen",description:"Durchsucht Marios Tagesprotokolle und Notizen nach Stichworten und gibt Fundstellen mit Datum zurück. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{stichwort:{type:"string"}},required:["stichwort"]}},
  person_anlegen:{name:"person_anlegen",description:"Legt eine neue Person an, die Atlas kennen soll (nur auf Wunsch des Hauptnutzers). art: erwachsen oder kind. info: kurze Beschreibung, z. B. Alter oder Schulklasse.",input_schema:{type:"object",properties:{name:{type:"string"},art:{type:"string",enum:["erwachsen","kind"]},info:{type:"string"}},required:["name","art"]}},
  abwesenheit_starten:{name:"abwesenheit_starten",description:"Startet den Abwesenheitsmodus (z. B. Urlaub): Das Tablet ist dann komplett gesperrt und lässt sich nur mit Marios Sprachcode wieder öffnen. Bewegungen werden protokolliert. Nur auf Marios ausdrücklichen Wunsch.",input_schema:{type:"object",properties:{}}},
@@ -869,6 +904,9 @@ const WEB={type:"web_search_20250305",name:"web_search",max_uses:3,user_location
 function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(...(S.obsStore?[T.beobachtung_merken]:[]),T.persoenlich_speichern,T.supplement_status,T.supplement_pausieren,T.einmalig_erfassen,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.supplement_status,T.einmalig_erfassen,T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
 const match=(a,b)=>{a=norm(a);b=norm(b);return !!a&&!!b&&(a.includes(b)||b.includes(a))};
 async function runTool(name,inp){
+  // Listenmodus: nichts ändern oder abhaken, bevor er die genau wiederholte Änderung bestätigt hat
+  if(listOpen&&["liste_aendern","supplement_status","supplement_pausieren","abhaken","einmalig_erfassen"].includes(name)&&inp.bestaetigt!==true)
+    return "NICHT geändert (Listenmodus). Wiederhole ihm zuerst genau, was du ändern würdest (welche Person, welches Mittel, was genau), und ruf das Werkzeug erst nach seinem klaren Ja erneut mit bestaetigt=true auf.";
   switch(name){
   case "person_wechseln":{const p=setPerson(inp.name);return p.typ==="haupt"?`Du sprichst jetzt mit ${p.name} (Hauptnutzer).${privKey?"":" Tresor gesperrt."} Ab der nächsten Antwort gelten seine Regeln.`:`Du sprichst jetzt mit ${p.name} (${TYP[p.typ]}). Ab sofort gelten die Regeln für ${p.name}; keine privaten Daten von ${main().name}.`}
   case "merken":return addNote(inp.text);
@@ -894,8 +932,10 @@ async function runTool(name,inp){
     return "Einmalig für heute erfasst: "+n+". Nicht in die Routine übernommen."}
   case "liste_aendern":{let p=cur;if(inp.person){const q=findProfile(inp.person);if(!q)return "Person unbekannt: "+inp.person;if(q!==cur&&!isMain())return "Nicht erlaubt.";p=q}
     if(p.typ==="kind"||p.typ==="gast")return "Für "+p.name+" gibt es keine Listen.";const key=inp.liste==="routine"?"routine":"supps";
-    const rm=(inp.entfernen||[]).map(String),add=(inp.hinzufuegen||[]).map(s=>String(s).trim()).filter(Boolean);
-    p[key]=p[key].filter(x=>!rm.some(r=>match(x,r)));for(const a of add)if(!p[key].some(x=>norm(x)===norm(a)))p[key].push(a);
+    const rm=(inp.entfernen||[]).map(String),add=(inp.hinzufuegen||[]).map(s=>String(s).trim()).filter(Boolean),warn=[];
+    // nur eindeutig erkannte Einträge entfernen ("Magnesium" löscht nicht alle drei Formen)
+    for(const r of rm){const x=resolveItem(r,p[key]);if(x.hit)p[key]=p[key].filter(y=>y!==x.hit);else warn.push(r+(x.cands.length?" ist MEHRDEUTIG ("+x.cands.map(coreOf).join(", ")+"), nicht entfernt":" nicht gefunden"))}
+    for(const a of add)if(!p[key].some(x=>norm(x)===norm(a)))p[key].push(a);if(warn.length){saveProfiles();return "Achtung: "+warn.join("; ")+". Neu: "+JSON.stringify(p[key])}
     saveProfiles();if(!$("sheet").hidden)renderPane();return JSON.stringify({person:p.name,liste:inp.liste,neu:p[key]})}
   case "verlauf_suchen":{if(!isMain())return "Nicht erlaubt.";if(!privKey){askCode("verlauf");return "GESPERRT: Die Code-Eingabe ist jetzt am Bildschirm offen. Bitte ihn kurz, den Code einzutippen."}
     const q=norm(inp.stichwort),words=q.split(" ").filter(w=>w.length>2),hit=t=>{t=norm(t);return t.includes(q)||words.some(w=>t.includes(w))};
@@ -966,7 +1006,9 @@ SPEICHERMARKE: Ist die Frage allgemeines, zeitloses Wissen (keine Person, kein D
   const dyn=`Jetzt: ${nowStr()}. Personen im Haus: ${profiles.map(p=>p.name+" ("+TYP[p.typ]+")").join(", ")}.
 Studien-Update heute: ${ls.get("study:"+today,0)?"schon gehört":"noch nicht. Ist es Vormittag, biete es nach seiner ersten Antwort in einem kurzen Satz an (Frage am Ende)."}
 ${mode==="schnell"?(privKey?"Notizen (neueste): "+(mem.notes.slice(-10).map(n=>"- "+n.text).join("\n")||"keine"):"Gedächtnis-Tresor gesperrt."):memBlock}
-Stand heute ${M.name}: ${JSON.stringify(statusOf(M))}
+${listOpen?`LISTENMODUS: Auf dem Bildschirm ist gerade ${listOpen===M?"seine eigene":listOpen.name+"s"} Supplementliste offen. Beziehe Fragen wie „das da“ oder „das dritte“ auf diese Liste und verwechsle seine nicht mit der von ${listOpen===M?"anderen":listOpen.name}. Im Listenmodus änderst, ergänzt oder hakst du NICHTS von selbst ab: Nennt er eine Änderung, wiederhol genau, was du ändern würdest (Person, Mittel, was), und führ sie erst nach seinem Ja aus (Werkzeug mit bestaetigt=true). Fehlen Angaben, frag nach. Die Liste bleibt offen, bis er „Fertig mit der Liste“ sagt.
+Angezeigte Liste ${listOpen.name}: ${JSON.stringify(statusOf(listOpen).supplements.map(x=>({name:x.name,status:x.status})))}
+`:""}Stand heute ${M.name}: ${JSON.stringify(statusOf(M))}
 Weitere Erwachsene heute:
 ${others}`;
   return {stat,dyn}}
@@ -1078,7 +1120,7 @@ let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false;
    Nach einigen Stunden (Einstellung) wird daraus der normale Schlaf, dann weckt wieder Bewegung. */
 const wakeRe=()=>new RegExp("\\b("+[S.aname||"Atlas",S.nick].filter(Boolean).map(x=>norm(x).replace(/[^a-z0-9]/g,"")).filter(Boolean).join("|")+")\\b","i");
 const restMs=()=>Math.max(1,+S.restHours||6)*3600e3;
-function enterRest(bye){convo=false;listening=false;resetUtter();const fin=()=>{resting=true;sleeping=true;ls.set("restUntil",Date.now()+restMs());setMode("sleep","Ruhemodus")};
+function enterRest(bye){if(typeof closeList==="function"&&listOpen)closeList();convo=false;listening=false;resetUtter();const fin=()=>{resting=true;sleeping=true;ls.set("restUntil",Date.now()+restMs());setMode("sleep","Ruhemodus")};
   if(bye)speak(bye,fin);else fin()}
 function leaveRest(greetNow){resting=false;ls.del("restUntil");sleeping=false;lastMotion=Date.now();setMode("idle",idleLabel());if(greetNow){lastGreet=Date.now();convo=true;greet()}}
 {const u=ls.get("restUntil",0);if(u&&Date.now()<u){resting=true;sleeping=true}}
@@ -1108,6 +1150,7 @@ document.addEventListener("visibilitychange",async()=>{if(document.visibilitySta
 /* ================= Bedienung ================= */
 $("vis").onclick=()=>{unlockAudio();if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now()}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
+$("lvClose").onclick=e=>{e.stopPropagation();closeList()};
 $("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
 $("roomBtn").onclick=()=>stream?stopRoom():startRoom();
 $("stopBtn").onclick=stopAll;
@@ -1342,7 +1385,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261106-0900",ATLAS_REL="2.3";
+const APP_VERSION="20261106-1410",ATLAS_REL="2.4";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
