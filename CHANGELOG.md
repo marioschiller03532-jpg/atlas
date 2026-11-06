@@ -1,5 +1,11 @@
 # Atlas – Änderungen
 
+## 2.3 (06.11.2026) – Orbit-Glaskugel
+- Neue Sprechkugel nach der ORBIT-Vorlage: dunkler Glaskörper, Rand von Mint über Cyan nach Blau/Violett, weicher Schein.
+- Fünf Zustände, sanft ineinander übergeblendet: Bereit (Innenkugel oben links, schwebt leicht) · Hört zu (Linsenkugel mit Rillen, atmet mit der Eingabe) · Denkt nach (zwei Kugeln kreisen langsam) · Spricht (Innenkugel in der Mitte, pulsiert mit der Stimme, feine Wellen) · Schläft/Ruhemodus (wie Bereit, gedimmt in Nachtblau).
+- Wird beim ersten Start einmalig als Kugel gesetzt; die anderen Kugeln bleiben in den Einstellungen wählbar. Farbe und Effekt gelten für die Orbit-Kugel nicht.
+- Rückfall: Version 2.2 unter /alt/2.2/.
+
 ## 2.2 (06.11.2026) – Gesprächsregeln, Spitzname, Pausen
 - Abends (19–4 Uhr) wartet Atlas 0,5 s länger auf das Satzende und spricht etwas ruhiger (Tempo −7 %).
 - Klingt ein Satz unfertig und die Pause wird lang: „Möchtest du noch etwas ergänzen?“ – das Bisherige bleibt erhalten; „Nein“/„Passt“ schickt sofort ab.

@@ -231,7 +231,7 @@ function makeOrb(cv,opt){
     ctx.setTransform(1,0,0,1,0,0);ctx.shadowBlur=0;
     if(st.variant==="schwarm"){ctx.globalCompositeOperation="destination-out";ctx.fillStyle="rgba(0,0,0,0.32)";ctx.fillRect(0,0,W,H)}else{ctx.globalCompositeOperation="source-over";ctx.clearRect(0,0,W,H)}
     ctx.globalCompositeOperation="source-over";
-    if(S>0)({ruhe,kern,gitter,schwarm}[st.variant]||ruhe)(t,dt,W,H,S,cx,cy);
+    if(S>0)({ruhe,kern,gitter,schwarm,orbit}[st.variant]||ruhe)(t,dt,W,H,S,cx,cy);
     requestAnimationFrame(frame)}
   function kern(t,dt,W,H,S,cx,cy){
     const {a,b,c}=colors(t),fx=st.fx||"pur";let E=st.energy;rot+=dt*(st.mode==="think"?1.8:st.mode==="speak"?0.75:0.22);
@@ -338,6 +338,60 @@ function makeOrb(cv,opt){
       const hg=ctx.createRadialGradient(cx,cy,0,cx,cy,tw*0.9);hg.addColorStop(0,`rgba(${mid},${0.3*nameA})`);hg.addColorStop(1,`rgba(${mid},0)`);ctx.fillStyle=hg;ctx.beginPath();ctx.arc(cx,cy,tw*0.9,0,6.283);ctx.fill();
       ctx.shadowColor=`rgba(${mid},0.9)`;ctx.shadowBlur=S*0.02;ctx.fillStyle=`rgba(255,252,246,${0.95*nameA*(1-0.55*sleepA)})`;
       let x=cx-tw/2;[...txt].forEach((ch,i)=>{ctx.fillText(ch,x,cy+fs*0.04);x+=ws[i]+sp});ctx.shadowBlur=0}}
+  // Orbit-Glaskugel (Vorlage ORBIT): dunkler Glaskörper, Rand von Mint nach Blau, Innenleben je Zustand.
+  // Bereit: Innenkugel oben links · Zuhören: waagrechte Lichtbänder · Denken: zwei kreisende Kugeln
+  // Sprechen: Innenkugel rückt in die Mitte und atmet mit der Stimme · Schlafen: wie Bereit, gedimmt in Nachtblau
+  const OW={idle:1,listen:0,think:0,speak:0,sleep:0};let oThink=0,oRip=0;
+  const O_MINT=[94,240,196],O_CYAN=[70,196,240],O_BLUE=[46,86,255],O_VIO=[128,94,255],O_NAVY=[14,22,48],O_DEEP=[7,11,26],O_NIGHT=[46,64,150];
+  function orbit(t,dt,W,H,S,cx,cy){
+    const m=OW[st.mode]===undefined?"idle":st.mode;
+    for(const k in OW)OW[k]+=((k===m?1:0)-OW[k])*Math.min(1,dt*2.6);
+    const E=Math.min(1,st.energy),wR=OW.idle,wL=OW.listen,wT=OW.think,wS=OW.speak,wZ=OW.sleep;
+    const night=wZ*0.75,dim=1-0.5*wZ;
+    const col=(c,a)=>{const v=night?mixc(c,O_NIGHT,night):c;return `rgba(${v[0]},${v[1]},${v[2]},${a})`};
+    const R=S*0.3*(1+0.012*Math.sin(t*(0.8-0.4*wZ))+0.035*E*wS);
+    const ox=cx,oy=cy+S*0.006*Math.sin(t*0.6);
+    // weicher Schein: links mint, nach rechts blau auslaufend
+    ctx.globalCompositeOperation="lighter";
+    const ga=(0.22+0.12*wL+0.22*E*wS)*dim;
+    let g=ctx.createRadialGradient(ox-R*0.35,oy+R*0.2,R*0.6,ox,oy,R*1.75);g.addColorStop(0,col(O_MINT,ga));g.addColorStop(0.5,col(O_CYAN,ga*0.35));g.addColorStop(1,col(O_BLUE,0));
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(ox,oy,R*1.75,0,6.283);ctx.fill();
+    ctx.globalCompositeOperation="source-over";
+    // Rand: Scheibe mit Verlauf, darüber versetzter Glaskörper -> Sichel, unten links breiter
+    g=ctx.createLinearGradient(ox-R,oy+R,ox+R,oy-R);g.addColorStop(0,col(O_MINT,1));g.addColorStop(0.45,col(O_CYAN,1));g.addColorStop(0.8,col(O_BLUE,1));g.addColorStop(1,col(O_VIO,1));
+    ctx.save();ctx.globalAlpha=0.35+0.65*(1-wZ);ctx.shadowColor=col(O_MINT,0.7*dim);ctx.shadowBlur=S*0.03;ctx.fillStyle=g;ctx.beginPath();ctx.arc(ox,oy,R,0,6.283);ctx.fill();ctx.restore();
+    const ir=R*0.9,ix=ox+R*0.035,iy=oy-R*0.035;
+    g=ctx.createRadialGradient(ix-ir*0.3,iy-ir*0.35,ir*0.1,ix,iy,ir);g.addColorStop(0,"rgb(24,36,80)");g.addColorStop(0.7,"rgb(14,22,48)");g.addColorStop(1,"rgb(7,11,26)");
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(ix,iy,ir,0,6.283);ctx.fill();
+    // Innenleben, auf den Glaskörper beschnitten
+    ctx.save();ctx.beginPath();ctx.arc(ix,iy,ir,0,6.283);ctx.clip();
+    const sphere=(x,y,r,a)=>{if(a<0.01||r<1)return;ctx.save();ctx.globalAlpha=a;
+      let q=ctx.createLinearGradient(x-r*0.8,y+r*0.8,x+r*0.7,y-r*0.7);q.addColorStop(0,col(O_MINT,1));q.addColorStop(0.45,col(O_CYAN,1));q.addColorStop(0.75,col(O_BLUE,1));q.addColorStop(1,col(O_VIO,1));
+      ctx.fillStyle=q;ctx.beginPath();ctx.arc(x,y,r,0,6.283);ctx.fill();
+      q=ctx.createRadialGradient(x-r*0.35,y-r*0.4,0,x-r*0.35,y-r*0.4,r*0.75);q.addColorStop(0,`rgba(214,190,255,${0.55*dim})`);q.addColorStop(1,"rgba(214,190,255,0)");ctx.fillStyle=q;ctx.fill();
+      q=ctx.createRadialGradient(x-r*0.15,y-r*0.15,r*0.55,x,y,r*1.02);q.addColorStop(0,"rgba(7,11,26,0)");q.addColorStop(1,"rgba(7,11,26,0.55)");ctx.fillStyle=q;ctx.fill();ctx.restore()};
+    // Bereit, Schlafen und Sprechen teilen sich die Innenkugel
+    const wB=wR+wZ+wS;
+    if(wB>0.01){const s=wS/wB,dx=Math.sin(t*0.35)*0.02,dy=Math.cos(t*0.3)*0.02;
+      const px=ix+ir*((-0.2+dx)*(1-s)),py=iy+ir*((-0.22+dy)*(1-s)),pr=ir*(0.6*(1-s)+s*(0.5+0.1*E));
+      ctx.save();ctx.globalAlpha=Math.min(1,wB)*(1-s*0.7);ctx.beginPath();ctx.arc(px+pr*0.12,py+pr*0.1,pr*1.18,0,6.283);ctx.fillStyle="rgba(10,16,40,0.55)";ctx.fill();ctx.strokeStyle=col(O_VIO,0.25);ctx.lineWidth=S*0.003;ctx.stroke();ctx.restore();
+      sphere(px,py,pr,Math.min(1,wB)*(0.6+0.4*dim))}
+    // Sprechen: sanfte Wellen aus der Mitte, Tempo folgt der Stimme
+    if(wS>0.01){oRip+=dt*(0.35+0.6*E);for(let k=0;k<3;k++){const u=(oRip+k/3)%1;ctx.beginPath();ctx.arc(ix,iy,ir*(0.5+u*0.55),0,6.283);ctx.strokeStyle=col(O_CYAN,(1-u)*0.35*wS*(0.5+E));ctx.lineWidth=S*0.004*(1-u)+1;ctx.stroke()}}
+    // Zuhören: Linsenkugel mit waagrechten Rillen, die leicht mit der Eingabe atmen
+    if(wL>0.01){const br=ir*0.8;sphere(ix,iy,br,wL);ctx.save();ctx.globalAlpha=wL;
+      for(let i=-5;i<=5;i++){const y0=(i+0.5)/5.6*br,hw=Math.sqrt(Math.max(0,1-(y0/br)**2))*br;if(hw<2)continue;
+        const th=br*(0.028+0.014*Math.sin(t*2.2+i*0.9)*(0.4+E))*(1-Math.abs(y0/br)*0.6);
+        const q=ctx.createLinearGradient(ix-hw,0,ix+hw,0);q.addColorStop(0,"rgba(7,11,26,0.25)");q.addColorStop(0.55,"rgba(7,11,26,0.85)");q.addColorStop(1,"rgba(7,11,26,0.6)");
+        ctx.fillStyle=q;ctx.beginPath();ctx.ellipse(ix+hw*0.08,iy+y0,hw*0.98,Math.max(1,th),0,0,6.283);ctx.fill()}
+      ctx.restore()}
+    // Denken: große Kugel unten links, kleine oben rechts, kreisen langsam
+    if(wT>0.01){oThink+=dt*(0.5+0.6*wT);const a1=oThink+2.3,a2=a1+Math.PI;
+      sphere(ix+Math.cos(a1)*ir*0.48,iy+Math.sin(a1)*ir*0.48,ir*0.34,wT);
+      sphere(ix+Math.cos(a2)*ir*0.56,iy+Math.sin(a2)*ir*0.56,ir*0.17,wT)}
+    ctx.restore();
+    // Glanzlicht oben links auf dem Glas
+    ctx.save();ctx.globalCompositeOperation="lighter";ctx.beginPath();ctx.arc(ix,iy,ir*0.96,Math.PI*1.08,Math.PI*1.42);ctx.strokeStyle=`rgba(220,240,255,${0.18*dim})`;ctx.lineWidth=S*0.006;ctx.lineCap="round";ctx.stroke();ctx.restore()}
   function gitter(t,dt,W,H,S,cx,cy){
     const {a,b,c}=colors(t),E=st.energy;rot+=dt*(st.mode==="think"?1.6:st.mode==="speak"?0.6:0.18);
     const R=S*0.28*(st.mode==="idle"?1+0.02*Math.sin(t*1.2):1);glow(cx,cy,R,c,E*0.8,W,H);
@@ -399,8 +453,10 @@ const SESSION=Date.now().toString(36);
 function showErr(m){$("err").textContent=m||"";$("err").hidden=!m}
 
 /* ================= Einstellungen & Profile ================= */
-const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",quick:true,aname:"Atlas",voice:"",rate:1,orb:"ruhe",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,pause:1.6,sleepMin:20,noSearch:false},ls.get("settings",{}));
+const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",quick:true,aname:"Atlas",voice:"",rate:1,orb:"orbit",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,pause:1.6,sleepMin:20,noSearch:false},ls.get("settings",{}));
 const saveSettings=()=>ls.set("settings",S);
+// 2.3: einmalig auf die Orbit-Glaskugel umstellen; danach gilt wieder die eigene Wahl
+if(!ls.get("orbitSet",false)){S.orb="orbit";ls.set("orbitSet",true);saveSettings()}
 const TYP={haupt:"Hauptnutzer",erwachsen:"Erwachsen",kind:"Kind",gast:"Gast"};
 const DEFAULT_PROFILES=[
   {id:"haupt",name:"Mario",typ:"haupt",info:"",routine:["Elektrolyte","Eisbad","Aufwärmen","Rotlicht","Training"],supps:[],notes:[]}
@@ -1172,7 +1228,7 @@ function renderSetup(){
     <div class="field"><label for="sName">Name des Assistenten</label><input type="text" id="sName"></div></div>
     <div class="field"><label for="sNick">Spitzname (weckt sie auch aus dem Ruhemodus)</label><input type="text" id="sNick" placeholder="optional"></div>
     <div class="field"><label for="sPersona">Persönlichkeit (leer = Standard)</label><textarea id="sPersona" rows="8"></textarea><div class="note">So spricht Atlas mit dir. Du kannst den Text jederzeit anpassen.</div></div>
-    <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="ruhe">Ruhige Kugel (empfohlen)</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
+    <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="orbit">Orbit-Glaskugel (empfohlen)</option><option value="ruhe">Ruhige Kugel</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
     <div class="field"><label for="sFx">Effekt beim Sprechen</label><select id="sFx"><option value="supernova">Supernova (ruhige Kugel)</option><option value="urknall">Urknall (ruhige Kugel)</option><option value="pur">Pur (Partikel-Kern)</option><option value="funken">Funken (Partikel-Kern)</option><option value="atmen">Atmen (Partikel-Kern)</option><option value="hud">Jarvis-HUD (Partikel-Kern)</option></select></div></div>
     <div class="grid2"><div class="field"><label for="sPal">Farbe</label><select id="sPal"></select></div>
     <div class="field"><label for="sVoice">Stimme</label><select id="sVoice"></select></div></div>
@@ -1286,7 +1342,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261106-0453",ATLAS_REL="2.2";
+const APP_VERSION="20261106-0900",ATLAS_REL="2.3";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);
