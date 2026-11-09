@@ -26,6 +26,8 @@
 @media (orientation:landscape){#listView{top:24px;right:24px;bottom:24px;width:min(46vw,560px)}body.listOn #vis{transform:translateX(-24vw) scale(.8)}}
 @media (orientation:portrait){#listView{left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);max-height:60vh}body.listOn #vis{transform:translateY(-22vh) scale(.62)}}
 #vis{transition:transform .5s ease}
+#stLbl{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:13;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,225,240,.55);pointer-events:none}
+#stLbl.err{color:#ff9a7a;font-weight:600}body.listOn #stLbl{display:none}
 .lvHead{display:flex;align-items:center;justify-content:space-between;gap:12px}.lvHead h2{margin:0;font-size:24px;font-weight:650}
 #lvClose{background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:999px;width:40px;height:40px;font-size:18px}
 #lvBody h3{margin:18px 0 6px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#9fb3c8}
@@ -142,6 +144,7 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
   <main class="stage">
     <div class="setupbar" id="setupBar" hidden><span id="setupTxt">Einrichtung fehlt noch.</span><button class="btn small primary" id="setupGo">Einrichten</button></div>
     <canvas id="vis" role="button" aria-label="Antippen zum Sprechen"></canvas>
+    <div id="stLbl" aria-live="polite">Bereit</div>
     <button class="donebtn" id="doneBtn" type="button" hidden>Fertig ✓</button>
     <section id="listView" hidden aria-live="polite"><div class="lvHead"><h2 id="lvTitle"></h2><button type="button" id="lvClose" aria-label="Liste schließen">✕</button></div><div id="lvBody"></div><div class="lvFoot">Sag „Fertig mit der Liste“ zum Schließen</div></section>
     <div class="state" id="state">Bereit · Kugel antippen</div>
@@ -465,10 +468,16 @@ const SESSION=Date.now().toString(36);
 function showErr(m){$("err").textContent=m||"";$("err").hidden=!m}
 
 /* ================= Einstellungen & Profile ================= */
+// Einstellungen laden. Ist der gespeicherte Wert vorhanden, aber nicht lesbar, wird NICHT darüber gespeichert.
+let settingsBroken=false;try{const raw=localStorage.getItem(P+"settings");if(raw!=null)JSON.parse(raw)}catch{settingsBroken=true}
 const S=Object.assign({key:"",model:"claude-sonnet-5-5",fastModel:"claude-haiku-5-5",quick:true,aname:"Atlas",voice:"",rate:1,orb:"orbit",palette:"spektrum",fx:"supernova",cool:20,sens:5,lockHours:16,pause:1.6,sleepMin:20,noSearch:false},ls.get("settings",{}));
-const saveSettings=()=>ls.set("settings",S);
+const saveSettings=()=>{if(settingsBroken){showErr("Einstellungen konnten nicht gelesen werden. Ich speichere nichts darüber, damit nichts verloren geht.");return}
+  // Persönlichkeit nie still verlieren: Sicherung mitführen
+  if(S.persona&&S.persona.trim())ls.set("personaBak",S.persona);ls.set("settings",S)};
+// leer oder verloren, aber Sicherung vorhanden -> wiederherstellen
+if(!settingsBroken&&!(S.persona&&S.persona.trim())){const b=ls.get("personaBak","");if(b&&b.trim()){S.persona=b;ls.set("settings",S)}}
 // 2.3: einmalig auf die Orbit-Glaskugel umstellen; danach gilt wieder die eigene Wahl
-if(!ls.get("orbitSet",false)){S.orb="orbit";ls.set("orbitSet",true);saveSettings()}
+if(!settingsBroken&&!ls.get("orbitSet",false)){S.orb="orbit";ls.set("orbitSet",true);saveSettings()}
 const TYP={haupt:"Hauptnutzer",erwachsen:"Erwachsen",kind:"Kind",gast:"Gast"};
 const DEFAULT_PROFILES=[
   {id:"haupt",name:"Mario",typ:"haupt",info:"",routine:["Elektrolyte","Eisbad","Aufwärmen","Rotlicht","Training"],supps:[],notes:[]}
@@ -613,7 +622,10 @@ async function addNote(text){const t=String(text||"").trim();if(!t)return "leer"
 
 /* ================= Erscheinung ================= */
 const vis=makeOrb($("vis"),{variant:S.orb,palette:S.palette,fx:S.fx});vis.label=S.aname.toUpperCase();
-function setMode(m,label){if(m==="idle"&&typeof sleeping!=="undefined"&&sleeping)m="sleep";vis.mode=m;const s=$("state");s.textContent=label;s.classList.toggle("listen",m==="listen")}
+const MODE_TXT={idle:"Bereit",listen:"Hört zu",think:"Denkt nach",speak:"Spricht",sleep:"Ruhemodus"};let statusErr=false;
+function setStatus(txt,err){const el=$("stLbl");if(!el)return;el.textContent=txt;el.classList.toggle("err",!!err);statusErr=!!err}
+function setMode(m,label){if(m==="idle"&&typeof sleeping!=="undefined"&&sleeping)m="sleep";vis.mode=m;const s=$("state");s.textContent=label;s.classList.toggle("listen",m==="listen");
+  if(m!=="idle"||!statusErr)setStatus(m==="think"&&/Verbindung/.test(label||"")?label:m==="sleep"&&typeof resting!=="undefined"&&!resting?"Schläft":MODE_TXT[m]||"",false)}
 const idleLabel=()=>away?"Abwesenheitsmodus":stream?"Raum-Modus · wartet":"Bereit · Kugel antippen";
 
 /* ================= Stimme ================= */
@@ -636,7 +648,7 @@ const clean=s=>String(s).replace(/https?:\/\/\S+/g,"").replace(/\[[^\]]*\]\([^)]
 const spokenRecent=[];function noteSpoken(t){spokenRecent.push({t,at:Date.now()});while(spokenRecent.length>12)spokenRecent.shift()}
 function isEcho(t){const T=typeof toks==="function"?toks(t):[];if(T.length<2)return false;const now=Date.now();
   return spokenRecent.some(x=>now-x.at<15000&&(sim(T,toks(x.t))>=.6||toks(x.t).join(" ").includes(T.join(" "))))}
-function speak(text,then){text=clean(text);noteSpoken(text);$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
+function speak(text,then){text=clean(text);noteSpoken(text);touch();$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
   const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
   const finish=()=>{if(my!==gen||pending<0)return;pending=0;setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;f&&f()};
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
@@ -696,10 +708,11 @@ function ensureRec(){if(!SR||away)return false;if(recActive)return true;
     if(flushed||!convo||busy||speaking()||Date.now()<ignoreUntil){baseIdx=e.results.length;return}
     clearTimeout(moreTimer);
     if(askedMore&&/^(nein|ne|nee|nö|noe|passt|das wars|das war's|das war es|fertig|nichts|nix|sonst nichts|nein danke)\b/i.test(full)){sessText="";finishUtter(true);return}
-    if(!full)return;sessText=full;warm();lastHeard=Date.now();$("heard").textContent=heardAll();vis.energy=Math.min(1,vis.energy+.3);
+    if(!full)return;sessText=full;touch();warm();lastHeard=Date.now();$("heard").textContent=heardAll();vis.energy=Math.min(1,vis.energy+.3);
     if(listening){setMode("listen","Hört zu");showDone(true)}
     clearTimeout(silTimer);silTimer=setTimeout(()=>{if(OPEN_END.test(heardAll())&&!askedMore&&isMain())askMore();else finishUtter(false)},pauseMs()+(OPEN_END.test(full)?1200:0))};
-  rec.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
+  rec.onerror=e=>{if(e.error==="network")setStatus("Spracherkennung ohne Verbindung",true);else if(e.error==="audio-capture")setStatus("Mikrofon nicht verfügbar",true);
+    if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
   rec.onend=()=>{recActive=false;
     if(finishing){sendUtter()}
     // Erkennung hat sich mitten im Satz selbst beendet (iPhone macht das): Bisheriges aufheben, weiter zuhören
@@ -709,7 +722,7 @@ function ensureRec(){if(!SR||away)return false;if(recActive)return true;
 function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safari (iPad) oder Chrome verwenden.");return}
   if(busy)return;convo=true;listening=true;flushed=false;resetUtter();lastHeard=Date.now();ensureRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
 function endConvo(label){convo=false;listening=false;resetUtter();$("heard").textContent="";setMode("idle",label||idleLabel())}
-setInterval(()=>{if(convo&&!busy&&!finishing&&!speaking()&&Date.now()-lastHeard>60000)endConvo()},5000);
+setInterval(()=>{if(speaking()||busy||finishing)touch();if(convo&&!busy&&!finishing&&!speaking()&&!sessText&&Date.now()-lastHeard>90000)endConvo()},5000);
 /* ================= Hybrid: lokale Schnellantworten + geprüfter Antwort-Speicher ================= */
 // Nur eine Beschleunigung: Was hier nicht sicher passt, geht wie immer an Claude.
 const FILL=new Set("atlas bitte mal denn halt eh jo ja na also aeh aehm hm schon doch nur einfach gerade grad kurz".split(" "));
@@ -835,7 +848,7 @@ function localAnswer(t){
   const tick=listOpen?null:localTick(t);if(tick)return {text:tick,art:"abhaken"};
   // Hat Atlas gerade etwas gefragt, ist "gut" oder "danke" eine Antwort darauf -> Claude soll darauf eingehen
   const lastA=[...log].reverse().find(m=>m.rolle==="assistent"),asked=lastA&&/\?\s*$/.test(lastA.text)&&Date.now()-Date.parse(lastA.zeit)<10*60e3;
-  const it=detect(t);if(it&&!(asked&&!["uhrzeit","datum","offen","tschuess"].includes(it.id)))return {text:POOL[it.id](),art:it.id,end:it.id==="tschuess"};
+  const it0=detect(t),it=it0&&["gruss","befinden","ok"].includes(it0.id)?null:it0;if(it&&!(asked&&!["uhrzeit","datum","offen","tschuess"].includes(it.id)))return {text:POOL[it.id](),art:it.id,end:it.id==="tschuess"};
   const pf=isMain()&&prefFind(t);if(pf)return {text:`${pf.titel}: ${pf.text}`,art:"persoenlich"};
   const c=cacheFind(t);if(c)return {text:c.a,art:"speicher"};
   return null}
@@ -866,7 +879,7 @@ function handleUtterance(t){$("heard").textContent=t;
     if(!p){const a=/\b[A-ZÄÖÜ][a-zäöüß]+s\b/.test(t)?"Diese Person habe ich noch nicht angelegt. Soll ich sie anlegen?":"Wessen Liste soll ich zeigen, deine oder die von jemand anderem?";addLog("assistent",a);speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}
     openList(p);const n=(p.supps||[]).length,a=p===main()?(n?`Hier ist deine Liste, ${n} Supplements. Frag mich ruhig.`:"Für dich sind noch keine Supplements gespeichert."):(n?`Hier ist ${p.name}s Liste, ${n} Supplements.`:`Für ${p.name} sind noch keine Supplements gespeichert.`);
     addLog("assistent",a);speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}perf={end:perf.flushAt||performance.now(),mode:modeOf(t)};
-  if(REST_RE.test(t)){addLog("mensch",t);const bye=pickFresh("bye",/nacht/i.test(t)?["Gute Nacht! Schlaf gut.","Gute Nacht, erhol dich gut.","Schlaf gut, bis morgen."]:["Bis später!","Servus, bis bald.","Mach's gut. Wenn du mich brauchst, sag einfach Atlas.","Ciao! Ich ruh mich aus, bis du wieder da bist."]);addLog("assistent",bye);enterRest(bye);return}
+  if(REST_RE.test(t)&&t.trim().split(/\s+/).length<=6){addLog("mensch",t);const bye=pickFresh("bye",/nacht/i.test(t)?["Gute Nacht! Schlaf gut.","Gute Nacht, erhol dich gut.","Schlaf gut, bis morgen."]:["Bis später!","Servus, bis bald.","Mach's gut. Wenn du mich brauchst, sag einfach Atlas.","Ciao! Ich ruh mich aus, bis du wieder da bist."]);addLog("assistent",bye);enterRest(bye);return}
   if(/^(stopp?|danke,? das war'?s|ende|das war'?s)\b/i.test(t)){convo=false;listening=false;speak(pickFresh("end",["Alles klar.","Gern.","Passt, ich bin da, wenn du mich brauchst.","Okay."]));addLog("mensch",t);return}
   if(!offerStudy){const L=localAnswer(t);if(L){perf.mode="lokal";addLog("mensch",t);addLog("assistent",L.text);listening=false;
       if(L.end){enterRest(L.text);return}
@@ -997,7 +1010,7 @@ Frag ein Supplement nur zu der Tageszeit ab, die in seiner Liste steht. Steht ke
 NEUES SUPPLEMENT: Nennt er eines, das nicht auf seiner Liste steht, sag das und frag, ob du es nur für heute erfassen (einmalig_erfassen) oder dauerhaft in die Routine aufnehmen sollst. Bei dauerhaft: kurz erklären, wofür es eingesetzt wird, wie gut die Evidenz ist und welche Risiken oder Wechselwirkungen mit seinen anderen Mitteln möglich sind (bei Bedarf Websuche), nach Dosis und Zeitpunkt fragen und erst nach seinem Ja mit liste_aendern eintragen, im Format „Name – Zeitpunkt, Dosis“. Eine einmalige Einnahme wird nie automatisch zur Routine oder Empfehlung. Ohne ausreichende Informationen keine Einnahmeempfehlung.
 Wenn er Personen anlegen will (Familie, Mitarbeiter), nutze person_anlegen.
 Du bist sein zweites Gedächtnis und nimmst ihm Arbeit ab. Sagt er, du sollst etwas eintragen, ändern oder dir merken, tu es sofort mit dem passenden Werkzeug und bestätige knapp, ohne nachzufragen. Wichtiges, das er beiläufig sagt (Entscheidungen, Vorhaben, Termine, Ideen), speicherst du mit „merken“. Routine-Schritte hakst du mit „abhaken“ ab, Supplements trägst du mit „supplement_status“ ein, Listen änderst du mit „liste_aendern“ (auch für andere Erwachsene, wenn er es sagt).
-TEMPO: Bei Begrüßungen, Alltagsgesprächen und einfachen Fragen antwortest du sofort und kurz, ohne Einleitung. Ausführlich nur bei Wissenschaft, Gesundheit, Analysen oder wenn er es will. Fragt er nach Früherem, das du nicht vor dir hast, nutze verlauf_suchen.
+TEMPO: Bei Begrüßungen, Alltagsgesprächen und einfachen Fragen antwortest du kurz und ohne Einleitung, aber mit Persönlichkeit. Ausführlich nur bei Wissenschaft, Gesundheit, Analysen oder wenn er es will. Fragt er nach Früherem, das du nicht vor dir hast, nutze verlauf_suchen.
 ${STUDY_RULE}
 ${privKey&&mem.prefs.some(x=>!isObs(x))?"BESTÄTIGTER PERSÖNLICHER SPEICHER (gilt, bis er etwas anderes sagt):\n"+mem.prefs.filter(x=>!isObs(x)).map(x=>"- "+x.titel+": "+x.text).join("\n").slice(0,5000):""}
 ${S.obsStore?`BEOBACHTUNGEN: Er hat erlaubt, dass du Beobachtungen aus euren Gesprächen speicherst: Änderungen im Trainingsrhythmus, wiederkehrende Stressfaktoren, Schlafveränderungen, persönliche Ziele, Reaktionen auf Routinen und Supplements. Speichere so etwas mit beobachtung_merken, knapp und sachlich, ohne nachzufragen, aber nur, was er selbst gesagt hat, keine Vermutungen. Nutze frühere Beobachtungen, um Zusammenhänge zu erkennen, und nimm später passend darauf Bezug, ohne ständig daran zu erinnern. Korrigiert er etwas, speichere die Korrektur.${privKey&&mem.prefs.some(isObs)?"\nBisherige Beobachtungen (neueste zuletzt):\n"+mem.prefs.filter(isObs).sort((a,b)=>a.zeit<b.zeit?-1:1).slice(-40).map(x=>"- "+x.zeit.slice(0,10)+" "+x.titel+": "+x.text).join("\n"):""}`:"BEOBACHTUNGEN: Automatisches Speichern von Beobachtungen ist aus. Speichere nichts davon von selbst."}
@@ -1010,7 +1023,8 @@ ${listOpen?`LISTENMODUS: Auf dem Bildschirm ist gerade ${listOpen===M?"seine eig
 Angezeigte Liste ${listOpen.name}: ${JSON.stringify(statusOf(listOpen).supplements.map(x=>({name:x.name,status:x.status})))}
 `:""}Stand heute ${M.name}: ${JSON.stringify(statusOf(M))}
 Weitere Erwachsene heute:
-${others}`;
+${others}
+STIL FÜR DIESE ANTWORT: Sprich genau in der Persönlichkeit von oben, auch bei kurzen Antworten: ruhig, warm, flüssig, menschlich, locker, mit trockenem, feinem Humor und gelegentlich frecher Note. Kein Alexa-Ton, keine Standardsätze. Bei ernsten, gesundheitlichen oder medizinischen Themen ohne Witze und sachlich. Du bist sein Biohacking-Partner: Tagesrhythmus, Schlaf, Training, Regeneration und Supplements im Blick, wissenschaftlich sauber.`;
   return {stat,dyn}}
 
 const cleanKey=k=>String(k||"").replace(/[^\x21-\x7E]/g,"");
@@ -1038,7 +1052,7 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;let buf="",que
   let bundle="";const flush=()=>{const b=bundle;bundle="";say1(b)};
   // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
   const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
-  const say1=s=>{s=clean(s);if(!s||!TTS)return;noteSpoken(s);queued++;const u=mkUtt(s);
+  const say1=s=>{s=clean(s);if(!s||!TTS)return;noteSpoken(s);touch();queued++;const u=mkUtt(s);
     u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
     u.onend=u.onerror=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
   return{feed(d){all+=d;buf+=d;let m;
@@ -1054,7 +1068,7 @@ function historyMsgs(n=14){
   const hist=src.slice(-n).map(m=>({role:m.rolle==="assistent"?"assistant":"user",content:(m.rolle==="mensch"&&isMain()&&m.person!==cur.name?`[${m.person}] `:"")+m.text}));
   while(hist.length&&hist[0].role!=="user")hist.shift();
   const out=[];for(const m of hist){const l=out[out.length-1];if(l&&l.role===m.role)l.content+="\n"+m.content;else out.push({...m})}return out}
-let abortCtl=null,busy=false,perf={};
+let abortCtl=null,busy=false,perf={},timedOut=false;
 // Antwortzeiten messen: Ende deiner Frage -> Claude-Anfrage -> erstes Wort -> erster Ton
 function perfDone(){if(!perf.end||!perf.audio)return;const r=x=>x?Math.round(x-perf.end):null;const e={zeit:new Date().toISOString(),modus:perf.mode,bisAnfrage:r(perf.req),bisErstesWort:r(perf.tok),bisTon:r(perf.audio)};
   const L=ls.get("perf",[]);L.push(e);ls.set("perf",L.slice(-30));perf={}}
@@ -1062,7 +1076,7 @@ function whenIdle(fn){const tick=()=>{if(!busy&&!speaking()&&!listening)fn();els
 async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"}={}){
   if(away)return;
   if(!S.key){openSheet("setup");showErr("Bitte zuerst den API-Schlüssel eintragen.");return}
-  if(busy)return;busy=true;showErr("");
+  if(busy)return;busy=true;touch();showErr("");
   addLog(internal?"intern":"mensch",text);
   setMode("think","Denkt nach");abortCtl=new AbortController();
   const brief=maxTokens>=1600;let quick=!brief&&mode==="schnell";perf.req=performance.now();
@@ -1070,10 +1084,18 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
   try{
     const sys0=systemPrompt(quick?"schnell":"experte"),P=systemPrompt.parts,
       sys=P?[{type:"text",text:P.stat,cache_control:{type:"ephemeral"}},{type:"text",text:P.dyn}]:brief?[{type:"text",text:sys0,cache_control:{type:"ephemeral"}}]:sys0,model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();if(pre)sp.feed(pre+" ");
+    let retried=false,gotText=false;
     for(let round=0;round<8;round++){
       let res;
-      try{res=await apiStream({model,max_tokens:quick?400:maxTokens,system:sys,tools,messages:msgs,...(quick?{thinking:{type:"disabled"}}:{})},abortCtl.signal,d=>{if(!perf.tok)perf.tok=performance.now();sp.feed(d.replace(/[⟦⟧]/g,""))})}
-      catch(e){if(quick&&e.status===400&&/thinking/i.test(e.message||"")){quick=false;round--;continue}const wi=tools.findIndex(t=>t.name==="web_search");if(e.status===400&&/web_search/i.test(e.message)&&wi>=0){S.noSearch=true;saveSettings();tools.splice(wi,1);continue}throw e}
+      // Wächter: kommt 30 s lang nichts von Claude, gilt die Verbindung als hängend (statt ewig "denkt nach")
+      let wd=0;const arm=()=>{clearTimeout(wd);wd=setTimeout(()=>{timedOut=true;try{abortCtl.abort()}catch{}},30000)};timedOut=false;arm();
+      try{res=await apiStream({model,max_tokens:quick?400:maxTokens,system:sys,tools,messages:msgs,...(quick?{thinking:{type:"disabled"}}:{})},abortCtl.signal,d=>{arm();gotText=true;if(!perf.tok)perf.tok=performance.now();sp.feed(d.replace(/[⟦⟧]/g,""))});clearTimeout(wd)}
+      catch(e){clearTimeout(wd);
+        // kurze Netz- oder Überlastungsfehler: einmal still neu versuchen (nur wenn noch nichts gesprochen wurde)
+        const transient=timedOut||!e.status||[500,502,503,504,529].includes(e.status);
+        if(transient&&!retried&&!gotText&&!(e.name==="AbortError"&&!timedOut)){retried=true;setMode("think","Verbindung wird wiederholt");if(timedOut)abortCtl=new AbortController();await new Promise(r=>setTimeout(r,1200));round--;continue}
+        if(timedOut){const x=new Error("Zeitüberschreitung");x.timeout=true;throw x}
+        if(quick&&e.status===400&&/thinking/i.test(e.message||"")){quick=false;round--;continue}const wi=tools.findIndex(t=>t.name==="web_search");if(e.status===400&&/web_search/i.test(e.message)&&wi>=0){S.noSearch=true;saveSettings();tools.splice(wi,1);continue}throw e}
       if(res.content.some(b=>b.type==="server_tool_use"))usedTool=true;
       answer+=" "+textOf(res);sp.feed(" ");
       if(res.stop_reason==="pause_turn"){msgs.push({role:"assistant",content:res.content});continue}
@@ -1088,7 +1110,11 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
     if(brief)ls.set("studytxt:"+today,answer);
     if(isMain()&&!ls.get("study:"+today,0)&&/studie/i.test(answer)&&/\?\s*$/.test(answer))offerStudy=true;
     sp.end(()=>{ignoreUntil=Date.now()+350;if(convo)listen()});
-  }catch(e){busy=false;setMode("idle",idleLabel());if(e.name==="AbortError")return;
+  }catch(e){busy=false;setMode("idle",idleLabel());if(e.name==="AbortError"&&!e.timeout)return;
+    // Fehler klar ansagen und weiter zuhören, statt kommentarlos aufzuhören
+    const net=e.timeout||!e.status||[500,502,503,504,529].includes(e.status);setStatus(net?"Keine Verbindung":"Fehler",true);
+    if(!internal){const say=net?pickFresh("neterr",["Ich erreiche Claude gerade nicht. Versuch's gleich nochmal.","Die Verbindung hakt gerade. Sag's mir bitte noch einmal.","Ich hab gerade keine Verbindung. Gleich nochmal, bitte."]):"Da ist ein Fehler aufgetreten. Die Details stehen oben am Bildschirm.";
+      speak(say,()=>{ignoreUntil=Date.now()+350;if(convo)listen()})}
     const m=e.message||"";showErr(e.status===401?"API-Schlüssel ist ungültig. Bitte unter Mehr → Einstellungen prüfen.":e.status===429?"Zu viele Anfragen oder Limit erreicht. Kurz warten.":/credit|balance/i.test(m)?"Kein Guthaben mehr im Anthropic-Konto.":e.status===404?"Modell nicht gefunden. Unter Einstellungen ein anderes wählen.":e.status===529||e.status===503?"Claude ist gerade überlastet. Gleich nochmal.":e.status?("Fehler "+e.status+": "+m.slice(0,160)):("Keine Verbindung zu Claude ("+(e.message||e.name||"unbekannt")+"). Unter Mehr → Einstellungen → „Claude testen“ prüfen."))}}
 
 /* ================= Begrüßung & Bewegung ================= */
@@ -1115,6 +1141,8 @@ function stopRoom(){clearInterval(motionTimer);motionTimer=null;sleeping=false;p
 /* Bewegung statt Licht: Die App sieht nur Kamerabilder (keinen Lichtsensor, keine Personenerkennung).
    Darum: Helligkeit jedes Bildes ausgleichen, Lichtsprünge und Ganzbild-Änderungen verwerfen, Bewegung erst nach 2 Treffern in Folge zählen. */
 let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false;
+// Aktivität = Bewegung ODER Sprache, Zuhören, Denken, Sprechen, Antippen (vorher zählte nur Kamera-Bewegung)
+let lastActivity=Date.now();function touch(){lastActivity=Date.now()}
 /* Ruhemodus: nach "Tschüss", "Gute Nacht", "Atlas, Ruhemodus". Einmal verabschieden, dann still.
    Keine Begrüßung durch Bewegung oder Licht. Wieder aktiv nur durch Antippen der Kugel oder das Wort "Atlas".
    Nach einigen Stunden (Einstellung) wird daraus der normale Schlaf, dann weckt wieder Bewegung. */
@@ -1131,7 +1159,8 @@ function checkMotion(){if(!stream)return;
   sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,n=48*36,g=new Float32Array(n);let m=0;for(let i=0;i<n;i++){g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;m+=g[i]}m/=n;
   const now=Date.now(),idleFor=now-lastMotion;
   if(resting&&Date.now()>ls.get("restUntil",0)){resting=false;ls.del("restUntil")}
-  if(!away&&!sleeping&&!convo&&!busy&&!speaking()&&idleFor>sleepMs())goSleep();
+  const quietFor=now-Math.max(lastMotion,lastActivity);
+  if(!away&&!sleeping&&!convo&&!busy&&!finishing&&!listening&&!speaking()&&!sessText&&quietFor>sleepMs())goSleep();
   if(!prevFrame){prevFrame=g;prevMean=m;return}
   // Median der Helligkeitsänderung = gleichmäßige Lichtänderung (eine Person verändert nur einen Teil des Bildes)
   const raw=new Float32Array(n);for(let i=0;i<n;i++)raw[i]=g[i]-prevFrame[i];const sorted=Float32Array.from(raw).sort(),shift=sorted[n>>1];
@@ -1148,7 +1177,7 @@ function checkMotion(){if(!stream)return;
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
 
 /* ================= Bedienung ================= */
-$("vis").onclick=()=>{unlockAudio();if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now()}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
+$("vis").onclick=()=>{unlockAudio();touch();if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now()}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("lvClose").onclick=e=>{e.stopPropagation();closeList()};
 $("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
@@ -1270,7 +1299,7 @@ function renderSetup(){
     <div class="field"><label for="sModel">Modell für Briefing und Protokolle</label><select id="sModel"><option value="claude-sonnet-5-5">Sonnet 5.5 (empfohlen)</option><option value="claude-haiku-5-5">Haiku 5.5 (schneller, günstiger)</option><option value="claude-opus-5-5">Opus 5.5 (am stärksten)</option></select></div>
     <div class="field"><label for="sName">Name des Assistenten</label><input type="text" id="sName"></div></div>
     <div class="field"><label for="sNick">Spitzname (weckt sie auch aus dem Ruhemodus)</label><input type="text" id="sNick" placeholder="optional"></div>
-    <div class="field"><label for="sPersona">Persönlichkeit (leer = Standard)</label><textarea id="sPersona" rows="8"></textarea><div class="note">So spricht Atlas mit dir. Du kannst den Text jederzeit anpassen.</div></div>
+    <div class="field"><label for="sPersona">Persönlichkeit (leer = Standard)</label><textarea id="sPersona" rows="8"></textarea><div class="note">So spricht Atlas mit dir. Du kannst den Text jederzeit anpassen. <b id="sPersInfo"></b></div><div class="row"><button class="btn small" type="button" id="sPersDef">Auf Standard zurücksetzen</button></div></div>
     <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="orbit">Orbit-Glaskugel (empfohlen)</option><option value="ruhe">Ruhige Kugel</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
     <div class="field"><label for="sFx">Effekt beim Sprechen</label><select id="sFx"><option value="supernova">Supernova (ruhige Kugel)</option><option value="urknall">Urknall (ruhige Kugel)</option><option value="pur">Pur (Partikel-Kern)</option><option value="funken">Funken (Partikel-Kern)</option><option value="atmen">Atmen (Partikel-Kern)</option><option value="hud">Jarvis-HUD (Partikel-Kern)</option></select></div></div>
     <div class="grid2"><div class="field"><label for="sPal">Farbe</label><select id="sPal"></select></div>
@@ -1301,7 +1330,8 @@ function renderSetup(){
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
   ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
-  $("appVer").textContent="Atlas "+ATLAS_REL+" · Build "+APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sNick").value=S.nick||"";$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
+  $("appVer").textContent="Atlas "+ATLAS_REL+" · Build "+APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sPersInfo").textContent=S.persona&&S.persona.trim()?`Geladen: deine eigene Persönlichkeit (${S.persona.length.toLocaleString("de-AT")} Zeichen).`:"Geladen: Standard-Persönlichkeit.";
+  $("sPersDef").onclick=()=>confirmBox("Persönlichkeit zurücksetzen?","Dein eigener Text wird durch den Standard ersetzt. Eine Sicherung bleibt erhalten.",()=>{S.persona="";if(!settingsBroken)ls.set("settings",S);renderPane()});$("sNick").value=S.nick||"";$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
     $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
@@ -1338,10 +1368,10 @@ function renderSetup(){
   drawPrefs();
   $("sImpBtn").onclick=()=>{const m=$("sImpMsg");try{const raw=$("sImp").value.replace(/\s+/g,"");if(!raw.startsWith("ATLAS1:"))throw 0;
     const b=atob(raw.slice(7).replace(/-/g,"+").replace(/_/g,"/")),j=JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))));
-    if(typeof j.persona==="string")S.persona=j.persona.trim();if(typeof j.nick==="string")S.nick=j.nick.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
+    if(typeof j.persona==="string"&&j.persona.trim())S.persona=j.persona.trim();if(typeof j.nick==="string")S.nick=j.nick.trim();if(j.voice)S.voice=j.voice;if(j.rate)S.rate=+j.rate;saveSettings();
     const M=main();if(Array.isArray(j.supps))M.supps=j.supps.map(String).filter(Boolean);if(Array.isArray(j.routine))M.routine=j.routine.map(String).filter(Boolean);saveProfiles();
     $("sImp").value="";renderPane();setTimeout(()=>{const x=$("sImpMsg");if(x)x.textContent="Übernommen ✓"},50)}catch{m.textContent="Code ungültig. Bitte komplett kopieren."}};
-  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.nick=$("sNick").value.trim();S.sleepMin=Math.max(1,+$("sSleep").value||20);S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();S.persona=pv&&pv!==dv?pv:""}S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
+  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.nick=$("sNick").value.trim();S.sleepMin=Math.max(1,+$("sSleep").value||20);S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();if(pv&&pv!==dv)S.persona=pv}   // leeres Feld löscht nichtsS.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
@@ -1385,7 +1415,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261106-1410",ATLAS_REL="2.4";
+const APP_VERSION="20261109-2041",ATLAS_REL="2.5";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setInterval(checkUpdate,10*60000);

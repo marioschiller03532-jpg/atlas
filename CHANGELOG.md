@@ -1,5 +1,14 @@
 # Atlas – Änderungen
 
+## 2.5 (09.11.2026) – Fehlerbehebung Persönlichkeit, Zuhören, Ruhemodus
+- Ruhemodus: zählte bisher nur Kamera-Bewegung als Aktivität. Lag das Gerät still oder stand man ruhig davor, schlief Atlas direkt nach einer Gesprächspause ein. Jetzt zählen auch Sprache, Zuhören, Denken, Sprechen und Antippen; Schlaf erst nach 20 Minuten echter Ruhe und nie während Aufnahme, Erkennung oder Antwort.
+- „Tschüss“, „Bis dann“ usw. lösen den Ruhemodus nur noch als kurze, eigenständige Aussage aus (höchstens 6 Wörter), nicht mitten in einem Satz.
+- Gespräch endet erst nach 90 s Stille (vorher 60 s).
+- Verbindungsfehler: Atlas verstummte bisher kommentarlos. Jetzt: ein stiller Neuversuch, Wächter gegen hängende Anfragen (30 s), danach sagt Atlas, dass die Verbindung fehlt, und hört weiter zu. Zustand unter der Kugel sichtbar (Bereit, Hört zu, Denkt nach, Spricht, Ruhemodus, Keine Verbindung, Mikrofon/Spracherkennung-Fehler).
+- Persönlichkeit: Stil-Anker am Ende jeder Anfrage, damit die vielen Technik-Regeln den Ton nicht verdrängen. Begrüßung, „Wie geht’s“ und „Okay“ laufen wieder über Claude statt über Standardsätze.
+- Einstellungen: Ein leeres Persönlichkeitsfeld löscht nichts mehr; automatische Sicherung der Persönlichkeit mit Wiederherstellung; unlesbare Einstellungen werden nie überschrieben; Anzeige, welche Persönlichkeit geladen ist; Zurücksetzen nur per Knopf mit Rückfrage.
+- Rückfall: Version 2.4 unter /alt/2.4/.
+
 ## 2.4 (06.11.2026) – Supplementlisten-Modus
 - „Atlas, zeig mir meine Supplementierungsliste“ / „… Evas Supplementierungsliste“ öffnet die Liste groß (Tablet quer: rechts neben der Kugel, Handy: unten), gruppiert nach morgens, mittags, abends, ohne feste Zeit, mit Tagesstatus ✓ ✕ ○ ⏸.
 - Liste bleibt offen, während Atlas zuhört, denkt oder spricht und auch nach Gesprächsende; „Fertig mit der Liste“ oder ✕ schließt sie.
