@@ -24,6 +24,7 @@ const report={geprueft:NOW,definitionen:{gefunden:"alle Produktseiten im offizie
 const FELD={inhaltsstoffe:"Mengen pro Portion (Nährstofftabelle)",zutaten:"Zutaten",verzehrempfehlung:"Verzehr-/Einnahmeempfehlung",packung:"Packungsgröße"};
 const GRUND={biogena:Object.fromEntries(Object.keys(FELD).map(k=>[k,"nicht auf Produktseite und Etikett-PDF gefunden"])),moleqlar:Object.fromEntries(Object.keys(FELD).map(k=>[k,"nicht auf der Produktseite gefunden"]))};
 const offen=(miss,h)=>Object.fromEntries(miss.map(k=>[FELD[k],GRUND[h][k]]));
+let probeLeft=0;const tm0=s=>/<table/.test(s);
 
 // ---------- Biogena ----------
 {const R={gefunden:0,nem:0,vollstaendig:0,teilweise:[],nicht_abrufbar:[],typen:{}};report.hersteller.Biogena=R;
