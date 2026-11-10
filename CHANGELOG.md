@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.7.1 (10.11.2026) – Produktkatalog fertiggestellt
+- Zählweise eindeutig: „gefunden“ = alle Produktseiten im offiziellen Verzeichnis (inkl. Zubehör, Sets, Tests, Lebensmittel, Medizinprodukte). „Nahrungsergänzungen“ = davon als NEM gekennzeichnet. „Vollständig“ = NEM mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße.
+- Produkttyp jetzt nach Pflichtkennzeichnung (Biogena) bzw. Nährstofftabelle (MoleQlar) statt Raten. Die 7 früher „teilweisen“ Biogena-Produkte sind keine NEM (2 Wässer, Snack, 2 Speiseöle = Lebensmittel; 2× Zeolith = Medizinprodukt), Hinweise wie Wechselwirkungen/Nebenwirkungen beim Zeolith übernommen.
+- MoleQlar: Nährstofftabelle der Produktseite (Portion, %NRV) wird jetzt gelesen; Packungsgröße aus Shop-Varianten. Keine Werte aus Bildern, nichts geschätzt.
+- Stand 10.11.2026 06:51 UTC: Biogena 298 gefunden, 253 NEM, 253 vollständig, 0 offen. MoleQlar 104 gefunden, 74 NEM, 63 vollständig, 11 teilweise (meist nur Packungsgröße). Katalog bleibt als unvollständig gekennzeichnet.
+- App: Katalog-Status zeigt gefunden / NEM / vollständig / teilweise / andere Produkttypen und „katalog_vollstaendig“. Grundaufbau, Hauptprompt und Design unverändert.
+- Rückfall: Version 2.7 unter /alt/2.7/.
+
 ## 2.7 (10.11.2026) – Produktkatalog Biogena + MoleQlar
 - Katalog-Datei katalog/supplement_catalog.json liegt bei der App (allgemeine Herstellerdaten, getrennt von persönlichen Angaben). Erstellt von tools/katalog-run.mjs über GitHub Actions aus den offiziellen Shops (Sitemap bzw. Shop-Schnittstelle, robots.txt beachtet, 1 Anfrage/Sekunde). Prüfbericht in katalog/report.json mit Änderungen gegenüber dem letzten Lauf.
 - Stand 10.11.2026: Biogena 298 Seiten (271 Nahrungsergänzungen, davon 264 vollständig; 27 Zubehör/Bundles/Tests), MoleQlar 104 Produkte (97 Nahrungsergänzungen bzw. Pulver, 14 vollständig – MoleQlar veröffentlicht keine Mengentabelle als Text). Katalog als unvollständig gekennzeichnet.

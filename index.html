@@ -793,7 +793,8 @@ let speechHint=[];
 // ===== Produktkatalog Biogena + MoleQlar: Datei liegt bei der App (katalog/supplement_catalog.json), Kopie im Gerät =====
 // Allgemeine Herstellerdaten, getrennt von persönlichen Angaben. Keine Websuche im normalen Betrieb.
 let KAT=null;
-function katCompact(j){return {stand:j.stand,produkte:j.produkte.map(p=>({h:p.hersteller,n:p.name,u:p.url,k:p.kategorie,l:p.linie,kz:p.kurz,a:p.anwendungsbereiche_hersteller,t:p.inhaltsstoffe,m:p.mengen_aus_text,z:p.zutaten,v:p.verzehrempfehlung,pk:p.packung,f:p.form,hw:p.hinweise,al:p.allergene,pr:p.preis,fe:p.fehlend,ab:p.abgerufen}))}}
+function katCompact(j){return {stand:j.stand,produkte:j.produkte.map(p=>({h:p.hersteller,n:p.name,u:p.url,k:p.kategorie,l:p.linie,kz:p.kurz,a:p.anwendungsbereiche_hersteller,t:p.inhaltsstoffe,m:p.mengen_aus_text,z:p.zutaten,v:p.verzehrempfehlung,pk:p.packung,f:p.form,hw:p.hinweise,al:p.allergene,pr:p.preis,fe:p.fehlend,ab:p.abgerufen,ty:p.typ}))}}
+const katNem=p=>p.ty?p.ty==="Nahrungsergänzungsmittel":!/^kein /.test(p.k||"");
 async function loadKatalog(){try{const r=await fetch("katalog/supplement_catalog.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&Array.isArray(j.produkte)&&j.produkte.length){KAT=katCompact(j);try{localStorage.setItem(P+"katalog",JSON.stringify(KAT))}catch{}return}}}catch{}
   // ohne Netz: gespeicherte Kopie verwenden
   if(!KAT){try{KAT=JSON.parse(localStorage.getItem(P+"katalog")||"null")}catch{}}}
@@ -803,8 +804,8 @@ function katSearch(q,hersteller,max=6){if(!KAT)return [];const T=tk(q).filter(w=
   for(const w of [...T]){if(SYN[w])T.push(SYN[w])}{const e=kbLookup(q);if(e)for(const a of e.aliases||[])for(const w of tk(a))if(w.length>3&&!T.includes(w))T.push(w)}
   const sc=p=>{const hay={n:tk(p.n).join(" "),z:tk((p.z||"")+" "+(p.t?p.t.zeilen.map(r=>r[0]).join(" "):"")).join(" "),a:tk((p.a||[]).join(" ")+" "+(p.kz||"")+" "+(p.k||"")).join(" ")};let s=0;
     for(const w of T){if(hay.n.includes(w))s+=5;if(hay.z.includes(w))s+=3;if(hay.a.includes(w))s+=2}return s};
-  return KAT.produkte.filter(p=>!hersteller||norm(p.h).includes(norm(hersteller))).map(p=>({p,s:sc(p)})).filter(x=>x.s>0).map(x=>(/^kein /.test(x.p.k||"")&&(x.s-=2),x)).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,max).map(x=>x.p)}
-const katOut=p=>({hersteller:p.h,name:p.n,link:p.u,linie:p.l,kategorie:p.k,anwendung_laut_hersteller:p.a,inhaltsstoffe_pro_portion:p.t?{kopf:p.t.kopf,zeilen:p.t.zeilen.slice(0,10)}:(p.m&&p.m.length?{aus_text:p.m}:null),
+  return KAT.produkte.filter(p=>!hersteller||norm(p.h).includes(norm(hersteller))).map(p=>({p,s:sc(p)})).filter(x=>x.s>0).map(x=>(!katNem(x.p)&&(x.s-=2),x)).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,max).map(x=>x.p)}
+const katOut=p=>({hersteller:p.h,name:p.n,produkttyp:p.ty||null,link:p.u,linie:p.l,kategorie:p.k,anwendung_laut_hersteller:p.a,inhaltsstoffe_pro_portion:p.t?{kopf:p.t.kopf,zeilen:p.t.zeilen.slice(0,10)}:(p.m&&p.m.length?{aus_text:p.m}:null),
   zutaten:p.z,verzehrempfehlung:p.v,packung:p.pk,form:p.f,hinweise:p.hw,allergene:p.al,preis:p.pr?`${p.pr.betrag} ${p.pr.waehrung} (abgerufen ${String(p.pr.abgerufen).slice(0,10)})`:null,fehlende_angaben:p.fe,abgerufen:String(p.ab).slice(0,10)});
 
 // ===== Supplement-Tagebuch: drei Zustände je Supplement (genommen / nicht genommen / offen), nur eindeutige Aussagen zählen =====
@@ -1008,8 +1009,9 @@ async function runTool(name,inp){
     return res.join("\n")+"\nStand: "+JSON.stringify(statusOf(cur).supplements.map(x=>coreOf(x.name)+"="+x.status))}
   case "katalog_suchen":{if(!KAT)return "Der Produktkatalog ist auf diesem Gerät nicht geladen. Sag ihm das ehrlich; nichts erfinden.";
     const L=katSearch(inp.suchbegriff||"",inp.hersteller);return L.length?JSON.stringify({katalog_stand:String(KAT.stand).slice(0,10),treffer:L.map(katOut)}):"Im Katalog (Stand "+String(KAT.stand).slice(0,10)+") nichts Passendes gefunden."}
-  case "katalog_status":{if(!KAT)return "Katalog nicht geladen.";const by={};for(const p of KAT.produkte){const h=by[p.h]=by[p.h]||{produkte:0,vollstaendig:0,unvollstaendig:0,zubehoer:0};h.produkte++;if(/^kein /.test(p.k||""))h.zubehoer++;else if((p.fe||[]).length)h.unvollstaendig++;else h.vollstaendig++}
-    return JSON.stringify({geprueft:String(KAT.stand).slice(0,16).replace("T"," "),hersteller:by,aktualisieren:"Eine neue Online-Prüfung startet Mario über Claude im Chat (Katalog aktualisieren). Atlas selbst lädt Produktseiten nicht neu."})}
+  case "katalog_status":{if(!KAT)return "Katalog nicht geladen.";const by={};for(const p of KAT.produkte){const h=by[p.h]=by[p.h]||{produkte_gefunden:0,nahrungsergaenzungen:0,vollstaendig:0,teilweise:0,andere_produkte:{}};h.produkte_gefunden++;if(!katNem(p)){const t=p.ty||"Zubehör/Sonstiges";h.andere_produkte[t]=(h.andere_produkte[t]||0)+1}else{h.nahrungsergaenzungen++;if((p.fe||[]).length)h.teilweise++;else h.vollstaendig++}}
+    const offen=Object.values(by).some(h=>h.teilweise>0);
+    return JSON.stringify({geprueft:String(KAT.stand).slice(0,16).replace("T"," "),katalog_vollstaendig:!offen,hinweis:offen?"Katalog ist noch unvollständig: bei einigen Nahrungsergänzungen fehlen Angaben (siehe fehlende_angaben bei katalog_suchen).":"Alle Nahrungsergänzungen vollständig erfasst.",hersteller:by,aktualisieren:"Eine neue Online-Prüfung startet Mario über Claude im Chat (Katalog aktualisieren). Atlas selbst lädt Produktseiten nicht neu."})}
   case "wissen_nachschlagen":{const e=kbLookup(inp.begriff||"");if(e)return JSON.stringify({...kbCompact(e),quellen:e.quellen});
     const near2=kbList().filter(x=>tk(x.name).some(w=>tk(inp.begriff||"").some(u=>near(u,w)))).map(x=>x.name);
     return near2.length?"Nicht eindeutig. Meinst du: "+near2.join(", ")+"?":"Nicht in der Bibliothek. Allgemeinwissen kennzeichnen oder auf Wunsch recherchieren."}
@@ -1483,7 +1485,7 @@ function renderSetup(){
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
   $("sCacheInfo").textContent=ls.get("acache",[]).filter(e=>e.key&&Date.now()-e.at<CACHE_TTL).length+" gespeicherte Antworten";$("sCacheClr").onclick=()=>{ls.del("acache");pendingCache=null;$("sCacheInfo").textContent="Geleert."};
-  const katTxt=KAT?(()=>{const by={};for(const p of KAT.produkte){if(/^kein /.test(p.k||""))continue;const h=by[p.h]=by[p.h]||[0,0];h[0]++;if(!(p.fe||[]).length)h[1]++}return " Produktkatalog: "+Object.entries(by).map(([h,[n,v]])=>`${h} ${n} (${v} vollständig)`).join(", ")+`, geprüft ${String(KAT.stand).slice(0,10)}.`})():" Produktkatalog: nicht geladen.";
+  const katTxt=KAT?(()=>{const by={};for(const p of KAT.produkte){if(!katNem(p))continue;const h=by[p.h]=by[p.h]||[0,0];h[0]++;if(!(p.fe||[]).length)h[1]++}return " Produktkatalog: "+Object.entries(by).map(([h,[n,v]])=>`${h} ${n} (${v} vollständig)`).join(", ")+`, geprüft ${String(KAT.stand).slice(0,10)}${Object.values(by).some(([n,v])=>v<n)?", noch unvollständig":""}.`})():" Produktkatalog: nicht geladen.";
   $("sKbInfo").textContent=(KB?`Wissensbibliothek: ${kbList().length} Präparate, Stand ${KB.v}, lokal gespeichert.`:"Wissensbibliothek: noch nicht geladen (Einrichtungs-Code einfügen).")+katTxt;
   $("sObsOn").checked=!!S.obsStore;$("sObsOn").onchange=()=>{S.obsStore=$("sObsOn").checked;saveSettings()};
   $("sRest").value=S.restHours||6;$("sRest").onchange=()=>{S.restHours=Math.max(1,Math.min(24,+$("sRest").value||6));saveSettings()};
@@ -1540,7 +1542,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261110-0618",ATLAS_REL="2.7";
+const APP_VERSION="20261110-0758",ATLAS_REL="2.7.1";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
