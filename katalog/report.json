@@ -1,0 +1,1215 @@
+{
+ "geprueft": "2026-11-10T04:58:52.560Z",
+ "hersteller": {
+  "Biogena": {
+   "gefunden": 298,
+   "vollstaendig": 205,
+   "teilweise": [
+    {
+     "url": "https://biogena.com/de-at/produkte/vitamin-c-liposomal-583",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/biogena-sports-omega-3-oel-vegan-443",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/thyrocare-calm-schilddruesen-komplex-434",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/thyrocare-active-430",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/biogena-sports-magnesium-wasser-428",
+     "fehlt": [
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/biogena-sports-omega-3-ultra-426",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/hallsteinwasser-416",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/soludrops-astaxanthin-404",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/nutrifem-mamma-mia-schwangerschafts-paket-377",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/nutrident-paro-pro-superior-375",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/nutrifem-omega-3-vegan-367",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/maculaplex-1-2-325",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/cordyceps-c-315",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/biogena-moments-beauty-bites-314",
+     "fehlt": [
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/vitamin-b12-tropfen-311",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/reishi-c-302",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/spermidin-cellimmun-299",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/zeolith-500-296",
+     "fehlt": [
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/vitamin-b6-aktiviert-p5p-292",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/smartferrin-b12-287",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/fit-at-work-premium-gold-282",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/vitamin-e-natural-vegan-281",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/astaxanthin-4-mg-271",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/nitrostress-formula-ii-269",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/moferrin-21-268",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/nutrident-paro-pro-266",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/selen-forte-264",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/oculaplex-263",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/diaantioxidans-formula-253",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/biogena-akuthaut-balance-252",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/quattroferrin-21-eisen-komplex-248",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/fit-at-work-immun-astaxanthin-246",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/zeolith-ultrafein-245",
+     "fehlt": [
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/panthoplex-b5-243",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/gruener-tee-epiverde-222-242",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/betaglucan-formula-240",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/bio-schwarzkuemmeloel-233",
+     "fehlt": [
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/neurosagena-vitamin-b-komplex-active-gold-228",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/ferrogena-10-215",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/gepuffertes-vitamin-c-750-c-l-a-205",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/folsaeure-800-aktiviert-199",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/selen-natural-173",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/eisen-vitamin-c-171",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/lecithin-b-komplex-151",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/b12-folsaeure-143",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/biogena-sports-zmb6-135",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/cranberry-formula-134",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/eisensaft-moferrin-liquid-herbal-elixier-129",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/alpha-liponsaeure-200-108",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/mangan-4-mg-102",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/androsafe-lyco-10-97",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/selenit-200-96",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/niaplex-b3-93",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/antioxidans-formula-92",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/antistress-formula-84",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/ester-c-gold-83",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/omega-3-vegan-dha-250-80",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/bio-leinoel-74",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/omega-3-forte-700-73",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/marines-omega-3-liquid-70",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/omega-3-vegan-dha-epa-450-69",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/intradoxx-255-68",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/algenoel-omega-3-liquid-vegan-superior-49",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/dha-250-48",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/vitamin-e-caps-47",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://biogena.com/de-at/produkte/omega-3-duo-9",
+     "fehlt": [
+      "zutaten"
+     ]
+    }
+   ],
+   "nicht_abrufbar": [],
+   "quelle": "https://biogena.com/sitemap/sitemap-de-at.xml",
+   "zubehoer": 27
+  },
+  "MoleQlar": {
+   "gefunden": 104,
+   "vollstaendig": 0,
+   "teilweise": [
+    {
+     "url": "https://moleqlar.com/products/energy-bundle",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/lutein-zeaxanthin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/nr-pro-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vegan-omega-3-kapseln",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/fischoel-omega-3-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/blaulichtfilter-brille",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/natives-olivenoel-extra",
+     "fehlt": [
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/testo-support-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/scalp-brush",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/tote-bag",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/schlaf-bundle",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/nad-bundle",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/sport-bundle",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/recovery-bundle",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/skin-bundle",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/fokus-bundle",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/diagnostic-starter-bundle",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/enhanced-fiber-ballaststoffe",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/zeolith-pulver",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/nasenpflaster",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/hair-restoration-serum",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/melatonin-tabletten",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/kreatin-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vitamin-b12-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/citicolin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/elektrolyte-sticks",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vitamin-adek-tropfen",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/eisen-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/chrom-kapseln",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/schlafmaske",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/ceramide-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/nattokinase-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/qshaker-pro",
+     "fehlt": [
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/alpha-liponsaeure-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/pqq-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/enhanced-protein-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/ergothionein-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/cognesium-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/eaa-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/prolithin-a-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/magnesium-bisglycinat-kapseln",
+     "fehlt": [
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/collagen-booster",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/kreatin-monohydrat-sticks",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vitamin-d3-k2-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vitamin-c-liposomal-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/astragalus-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vitamin-b-komplex",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/l-theanin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/one-probierpaket",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/zink-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/selen-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/methylenblau",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/lithium-orotat",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vitamin-d-test",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/omega-3-test",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/rhodiola-rosea-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/ashwagandha-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vegan-omega3-vitamin-d",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/glycin-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/inositol-pulver",
+     "fehlt": [
+      "zutaten"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/magnesium-l-threonat-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/astaxanthin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/coenzym-q10-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/curcumin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/magnesium-l-threonat-kapseln",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/geschenkgutschein",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/nmn-serum",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/nicotinamid-ribosid-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/daily-essentials-complex",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/uthever-nmn",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/essentials-bundle",
+     "fehlt": [
+      "zutaten",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/kreatin-monohydrat-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/kollagen-peptide-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/betain-tmg-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/carnosin-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/spermidin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/quercetin-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/glucosamin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/vitamin-d3-k2-tropfen",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/magnesium-komplex",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/calcium-alphaketoglutarat-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/resveratrol-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/resveratrol-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/qjar",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/qscoop",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/nad-test",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/quercetin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/betain-tmg-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/omega-3-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/berberin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/sulforaphan-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/hyaluron-glycin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/nad-booster-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/calcium-alphaketoglutarat-pulver",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/glynac-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/qshaker",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/daily-longevity-complex",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/apigenin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/spermidin-pro-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/qrganizer",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/epi-proteomics-test",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/taurin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/fisetin-kapseln",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    },
+    {
+     "url": "https://moleqlar.com/products/qnight-relax-complex",
+     "fehlt": [
+      "zutaten",
+      "verzehrempfehlung",
+      "inhaltsstoffe"
+     ]
+    }
+   ],
+   "nicht_abrufbar": [],
+   "quelle": "https://moleqlar.com/products.json"
+  }
+ },
+ "aenderungen": {
+  "erstimport": true
+ },
+ "unvollstaendig": true
+}
