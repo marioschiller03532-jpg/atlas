@@ -76,7 +76,7 @@ const GRUND={biogena:{inhaltsstoffe:"keine Inhaltsstofftabelle auf der Seite",zu
   const mengen=[...new Set((info.match(/\d+(?:[.,]\d+)?\s?(?:mg|µg|mcg|g|IE|I\.E\.|Mrd\.?\s?KBE)\s[A-Za-zÄÖÜäöüß][\wÄÖÜäöüß\-®]*(?:\s[\wÄÖÜäöüß\-®]+)?/g)||[]))].slice(0,12);
   const hin=(anw||"").split(/(?<=\.)\s+/).filter(x=>/nicht|Schwanger|Kinder|Stillen|ärzt|Arzt|überschritten|Allerg/i.test(x));
   const fn=pick("Funktion");const v=pr.variants?.[0]||{};const tags=(pr.tags||[]).map(String);
-  const p={hersteller:"MoleQlar",name:pr.title,url,abgerufen:NOW,linie:null,kurz:null,kategorie:pr.product_type||tags.find(t=>!/^(_|sale|new|neu|bundle|bulk|coming soon|bestseller|angebot|black|cyber|gift|geschenk|hidden|subscription|abo)/i.test(t)&&t.length>3)||null,
+  const p={hersteller:"MoleQlar",name:pr.title,url,abgerufen:NOW,linie:null,kurz:null,kategorie:pr.product_type||tags.find(t=>!/^(_|features_|return_box|no-upsell|sale|new|neu|bundle|bulk|coming soon|bestseller|angebot|black|cyber|gift|geschenk|hidden|subscription|abo)/i.test(t)&&t.length>3)||null,
     anwendungsbereiche_hersteller:fn?[fn.split(/(?<=\.)\s+/).slice(0,2).join(" ").slice(0,300)]:[],inhaltsstoffe:null,mengen_aus_text:mengen,zutaten:zut,verzehrempfehlung:einn?einn.split(/(?<=\.)\s+/).slice(0,2).join(" "):null,
     tagesdosis:null,packung:v.title&&v.title!=="Default Title"?v.title:null,form:(pr.title.match(/Kapseln|Pulver|Tropfen|Liquid|Sachets?|Tabletten|Öl|Spray|Gummies/i)||[null])[0],hinweise:hin,allergene:[],
     preis:v.price?{betrag:+v.price,waehrung:"EUR",verfuegbar:!!v.available,abgerufen:NOW}:null,ean:v.barcode||null,dokumente:[],tags};
