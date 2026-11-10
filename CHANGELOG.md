@@ -1,5 +1,23 @@
 # Atlas – Änderungen
 
+## 2.8 (10.11.2026) – Zuhören, Stopp, Sprache, Katalog-Aufträge
+Gefundene Ursachen (im Code, nicht im Prompt):
+- „Stopp“ wurde während Atlas sprach oder nachdachte komplett verworfen: Alles Gehörte in dieser Zeit wurde ignoriert. Nur Antippen half.
+- „Stopp“ als eigener Satz beendete das Gespräch, statt sofort wieder zuzuhören.
+- Unterbrechen: Bei Sätzen, die auf „und“, „weil“ usw. endeten, sprach Atlas nach 2,8 s die Zwischenfrage „Möchtest du noch etwas ergänzen?“ – genau dann, wenn man weiterdenkt. Standardpause war 1,6 s.
+- Haken: Fiel die Spracherkennung mit Fehler aus (Netz, Mikrofon), startete sie sofort neu – Dauerschleife ohne Pause. Schlug ein Neustart fehl, endete das Gespräch kommentarlos.
+- Nach einer Antwort lief dieselbe Erkennungs-Sitzung weiter; je nach Gerät konnten Reste der eigenen Stimme oder ein „verbrauchter“ Erkennungsstand das nächste Zuhören stören.
+- Katalog-Auftrag: Es gab kein Werkzeug, um etwas in den Katalog einzutragen – Atlas konnte den Auftrag gar nicht ausführen.
+Änderungen:
+- Stopp-Erkennung läuft während Sprechen und Denken: „Stopp“, „hör auf“, „sei still“ bricht Sprachausgabe und Claude-Anfrage sofort ab, keine Antwort, direkt „Hört zu“. Echo-Schutz: sagt Atlas selbst „Stopp“, zählt es nicht.
+- Keine gesprochene Zwischenfrage mehr. Mindestpause 2,0 s (Einstellung 2–3,5 s), abends +0,5 s, unfertiger Satz +2,5 s, kurze Bruchstücke +0,7 s, Ja/Nein ohne Extrawarten. „Fertig“-Knopf bleibt.
+- Nach jeder Antwort frische Erkennungs-Sitzung. Fehler: Neustart mit wachsender Pause, bis zu 4 Startversuche, Wächter startet die Erkennung neu, wenn sie im Gespräch ausfällt. Bewegung/Licht löst während eines Gesprächs keine Begrüßung aus.
+- Diagnose-Protokoll (nur Ereignisse und Fehlercodes, keine Inhalte) in den Einstellungen unter den Antwortzeiten.
+- Fachbegriffe: typische Fehlhörungen werden korrigiert (z. B. „Magnesium bis glyzinat“ → Magnesium-Bisglycinat, „el Theanin“, „N M N“, „Vitamin D drei“, „Molekular“ → MoleQlar). Vorlesen: Einheiten und Abkürzungen ausgeschrieben (mg → Milligramm, z. B. → zum Beispiel, D3 → D drei), Bisglycinat in zwei Teilen.
+- Antwortbeginn ohne Floskeln („Gute Frage“, „Natürlich“, „Absolut“ werden nicht vorgelesen); Stil-Anker im Prompt um Schmäh, Varianz und Sprechsprache ergänzt. Mario’s Persönlichkeitstext unverändert.
+- Neues Werkzeug katalog_eintragen: eigene Katalog-Einträge hinzufügen, ändern, entfernen; Herstellerdaten werden nie geändert, Doppelte und Hersteller-Produkte werden erkannt. Eigene Einträge lokal gespeichert und im Backup. Regel KATALOG-AUFTRÄGE: bei unsicherem Namen einmal nachfragen, dann knapp bestätigen; Katalog und Einnahmeliste getrennt.
+- Rückfall: Version 2.7.2 unter /alt/2.7.2/.
+
 ## 2.7.2 (10.11.2026) – Katalog-Status je Hersteller und Produktgruppe
 - Kein pauschales „Katalog vollständig/unvollständig“ mehr. Status getrennt: alle gefundenen Produkte, Nahrungsergänzungen, davon vollständig, davon teilweise, andere Produktarten (nach Art).
 - Fehlende Angaben je Produkt und Feld, Wortlaut „nicht auf der Produktseite gefunden“ (Biogena: „nicht auf Produktseite und Etikett-PDF gefunden“). Nichts geschätzt oder ergänzt.
