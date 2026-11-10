@@ -1,0 +1,901 @@
+{
+ "biogena": {
+  "biogena-sports-magnesium-wasser-428": {
+   "status": 200,
+   "keys": {
+    "documentsLegal": {
+     "label": "Legal Dokumente",
+     "v": "https://static.biogena.com/productdocs/biogena_sports_magnesium_water_deposit_de_AT_2026_11_04_15_42_21_pdf-1793807062.pdf"
+    },
+    "nutritionalValueHeader2": {
+     "label": "Nährwerttabelle Tabellenkopf 2",
+     "v": "pro 100 ml"
+    },
+    "fieldsOfApplication": {
+     "label": "Einsatzmöglichkeiten",
+     "v": "<p>Ideal vor, während oder nach dem Sport, bei hoher körperlicher Belastung oder Stress. Unterstützt das Elektrolytgleichgewicht, den Energiestoffwechsel und die Muskelfunktion* – auch praktisch für unterwegs oder auf Reisen.</p><p><b>Produktvorteile:</b></p><ul><li>*Magnesium trägt zum Elektrolytgleichgewicht bei.</li><li>*Magnesium trägt zu einer normalen Muskelfunktion bei.</li><li>*Magnesium t"
+    },
+    "mainProductId": {
+     "label": "Hauptprodukt-ID",
+     "v": "425"
+    },
+    "seoSlug": {
+     "label": "SEO-Slug",
+     "v": "biogena-sports-magnesium-wasser"
+    },
+    "nutritionalValueHeader3": {
+     "label": "Nährwerttabelle Tabellenkopf 3 ",
+     "v": "pro Dose (330 ml)"
+    },
+    "usps": {
+     "label": "USPs",
+     "v": "<ol><li>Wasser mit bioverfügbarem Magnesiumcitrat</li><li>Erfrischender Geschmack mit Kohlensäure – verfeinert mit Minze &amp; Holunder.</li><li>Magnesium unterstützt die Muskelfunktion, Nerven und den Energiestoffwechsel*</li><li>Zuckerfreies Getränk</li><li>Ideal für Training, Alltag und bei Magnesiumbedarf</li><li>Praktisches 330 ml Slim-Format – perfekt für unterwegs</li></ol>"
+    },
+    "notices": {
+     "label": "Hinweise",
+     "v": "<p>Eine abwechslungsreiche und ausgewogene Ernährung und eine gesunde Lebensweise sind wichtig.</p><p>Dargereichte Informationen sind keine Heilaussagen oder Aufforderungen zur Selbstmedikation. Etwaige Druck- und Satzfehler vorbehalten.</p>"
+    },
+    "company": {
+     "label": "Unternehmen",
+     "v": "Biogena GmbH & Co KG"
+    },
+    "dailyDosage": {
+     "label": "Tagesdosis",
+     "v": "1"
+    },
+    "productDescription": {
+     "label": "Produktbeschreibung",
+     "v": "<p>Unser Magnesium Wasser ist die clevere Alternative zu Kapseln oder Pulvern – trinkfertig, leicht und direkt verfügbar. Entwickelt für aktive Menschen, die Funktion und Convenience verbinden möchten. Die Formel mit Magnesiumcitrat eignet sich auch bei erhöhter Schweißbildung oder intensiven Sporteinheiten. Einfach greifen, trinken, erfrischen.</p><p><b>Jetzt Magnesium Wasser kaufen &amp; erfrisc"
+    },
+    "productAlternativesPerShopCountry": {
+     "label": "Produktalternative pro Shop-Land",
+     "v": "{\"de_AT\":[428],\"hr_HR\":[],\"en_ZW\":[],\"it_IT\":[],\"pl_PL\":[],\"de_CH\":[],\"en_GB\":[],\"ro_RO\":[],\"sk_SK\":[],\"es_ES\":[],\"fr_FR\":[],\"de_DE\":[425]}"
+    },
+    "productSubtitle": {
+     "label": "Produktuntertitel (Produktbeschreibung kurz)",
+     "v": "Unser Magnesiumwasser mit Minze-Holunder versorgt dich mit Magnesiumcitrat – spritzig, zuckerfrei & ideal für Muskeln, Nerven und Energie.*"
+    },
+    "ingredients": {
+     "label": "Zutaten",
+     "v": "<p>Wasser, Magnesiumcitrat, Kohlensäure, Säuerungsmittel: Citronensäure, Glycin, natürliche Aromen, färbendes Lebensmittel: Spirulina-Extrakt.</p>"
+    },
+    "nutritionalValueHeader4": {
+     "label": "Nährwerttabelle Tabellenkopf 4",
+     "v": "% RI */% NRV **"
+    },
+    "productSubtitleShort": {
+     "label": "Produktuntertitel kurz (Produktbeschreibung sehr kurz)",
+     "v": "Magnesium Wasser mit Minze-Holunder Geschmack – Magnesium unterstützt Muskeln, Nerven & Energiestoffwechsel* – zuckerfrei und kalorienarm"
+    },
+    "productLine": {
+     "label": "Product Line",
+     "v": "SPORTS"
+    },
+    "nutritionalValueHeader1": {
+     "label": "Nährwerttabelle Tabellenkopf 1",
+     "v": "Nährwerte"
+    },
+    "bioDisclaimer": {
+     "label": "BIO-Disclaimer",
+     "v": "Kein Bio-Produkt gemäß VO (EU) 2018/848."
+    },
+    "diabeticNote": {
+     "label": "Hinweis Diabetiker",
+     "v": "Für Diabetiker:innen geeignet."
+    },
+    "packQuantityWithUnit": {
+     "label": "Packmenge mit Einheit",
+     "v": "{\"quantity\":\"6\",\"unitLabelPlural\":{\"de_AT\":\"Stück\",\"it_IT\":\"pezzi\",\"pl_PL\":\"sztuki\",\"it_CH\":\"pezzi\",\"ro_RO\":\"piesă\",\"fr_CH\":\"unités\",\"fr_FR\":\"unités\",\"de_DE\":\"Stück\",\"hr_HR\":\"komadi\",\"en_ZW\":\"units\",\"en_GB\":\"units\",\"de_CH\":\"Stück\",\"sk_SK\":\"kusy\",\"es_ES\":\"unidades\"},\"unitAbbreviationSingular\":{\"de_AT\":\"Stk.\",\"it_IT\":\"pz.\",\"pl_PL\":\"szt.\",\"it_CH\":\"pz.\",\"ro_RO\":\"buc.\",\"fr_CH\":\"unité\",\"fr_FR\":\"unité\",\""
+    },
+    "variantAlternativesPerShopCountry": {
+     "label": "Variantenalternative pro Shop-Land",
+     "v": "{\"en_ZW\":[],\"hr_HR\":[],\"de_AT\":[506],\"it_IT\":[],\"en_GB\":[],\"de_CH\":[],\"pl_PL\":[],\"ro_RO\":[],\"sk_SK\":[],\"es_ES\":[],\"fr_FR\":[],\"de_DE\":[503]}"
+    },
+    "packageSize": {
+     "label": "Packungsgröße",
+     "v": "6 x 330 ml"
+    },
+    "productDiscountGroup": {
+     "label": "Artikelrabattgruppe",
+     "v": "BIOGENA SPORTS"
+    },
+    "ean": {
+     "label": "EAN",
+     "v": "9120134387844"
+    }
+   },
+   "tabelle": "Nährwerte pro 100 ml pro Dose (330 ml) % RI */% NRV ** Energie 7 kJ / 2 kcal 27 kJ / 7 kcal Magnesium 57 mg 188 mg 50 %**",
+   "pdfs": [
+    "https://static.biogena.com/productdocs/biogena_sports_magnesium_water_deposit_de_AT_2026_11_04_15_42_21_pdf-1793807062.pdf"
+   ]
+  },
+  "hallsteinwasser-416": {
+   "status": 200,
+   "keys": {
+    "storageAdvice": {
+     "label": "Lagerhinweise",
+     "v": "Bei Raumtemperatur, trocken und lichtgeschützt lagern. Vor Wärme schützen."
+    },
+    "mandatoryLabeling": {
+     "label": "Pflichtkennzeichnung NEM/LM",
+     "v": "Eine abwechslungsreiche und ausgewogene Ernährung und eine gesunde Lebensweise sind wichtig. "
+    },
+    "productSubtitleShort": {
+     "label": "Produktuntertitel kurz (Produktbeschreibung sehr kurz)",
+     "v": "Reines artesisches Wasser aus der Region Hallstatt"
+    },
+    "nutritionalValueHeader1": {
+     "label": "Nährwerttabelle Tabellenkopf 1",
+     "v": "Parameter"
+    },
+    "legalTextCh": {
+     "label": "Legal Text CH",
+     "v": "Das angebotene Produkt entspricht ausschließlich den Anforderungen des in Österreich, Deutschland und der EU geltenden Lebensmittelrechts. "
+    },
+    "nutritionalValueHeader2": {
+     "label": "Nährwerttabelle Tabellenkopf 2",
+     "v": "mg/l"
+    },
+    "usps": {
+     "label": "USPs",
+     "v": "<p>pH 8,3 für natürliche Alkalität</p><p>Auf seinem natürlichem Weg durch Gestein gefiltert</p><p>Völlig unbehandelt</p><p>Hoher Gehalt an natürlich gelöstem Sauerstoff: 10,8 mg/l</p><p>\r\n\r\nNutzung des natürlichen artesischen Drucks - kein Abpumpen\n</p><p>\nDie artesische Quelle liegt in 214 m Tiefe am Fuße des Dachsteins</p>"
+    },
+    "productDescription": {
+     "label": "Produktbeschreibung",
+     "v": "<p>Hallstein Wasser entspringt aus einer artesischen Quelle in 214 m Tiefe am Fuße des österreichischen Dachsteins. Auf seinem langen Weg durch Kalkstein und Gletschermoränen wird es auf natürliche Weise gefiltert und ohne technische Filtration oder Behandlung abgefüllt. Der natürlich alkalische pH-Wert – typischer Wert: 8,3 – und der niedrige Natrium- und Nitratgehalt prägen seinen klaren, leicht"
+    },
+    "diabeticNote": {
+     "label": "Hinweis Diabetiker",
+     "v": "Für Diabetiker:innen geeignet."
+    },
+    "productSubtitle": {
+     "label": "Produktuntertitel (Produktbeschreibung kurz)",
+     "v": "Natürliches artesisches Quellwasser aus den Alpen"
+    },
+    "seoSlug": {
+     "label": "SEO-Slug",
+     "v": "hallsteinwasser"
+    },
+    "bioDisclaimer": {
+     "label": "BIO-Disclaimer",
+     "v": "Kein Bio-Produkt gemäß VO (EU) 2018/848."
+    },
+    "mainProductId": {
+     "label": "Hauptprodukt-ID",
+     "v": "416"
+    },
+    "documentsLegal": {
+     "label": "Legal Dokumente",
+     "v": "https://static.biogena.com/productdocs/hallstein_artesian_water_de_AT_2026_11_04_13_54_54_pdf-1793800586.pdf"
+    },
+    "notices": {
+     "label": "Hinweise",
+     "v": "<p>Pures Artesisches Quellwasser\n</p><p>Alpine Water GmbH, Obertraun 311, 4831 Obertraun.\nAbgefüllt von der Quelle \"Hallstein Brunnen\" in 4831 Obertraun.</p><p>Etwaige Druck- und Satzfehler vorbehalten.<br></p>"
+    },
+    "productLine": {
+     "label": "Product Line",
+     "v": "Private Label"
+    },
+    "company": {
+     "label": "Unternehmen",
+     "v": "Biogena GmbH & Co KG"
+    },
+    "packQuantityWithUnit": {
+     "label": "Packmenge mit Einheit",
+     "v": "{\"quantity\":\"330\",\"unitLabelPlural\":{\"de_AT\":\"Milliliter\",\"it_IT\":\"millilitri\",\"pl_PL\":\"mililitry\",\"it_CH\":\"millilitri\",\"ro_RO\":\"mililitri\",\"fr_CH\":\"millilitres\",\"fr_FR\":\"millilitres\",\"de_DE\":\"Milliliter\",\"hr_HR\":\"mililitri\",\"en_ZW\":\"millilitres\",\"en_GB\":\"millilitres\",\"de_CH\":\"Milliliter\",\"sk_SK\":\"mililitrov\",\"es_ES\":\"mililitros\"},\"unitAbbreviationSingular\":{\"de_AT\":\"ml\",\"it_IT\":\"ml\",\"pl_PL\":\"ml\","
+    },
+    "productDiscountGroup": {
+     "label": "Artikelrabattgruppe",
+     "v": "STANDARD"
+    },
+    "ean": {
+     "label": "EAN",
+     "v": "9120090010152"
+    }
+   },
+   "tabelle": "Parameter mg/l pH-Wert 8,3 gelöster Sauerstoff 10,8 Calcium 19,2 Magnesium 9,37 Natrium 0,15 Kalium 0,09 Hydrogencarbonat 99 Chlorid 0,18 Fluorid Nitrat 1,83 Sulfat 2,19",
+   "pdfs": [
+    "https://static.biogena.com/productdocs/hallstein_artesian_water_de_AT_2026_11_04_13_54_54_pdf-1793800586.pdf"
+   ]
+  },
+  "biogena-moments-beauty-bites-314": {
+   "status": 200,
+   "keys": {
+    "nutritionalValueHeader5": {
+     "label": "Nährwerttabelle Tabellenkopf 5",
+     "v": "% RI */% NRV ** (pro 30 g)"
+    },
+    "legalTextCh": {
+     "label": "Legal Text CH",
+     "v": "Das angebotene Produkt entspricht ausschließlich den Anforderungen des in Österreich, Deutschland und der EU geltenden Lebensmittelrechts. "
+    },
+    "nutritionalValueHeader1": {
+     "label": "Nährwerttabelle Tabellenkopf 1",
+     "v": "Nährwerte"
+    },
+    "productDescription": {
+     "label": "Produktbeschreibung",
+     "v": "<p><strong>Functional Beauty zum Dahinschmelzen</strong></p><p>Kann functional Beauty zum Dahinschmelzen genauso genussvoll wie gelungen sein? Die neuen <strong>beauty bites*&nbsp;</strong>von BIOGENA moments sagen eindeutig YES und zwar JA&nbsp;zu Inner Beauty. Hinter der knusprig-knackigen Hülle in umwerfendem Pink dank 100% natürlichem Rote-Beetesaft-Pulver, offenbart sich Bite für Bite eine un"
+    },
+    "nutritionalValueHeader3": {
+     "label": "Nährwerttabelle Tabellenkopf 3 ",
+     "v": "% RI */% NRV **"
+    },
+    "mandatoryLabeling": {
+     "label": "Pflichtkennzeichnung NEM/LM",
+     "v": "Knuspriger Waffel-Polster-Snack mit Kokos-Mandel-Creme (50 %) gefüllt, angereichert mit veganer Hyaluronsäure aus Tremella Extrakt, Vitamine A, E, Biotin, Zink und Pantothensäure. Mit Süßungsmitteln. Eine ausgewogene Ernährung und eine gesunde Lebensweise sind wichtig."
+    },
+    "nutritionalValueHeader2": {
+     "label": "Nährwerttabelle Tabellenkopf 2",
+     "v": "pro 100 g"
+    },
+    "company": {
+     "label": "Unternehmen",
+     "v": "Biogena GmbH & Co KG"
+    },
+    "trademarkSentence": {
+     "label": "Trademark sentence",
+     "v": "GREENIURONIC® is a registered trademark of Vivatis Pharma GmbH."
+    },
+    "computedSeoSlug": {
+     "label": "SEO-Slug",
+     "v": "{\"de_AT\":\"biogena-moments-beauty-bites\",\"it_IT\":\"biogena-moments-beauty-bites\",\"pl_PL\":\"biogena-moments-beauty-bites\",\"it_CH\":\"biogena-moments-beauty-bites\",\"ro_RO\":\"biogena-moments-beauty-bites\",\"fr_CH\":\"biogena-moments-beauty-bites\",\"fr_FR\":\"biogena-moments-beauty-bites\",\"de_DE\":\"biogena-moments-beauty-bites\",\"en_ZW\":\"biogena-moments-beauty-bites\",\"hr_HR\":\"biogena-moments-beauty-bites\",\"de_CH\":\""
+    },
+    "bioDisclaimer": {
+     "label": "BIO-Disclaimer",
+     "v": "Kein Bio-Produkt gemäß VO (EU) 2018/848."
+    },
+    "mainProductId": {
+     "label": "Hauptprodukt-ID",
+     "v": "314"
+    },
+    "documentsLegal": {
+     "label": "Legal Dokumente",
+     "v": "https://static.biogena.com/productdocs/biogena_moments_beauty_bites_de_AT_2026_11_04_15_42_11_pdf-1793807058.pdf"
+    },
+    "usps": {
+     "label": "USPs",
+     "v": "<p>MIt Vitamin A, E, Biotin, Zink,...</p><p>...veganer Hyaluronsäure &amp; Pantothensäure</p><p>Lassen Sie Ihre Schönheit von innen strahlen</p><p>Zuckerfrei &amp; nur 135 kcal pro Packung</p><p>100 % vegan, palmölfrei &amp; glutenfrei</p>"
+    },
+    "nutritionalValueHeader4": {
+     "label": "Nährwerttabelle Tabellenkopf 4",
+     "v": "pro Packung (30g)"
+    },
+    "productSubtitleShort": {
+     "label": "Produktuntertitel kurz (Produktbeschreibung sehr kurz)",
+     "v": "Functional Snack mit leckerer Weißer-Kokos-Mandel-Creme"
+    },
+    "productLine": {
+     "label": "Product Line",
+     "v": "Essentials"
+    },
+    "notices": {
+     "label": "Hinweise",
+     "v": "<p>Kann bei übermäßigem Verzehr abführend wirken.\n</p><p>Etwaige Druck- und Satzfehler vorbehalten.<br></p>"
+    },
+    "ingredients": {
+     "label": "Zutaten",
+     "v": "Kokosmus (34 %), Reismehl, pflanzliche Ballaststoffe (Mais, Agave, Zichorie), Süßungsmittel: Erythrit, Sucralose; Füllstoff: Polydextrose; weißes <strong>Mandel</strong>mus (5 %), Kichererbsenmehl, Kokosfett, Maltodextrin, Salz, Mikronährstoff-Blend (Tremella-fuciformis-Extrakt, D-alpha-Tocopherylacetat, Calcium-D-pantothenat, Retinol, Zinkbisglycinat, D-Biotin), Reisstärke, Rote-Beetesaft-Pulver,"
+    },
+    "productSubtitle": {
+     "label": "Produktuntertitel (Produktbeschreibung kurz)",
+     "v": "Functional Snack mit leckerer Weißer-Kokos-Mandel-Creme in knusprigen Waffel-Polstern "
+    },
+    "referenceQuantity": {
+     "label": "Referenzmenge Inhaltsstofftabelle",
+     "v": "* % der Referenzmenge nach EU-Verordnung 1169/2011."
+    },
+    "packQuantityWithUnit": {
+     "label": "Packmenge mit Einheit",
+     "v": "{\"quantity\":\"300\",\"unitLabelPlural\":{\"de_AT\":\"Gramm\",\"it_IT\":\"grammi\",\"pl_PL\":\"gramy\",\"it_CH\":\"grammi\",\"ro_RO\":\"grame\",\"fr_CH\":\"grammes\",\"fr_FR\":\"grammes\",\"de_DE\":\"Gramm\",\"hr_HR\":\"grami\",\"en_ZW\":\"grams\",\"en_GB\":\"grams\",\"de_CH\":\"Gramm\",\"sk_SK\":\"gramy\",\"es_ES\":\"gramos\"},\"unitAbbreviationSingular\":{\"de_AT\":\"g\",\"it_IT\":\"g\",\"pl_PL\":\"g\",\"it_CH\":\"g\",\"ro_RO\":\"g\",\"fr_CH\":\"g\",\"fr_FR\":\"g\",\"de_DE\":\"g\",\"hr_HR\""
+    },
+    "packageSize": {
+     "label": "Packungsgröße",
+     "v": "300 g (10 x 30 g)"
+    },
+    "productDiscountGroup": {
+     "label": "Artikelrabattgruppe",
+     "v": "MOMENTS"
+    },
+    "ean": {
+     "label": "EAN",
+     "v": "9120089616235"
+    }
+   },
+   "tabelle": "Nährwerte pro 100 g % RI */% NRV ** pro Packung (30g) % RI */% NRV ** (pro 30 g) Energie 1830/440 22 % * 549/132 7 % * Fett 24 g 34 % * 7,2 g 10 % * davon gesättigte Fettsäuren 20 g 100 % * 6,0 g 30 % * Kohlenhydrate 40 g 15 % * 12 g 5 % * davon Zucker 3 g 3 % * 1 g 1 % * Ballaststoffe 23 g - 6,9 g - Eiweiß 4,6 g 9 % * 1,4 g 3 % * Salz 1,6 g 27 % * 0,48 g 8 % * Pantothensäure 60 mg 1000 % ** 18 mg 300 % ** Vitamin E 40 mg 333 % ** 12 mg 100 % ** Vitamin A 668 µg 83 % ** 200 µg 25 % ** Biotin 500 µg 1000 % ** 150 µg 300 % ** Zink 5,7 mg 57 % ** 1,7 mg 17 % ** Hyaluronsäure 267 mg - 80 mg -",
+   "pdfs": [
+    "https://static.biogena.com/productdocs/biogena_moments_beauty_bites_de_AT_2026_11_04_15_42_11_pdf-1793807058.pdf"
+   ]
+  },
+  "zeolith-500-296": {
+   "status": 200,
+   "keys": {
+    "interactions": {
+     "label": "Wechselwirkungen",
+     "v": "Achten Sie bei gleichzeitiger Einnahme von Medikamenten auf einen zeitlichen Abstand von 2 Stunden. Nehmen Sie die Medikamente, falls von Ihrem Arzt nicht anders verordnet, vor der Einnahme von Biogena\nZeolith ultrafein ein."
+    },
+    "mainProductId": {
+     "label": "Hauptprodukt-ID",
+     "v": "296"
+    },
+    "computedSeoSlug": {
+     "label": "SEO-Slug",
+     "v": "{\"de_AT\":\"zeolith-500\",\"it_IT\":\"zeolite-500\",\"pl_PL\":\"zeolit-500\",\"it_CH\":\"zeolite-500\",\"ro_RO\":\"zeolith-500\",\"fr_CH\":\"zeolite-500\",\"fr_FR\":\"zeolite-500\",\"de_DE\":\"zeolith-500\",\"en_ZW\":\"zeolith-500\",\"hr_HR\":\"zeolit-500\",\"de_CH\":\"zeolith-500\",\"en_GB\":\"zeolith-500\",\"sk_SK\":\"zeolit-500\",\"es_ES\":\"zeolita-500\"}"
+    },
+    "usps": {
+     "label": "USPs",
+     "v": "<p>Zur Unterstützung der Bindung und Ausleitung von Schwermetallen und Schadstoffen</p><p>CE Zertifiziertes Medizinprodukt</p><p>Österreichische Qualitsätsmarke Klinopur®</p><p>Laborgetestet &amp; ultrafein vermahlen dank Mikronisierung</p><p>Höchstmöglicher Klinoptilolith-Anteil</p>"
+    },
+    "warningSafetyNotes": {
+     "label": "Warn- und Sicherheitshinweise",
+     "v": "Beenden Sie die Einnahme, wenn Sie unerwartete Nebenwirkungen bemerken und konsultieren Sie Ihren Arzt. Bei Auftreten von Verstopfung ist die Flüssigkeitszufuhr zu erhöhen, die Dosierung zu\nreduzieren und ggf. Ihr Arzt zu konsultieren. Die Anwendung bei Patienten mit vorliegender Obstipation, eingeschränkter Nierenfunktion, mit bestehender Krankheit, bei medikamentöser Therapie oder bei Chemo- ode"
+    },
+    "legalTextCh": {
+     "label": "Legal Text CH",
+     "v": "Das angebotene Produkt entspricht ausschließlich den Anforderungen des in Österreich, Deutschland und der EU geltenden Lebensmittelrechts."
+    },
+    "productSubtitle": {
+     "label": "Produktuntertitel (Produktbeschreibung kurz)",
+     "v": "Zeolith Kapseln zur Unterstützung der Entgiftung"
+    },
+    "company": {
+     "label": "Unternehmen",
+     "v": "Biogena GmbH & Co KG"
+    },
+    "bioDisclaimer": {
+     "label": "BIO-Disclaimer",
+     "v": "Kein Bio-Produkt gemäß VO (EU) 2018/848."
+    },
+    "mandatoryLabeling": {
+     "label": "Pflichtkennzeichnung NEM/LM",
+     "v": "Medizinprodukt (CE 0477) Zeolith 500 ist in der EU von einer akkreditierten Prüfstelle als Medizinprodukt zugelassen. Bitte beachten Sie bei der Einnahme die Gebrauchshinweise am Etikett genau."
+    },
+    "documentsLegal": {
+     "label": "Legal Dokumente",
+     "v": "https://static.biogena.com/productdocs/zeolith_500_de_AT_2026_11_02_14_27_20_pdf-1793629719.pdf"
+    },
+    "productLine": {
+     "label": "Product Line",
+     "v": "Essentials"
+    },
+    "recommendedIntake": {
+     "label": "Verzehrempfehlung",
+     "v": "Art und Dauer der Anwendung: 2–3 mal täglich 2 Kapseln mit einem Glas Wasser (250 ml) zu den Mahlzeiten einnehmen. Die Einnahmedauer beträgt maximal 12 Wochen. Bei wiederholter Einnahme ist eine Anwendungspause von mindestens einer Woche einzuhalten."
+    },
+    "ingredients": {
+     "label": "Zutaten",
+     "v": "100 % Klinoptilolith-Zeolith, ultrafein vermahlen, Hydroxypropylmethylcellulose (Kapselhülle). "
+    },
+    "productDescription": {
+     "label": "Produktbeschreibung",
+     "v": "<p><b>Zeolith 500 – Die Lösung zur Unterstützung der Entgiftung</b></p><p>Die Darmwand ist ein dynamisches Gebilde, das in Wechselwirkung mit verschiedenen Reizen reagiert und den Körper vor unerwünschten Stoffen aus dem Darmmilieu schützt. Durch die Verwendung von Zeolith als Kapseln oder Pulver kann man dem Darm dabei helfen, sich von Schadstoffen zu befreien, so dass sie erst gar nicht über den"
+    },
+    "sideEffects": {
+     "label": "Nebenwirkungen",
+     "v": "Insbesondere in der ersten Woche nach der Einnahme kann es zu Verstopfung (Obstipation) kommen. In sehr seltenen Fällen kann es zu Beginn der Einnahme zu Blähungen, Magenschmerzen, Übelkeit,\nSchwindelgefühl und Müdigkeit kommen."
+    },
+    "notices": {
+     "label": "Hinweise",
+     "v": "<p>&nbsp;Etwaige Druck- und Satzfehler vorbehalten.<br></p>"
+    },
+    "packageSize": {
+     "label": "Packungsgröße",
+     "v": "200 Kapseln, 128 g\n"
+    },
+    "ean": {
+     "label": "EAN",
+     "v": "9120134380043"
+    },
+    "packQuantityWithUnit": {
+     "label": "Packmenge mit Einheit",
+     "v": "{\"quantity\":\"200\",\"unitLabelPlural\":{\"de_AT\":\"Kapseln\",\"it_IT\":\"capsule \",\"pl_PL\":\"kapsułki\",\"it_CH\":\"capsule \",\"ro_RO\":\"capsule \",\"fr_CH\":\"gélules\",\"fr_FR\":\"gélules \",\"de_DE\":\"Kapeln\",\"hr_HR\":\"kapsule\",\"en_ZW\":\"capsules\",\"en_GB\":\"capsules\",\"de_CH\":\"Kapeln\",\"sk_SK\":\"kapsuly\",\"es_ES\":\"cápsulas \"},\"unitAbbreviationSingular\":{\"de_AT\":\"Kps.\",\"it_IT\":\"cps.\",\"pl_PL\":\"kaps.\",\"it_CH\":\"cps.\",\"ro_RO\":\"caps."
+    },
+    "productDiscountGroup": {
+     "label": "Artikelrabattgruppe",
+     "v": "STANDARD"
+    }
+   },
+   "tabelle": "",
+   "pdfs": [
+    "https://static.biogena.com/productdocs/zeolith_500_de_AT_2026_11_02_14_27_20_pdf-1793629719.pdf"
+   ]
+  },
+  "zeolith-ultrafein-245": {
+   "status": 200,
+   "keys": {
+    "mainProductId": {
+     "label": "Hauptprodukt-ID",
+     "v": "245"
+    },
+    "computedSeoSlug": {
+     "label": "SEO-Slug",
+     "v": "{\"de_AT\":\"zeolith-ultrafein\",\"it_IT\":\"zeolite-ultrafine\",\"pl_PL\":\"zeolit-ultradrobny\",\"it_CH\":\"zeolite-ultrafine\",\"ro_RO\":\"zeolith-ultrafein\",\"fr_CH\":\"zeolite-ultrafine\",\"fr_FR\":\"zeolite-ultrafine\",\"de_DE\":\"zeolith-ultrafein\",\"en_ZW\":\"ultrafine-zeolite\",\"hr_HR\":\"zeolit-ultrafini\",\"de_CH\":\"zeolith-ultrafein\",\"en_GB\":\"ultrafine-zeolite\",\"sk_SK\":\"zeolith-ultrafein\",\"es_ES\":\"zeolita-ultrafina\"}"
+    },
+    "recommendedIntake": {
+     "label": "Verzehrempfehlung",
+     "v": "Art und Dauer der Anwendung: Medizinprodukt zur oralen Anwendung: 2–3 Mal täglich ½ Teelöffel (= 1 g) in ein Glas Wasser (250 ml) einrühren und unmittelbar zu den Mahlzeiten trinken. Die Einnahmedauer beträgt maximal 12 Wochen. Bei wiederholter Einnahme ist eine Anwendungspause von mindestens einer Woche einzuhalten."
+    },
+    "productLine": {
+     "label": "Product Line",
+     "v": "Essentials"
+    },
+    "interactions": {
+     "label": "Wechselwirkungen",
+     "v": "Achten Sie bei gleichzeitiger Einnahme von Medikamenten auf einen zeitlichen Abstand von 2 Stunden. Nehmen Sie die Medikamente, falls von Ihrem Arzt nicht anders verordnet, vor der Einnahme von Biogena\nZeolith ultrafein ein."
+    },
+    "usps": {
+     "label": "USPs",
+     "v": "<p>100 % reiner Klinoptilolith-Zeolith (Klinopur®)</p><p>\n\nZeolith Pulver ultrafein mikronisiert</p><p>\n\nUnterstützt die Entgiftung durch Bindung und Ausleitung von Schwermetallen</p><p>\n\nCE-zertifiziertes Medizinprodukt</p><p>\n\nAbgebaut und hergestellt in Österreich </p><p>\n\nOhne Zusätze und 100 % natürlich</p>"
+    },
+    "bioDisclaimer": {
+     "label": "BIO-Disclaimer",
+     "v": "Kein Bio-Produkt gemäß VO (EU) 2018/848."
+    },
+    "sideEffects": {
+     "label": "Nebenwirkungen",
+     "v": "Insbesondere in der ersten Woche nach der Einnahme kann es zu Verstopfung (Obstipation) kommen. In sehr seltenen Fällen kann es zu Beginn der Einnahme zu Blähungen, Magenschmerzen, Übelkeit,\nSchwindelgefühl und Müdigkeit kommen."
+    },
+    "ingredients": {
+     "label": "Zutaten",
+     "v": "100 % Klinoptilolith-Zeolith, ultrafein vermahlen. "
+    },
+    "productSubtitle": {
+     "label": "Produktuntertitel (Produktbeschreibung kurz)",
+     "v": "100 % reiner Klinoptilolith-Zeolith (Klinopur®) zur Bindung und Ausleitung von Schwermetallen aus dem Organismus"
+    },
+    "productSubtitleShort": {
+     "label": "Produktuntertitel kurz (Produktbeschreibung sehr kurz)",
+     "v": "Vulkanische Kraft zur Unterstützung für deine Entgiftung"
+    },
+    "mandatoryLabeling": {
+     "label": "Pflichtkennzeichnung NEM/LM",
+     "v": "Medizinprodukt zur oralen Anwendung"
+    },
+    "warningSafetyNotes": {
+     "label": "Warn- und Sicherheitshinweise",
+     "v": "Beenden Sie die Einnahme, wenn Sie unerwartete Nebenwirkungen bemerken und konsultieren Sie Ihren Arzt. Bei Auftreten von Verstopfung ist die Flüssigkeitszufuhr zu erhöhen, die Dosierung zu reduzieren und ggf. Ihr Arzt zu konsultieren. Die Anwendung bei Patienten mit vorliegender Obstipation, eingeschränkter Nierenfunktion, mit bestehender Krankheit, bei medikamentöser Therapie oder bei Chemo- ode"
+    },
+    "notices": {
+     "label": "Hinweise",
+     "v": "<p>Etwaige Druck- und Satzfehler vorbehalten.<br></p>"
+    },
+    "documentsLegal": {
+     "label": "Legal Dokumente",
+     "v": "https://static.biogena.com/productdocs/zeolith_ultrafein_de_AT_2026_11_04_15_43_24_pdf-1793807092.pdf"
+    },
+    "company": {
+     "label": "Unternehmen",
+     "v": "Biogena GmbH & Co KG"
+    },
+    "productDescription": {
+     "label": "Produktbeschreibung",
+     "v": "<p>Dein Darm ist die zentrale Barriere zwischen Körper und Umwelt – und täglich gefordert. <b>Biogena Zeolith ultrafein</b> hilft ihm, Schadstoffe und Schwermetalle wie Blei, Quecksilber oder Aluminium zuverlässig zu binden und auf natürlichem Weg auszuscheiden.</p><p>\n\nDas<b> CE-zertifizierte Medizinprodukt</b> enthält 100 % reinen<b> Klinoptilolith-Zeolith (Klinopur®)</b> – ultrafein mikronisier"
+    },
+    "legalTextCh": {
+     "label": "Legal Text CH",
+     "v": "Das angebotene Produkt entspricht ausschließlich den Anforderungen des in Österreich, Deutschland und der EU geltenden Lebensmittelrechts."
+    },
+    "packQuantityWithUnit": {
+     "label": "Packmenge mit Einheit",
+     "v": "{\"quantity\":\"250\",\"unitLabelPlural\":{\"de_AT\":\"Gramm\",\"it_IT\":\"grammi\",\"pl_PL\":\"gramy\",\"it_CH\":\"grammi\",\"ro_RO\":\"grame\",\"fr_CH\":\"grammes\",\"fr_FR\":\"grammes\",\"de_DE\":\"Gramm\",\"hr_HR\":\"grami\",\"en_ZW\":\"grams\",\"en_GB\":\"grams\",\"de_CH\":\"Gramm\",\"sk_SK\":\"gramy\",\"es_ES\":\"gramos\"},\"unitAbbreviationSingular\":{\"de_AT\":\"g\",\"it_IT\":\"g\",\"pl_PL\":\"g\",\"it_CH\":\"g\",\"ro_RO\":\"g\",\"fr_CH\":\"g\",\"fr_FR\":\"g\",\"de_DE\":\"g\",\"hr_HR\""
+    },
+    "productDiscountGroup": {
+     "label": "Artikelrabattgruppe",
+     "v": "STANDARD"
+    },
+    "ean": {
+     "label": "EAN",
+     "v": "9008740009322"
+    },
+    "packageSize": {
+     "label": "Packungsgröße",
+     "v": "250 g Pulver\n"
+    }
+   },
+   "tabelle": "",
+   "pdfs": [
+    "https://static.biogena.com/productdocs/zeolith_ultrafein_de_AT_2026_11_04_15_43_24_pdf-1793807092.pdf"
+   ]
+  },
+  "bio-schwarzkuemmeloel-233": {
+   "status": 200,
+   "keys": {
+    "seoSlug": {
+     "label": "SEO-Slug",
+     "v": "bio-schwarzkuemmeloel"
+    },
+    "productSubtitle": {
+     "label": "Produktuntertitel (Produktbeschreibung kurz)",
+     "v": "Kaltgepresstes Schwarzkümmelöl aus echtem Schwarzkümmel (Nigella sativa) mit einem hohen Gehalt an der natürlich enthaltenen Omega-6-Fettsäure Linolsäure & Thymochinon"
+    },
+    "mainProductId": {
+     "label": "Hauptprodukt-ID",
+     "v": "233"
+    },
+    "usps": {
+     "label": "USPs",
+     "v": "<p>Sorgfältig 100 % in Handarbeit gefertigt</p><p>Geschmack: Nussig, krautig &amp; fein pfeffrig</p><p>Zur täglichen puren Einnahme (nicht erhitzen)</p><p>1-2 TL pro Tag zu Salaten oder kalten Speisen</p>"
+    },
+    "nutritionalValueHeader1": {
+     "label": "Nährwerttabelle Tabellenkopf 1",
+     "v": "Nährwerte"
+    },
+    "productSubtitleShort": {
+     "label": "Produktuntertitel kurz (Produktbeschreibung sehr kurz)",
+     "v": "Mit hohem Gehalt an der natürlich enthaltenen Omega-6-Fettsäure Linolsäure & Thymochinon"
+    },
+    "documentsLegal": {
+     "label": "Legal Dokumente",
+     "v": "https://static.biogena.com/productdocs/bio_schwarzk_mmel_l_de_AT_2026_11_04_13_54_50_pdf-1793800583.pdf"
+    },
+    "mandatoryLabeling": {
+     "label": "Pflichtkennzeichnung NEM/LM",
+     "v": "Bio-Schwarzkümmelöl"
+    },
+    "notices": {
+     "label": "Hinweise",
+     "v": "<p>Aus kontrolliert biologischem Anbau AT-BIO-402, Nicht-EU-Landwirtschaft. Da es sich um ein Naturprodukt handelt, können die angegebenen Nährwerte - insbesondere der Thymochinongehalt - natürlichen Schwankungen unterliegen. </p><p>Etwaige Druck- und Satzfehler vorbehalten.</p>"
+    },
+    "productLine": {
+     "label": "Product Line",
+     "v": "Essentials"
+    },
+    "referenceQuantityNutritionalTable": {
+     "label": "Referenzmenge Nährwerttabelle",
+     "v": "* Enthält geringfügige Mengen an Kohlenhydraten, Zucker, Eiweiß und Salz."
+    },
+    "productDescription": {
+     "label": "Produktbeschreibung",
+     "v": "<p><strong>Schwarzkümmelöl: Ein seit Jahrtausenden geschätztes Naturjuwel</strong><br>Das Öl aus <em>Nigella sativa</em>, dem&nbsp;Schwarzkümmel, ist als Öl der Pharaonen bekannt. Nussig, krautig, pfeffrig. Das Schwarzkümmelöl bringt nicht nur geschmacklich, sondern auch inhaltlich eine ganz besondere Note mit sich. Um das begehrte Traditionsöl zu gewinnen, heißt es jedoch erstmal&nbsp;früh aufste"
+    },
+    "nutritionalValueHeader2": {
+     "label": "Nährwerttabelle Tabellenkopf 2",
+     "v": "pro 100 ml"
+    },
+    "ingredients": {
+     "label": "Zutaten",
+     "v": "Linolsäure, Thymochinon"
+    },
+    "company": {
+     "label": "Unternehmen",
+     "v": "Biogena GmbH & Co KG"
+    },
+    "productDiscountGroup": {
+     "label": "Artikelrabattgruppe",
+     "v": "STANDARD"
+    },
+    "ean": {
+     "label": "EAN",
+     "v": "9120089616433"
+    },
+    "packQuantityWithUnit": {
+     "label": "Packmenge mit Einheit",
+     "v": "{\"quantity\":\"100\",\"unitLabelPlural\":{\"de_AT\":\"Milliliter\",\"it_IT\":\"millilitri\",\"pl_PL\":\"mililitry\",\"it_CH\":\"millilitri\",\"ro_RO\":\"mililitri\",\"fr_CH\":\"millilitres\",\"fr_FR\":\"millilitres\",\"de_DE\":\"Milliliter\",\"hr_HR\":\"mililitri\",\"en_ZW\":\"millilitres\",\"en_GB\":\"millilitres\",\"de_CH\":\"Milliliter\",\"sk_SK\":\"mililitrov\",\"es_ES\":\"mililitros\"},\"unitAbbreviationSingular\":{\"de_AT\":\"ml\",\"it_IT\":\"ml\",\"pl_PL\":\"ml\","
+    }
+   },
+   "tabelle": "Nährwerte pro 100 ml Energie 3390 kJ / 825 kcal Fett 92 g davon gesättigte Fettsäuren 15 g davon einfach ungesättigte Fettsäuren 25 g davon mehrfach ungesättigte Fettsäuren 52 g daraus Omega-6-Fettsäure Linolsäure 50 g ätherisches Öl Thymochinon 0,2 g",
+   "pdfs": [
+    "https://static.biogena.com/productdocs/bio_schwarzk_mmel_l_de_AT_2026_11_04_13_54_50_pdf-1793800583.pdf",
+    "https://static.biogena.com/productdocs/BioSchwarzk_mmel_l_100ml_p_53881_Thymochinon-1787045126.pdf",
+    "https://static.biogena.com/productdocs/BioSchwarzk_mmel_l100ml_p_48228_Schwermetalle-1787045126.pdf",
+    "https://static.biogena.com/productdocs/BioSchwarzk_mmel_l100ml_p_53304_Fetts_urespektrum-1787045126.pdf",
+    "https://static.biogena.com/productdocs/BioSchwarzk_mmel_l100ml_p_53304_Mibi-1787045126.pdf",
+    "https://static.biogena.com/productdocs/BioSchwarzk_mmel_l100ml_p_55910_Thymochinon-1787045126.pdf",
+    "https://static.biogena.com/productdocs/BioSchwarzk_mmel_l100ml_p_60120_MiBi-1787045126.pdf"
+   ]
+  },
+  "bio-leinoel-74": {
+   "status": 200,
+   "keys": {
+    "documentsLegal": {
+     "label": "Legal Dokumente",
+     "v": "https://static.biogena.com/productdocs/bio_lein_oel_250_ml_de_AT_2026_11_04_13_54_43_pdf-1793800577.pdf"
+    },
+    "mainProductId": {
+     "label": "Hauptprodukt-ID",
+     "v": "74"
+    },
+    "seoSlug": {
+     "label": "SEO-Slug",
+     "v": "bio-leinoel"
+    },
+    "nutritionalValueHeader1": {
+     "label": "Nährwerttabelle Tabellenkopf 1",
+     "v": "Nährwerte"
+    },
+    "productSubtitleShort": {
+     "label": "Produktuntertitel kurz (Produktbeschreibung sehr kurz)",
+     "v": "100% Bio-Leinöl aus Österreich, kaltgepresst"
+    },
+    "productDescription": {
+     "label": "Produktbeschreibung",
+     "v": "<p><b>Nativ gepresstes Leinöl aus biologischem Anbau</b></p><p>Je nach Sorte besitzen Leinsamen eine braune oder gelbe Schale, schmecken leicht nussig und enthalten ca. 40 % Fett. Das aus Leinsamen gewonnene Öl enthält im Vergleich mit anderen bekannten Pflanzenölen eine der höchsten Konzentrationen an Omega-3-Fettsäuren. Die reifen und zerkleinerten Leinsamen werden ohne Röstung und Hitze nativ g"
+    },
+    "notices": {
+     "label": "Hinweise",
+     "v": "<p>Hergestellt von:\nfarmgoodies GmbH, Am Emerberg 12,\n4174 Niederwaldkirchen\n</p><p>\nEtwaige Druck- und Satzfehler vorbehalten.<br></p>"
+    },
+    "company": {
+     "label": "Unternehmen",
+     "v": "Biogena GmbH & Co KG"
+    },
+    "fieldsOfApplication": {
+     "label": "Einsatzmöglichkeiten",
+     "v": "<ul><li>Zur Zubereitung von kalten Speisen</li><li>Ideal für Salate, Kartoffel- und Gemüsegerichte, zu Joghurt und Müsli.</li><li>Nicht zum Erhitzen geeignet </li></ul>"
+    },
+    "productLine": {
+     "label": "Product Line",
+     "v": "Essentials"
+    },
+    "nutritionalValueHeader2": {
+     "label": "Nährwerttabelle Tabellenkopf 2",
+     "v": "pro 100 ml"
+    },
+    "productSubtitle": {
+     "label": "Produktuntertitel (Produktbeschreibung kurz)",
+     "v": "100% Bio-Leinöl aus Österreich, reich an Omega-3-Fettsäuren, kaltgepresst."
+    },
+    "usps": {
+     "label": "USPs",
+     "v": "<ul><li>100 % Bio Leinöl aus Österreich</li><li>Ideal für Salate, Milchprodukte oder zu Topfen und Hüttenkäse</li></ul>"
+    },
+    "referenceQuantityNutritionalTable": {
+     "label": "Referenzmenge Nährwerttabelle",
+     "v": "* Enthält geringfügige Mengen an Kohlenhydraten, Zucker, Eiweiß und Salz."
+    },
+    "productDiscountGroup": {
+     "label": "Artikelrabattgruppe",
+     "v": "STANDARD"
+    },
+    "packQuantityWithUnit": {
+     "label": "Packmenge mit Einheit",
+     "v": "{\"quantity\":\"250\",\"unitLabelPlural\":{\"de_AT\":\"Milliliter\",\"it_IT\":\"millilitri\",\"pl_PL\":\"mililitry\",\"it_CH\":\"millilitri\",\"ro_RO\":\"mililitri\",\"fr_CH\":\"millilitres\",\"fr_FR\":\"millilitres\",\"de_DE\":\"Milliliter\",\"hr_HR\":\"mililitri\",\"en_ZW\":\"millilitres\",\"en_GB\":\"millilitres\",\"de_CH\":\"Milliliter\",\"sk_SK\":\"mililitrov\",\"es_ES\":\"mililitros\"},\"unitAbbreviationSingular\":{\"de_AT\":\"ml\",\"it_IT\":\"ml\",\"pl_PL\":\"ml\","
+    },
+    "ean": {
+     "label": "EAN",
+     "v": "9120089618437"
+    }
+   },
+   "tabelle": "Nährwerte pro 100 ml Energie 3700 kJ / 883 kcal Fett 100 g davon gesättigte Fettsäuren 9 g davon einfach ungesättigte Fettsäuren 15 g davon mehrfach ungesättigte Fettsäuren 76 g Omega-3-Fettsäuren 61 g",
+   "pdfs": [
+    "https://static.biogena.com/productdocs/bio_lein_oel_250_ml_de_AT_2026_11_04_13_54_43_pdf-1793800577.pdf",
+    "https://static.biogena.com/productdocs/Bio_Lein_l_p_53677_Fetts_urespektrum-1787045110.pdf",
+    "https://static.biogena.com/productdocs/BioLein_l_p_54245_TOTOX-1787045126.pdf",
+    "https://static.biogena.com/productdocs/BioLein_l_p_57016_Fetts_ureverteilung-1787045126.pdf",
+    "https://static.biogena.com/productdocs/Bio_Lein_l_p_60540_Fetts_urespektrum_Fetts_ureverteilung-1787045110.pdf",
+    "https://static.biogena.com/productdocs/BioLein_l_250ml_p_59608_Fetts_ureverteilung-1787045126.pdf",
+    "https://static.biogena.com/productdocs/Bio_Lein_l_p_61645_SZ_POZ_Anisidinzahl_TOTOX-1787045110.pdf",
+    "https://static.biogena.com/productdocs/Bio_Lein_l_p_62078_alphaLinolens_ure_unges_Fetts_ure_ges_Fetts_uren_mehrfachunges_Fetts_uren-1787045110.pdf",
+    "https://static.biogena.com/productdocs/p_63283_99111858_FG_BLO25020-1788190218.pdf"
+   ]
+  }
+ },
+ "moleqlar": {
+  "lutein-zeaxanthin-kapseln": {
+   "status": 200,
+   "body_html": "20 mg Lutein und 1,6 mg Zeaxanthin pro Tagesportion aus standardisiertem Studentenblumenextrakt (Tagetes erecta) Hochwertiger FloraGLO® Markenrohstoff mit freiem, unverestertem Lutein – in derselben Form wie in Gemüse Mit 5 mg Zink als Zinkbisglycinat – Zink trägt zur Erhaltung normaler Sehkraft bei Ein Glas Lutein &amp; Zeaxanthin (60 Kapseln) entspricht einem Vorrat für 30 Tage (2 Kapseln pro Portion)",
+   "imgsMitAlt": [],
+   "produktbilder": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2608LUZEA60K-render.jpg?v=1793093698",
+     "w": 1080,
+     "h": 1350
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/kapseln-1.jpg?v=1772805934",
+     "w": 1080,
+     "h": 1350
+    }
+   ],
+   "pdfs": [],
+   "meta": [
+    "Lutein und Zeaxanthin gehören zu den Carotinoiden, einer Gruppe natürlich vorkommender Pflanzenfarbstoffe. Die MOLEQLAR Lutein &amp; Zeaxanthin Kapseln kombinieren beide Carotinoide aus der Studentenblume (Tagetes erecta) mit dem essenziellen Spurenelement Zink . Im Mittelpunkt der Rezeptur steht de",
+    "Lutein und Zeaxanthin gehören zu den wenigen Carotinoiden, die natürlicherweise in der menschlichen Netzhaut vorkommen. Beide sind Bestandteile des Makulapigments , das sich im Bereich des zentralen Sehens befindet. Da der Körper Lutein und Zeaxanthin nicht selbst herstellen kann, müssen sie über di",
+    "Wir empfehlen eine tägliche Einnahme von 2 Kapseln Lutein Zeaxanthin . Dazu zwei Kapseln mit ausreichend Flüssigkeit einnehmen. Die angegebene empfohlene tägliche Verzehrmenge sollte nicht überschritten werden. Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene und abwechslungsreiche Ern",
+    "Bio-Leinsamenmehl (Linum usitatissimum L.), Tagetes erecta-Extrakt (¹FloraGLO®, 10 % Lutein, 0,8 % Zeaxanthin), Zinkbisglycinat (20 % Zink), Hydroxypropylmethylcellulose (Kapselhülle)",
+    "Lutein und Zeaxanthin gehören zu den Carotinoiden, einer Gruppe natürlich vorkommender Pflanzenfarbstoffe. Die MOLEQLAR Lutein &amp; Zeaxanthin Kapseln kombinieren beide Carotinoide aus der Studentenblume (Tagetes erecta) mit dem essenziellen Spurenelement Zink . Im Mittelpunkt der Rezeptur steht de",
+    "Lutein und Zeaxanthin gehören zu den wenigen Carotinoiden, die natürlicherweise in der menschlichen Netzhaut vorkommen. Beide sind Bestandteile des Makulapigments , das sich im Bereich des zentralen Sehens befindet. Da der Körper Lutein und Zeaxanthin nicht selbst herstellen kann, müssen sie über di",
+    "Wir empfehlen eine tägliche Einnahme von 2 Kapseln Lutein Zeaxanthin . Dazu zwei Kapseln mit ausreichend Flüssigkeit einnehmen. Die angegebene empfohlene tägliche Verzehrmenge sollte nicht überschritten werden. Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene und abwechslungsreiche Ern",
+    "Bio-Leinsamenmehl (Linum usitatissimum L.), Tagetes erecta-Extrakt (¹FloraGLO®, 10 % Lutein, 0,8 % Zeaxanthin), Zinkbisglycinat (20 % Zink), Hydroxypropylmethylcellulose (Kapselhülle)",
+    "Inhaltsstoffe: Bio-Leinsamenmehl (Linum usitatissimum L.), Tagetes erecta-Extrakt (¹FloraGLO®, 10 % Lutein, 0,8 % Zeaxanthin), Zinkbisglycinat (20 % Zink), Hydroxypropylmethylcellulose (Kapselhülle)",
+    "Zink trägt zur Erhaltung normaler Sehkraft bei."
+   ],
+   "tables": [
+    "Nährstoffe/sonstige Stoffe Portion* %NRV** Studentenblumen Extrakt¹ 200 mg *** davon Lutein 20 mg *** davon Zeaxanthin 1,6 mg *** Zink 5 mg 50 %"
+   ],
+   "mgStellen": [
+    " Versand wird beim Checkout berechnet 20 mg Lutein und 1,6 mg Zeaxanthin pro Tagesportion aus standardisiertem Studentenb",
+    "rohstoff mit freiem, unverestertem Lutein – in derselben Form wie in Gemüse Mit 5 mg Zink als Zinkbisglycinat – Zink trägt zur Erhaltung normale",
+    " Eine Tagesportion von zwei Kapseln enthält 20 mg Lutein, 1,6 mg Zeaxanthin und 5 mg Zink ",
+    " Eine Tagesportion von zwei Kapseln enthält 20 mg Lutein, 1,6 mg Zeaxanthin und 5 mg Zink ",
+    " Nährstoffe/sonstige Stoffe Portion* %NRV** Studentenblumen Extrakt¹ 200 mg *** davon Lutein 20 mg *** davon Zeaxanthin 1,6 mg *** Zink",
+    " 5 mg 50 % Der Unterschied",
+    " Diese liefern 20 mg Lutein und 1,6 mg Zeaxanthin aus standardisiertem Studentenblumenextrakt sowi",
+    "e 5 mg Zink (50 % NRV)",
+    " Die MOLEQLAR Formulierung kombiniert Lutein und Zeaxanthin mit 5 mg Zink aus Zinkbisglycinat pro Tagesportion",
+    " Ein Extrakt mit 10 % Lutein liefert beispielsweise bei einer Menge von 200 mg genau 20 mg Lutein"
+   ]
+  },
+  "nr-pro-kapseln": {
+   "status": 200,
+   "body_html": "500 mg Nicotinamid Ribosid pro Kapsel – eine direkte Vorstufe des körpereigenen Coenzyms NAD⁺ Ergänzt durch Vitamin B9 (Quatrefolic®) und Vitamin B12 (Methylcobalamin) in ausgewählten, bioaktiven Formen Vitamin B9 und B12 tragen zur Verringerung von Müdigkeit und Ermüdung sowie zu einem normalen Homocystein-Stoffwechsel bei Ein Glas NR PRO Kapseln (30 Kapseln) entspricht einem Vorrat für 30 Tage (Eine Portion = 1 Kapsel)",
+   "imgsMitAlt": [],
+   "produktbilder": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f4f4f4-2512NRpro-Glas60ml.jpg?v=1785396527",
+     "w": 1080,
+     "h": 1350
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/NR_Pro-kapsel-detail.jpg?v=1766487711",
+     "w": 2000,
+     "h": 2500
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/nr-pro-kapseln.jpg?v=1789633691",
+     "w": 1000,
+     "h": 1250
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/NR_Pro.jpg?v=1771515595",
+     "w": 900,
+     "h": 1125
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/nr-nrpro-kapseln.jpg?v=1789633679",
+     "w": 1000,
+     "h": 1250
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/kapseln-1.jpg?v=1772805934",
+     "w": 1080,
+     "h": 1350
+    }
+   ],
+   "pdfs": [
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Pruefbericht_NR_Pro_127427.pdf",
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Pruefbericht-NrPro__127044.pdf"
+   ],
+   "meta": [
+    "NR Pro kombiniert hochdosiertes Nicotinamid-Ribosid (NR) mit den bioaktiven Vitaminen B9 (Folat) und B12 . Nicotinamid-Ribosid ist eine Vorstufe des körpereigenen Coenzyms NAD⁺ und dient gleichzeitig als Quelle für Niacin (Vitamin B3). Mit 500 mg Nicotinamid-Ribosid pro Kapsel setzt NR Pro auf eine ",
+    "Nicotinamid-Ribosid (NR) ist eine Vorstufe des körpereigenen Coenzyms NAD⁺ (Nicotinamid-Adenin-Dinukleotid) , das an zahlreichen zellulären Stoffwechselprozessen beteiligt ist. Als Niacinquelle ergänzt NR die enthaltenen Vitamine B9 und B12. Niacin und Vitamin B12 tragen zu einem normalen Energiesto",
+    "Wir empfehlen eine tägliche Einnahme von einer Kapsel NR PRO . Dazu einfach eine Kapsel zusammen mit ausreichend Wasser einnehmen. Die angegebene empfohlene tägliche Verzehrmenge sollte nicht überschritten werden. Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene und abwechslungsreiche ",
+    "Nicotinamid Ribosid Chlorid, Folsäure (Quatrefolic®), Vitamin B12 (Methylcobalamin), Hydroxypropylmethylcellulose (Kapselhülle)",
+    "NR Pro kombiniert hochdosiertes Nicotinamid-Ribosid (NR) mit den bioaktiven Vitaminen B9 (Folat) und B12 . Nicotinamid-Ribosid ist eine Vorstufe des körpereigenen Coenzyms NAD⁺ und dient gleichzeitig als Quelle für Niacin (Vitamin B3). Mit 500 mg Nicotinamid-Ribosid pro Kapsel setzt NR Pro auf eine ",
+    "Nicotinamid-Ribosid (NR) ist eine Vorstufe des körpereigenen Coenzyms NAD⁺ (Nicotinamid-Adenin-Dinukleotid) , das an zahlreichen zellulären Stoffwechselprozessen beteiligt ist. Als Niacinquelle ergänzt NR die enthaltenen Vitamine B9 und B12. Niacin und Vitamin B12 tragen zu einem normalen Energiesto",
+    "Wir empfehlen eine tägliche Einnahme von einer Kapsel NR PRO . Dazu einfach eine Kapsel zusammen mit ausreichend Wasser einnehmen. Die angegebene empfohlene tägliche Verzehrmenge sollte nicht überschritten werden. Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene und abwechslungsreiche ",
+    "Nicotinamid Ribosid Chlorid, Folsäure (Quatrefolic®), Vitamin B12 (Methylcobalamin), Hydroxypropylmethylcellulose (Kapselhülle)",
+    "Juni 2026 - Zertifikat der Charge 127427 März 2026 - Zertifikat der Charge 127044",
+    "Inhaltsstoffe : Nicotinamid Ribosid Chlorid, Folsäure (Quatrefolic®), Vitamin B12 (Methylcobalamin), Hydroxypropylmethylcellulose (Kapselhülle)"
+   ],
+   "tables": [
+    "Nährstoffe/sonstige Stoffe Portion* %NRV** Nicotinamid Ribosid 500 mg n.a.*** davon Niacin 210 mg NE¹ 1313 % Folsäure 200 µg 100 % Vitamin B12 30 µg 1200 %"
+   ],
+   "mgStellen": [
+    "NR Pro Kapseln – 500 mg Nicotinamid Ribosid + B9 &amp; B12 &ndash; MOLEQLAR @font-f",
+    " Versand wird beim Checkout berechnet 500 mg Nicotinamid Ribosid pro Kapsel – eine direkte Vorstufe des ",
+    " Mit 500 mg Nicotinamid-Ribosid pro Kapsel setzt NR Pro auf eine geziel",
+    " Mit 500 mg Nicotinamid-Ribosid pro Kapsel setzt NR Pro auf eine geziel",
+    " 500 mg Nicotinamid-Ribosid treffen auf ausgewählte, bioaktive Form",
+    " Nährstoffe/sonstige Stoffe Portion* %NRV** Nicotinamid Ribosid 500 mg n",
+    "*** davon Niacin 210 mg NE¹ 1313 % Folsäure 200 µg 100 % Vitamin B12 30 µg 1200 % Der Unterschied",
+    " Kapseln auf Nicotinamid-Ribosid als Einzelkomponente setzen, kombiniert NR Pro 500 mg NR pro Kapsel mit den bioaktiven Vitaminen B9 (Folat) und B"
+   ]
+  },
+  "kreatin-pulver": {
+   "status": 200,
+   "body_html": "Reines Kreativ-Monohydrat in Pulverform - ohne unnötige Zusatzstoffe 5 g Kreatin pro Portion – ein Beutel reicht für 60 Tage Kreatin erhöht die körperliche Leistung bei Schnellkrafttraining im Rahmen kurzzeitiger intensiver körperlicher Betätigung.",
+   "imgsMitAlt": [],
+   "produktbilder": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605Kreatin-normal-PouchL.jpg?v=1782832527",
+     "w": 1080,
+     "h": 1350
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Kreatin-pulver-detail.jpg?v=1766487464",
+     "w": 1500,
+     "h": 1875
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Kreatin_Pulver.jpg?v=1771867601",
+     "w": 900,
+     "h": 1125
+    }
+   ],
+   "pdfs": [],
+   "meta": [
+    "Kreatin ist eine körpereigene Verbindung, die aus den Aminosäuren Arginin, Glycin und Methionin gebildet wird. Es kommt natürlicherweise vor allem in Fleisch und Fisch vor und wird überwiegend in der Skelettmuskulatur gespeichert. Das Kreatin Pulver enthält ausschließlich Kreatin-Monohydrat ohne wei",
+    "Kreatin spielt eine zentrale Rolle bei der schnellen Bereitstellung von Energie in Form von ATP und ist insbesondere bei kurzzeitigen, hochintensiven Belastungen von Bedeutung. Da die körpereigenen Kreatinspeicher begrenzt sind, können sie über die Ernährung oder eine Nahrungsergänzung ergänzt werde",
+    "Wir empfehlen eine tägliche Einnahme von 5 g Kreatin-Monohydrat. Dazu einfach einen gefüllten Messlöffel in ausreichend Flüssigkeit auflösen und trinken. Die angegebene empfohlene tägliche Verzehrmenge sollte nicht überschritten werden. Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene ",
+    "Kreatin-Monohydrat",
+    "Kreatin ist eine körpereigene Verbindung, die aus den Aminosäuren Arginin, Glycin und Methionin gebildet wird. Es kommt natürlicherweise vor allem in Fleisch und Fisch vor und wird überwiegend in der Skelettmuskulatur gespeichert. Das Kreatin Pulver enthält ausschließlich Kreatin-Monohydrat ohne wei",
+    "Kreatin spielt eine zentrale Rolle bei der schnellen Bereitstellung von Energie in Form von ATP und ist insbesondere bei kurzzeitigen, hochintensiven Belastungen von Bedeutung. Da die körpereigenen Kreatinspeicher begrenzt sind, können sie über die Ernährung oder eine Nahrungsergänzung ergänzt werde",
+    "Wir empfehlen eine tägliche Einnahme von 5 g Kreatin-Monohydrat. Dazu einfach einen gefüllten Messlöffel in ausreichend Flüssigkeit auflösen und trinken. Die angegebene empfohlene tägliche Verzehrmenge sollte nicht überschritten werden. Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene ",
+    "Kreatin-Monohydrat",
+    "Juni 2026 - Zertifikat der Charge CHB 056.26",
+    "Inhaltsstoffe : Kreatin-Monohydrat"
+   ],
+   "tables": [
+    "Nährstoffe/sonstige Stoffe Portion* %NRV** Kreatin-Monohydrat 5,0 g *** davon Kreatin 4,4 g ***"
+   ],
+   "mgStellen": [
+    " berechnet Reines Kreativ-Monohydrat in Pulverform - ohne unnötige Zusatzstoffe 5 g Kreatin pro Portion – ein Beutel reicht für 60 Tage Kreatin",
+    " Einnahmeempfehlung Wir empfehlen eine tägliche Einnahme von 5 g Kreatin-Monohydrat",
+    " Pro Portion werden 5 g Kreatin-Monohydrat bereitgestellt, entsprechend 4,4 g reinem Kreatin ",
+    " Die positive Wirkung stellt sich bei einer täglichen Aufnahme von 3 g Kreatin ein",
+    "siven Belastungen unterstützen möchten Wir empfehlen eine tägliche Einnahme von 5 g Kreatin-Monohydrat",
+    " Pro Portion werden 5 g Kreatin-Monohydrat bereitgestellt, entsprechend 4,4 g reinem Kreatin ",
+    " Die positive Wirkung stellt sich bei einer täglichen Aufnahme von 3 g Kreatin ein",
+    "stungen unterstützen möchten Anwendung Wir empfehlen eine tägliche Einnahme von 5 g Kreatin-Monohydrat",
+    " Die positive Wirkung stellt sich bei einer täglichen Aufnahme von 3 g Kreatin ein",
+    " Nährstoffe/sonstige Stoffe Portion* %NRV** Kreatin-Monohydrat 5,0 g *** davon Kreatin 4,4 g *** Der Unterschied",
+    "aining im Rahmen kurzzeitiger intensiver k&ouml;rperlicher Bet&auml;tigung (bei 3 g t&auml;glich)"
+   ]
+  },
+  "magnesium-l-threonat-kapseln": {
+   "status": 200,
+   "body_html": "Reines Magtein® Magnesium L-Threonat in Kapselform Ein Glas Magnesium L-Threonat (90 Kapseln) entspricht einem Vorrat für 30 Tage (Eine Portion = 3 Kapseln) Magnesium-L-Threonat kann dank seiner einzigartigen molekularen Struktur die Blut-Hirn-Schranke überwinden",
+   "imgsMitAlt": [],
+   "produktbilder": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Magtein-Glas200ml.jpg?v=1767704889",
+     "w": 1080,
+     "h": 1350
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Magtein-kapse-detail.jpg?v=1766487643",
+     "w": 2000,
+     "h": 2500
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Magtein_lowres.jpg?v=1789644609",
+     "w": 1400,
+     "h": 1750
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/magtein-kapseln.jpg?v=1789633808",
+     "w": 1000,
+     "h": 1250
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/kapseln-00.jpg?v=1772121021",
+     "w": 1080,
+     "h": 1350
+    }
+   ],
+   "pdfs": [
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/BEFUND_Magtein__127087.pdf?v=1774947665",
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/BEFUND30_7Magnesium_L-Threonate1.pdf",
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/BEFUND30_7-3646722_Vers_1.pdf",
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/BEFUND30_7-3601607_Vers_2.pdf",
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/BEFUND30_7-3560168_Vers_1.pdf",
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/BEFUND30_7-3552445_Vers_1.pdf",
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/BEFUND30_7-3530384_Vers_1.pdf",
+    "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/BEFUND30_7-3510295_Vers_2.pdf"
+   ],
+   "meta": [
+    "Bei Magnesium L-Threonat handelt es sich um eine Verbindung aus Magnesium und der Zuckeralkoholsäure Threonsäure , die natürlicherweise in Pflanzen, Pilzen und einigen Meeresalgen vorkommt. Entscheidender Vorteil: Magnesium-L-Threonat kann dank seiner einzigartigen molekularen Struktur die Blut-Hirn",
+    "Magnesium spielt eine enorm wichtige Rolle in mehr als 300 Stoffwechselreaktionen in unserem Körper und ist insbesondere für die Aktivität vieler Enzyme von Bedeutung. Es unterstützt die Verringerung von Müdigkeit , fördert einen normalen Energiestoffwechsel und ist wichtig für die ordnungsgemäße Fu",
+    "Wir empfehlen eine tägliche Einnahme von 150 mg Magnesium in Form von Magnesium L-Threonat . Dazu einfach 3 Kapseln zusammen oder zu getrennten Tageszeiten mit einem Glas Wasser einnehmen. Die angegebene empfohlene tägliche Verzehrmenge sollte nicht überschritten werden. Dargereichte Informationen s",
+    "Magnesium L-Threonat (7,2% Magnesium, Magtein®), Mittelkettiges Triglyceride Öl (MCT, Kokosbasis); Kapsel: Hydroxypropylmethylcellulose",
+    "Bei Magnesium L-Threonat handelt es sich um eine Verbindung aus Magnesium und der Zuckeralkoholsäure Threonsäure , die natürlicherweise in Pflanzen, Pilzen und einigen Meeresalgen vorkommt. Entscheidender Vorteil: Magnesium-L-Threonat kann dank seiner einzigartigen molekularen Struktur die Blut-Hirn",
+    "Magnesium spielt eine enorm wichtige Rolle in mehr als 300 Stoffwechselreaktionen in unserem Körper und ist insbesondere für die Aktivität vieler Enzyme von Bedeutung. Es unterstützt die Verringerung von Müdigkeit , fördert einen normalen Energiestoffwechsel und ist wichtig für die ordnungsgemäße Fu",
+    "Wir empfehlen eine tägliche Einnahme von 150 mg Magnesium in Form von Magnesium L-Threonat . Dazu einfach 3 Kapseln zusammen oder zu getrennten Tageszeiten mit einem Glas Wasser einnehmen. Die angegebene empfohlene tägliche Verzehrmenge sollte nicht überschritten werden. Dargereichte Informationen s",
+    "Magnesium L-Threonat (7,2% Magnesium, Magtein®), Mittelkettiges Triglyceride Öl (MCT, Kokosbasis); Kapsel: Hydroxypropylmethylcellulose",
+    "September 2026 - Zertifikat der Charge 127851 September 2026 - Zertifikat der Charge 97765 Juni 2026 - Zertifikat der Charge 127256 März 2026 - Zertifikat der Charge 127087 März 2026 - Zertifikat der Charge 89362 März 2026 - Zertifikat der Charge 89859 Februar 2026 - Zertifikat der Charge 127000 Sep",
+    "Inhaltsstoffe : Magnesium L-Threonat¹ (7,5 % Magnesium), Mittelkettiges Triglyceride Öl (MCT, Kokosbasis), Hydroxypropylmethylcellulose (Kapselhülle)"
+   ],
+   "tables": [
+    "Nährstoffe/sonstige Stoffe Portion* %NRV** Magnesium 150 mg 40% aus Magnesium L-Threonat 2083 mg -"
+   ],
+   "mgStellen": [
+    " Einnahmeempfehlung Wir empfehlen eine tägliche Einnahme von 150 mg Magnesium in Form von Magnesium L-Threonat",
+    " Wir empfehlen eine tägliche Einnahme von 150 mg Magnesium in Form von Magnesium L-Threonat ",
+    " Anwendung Wir empfehlen eine tägliche Einnahme von 150 mg Magnesium in Form von Magnesium L-Threonat ",
+    " Nährstoffe/sonstige Stoffe Portion* %NRV** Magnesium 150 mg 40% aus Magnesium L-Threonat 2083 mg - Der Unterschied",
+    " Die Tagesportion der MOLEQLAR Kapseln enthält 2.000 mg Magtein® Magnesium-L-Threonat und liefert daraus 150 mg Mag"
+   ]
+  }
+ }
+}
