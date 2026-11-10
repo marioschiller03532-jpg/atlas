@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.7 (10.11.2026) – Produktkatalog Biogena + MoleQlar
+- Katalog-Datei katalog/supplement_catalog.json liegt bei der App (allgemeine Herstellerdaten, getrennt von persönlichen Angaben). Erstellt von tools/katalog-run.mjs über GitHub Actions aus den offiziellen Shops (Sitemap bzw. Shop-Schnittstelle, robots.txt beachtet, 1 Anfrage/Sekunde). Prüfbericht in katalog/report.json mit Änderungen gegenüber dem letzten Lauf.
+- Stand 10.11.2026: Biogena 298 Seiten (271 Nahrungsergänzungen, davon 264 vollständig; 27 Zubehör/Bundles/Tests), MoleQlar 104 Produkte (97 Nahrungsergänzungen bzw. Pulver, 14 vollständig – MoleQlar veröffentlicht keine Mengentabelle als Text). Katalog als unvollständig gekennzeichnet.
+- Atlas lädt den Katalog beim Start und behält eine Kopie im Gerät (getestet: nach Neustart ohne Netz weiter verfügbar). Werkzeuge katalog_suchen und katalog_status; keine Websuche im normalen Betrieb.
+- Aktualisierung nur auf Wunsch: neuer Lauf des Katalog-Werkzeugs; Bericht zeigt neue, geänderte und entfernte Produkte.
+- Backup im Tresor enthält alle persönlichen Daten; die Katalog-Kopie wird nicht mitgesichert (kommt mit der App).
+- Rückfall: Version 2.6 unter /alt/2.6/.
+
 ## 2.6 (10.11.2026) – Wissensbibliothek, Wörterbuch, getrennte Profile
 - Wissensbibliothek mit 44 Supplementen, Peptiden und Bioregulatoren (Inhaltsstoffe, Einsatz, Evidenzstufe, Risiken, Quellen mit Datum, Art der Angabe). Verschlüsselt im Repo (kb.enc), Schlüssel nur im Einrichtungs-Code; nach dem Laden lokal gespeichert, im Gespräch kein Internet nötig. Passende Einträge werden automatisch mitgegeben; Werkzeug „wissen_nachschlagen“.
 - Wörterbuch für die Spracherkennung: bekannte Fehlhörungen werden korrigiert („el Carnitin“ → L-Carnitin), Ähnliches nur als Rückfrage-Hinweis („Meinst du Sigumir?“); bei Unsicherheit wird nichts lokal abgehakt.

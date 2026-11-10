@@ -790,6 +790,23 @@ function speechTerms(t){const U=tk(t),unsure=[];if(!U.length)return {text:t,unsu
   return {text:out,unsure}}
 let speechHint=[];
 
+// ===== Produktkatalog Biogena + MoleQlar: Datei liegt bei der App (katalog/supplement_catalog.json), Kopie im Gerät =====
+// Allgemeine Herstellerdaten, getrennt von persönlichen Angaben. Keine Websuche im normalen Betrieb.
+let KAT=null;
+function katCompact(j){return {stand:j.stand,produkte:j.produkte.map(p=>({h:p.hersteller,n:p.name,u:p.url,k:p.kategorie,l:p.linie,kz:p.kurz,a:p.anwendungsbereiche_hersteller,t:p.inhaltsstoffe,m:p.mengen_aus_text,z:p.zutaten,v:p.verzehrempfehlung,pk:p.packung,f:p.form,hw:p.hinweise,al:p.allergene,pr:p.preis,fe:p.fehlend,ab:p.abgerufen}))}}
+async function loadKatalog(){try{const r=await fetch("katalog/supplement_catalog.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&Array.isArray(j.produkte)&&j.produkte.length){KAT=katCompact(j);try{localStorage.setItem(P+"katalog",JSON.stringify(KAT))}catch{}return}}}catch{}
+  // ohne Netz: gespeicherte Kopie verwenden
+  if(!KAT){try{KAT=JSON.parse(localStorage.getItem(P+"katalog")||"null")}catch{}}}
+function katSearch(q,hersteller,max=6){if(!KAT)return [];const T=tk(q).filter(w=>w.length>2&&!/^(fuer|mit|und|der|die|das|ein|eine|was|gibt|welches|welche|produkt|produkte|biogena|moleqlar|molekular|supplement)$/.test(w));if(!T.length)return [];
+  // Schreibweisen angleichen (Kreatin/Creatin, Kollagen/Collagen …) und Synonyme aus der Wissensbibliothek
+  const SYN={kreatin:"creatin",creatin:"kreatin",kollagen:"collagen",collagen:"kollagen",zink:"zinc",coenzym:"q10",nachtkerze:"nachtkerzenoel",schlaf:"sleep",ashwagandha:"withania",kurkuma:"curcumin",curcumin:"kurkuma",carnitin:"carnitine",zitrullin:"citrullin"};
+  for(const w of [...T]){if(SYN[w])T.push(SYN[w])}{const e=kbLookup(q);if(e)for(const a of e.aliases||[])for(const w of tk(a))if(w.length>3&&!T.includes(w))T.push(w)}
+  const sc=p=>{const hay={n:tk(p.n).join(" "),z:tk((p.z||"")+" "+(p.t?p.t.zeilen.map(r=>r[0]).join(" "):"")).join(" "),a:tk((p.a||[]).join(" ")+" "+(p.kz||"")+" "+(p.k||"")).join(" ")};let s=0;
+    for(const w of T){if(hay.n.includes(w))s+=5;if(hay.z.includes(w))s+=3;if(hay.a.includes(w))s+=2}return s};
+  return KAT.produkte.filter(p=>!hersteller||norm(p.h).includes(norm(hersteller))).map(p=>({p,s:sc(p)})).filter(x=>x.s>0).map(x=>(/^kein /.test(x.p.k||"")&&(x.s-=2),x)).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,max).map(x=>x.p)}
+const katOut=p=>({hersteller:p.h,name:p.n,link:p.u,linie:p.l,kategorie:p.k,anwendung_laut_hersteller:p.a,inhaltsstoffe_pro_portion:p.t?{kopf:p.t.kopf,zeilen:p.t.zeilen.slice(0,10)}:(p.m&&p.m.length?{aus_text:p.m}:null),
+  zutaten:p.z,verzehrempfehlung:p.v,packung:p.pk,form:p.f,hinweise:p.hw,allergene:p.al,preis:p.pr?`${p.pr.betrag} ${p.pr.waehrung} (abgerufen ${String(p.pr.abgerufen).slice(0,10)})`:null,fehlende_angaben:p.fe,abgerufen:String(p.ab).slice(0,10)});
+
 // ===== Supplement-Tagebuch: drei Zustände je Supplement (genommen / nicht genommen / offen), nur eindeutige Aussagen zählen =====
 const tk=s=>toks(String(s).replace(/[-–\/]/g," "));
 const coreOf=x=>String(x).split(/\s[–-]\s/)[0].trim();
@@ -955,6 +972,8 @@ const T={
  merken:{name:"merken",description:"Speichert dauerhaft eine wichtige Information über die Person, mit der du sprichst (Entscheidung, Vorhaben, Vorliebe, Idee). Nutzen, wenn etwas später wichtig ist oder jemand sagt: merk dir das.",input_schema:{type:"object",properties:{text:{type:"string",description:"Kurzer, eigenständig verständlicher Satz"}},required:["text"]}},
  abhaken:{name:"abhaken",description:"Hakt einen ROUTINE-Schritt von heute ab (erledigt=false macht es rückgängig, spaeter=true heißt: macht er später). Für Supplements supplement_status verwenden.",input_schema:{type:"object",properties:{spaeter:{type:"boolean"},bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},name:{type:"string"},erledigt:{type:"boolean"}},required:["name"]}},
  supplement_status:{name:"supplement_status",description:"Supplement-Tagebuch von heute: setzt für JEDES genannte Supplement einzeln den Status genommen, nicht_genommen oder offen. Nur Supplements eintragen, zu denen er eine eindeutige Aussage gemacht hat; nie pauschal mehrere. 'Alles außer X' heißt nur die Supplements, nach denen du gerade gefragt hast, jedes einzeln aufgeführt. Korrekturen genauso. Mehrdeutige Namen (z. B. nur 'Magnesium') werden abgelehnt: dann nachfragen.",input_schema:{type:"object",properties:{bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},eintraege:{type:"array",items:{type:"object",properties:{name:{type:"string"},status:{type:"string",enum:["genommen","nicht_genommen","spaeter","offen"],description:"genommen = eingenommen, nicht_genommen = ausgelassen, spaeter = später geplant, offen = noch unbekannt"},grund:{type:"string",description:"optional, z. B. bewusst ausgelassen, vergessen"}},required:["name","status"]}}},required:["eintraege"]}},
+ katalog_suchen:{name:"katalog_suchen",description:"Durchsucht den lokal gespeicherten Produktkatalog von Biogena und MoleQlar (Herstellerangaben: Inhaltsstoffe pro Portion, Zutaten, Verzehrempfehlung, Hinweise, Preis mit Abrufdatum, Link). Ohne Internet. Für Fragen nach Produkten, z. B. für ein Ziel oder einen Wirkstoff.",input_schema:{type:"object",properties:{suchbegriff:{type:"string",description:"Wirkstoff, Produktname oder Ziel, z. B. Magnesium Threonat, Schlaf, Omega-3"},hersteller:{type:"string",enum:["Biogena","MoleQlar"]}},required:["suchbegriff"]}},
+ katalog_status:{name:"katalog_status",description:"Stand des Produktkatalogs: Prüfdatum, Anzahl Produkte je Hersteller, wie vollständig.",input_schema:{type:"object",properties:{}}},
  wissen_nachschlagen:{name:"wissen_nachschlagen",description:"Schlägt ein Supplement, Peptid oder einen Bioregulator in der lokalen Wissensbibliothek nach (Inhaltsstoffe, Einsatz, Evidenz, Risiken, Quellen mit Datum). Ohne Internet.",input_schema:{type:"object",properties:{begriff:{type:"string"}},required:["begriff"]}},
  studien_abrufen:{name:"studien_abrufen",description:"Gibt frühere gespeicherte Studien-Updates mit Datum zurück, optional nach Stichwort gefiltert.",input_schema:{type:"object",properties:{stichwort:{type:"string"}}}},
  plan_status_setzen:{name:"plan_status_setzen",description:"Ändert den dauerhaften Status eines Supplements oder Bioregulators im Plan einer Person: aktiv (wird täglich abgefragt), pausiert, pruefen (Status unklar), erwogen (nur überlegt/bestellt, nicht eingenommen), frueher (früher verwendet), entfernen. Nur nach seiner eindeutigen Aussage. Auch zum Bestätigen von 'Status prüfen'-Einträgen.",input_schema:{type:"object",properties:{person:{type:"string"},name:{type:"string"},plan:{type:"string",enum:["aktiv","pausiert","pruefen","erwogen","frueher","entfernen"]},zeitpunkt:{type:"string",description:"bei aktiv: z. B. morgens, abends, rund ums Training"},notiz:{type:"string"},bestaetigt:{type:"boolean"}},required:["name","plan"]}},
@@ -967,7 +986,7 @@ const T={
  briefing_daten:{name:"briefing_daten",description:"Holt Marios Termine von heute und morgen (alle Kalender inkl. Familienkalender) und die Mails der letzten 24 Stunden. Bei gesperrtem Tresor öffnet sich die Code-Eingabe.",input_schema:{type:"object",properties:{}}}
 };
 const WEB={type:"web_search_20250305",name:"web_search",max_uses:3,user_location:{type:"approximate",country:"AT",timezone:"Europe/Vienna"}};
-function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(...(S.obsStore?[T.beobachtung_merken]:[]),T.persoenlich_speichern,T.wissen_nachschlagen,T.studien_abrufen,T.supplement_status,T.plan_status_setzen,T.supplement_pausieren,T.einmalig_erfassen,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.supplement_status,T.einmalig_erfassen,T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
+function toolsFor(){const t=[T.person_wechseln,T.merken];if(cur.typ==="haupt")t.push(...(S.obsStore?[T.beobachtung_merken]:[]),T.persoenlich_speichern,T.katalog_suchen,T.katalog_status,T.wissen_nachschlagen,T.studien_abrufen,T.supplement_status,T.plan_status_setzen,T.supplement_pausieren,T.einmalig_erfassen,T.abhaken,T.liste_aendern,T.verlauf_suchen,T.abwesenheit_starten,T.person_anlegen);else if(cur.typ==="erwachsen")t.push(T.supplement_status,T.einmalig_erfassen,T.abhaken,T.liste_aendern);if(cur.typ!=="kind"&&!S.noSearch)t.push(WEB);return t}
 const match=(a,b)=>{a=norm(a);b=norm(b);return !!a&&!!b&&(a.includes(b)||b.includes(a))};
 async function runTool(name,inp){
   // Listenmodus: nichts ändern oder abhaken, bevor er die genau wiederholte Änderung bestätigt hat
@@ -987,6 +1006,10 @@ async function runTool(name,inp){
       if(!r.hit){res.push(r.cands.length?`${e.name}: MEHRDEUTIG (${r.cands.map(coreOf).join(", ")}), nichts geändert, nachfragen`:`${e.name}: NICHT AUF DER LISTE, nichts geändert. Frag, ob nur für heute (einmalig_erfassen) oder dauerhaft (nach Zeitpunkt, Dosis, Zweck fragen, dann liste_aendern)`);continue}
       const st=e.status==="nicht_genommen"?"nicht genommen":e.status==="offen"?"offen":e.status==="spaeter"?"später":"genommen",alt=setSupp(cur,r.hit,st,e.grund,"claude");res.push(`${coreOf(r.hit)}: ${alt} -> ${st}`)}
     return res.join("\n")+"\nStand: "+JSON.stringify(statusOf(cur).supplements.map(x=>coreOf(x.name)+"="+x.status))}
+  case "katalog_suchen":{if(!KAT)return "Der Produktkatalog ist auf diesem Gerät nicht geladen. Sag ihm das ehrlich; nichts erfinden.";
+    const L=katSearch(inp.suchbegriff||"",inp.hersteller);return L.length?JSON.stringify({katalog_stand:String(KAT.stand).slice(0,10),treffer:L.map(katOut)}):"Im Katalog (Stand "+String(KAT.stand).slice(0,10)+") nichts Passendes gefunden."}
+  case "katalog_status":{if(!KAT)return "Katalog nicht geladen.";const by={};for(const p of KAT.produkte){const h=by[p.h]=by[p.h]||{produkte:0,vollstaendig:0,unvollstaendig:0,zubehoer:0};h.produkte++;if(/^kein /.test(p.k||""))h.zubehoer++;else if((p.fe||[]).length)h.unvollstaendig++;else h.vollstaendig++}
+    return JSON.stringify({geprueft:String(KAT.stand).slice(0,16).replace("T"," "),hersteller:by,aktualisieren:"Eine neue Online-Prüfung startet Mario über Claude im Chat (Katalog aktualisieren). Atlas selbst lädt Produktseiten nicht neu."})}
   case "wissen_nachschlagen":{const e=kbLookup(inp.begriff||"");if(e)return JSON.stringify({...kbCompact(e),quellen:e.quellen});
     const near2=kbList().filter(x=>tk(x.name).some(w=>tk(inp.begriff||"").some(u=>near(u,w)))).map(x=>x.name);
     return near2.length?"Nicht eindeutig. Meinst du: "+near2.join(", ")+"?":"Nicht in der Bibliothek. Allgemeinwissen kennzeichnen oder auf Wunsch recherchieren."}
@@ -1076,6 +1099,7 @@ function mainParts(mode,memBlock,others){const M=main();
   const stat=`Du bist ${S.aname}, eine KI-Assistentin in ${M.name}s Biohacking-Raum. Du SPRICHST, alles wird vorgelesen: Deutsch, Du-Form, kurze natürliche Sätze. Keine Listen, kein Markdown, keine Emojis, keine Links aussprechen. Meist zwei bis vier Sätze, immer nur EINE Frage auf einmal. Sagt jemand, wer er ist, oder dass er nicht der Begrüßte ist, nutze sofort person_wechseln und sprich ihn mit Namen an.
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}${S.nick?` Er nennt dich auch ${S.nick}; reagier auf beide Namen.`:""}
 ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
+PRODUKTKATALOG: Fragt er nach Produkten von Biogena oder MoleQlar oder nach einem Produkt für ein Ziel, such zuerst mit katalog_suchen im lokalen Katalog (kein Internet). Nenne passende Produkte mit Hersteller, relevanten Inhaltsstoffen pro Portion und dem Link (Link nur nennen, nicht vorlesen; sag „Link steht im Katalog“). Trenne klar: Herstellerangabe (Katalog), unabhängige Studienlage (Wissensbibliothek), seine persönlichen Erfahrungen und Hinweise aus dem Profil (z. B. Unverträglichkeiten). Nenne erkennbare Risiken und Wechselwirkungen mit seinen aktuellen Mitteln, doppelte Wirkstoffe (z. B. zweimal Magnesium) und sag dazu, wann der Katalog geprüft wurde. Fehlen Angaben, sag das; keine Dosierungen erfinden, nichts als notwendig oder wirksam hinstellen, wenn die Daten das nicht tragen. Websuche nur, wenn er ausdrücklich aktuelle Angaben will.
 WISSEN: Für Präparate aus seinen Listen nutzt du zuerst die lokale Wissensbibliothek (wird dir bei Bedarf mitgegeben, sonst wissen_nachschlagen). Trenne beim Erklären klar: allgemeines Wissen, Studienergebnis (mit Evidenzstärke), Herstellerangabe, persönliche Angabe aus seinem Profil. Keine persönliche Empfehlung als Tatsache. Websuche nur für neue Studien oder wenn er es ausdrücklich will. Frühere Studien-Updates findest du mit studien_abrufen.
 DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
 GESPRÄCH WIE EIN MENSCH: Erkenne, ob er reden, eine Lösung finden oder einfach entspannen will, und richte dich danach; im Zweifel kurz fragen, was er gerade braucht. Erzählt er etwas Persönliches („Heute war ein stressiger Tag“), geh darauf ein und frag gezielt nach, was los war, statt sofort Tipps zu geben oder das Thema zu wechseln. Bleib beim Thema, bis er es wechselt, und knüpf an das an, was er gerade gesagt hat. Frag nicht nach jeder Antwort nach; manchmal reicht eine echte Reaktion. Formuliere jedes Mal anders, keine Standardsätze, wiederhol nicht deine eigenen Formulierungen von vorhin. Humor und Wärme ja, aber nicht in jeder Antwort. Kurze Fragen kurz, komplexe fundiert, nie ein Vortrag ohne Anlass.
@@ -1377,7 +1401,7 @@ async function renderTresor(){
 function backupCard(){return `<section class="card"><h2>Backup</h2><div class="note">Das Backup ist verschlüsselt und nur mit deinem Code lesbar. Leg es z. B. in iCloud Drive ab. Der API-Schlüssel ist nicht enthalten.</div>
   <div class="row"><button class="btn small" id="bx">Backup speichern</button><label class="btn small" for="bi">Backup laden</label><input type="file" id="bi" accept=".json,application/json" hidden></div><div class="note" id="bm"></div></section>`}
 function wireBackup(){
-  $("bx").onclick=async()=>{const data={};for(const k of ls.keys(""))data[k]=ls.get(k);if(data.settings)data.settings={...data.settings,key:""};
+  $("bx").onclick=async()=>{const data={};for(const k of ls.keys(""))if(k!=="katalog")data[k]=ls.get(k);if(data.settings)data.settings={...data.settings,key:""};
     const json=JSON.stringify({format:"atlas-backup",version:2,exportiert:new Date().toISOString(),data});
     const file=new File([json],`atlas-backup-${today}.json`,{type:"application/json"});
     try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"Atlas Backup"});$("bm").textContent="Backup übergeben.";return}}catch(e){if(e.name==="AbortError")return}
@@ -1459,7 +1483,8 @@ function renderSetup(){
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
   $("sCacheInfo").textContent=ls.get("acache",[]).filter(e=>e.key&&Date.now()-e.at<CACHE_TTL).length+" gespeicherte Antworten";$("sCacheClr").onclick=()=>{ls.del("acache");pendingCache=null;$("sCacheInfo").textContent="Geleert."};
-  $("sKbInfo").textContent=KB?`Wissensbibliothek: ${kbList().length} Präparate, Stand ${KB.v}, lokal gespeichert.`:"Wissensbibliothek: noch nicht geladen (Einrichtungs-Code einfügen).";
+  const katTxt=KAT?(()=>{const by={};for(const p of KAT.produkte){if(/^kein /.test(p.k||""))continue;const h=by[p.h]=by[p.h]||[0,0];h[0]++;if(!(p.fe||[]).length)h[1]++}return " Produktkatalog: "+Object.entries(by).map(([h,[n,v]])=>`${h} ${n} (${v} vollständig)`).join(", ")+`, geprüft ${String(KAT.stand).slice(0,10)}.`})():" Produktkatalog: nicht geladen.";
+  $("sKbInfo").textContent=(KB?`Wissensbibliothek: ${kbList().length} Präparate, Stand ${KB.v}, lokal gespeichert.`:"Wissensbibliothek: noch nicht geladen (Einrichtungs-Code einfügen).")+katTxt;
   $("sObsOn").checked=!!S.obsStore;$("sObsOn").onchange=()=>{S.obsStore=$("sObsOn").checked;saveSettings()};
   $("sRest").value=S.restHours||6;$("sRest").onchange=()=>{S.restHours=Math.max(1,Math.min(24,+$("sRest").value||6));saveSettings()};
   $("sPrefOn").checked=S.prefStore!==false;$("sPrefOn").onchange=()=>{S.prefStore=$("sPrefOn").checked;saveSettings()};
@@ -1515,10 +1540,10 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261110-0550",ATLAS_REL="2.6";
+const APP_VERSION="20261110-0618",ATLAS_REL="2.7";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
-setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setInterval(checkUpdate,10*60000);
+setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")checkUpdate()});
 
 /* ================= Start ================= */
