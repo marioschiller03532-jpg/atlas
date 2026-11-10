@@ -1,0 +1,22 @@
+name: Supplement-Katalog
+on:
+  push:
+    paths: ["tools/katalog-*.mjs", ".github/workflows/katalog.yml", "tools/katalog-run.txt"]
+permissions:
+  contents: write
+concurrency: katalog
+jobs:
+  katalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node tools/katalog-$(cat tools/katalog-run.txt 2>/dev/null || echo probe).mjs
+      - run: |
+          git config user.name "atlas-katalog-bot"
+          git config user.email "atlas-katalog-bot@users.noreply.github.com"
+          git add katalog
+          git commit -m "Katalog: automatischer Lauf" || echo "nichts zu committen"
+          git pull --rebase && git push
