@@ -1,10 +1,11 @@
 {
- "geprueft": "2026-11-10T06:51:12.429Z",
+ "geprueft": "2026-11-10T09:28:18.496Z",
  "definitionen": {
   "gefunden": "alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",
   "nem": "davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",
   "vollstaendig": "Nahrungsergänzung mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße",
-  "teilweise": "mindestens eine dieser vier Angaben fehlt auf Seite und Etikett-PDF"
+  "teilweise": "mindestens eine dieser vier Angaben wurde nicht gefunden; fehlende Werte werden weder geschätzt noch ergänzt",
+  "produktbilder": "nicht geprüft – aus Produktbildern werden keine Werte übernommen"
  },
  "hersteller": {
   "Biogena": {
@@ -22,7 +23,25 @@
     "Medizinprodukt": 2
    },
    "quelle": "https://biogena.com/sitemap/sitemap-de-at.xml",
-   "offen_oder_nicht_abrufbar": 0
+   "offen_oder_nicht_abrufbar": 0,
+   "produktbilder": "nicht geprüft",
+   "status": {
+    "alle_gefundenen_produkte": 298,
+    "nahrungsergaenzungen": 253,
+    "davon_vollstaendig": 253,
+    "davon_teilweise": 0,
+    "andere_produktarten": 45,
+    "andere_nach_art": {
+     "Nahrungsergänzungsmittel": 253,
+     "Zubehör/Sonstiges": 22,
+     "Set/Bundle": 4,
+     "Lebensmittel": 13,
+     "Test/Analyse": 4,
+     "Medizinprodukt": 2
+    },
+    "nicht_abrufbar": 0,
+    "text": "Biogena: 298 Produkte gefunden, davon 253 Nahrungsergänzungen (253 vollständig, 0 teilweise erfasst) und 45 andere Produktarten."
+   }
   },
   "MoleQlar": {
    "gefunden": 104,
@@ -32,92 +51,81 @@
     {
      "name": "Omega 3 Kapseln Vegan",
      "url": "https://moleqlar.com/products/vegan-omega-3-kapseln",
-     "fehlt": [
-      "packung"
-     ],
-     "grund": "Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Melatonin Tabletten",
      "url": "https://moleqlar.com/products/melatonin-tabletten",
-     "fehlt": [
-      "packung"
-     ],
-     "grund": "Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Kreatin Pulver",
      "url": "https://moleqlar.com/products/kreatin-pulver",
-     "fehlt": [
-      "packung"
-     ],
-     "grund": "Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Elektrolyte Sticks",
      "url": "https://moleqlar.com/products/elektrolyte-sticks",
-     "fehlt": [
-      "packung"
-     ],
-     "grund": "Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Kreatin Sticks",
      "url": "https://moleqlar.com/products/kreatin-monohydrat-sticks",
-     "fehlt": [
-      "packung"
-     ],
-     "grund": "Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Methylenblau Tropfen",
      "url": "https://moleqlar.com/products/methylenblau",
-     "fehlt": [
-      "verzehrempfehlung",
-      "packung"
-     ],
-     "grund": "keine Einnahmeempfehlung auf der Seite; Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Verzehr-/Einnahmeempfehlung": "nicht auf der Produktseite gefunden",
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Lithiumorotat",
      "url": "https://moleqlar.com/products/lithium-orotat",
-     "fehlt": [
-      "verzehrempfehlung"
-     ],
-     "grund": "keine Einnahmeempfehlung auf der Seite"
+     "fehlende_angaben": {
+      "Verzehr-/Einnahmeempfehlung": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Inositol Pulver",
      "url": "https://moleqlar.com/products/inositol-pulver",
-     "fehlt": [
-      "packung"
-     ],
-     "grund": "Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Uthever NMN Pulver",
      "url": "https://moleqlar.com/products/uthever-nmn",
-     "fehlt": [
-      "zutaten",
-      "verzehrempfehlung"
-     ],
-     "grund": "keine Zutatenliste auf der Seite; keine Einnahmeempfehlung auf der Seite"
+     "fehlende_angaben": {
+      "Zutaten": "nicht auf der Produktseite gefunden",
+      "Verzehr-/Einnahmeempfehlung": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Kreatin Pulver (Creavitalis®)",
      "url": "https://moleqlar.com/products/kreatin-monohydrat-pulver",
-     "fehlt": [
-      "packung"
-     ],
-     "grund": "Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     },
     {
      "name": "Vitamin D3 K2 Tropfen",
      "url": "https://moleqlar.com/products/vitamin-d3-k2-tropfen",
-     "fehlt": [
-      "packung"
-     ],
-     "grund": "Packungsgröße nicht als Text angegeben"
+     "fehlende_angaben": {
+      "Packungsgröße": "nicht auf der Produktseite gefunden"
+     }
     }
    ],
    "nicht_abrufbar": [],
@@ -130,13 +138,33 @@
     "Test/Analyse": 4
    },
    "quelle": "https://moleqlar.com/products.json",
-   "hinweis": "Mengen pro Portion aus der Nährstofftabelle der Produktseite; Werte aus Bildern werden nicht übernommen.",
-   "offen_oder_nicht_abrufbar": 0
+   "hinweis": "Mengen pro Portion aus der Nährstofftabelle der Produktseite (Text).",
+   "offen_oder_nicht_abrufbar": 0,
+   "produktbilder": "nicht geprüft",
+   "status": {
+    "alle_gefundenen_produkte": 104,
+    "nahrungsergaenzungen": 74,
+    "davon_vollstaendig": 63,
+    "davon_teilweise": 11,
+    "andere_produktarten": 30,
+    "andere_nach_art": {
+     "Set/Bundle": 10,
+     "Nahrungsergänzungsmittel": 74,
+     "Zubehör/Sonstiges": 14,
+     "Medizinprodukt": 1,
+     "Lebensmittel": 1,
+     "Test/Analyse": 4
+    },
+    "nicht_abrufbar": 0,
+    "text": "MoleQlar: 104 Produkte gefunden, davon 74 Nahrungsergänzungen (63 vollständig, 11 teilweise erfasst) und 30 andere Produktarten."
+   }
   }
  },
  "aenderungen": {
   "neu": [],
-  "geaendert": [],
+  "geaendert": [
+   "Danke Gutschein"
+  ],
   "entfernt": []
  },
  "unvollstaendig": true
