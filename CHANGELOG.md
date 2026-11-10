@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.9 (10.11.2026) – Neues Erscheinungsbild „Atemkern“
+- Neuer Avatar: runde, fein gerasterte Pixelhülle um einen weichen, warmen Kern, dezenter Pixelring. Farben: Mitternachtsblau, Türkis/Salbeigrün, warmes Kernlicht.
+- Zustände (bestehende Modi sleep/idle/listen/think/speak): Ruhe fast unbewegt und gedimmt · Zuhören: Kern und Ring heller · Denken: Kernlicht wandert langsam zwischen warm und Salbei · Sprechen: Kugel schwingt räumlich vor und zurück, folgt der Stimm-Energie (Wortgrenzen der Sprachausgabe), höchstens drei leise Pixel-Echos.
+- Reduzierte Bewegung (iPad-Einstellung): langsamere, kleinere Bewegung, keine Echos.
+- Hintergrund und Bedienfarben auf Mitternachtsblau/Salbei umgestellt. Atemkern ist einmalig als Kugel aktiviert; Orbit-Glaskugel und die anderen Kugeln bleiben in den Einstellungen wählbar.
+- Keine Funktionen geändert. Rückfall: /alt/2.8/.
+
 ## 2.8 (10.11.2026) – Zuhören, Stopp, Sprache, Katalog-Aufträge
 Gefundene Ursachen (im Code, nicht im Prompt):
 - „Stopp“ wurde während Atlas sprach oder nachdachte komplett verworfen: Alles Gehörte in dieser Zeit wurde ignoriert. Nur Antippen half.
