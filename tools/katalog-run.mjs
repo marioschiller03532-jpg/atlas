@@ -20,9 +20,10 @@ function typOf(name,text,hasNutrTable){const t=String(text);if(/\bBundle\b|\bSet
 const prev=(()=>{try{return JSON.parse(fs.readFileSync("katalog/supplement_catalog.json","utf8"))}catch{return null}})();
 const prevMap=new Map((prev?.produkte||[]).map(p=>[p.url,p]));
 const hash=p=>crypto.createHash("sha1").update(JSON.stringify([p.name,p.inhaltsstoffe,p.zutaten,p.verzehrempfehlung,p.packung,p.preis?.betrag,p.hinweise])).digest("hex").slice(0,12);
-const report={geprueft:NOW,definitionen:{gefunden:"alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",nem:"davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",vollstaendig:"Nahrungsergänzung mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße",teilweise:"mindestens eine dieser vier Angaben fehlt auf Seite und Etikett-PDF"},hersteller:{}},produkte=[];
-const GRUND={biogena:{inhaltsstoffe:"keine Inhaltsstofftabelle auf der Seite",zutaten:"keine Zutatenliste auf Seite und Etikett-PDF",verzehrempfehlung:"keine Verzehrempfehlung auf Seite und Etikett-PDF",packung:"keine Packungsgröße angegeben"},
-  moleqlar:{inhaltsstoffe:"keine Nährstofftabelle auf der Seite (nicht aus Bildern geschätzt)",zutaten:"keine Zutatenliste auf der Seite",verzehrempfehlung:"keine Einnahmeempfehlung auf der Seite",packung:"Packungsgröße nicht als Text angegeben"}};let probeLeft=0;const tm0=s=>/<table/.test(s);
+const report={geprueft:NOW,definitionen:{gefunden:"alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",nem:"davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",vollstaendig:"Nahrungsergänzung mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße",teilweise:"mindestens eine dieser vier Angaben wurde nicht gefunden; fehlende Werte werden weder geschätzt noch ergänzt",produktbilder:"nicht geprüft – aus Produktbildern werden keine Werte übernommen"},hersteller:{}},produkte=[];
+const FELD={inhaltsstoffe:"Mengen pro Portion (Nährstofftabelle)",zutaten:"Zutaten",verzehrempfehlung:"Verzehr-/Einnahmeempfehlung",packung:"Packungsgröße"};
+const GRUND={biogena:Object.fromEntries(Object.keys(FELD).map(k=>[k,"nicht auf Produktseite und Etikett-PDF gefunden"])),moleqlar:Object.fromEntries(Object.keys(FELD).map(k=>[k,"nicht auf der Produktseite gefunden"]))};
+const offen=(miss,h)=>Object.fromEntries(miss.map(k=>[FELD[k],GRUND[h][k]]));
 
 // ---------- Biogena ----------
 {const R={gefunden:0,nem:0,vollstaendig:0,teilweise:[],nicht_abrufbar:[],typen:{}};report.hersteller.Biogena=R;
@@ -59,7 +60,7 @@ const GRUND={biogena:{inhaltsstoffe:"keine Inhaltsstofftabelle auf der Seite",zu
   const pk=String(p.packung||"").match(/Kapseln|Tabletten|Pulver|Tropfen|Sticks?|Sachets?|Liquid|Flüssig|ml|Granulat|Lutsch|Spray|Kaugummi|Gummies|Öl/i);p.form=pk?pk[0]:null;
   const nem=p.typ==="Nahrungsergänzungsmittel";p.kategorie=nem?(p.linie||"Nahrungsergänzung"):p.typ;
   const miss=["inhaltsstoffe","zutaten","verzehrempfehlung","packung"].filter(k=>!p[k]);p.fehlend=nem?miss:[];p.vollstaendig=nem?miss.length===0:null;
-  R.typen[p.typ]=(R.typen[p.typ]||0)+1;if(nem){R.nem++;if(p.vollstaendig)R.vollstaendig++;else R.teilweise.push({name,url,fehlt:miss,grund:miss.map(k=>GRUND.biogena[k]).join("; ")})}
+  R.typen[p.typ]=(R.typen[p.typ]||0)+1;if(nem){R.nem++;if(p.vollstaendig)R.vollstaendig++;else R.teilweise.push({name,url,fehlende_angaben:offen(miss,"biogena")})}
   produkte.push(p)}}
 
 // ---------- MoleQlar (Shopify) ----------
@@ -92,15 +93,18 @@ const GRUND={biogena:{inhaltsstoffe:"keine Inhaltsstofftabelle auf der Seite",zu
   p.typ=/Bundle|Paket/i.test(pr.title)?"Set/Bundle":/Test\b/i.test(pr.title)?"Test/Analyse":/Medizinprodukt/i.test(Object.values(D).join(" ")+bodyTxt)?"Medizinprodukt":
     p.inhaltsstoffe?(/Oliven(ö|oe)l|Protein/i.test(pr.title)?"Lebensmittel":"Nahrungsergänzungsmittel"):(p.zutaten&&p.verzehrempfehlung&&/Kapseln|Pulver|Tropfen|Sticks|Tabletten/i.test(pr.title)?"Nahrungsergänzungsmittel":"Zubehör/Sonstiges");const nem=p.typ==="Nahrungsergänzungsmittel";p.kategorie=nem?(p.kategorie||"Nahrungsergänzung"):p.typ;
   const miss=["inhaltsstoffe","zutaten","verzehrempfehlung","packung"].filter(k=>!p[k]);p.fehlend=nem?miss:[];p.vollstaendig=nem?miss.length===0:null;
-  R.typen[p.typ]=(R.typen[p.typ]||0)+1;if(nem){R.nem++;if(p.vollstaendig)R.vollstaendig++;else R.teilweise.push({name:pr.title,url,fehlt:miss,grund:miss.map(k=>GRUND.moleqlar[k]).join("; ")})}produkte.push(p);
+  R.typen[p.typ]=(R.typen[p.typ]||0)+1;if(nem){R.nem++;if(p.vollstaendig)R.vollstaendig++;else R.teilweise.push({name:pr.title,url,fehlende_angaben:offen(miss,"moleqlar")})}produkte.push(p);
   if(!r.ok)R.nicht_abrufbar.push({url,status:r.status})}
- R.hinweis="Mengen pro Portion aus der Nährstofftabelle der Produktseite; Werte aus Bildern werden nicht übernommen."}
+ R.hinweis="Mengen pro Portion aus der Nährstofftabelle der Produktseite (Text)."}
 
 // ---------- Änderungen gegenüber dem letzten Lauf ----------
 const changes={neu:[],geaendert:[],entfernt:[]};for(const p of produkte){p.hash=hash(p);const o=prevMap.get(p.url);if(!o)changes.neu.push(p.name);else if(o.hash!==p.hash)changes.geaendert.push(p.name)}
 const now=new Set(produkte.map(p=>p.url));for(const o of prevMap.values())if(!now.has(o.url))changes.entfernt.push(o.name);
 report.aenderungen=prev?changes:{erstimport:true};
-for(const R of Object.values(report.hersteller))R.offen_oder_nicht_abrufbar=R.nicht_abrufbar.length;report.unvollstaendig=Object.values(report.hersteller).some(h=>h.teilweise.length||h.nicht_abrufbar.length);
+for(const [h,R] of Object.entries(report.hersteller)){R.offen_oder_nicht_abrufbar=R.nicht_abrufbar.length;R.produktbilder="nicht geprüft";
+  const andere=R.gefunden-R.nem;R.status={alle_gefundenen_produkte:R.gefunden,nahrungsergaenzungen:R.nem,davon_vollstaendig:R.vollstaendig,davon_teilweise:R.teilweise.length,andere_produktarten:andere,andere_nach_art:R.typen,nicht_abrufbar:R.nicht_abrufbar.length,
+    text:`${h}: ${R.gefunden} Produkte gefunden, davon ${R.nem} Nahrungsergänzungen (${R.vollstaendig} vollständig, ${R.teilweise.length} teilweise erfasst) und ${andere} andere Produktarten.`}}
+for(const p of produkte)p.produktbilder="nicht geprüft";report.unvollstaendig=Object.values(report.hersteller).some(h=>h.teilweise.length||h.nicht_abrufbar.length);
 fs.writeFileSync("katalog/supplement_catalog.json",JSON.stringify({stand:NOW,hinweis:"Herstellerangaben aus den offiziellen Shops; keine Wirksamkeitsbelege. Fehlende Angaben sind leer, nicht geschätzt.",produkte},null,0));
 fs.writeFileSync("katalog/report.json",JSON.stringify(report,null,1));
 console.log(JSON.stringify(Object.fromEntries(Object.entries(report.hersteller).map(([k,v])=>[k,{gefunden:v.gefunden,vollstaendig:v.vollstaendig,teilweise:v.teilweise.length,nicht_abrufbar:v.nicht_abrufbar.length}]))));
