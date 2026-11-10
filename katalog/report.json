@@ -1,585 +1,238 @@
 {
- "geprueft": "2026-11-10T05:17:27.551Z",
+ "geprueft": "2026-11-10T06:21:19.412Z",
+ "definitionen": {
+  "gefunden": "alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",
+  "nem": "davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",
+  "vollstaendig": "Nahrungsergänzung mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße",
+  "teilweise": "mindestens eine dieser vier Angaben fehlt auf Seite und Etikett-PDF"
+ },
  "hersteller": {
   "Biogena": {
    "gefunden": 298,
-   "vollstaendig": 264,
-   "teilweise": [
-    {
-     "url": "https://biogena.com/de-at/produkte/biogena-sports-magnesium-wasser-428",
-     "fehlt": [
-      "verzehrempfehlung"
-     ]
-    },
-    {
-     "url": "https://biogena.com/de-at/produkte/hallsteinwasser-416",
-     "fehlt": [
-      "zutaten",
-      "verzehrempfehlung"
-     ]
-    },
-    {
-     "url": "https://biogena.com/de-at/produkte/biogena-moments-beauty-bites-314",
-     "fehlt": [
-      "verzehrempfehlung"
-     ]
-    },
-    {
-     "url": "https://biogena.com/de-at/produkte/zeolith-500-296",
-     "fehlt": [
-      "inhaltsstoffe"
-     ]
-    },
-    {
-     "url": "https://biogena.com/de-at/produkte/zeolith-ultrafein-245",
-     "fehlt": [
-      "inhaltsstoffe"
-     ]
-    },
-    {
-     "url": "https://biogena.com/de-at/produkte/bio-schwarzkuemmeloel-233",
-     "fehlt": [
-      "verzehrempfehlung"
-     ]
-    },
-    {
-     "url": "https://biogena.com/de-at/produkte/bio-leinoel-74",
-     "fehlt": [
-      "verzehrempfehlung"
-     ]
-    }
-   ],
+   "nem": 253,
+   "vollstaendig": 253,
+   "teilweise": [],
    "nicht_abrufbar": [],
+   "typen": {
+    "Nahrungsergänzungsmittel": 253,
+    "Zubehör/Sonstiges": 22,
+    "Set/Bundle": 4,
+    "Lebensmittel": 13,
+    "Test/Analyse": 4,
+    "Medizinprodukt": 2
+   },
    "quelle": "https://biogena.com/sitemap/sitemap-de-at.xml",
-   "zubehoer": 27
+   "offen_oder_nicht_abrufbar": 0
   },
   "MoleQlar": {
    "gefunden": 104,
-   "vollstaendig": 14,
+   "nem": 66,
+   "vollstaendig": 55,
    "teilweise": [
     {
-     "url": "https://moleqlar.com/products/energy-bundle",
+     "name": "Omega 3 Kapseln Vegan",
+     "url": "https://moleqlar.com/products/vegan-omega-3-kapseln",
      "fehlt": [
-      "zutaten"
-     ]
+      "packung"
+     ],
+     "grund": "Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/lutein-zeaxanthin-kapseln",
+     "name": "Melatonin Tabletten",
+     "url": "https://moleqlar.com/products/melatonin-tabletten",
      "fehlt": [
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/blaulichtfilter-brille",
+     "name": "Kreatin Pulver",
+     "url": "https://moleqlar.com/products/kreatin-pulver",
      "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/testo-support-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/scalp-brush",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/schlaf-bundle",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/nad-bundle",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/sport-bundle",
-     "fehlt": [
-      "zutaten"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/recovery-bundle",
-     "fehlt": [
-      "zutaten"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/skin-bundle",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/fokus-bundle",
-     "fehlt": [
-      "zutaten"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/diagnostic-starter-bundle",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/enhanced-fiber-ballaststoffe",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/zeolith-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/nasenpflaster",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/hair-restoration-serum",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/vitamin-b12-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/citicolin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
+     "name": "Elektrolyte Sticks",
      "url": "https://moleqlar.com/products/elektrolyte-sticks",
      "fehlt": [
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/vitamin-adek-tropfen",
+     "name": "Kreatin Sticks",
+     "url": "https://moleqlar.com/products/kreatin-monohydrat-sticks",
      "fehlt": [
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/eisen-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/chrom-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/schlafmaske",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/ceramide-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/nattokinase-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/qshaker-pro",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/alpha-liponsaeure-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/pqq-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/enhanced-protein-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/ergothionein-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/cognesium-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/eaa-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/prolithin-a-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/magnesium-bisglycinat-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/collagen-booster",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/vitamin-c-liposomal-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/astragalus-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/vitamin-b-komplex",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/one-probierpaket",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/zink-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/selen-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
+     "name": "Methylenblau Tropfen",
      "url": "https://moleqlar.com/products/methylenblau",
      "fehlt": [
       "verzehrempfehlung",
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "keine Einnahmeempfehlung auf der Seite; Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/lithium-orotat",
+     "name": "Uthever NMN Pulver",
+     "url": "https://moleqlar.com/products/uthever-nmn",
      "fehlt": [
-      "verzehrempfehlung",
-      "mengen pro portion"
-     ]
+      "zutaten",
+      "verzehrempfehlung"
+     ],
+     "grund": "keine Zutatenliste auf der Seite; keine Einnahmeempfehlung auf der Seite"
     },
     {
-     "url": "https://moleqlar.com/products/rhodiola-rosea-kapseln",
+     "name": "Kreatin Pulver (Creavitalis®)",
+     "url": "https://moleqlar.com/products/kreatin-monohydrat-pulver",
      "fehlt": [
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/vegan-omega3-vitamin-d",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/glycin-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/inositol-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/magnesium-l-threonat-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/astaxanthin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/coenzym-q10-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/curcumin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/magnesium-l-threonat-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/nmn-serum",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/nicotinamid-ribosid-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/daily-essentials-complex",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/essentials-bundle",
-     "fehlt": [
-      "zutaten"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/kollagen-peptide-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/betain-tmg-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/carnosin-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/spermidin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/quercetin-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/glucosamin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
+     "name": "Vitamin D3 K2 Tropfen",
      "url": "https://moleqlar.com/products/vitamin-d3-k2-tropfen",
      "fehlt": [
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/magnesium-komplex",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/calcium-alphaketoglutarat-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/resveratrol-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/resveratrol-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/qjar",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
+     "name": "QSCOOP",
      "url": "https://moleqlar.com/products/qscoop",
      "fehlt": [
-      "zutaten"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/quercetin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/sulforaphan-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/hyaluron-glycin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/nad-booster-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/calcium-alphaketoglutarat-pulver",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/glynac-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/qshaker",
-     "fehlt": [
+      "inhaltsstoffe",
       "zutaten",
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "keine Nährstofftabelle auf der Seite (nicht aus Bildern geschätzt); keine Zutatenliste auf der Seite; Packungsgröße nicht als Text angegeben"
     },
     {
-     "url": "https://moleqlar.com/products/daily-longevity-complex",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/apigenin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
+     "name": "QRGANIZER",
      "url": "https://moleqlar.com/products/qrganizer",
      "fehlt": [
+      "inhaltsstoffe",
       "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/epi-proteomics-test",
-     "fehlt": [
-      "zutaten",
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/taurin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/fisetin-kapseln",
-     "fehlt": [
-      "mengen pro portion"
-     ]
-    },
-    {
-     "url": "https://moleqlar.com/products/qnight-relax-complex",
-     "fehlt": [
-      "mengen pro portion"
-     ]
+      "packung"
+     ],
+     "grund": "keine Nährstofftabelle auf der Seite (nicht aus Bildern geschätzt); keine Zutatenliste auf der Seite; Packungsgröße nicht als Text angegeben"
     }
    ],
    "nicht_abrufbar": [],
+   "typen": {
+    "Set/Bundle": 10,
+    "Nahrungsergänzungsmittel": 66,
+    "Zubehör/Sonstiges": 12,
+    "Lebensmittel": 11,
+    "Medizinprodukt": 1,
+    "Test/Analyse": 4
+   },
    "quelle": "https://moleqlar.com/products.json",
-   "zubehoer": 7,
-   "hinweis": "MoleQlar veröffentlicht keine Inhaltsstofftabelle als Text; Mengen pro Portion stammen nur aus der Produktbeschreibung, sonst leer."
+   "hinweis": "Mengen pro Portion aus der Nährstofftabelle der Produktseite; Werte aus Bildern werden nicht übernommen.",
+   "offen_oder_nicht_abrufbar": 0
   }
  },
  "aenderungen": {
   "neu": [],
-  "geaendert": [],
+  "geaendert": [
+   "Stressfrei Bundle für Hunde: Beruhigungstropfen & Verdauungshilfe",
+   "Proteindrink Schoko",
+   "Proteindrink Vanille",
+   "Pro Peptide Protein Isolate",
+   "Artesisches Hallstein Wasser",
+   "BIOGENA Wellbeing Check - Osteo Essential Urintest",
+   "Wellbeing Check Ultimate 360° Bluttest",
+   "ColonBalance® Sticks",
+   "Zeolith 500",
+   "Zeolith ultrafein",
+   "Vegan Protein CS 198/18 MRP ",
+   "ColonBalance®",
+   "Vegan Protein Sticks",
+   "Lutein + Zeaxanthin Kapseln",
+   "NR PRO Kapseln",
+   "Omega 3 Kapseln Vegan",
+   "Omega 3 Kapseln (Fischöl)",
+   "Testo Support",
+   "Enhanced Fiber (Ballaststoffe)",
+   "Zeolith Pulver",
+   "Hair Restoration Serum",
+   "Melatonin Tabletten",
+   "Kreatin Pulver",
+   "Vitamin B12 Kapseln",
+   "Citicolin Kapseln",
+   "Elektrolyte Sticks",
+   "Vitamin ADEK",
+   "Eisen Kapseln",
+   "Chrom Kapseln",
+   "Ceramide Kapseln",
+   "Nattokinase Kapseln",
+   "Alpha Liponsäure Kapseln",
+   "PQQ (Pyrrolochinolinchinon) Kapseln",
+   "Enhanced Protein Pulver",
+   "Ergothionein Kapseln",
+   "Cognesium Kapseln",
+   "Essential Amino Acids (EAA) Pulver",
+   "ProLithin A® Kapseln",
+   "Magnesium Bisglycinat Kapseln",
+   "Collagen Booster",
+   "Kreatin Sticks",
+   "Vitamin D3 K2 Kapseln",
+   "Vitamin C Kapseln (liposomal)",
+   "Astragalus Kapseln",
+   "Vitamin B Komplex Kapseln",
+   "L-Theanin Kapseln",
+   "ONE Probierpaket",
+   "Zink Kapseln",
+   "Selen Kapseln",
+   "Methylenblau Tropfen",
+   "Lithiumorotat",
+   "Rhodiola Rosea Kapseln",
+   "Ashwagandha Kapseln",
+   "Veganes Omega 3 + Vitamin D3",
+   "Glycin Pulver",
+   "Inositol Pulver",
+   "Magnesium L-Threonat Pulver",
+   "Astaxanthin Kapseln",
+   "Coenzym Q10 Kapseln",
+   "Curcumin Kapseln",
+   "Magnesium L-Threonat Kapseln",
+   "Nicotinamid Ribosid Kapseln",
+   "Essentials Formula Kapseln",
+   "Uthever NMN Pulver",
+   "Kreatin Pulver (Creavitalis®)",
+   "Kollagen (Kollagenpeptide)",
+   "Betain (TMG) Pulver",
+   "Carnosin Pulver",
+   "Spermidin Kapseln",
+   "Quercetin Pulver",
+   "Glucosamin Kapseln",
+   "Vitamin D3 K2 Tropfen",
+   "Magnesium Komplex Kapseln",
+   "Calcium-Alphaketoglutarat Kapseln",
+   "Resveratrol Kapseln",
+   "Resveratrol Pulver",
+   "Quercetin Kapseln",
+   "Betain (TMG) Kapseln",
+   "Omega 3 Kapseln (EPAX®)",
+   "Berberin Kapseln",
+   "Sulforaphan Kapseln",
+   "Hyaluron (Hyaluronsäure)",
+   "regeNAD (NAD Booster)",
+   "Calcium-Alphaketoglutarat Pulver",
+   "GlyNAC (Glycin & N-Acetyl-Cystein)",
+   "ONE - Daily Foundational Formula",
+   "Apigenin Kapseln",
+   "Spermidin PRO Kapseln",
+   "Taurin Kapseln",
+   "Fisetin Kapseln",
+   "QNIGHT (Relaxation & Recovery Support)"
+  ],
   "entfernt": []
  },
  "unvollstaendig": true
