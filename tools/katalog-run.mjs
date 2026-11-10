@@ -10,7 +10,7 @@ fs.mkdirSync("katalog",{recursive:true});
 const prev=(()=>{try{return JSON.parse(fs.readFileSync("katalog/supplement_catalog.json","utf8"))}catch{return null}})();
 const prevMap=new Map((prev?.produkte||[]).map(p=>[p.url,p]));
 const hash=p=>crypto.createHash("sha1").update(JSON.stringify([p.name,p.inhaltsstoffe,p.zutaten,p.verzehrempfehlung,p.packung,p.preis?.betrag,p.hinweise])).digest("hex").slice(0,12);
-const report={geprueft:NOW,hersteller:{}},produkte=[];let probeLeft=3;const tm0=s=>/<table/.test(s);
+const report={geprueft:NOW,hersteller:{}},produkte=[];let probeLeft=0;const tm0=s=>/<table/.test(s);
 
 // ---------- Biogena ----------
 {const R={gefunden:0,vollstaendig:0,teilweise:[],nicht_abrufbar:[]};report.hersteller.Biogena=R;
@@ -57,7 +57,7 @@ const report={geprueft:NOW,hersteller:{}},produkte=[];let probeLeft=3;const tm0=
   const mengen=[...new Set((info.match(/\d+(?:[.,]\d+)?\s?(?:mg|µg|mcg|g|IE|I\.E\.|Mrd\.?\s?KBE)\s[A-Za-zÄÖÜäöüß][\wÄÖÜäöüß\-®]*(?:\s[\wÄÖÜäöüß\-®]+)?/g)||[]))].slice(0,12);
   const hin=(anw||"").split(/(?<=\.)\s+/).filter(x=>/nicht|Schwanger|Kinder|Stillen|ärzt|Arzt|überschritten|Allerg/i.test(x));
   const fn=pick("Funktion");const v=pr.variants?.[0]||{};const tags=(pr.tags||[]).map(String);
-  const p={hersteller:"MoleQlar",name:pr.title,url,abgerufen:NOW,linie:null,kurz:null,kategorie:tags.find(t=>!/^(_|sale|new|bundle)/i.test(t))||pr.product_type||null,
+  const p={hersteller:"MoleQlar",name:pr.title,url,abgerufen:NOW,linie:null,kurz:null,kategorie:pr.product_type||tags.find(t=>!/^(_|sale|new|neu|bundle|bulk|coming soon|bestseller|angebot|black|cyber|gift|geschenk|hidden|subscription|abo)/i.test(t)&&t.length>3)||null,
     anwendungsbereiche_hersteller:fn?[fn.split(/(?<=\.)\s+/).slice(0,2).join(" ").slice(0,300)]:[],inhaltsstoffe:null,mengen_aus_text:mengen,zutaten:zut,verzehrempfehlung:einn?einn.split(/(?<=\.)\s+/).slice(0,2).join(" "):null,
     tagesdosis:null,packung:v.title&&v.title!=="Default Title"?v.title:null,form:(pr.title.match(/Kapseln|Pulver|Tropfen|Liquid|Sachets?|Tabletten|Öl|Spray|Gummies/i)||[null])[0],hinweise:hin,allergene:[],
     preis:v.price?{betrag:+v.price,waehrung:"EUR",verfuegbar:!!v.available,abgerufen:NOW}:null,ean:v.barcode||null,dokumente:[],tags};

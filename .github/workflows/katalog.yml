@@ -1,5 +1,6 @@
 name: Supplement-Katalog
 on:
+  workflow_dispatch:
   push:
     paths: ["tools/katalog-*.mjs", ".github/workflows/katalog.yml", "tools/katalog-run.txt"]
 permissions:
