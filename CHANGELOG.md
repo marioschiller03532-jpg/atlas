@@ -1,5 +1,14 @@
 # Atlas – Änderungen
 
+## 2.6 (10.11.2026) – Wissensbibliothek, Wörterbuch, getrennte Profile
+- Wissensbibliothek mit 44 Supplementen, Peptiden und Bioregulatoren (Inhaltsstoffe, Einsatz, Evidenzstufe, Risiken, Quellen mit Datum, Art der Angabe). Verschlüsselt im Repo (kb.enc), Schlüssel nur im Einrichtungs-Code; nach dem Laden lokal gespeichert, im Gespräch kein Internet nötig. Passende Einträge werden automatisch mitgegeben; Werkzeug „wissen_nachschlagen“.
+- Wörterbuch für die Spracherkennung: bekannte Fehlhörungen werden korrigiert („el Carnitin“ → L-Carnitin), Ähnliches nur als Rückfrage-Hinweis („Meinst du Sigumir?“); bei Unsicherheit wird nichts lokal abgehakt.
+- Profile: dauerhafter Plan-Status (aktiv, pausiert, Status prüfen, erwogen, früher verwendet), Hinweise (z. B. Threonat-Reaktion), Tagesstatus mit „später geplant“; Werkzeug „plan_status_setzen“; einmaliger Einrichtungs-Check für „Status prüfen“.
+- Identität: Beim Aktivieren nach 20 Minuten Ruhe fragt Atlas „Mit wem spreche ich?“, bis dahin keine persönlichen Daten; „Ich bin Eva“, „Wechsle zu Mario“ wechseln das Profil.
+- Studien-Updates werden mit Datum verschlüsselt archiviert („studien_abrufen“).
+- Korrektur: Namen mit vier Wörtern (z. B. „Omega-3 Norsan vegan“) wurden bisher nie erkannt.
+- Rückfall: Version 2.5 unter /alt/2.5/.
+
 ## 2.5 (09.11.2026) – Fehlerbehebung Persönlichkeit, Zuhören, Ruhemodus
 - Ruhemodus: zählte bisher nur Kamera-Bewegung als Aktivität. Lag das Gerät still oder stand man ruhig davor, schlief Atlas direkt nach einer Gesprächspause ein. Jetzt zählen auch Sprache, Zuhören, Denken, Sprechen und Antippen; Schlaf erst nach 20 Minuten echter Ruhe und nie während Aufnahme, Erkennung oder Antwort.
 - „Tschüss“, „Bis dann“ usw. lösen den Ruhemodus nur noch als kurze, eigenständige Aussage aus (höchstens 6 Wörter), nicht mitten in einem Satz.
