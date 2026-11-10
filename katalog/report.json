@@ -1,5 +1,5 @@
 {
- "geprueft": "2026-11-10T06:21:19.412Z",
+ "geprueft": "2026-11-10T06:33:21.141Z",
  "definitionen": {
   "gefunden": "alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",
   "nem": "davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",
@@ -26,8 +26,8 @@
   },
   "MoleQlar": {
    "gefunden": 104,
-   "nem": 66,
-   "vollstaendig": 55,
+   "nem": 74,
+   "vollstaendig": 63,
    "teilweise": [
     {
      "name": "Omega 3 Kapseln Vegan",
@@ -79,6 +79,22 @@
      "grund": "keine Einnahmeempfehlung auf der Seite; Packungsgröße nicht als Text angegeben"
     },
     {
+     "name": "Lithiumorotat",
+     "url": "https://moleqlar.com/products/lithium-orotat",
+     "fehlt": [
+      "verzehrempfehlung"
+     ],
+     "grund": "keine Einnahmeempfehlung auf der Seite"
+    },
+    {
+     "name": "Inositol Pulver",
+     "url": "https://moleqlar.com/products/inositol-pulver",
+     "fehlt": [
+      "packung"
+     ],
+     "grund": "Packungsgröße nicht als Text angegeben"
+    },
+    {
      "name": "Uthever NMN Pulver",
      "url": "https://moleqlar.com/products/uthever-nmn",
      "fehlt": [
@@ -102,35 +118,15 @@
       "packung"
      ],
      "grund": "Packungsgröße nicht als Text angegeben"
-    },
-    {
-     "name": "QSCOOP",
-     "url": "https://moleqlar.com/products/qscoop",
-     "fehlt": [
-      "inhaltsstoffe",
-      "zutaten",
-      "packung"
-     ],
-     "grund": "keine Nährstofftabelle auf der Seite (nicht aus Bildern geschätzt); keine Zutatenliste auf der Seite; Packungsgröße nicht als Text angegeben"
-    },
-    {
-     "name": "QRGANIZER",
-     "url": "https://moleqlar.com/products/qrganizer",
-     "fehlt": [
-      "inhaltsstoffe",
-      "zutaten",
-      "packung"
-     ],
-     "grund": "keine Nährstofftabelle auf der Seite (nicht aus Bildern geschätzt); keine Zutatenliste auf der Seite; Packungsgröße nicht als Text angegeben"
     }
    ],
    "nicht_abrufbar": [],
    "typen": {
     "Set/Bundle": 10,
-    "Nahrungsergänzungsmittel": 66,
-    "Zubehör/Sonstiges": 12,
-    "Lebensmittel": 11,
+    "Nahrungsergänzungsmittel": 74,
+    "Zubehör/Sonstiges": 14,
     "Medizinprodukt": 1,
+    "Lebensmittel": 1,
     "Test/Analyse": 4
    },
    "quelle": "https://moleqlar.com/products.json",
@@ -141,97 +137,9 @@
  "aenderungen": {
   "neu": [],
   "geaendert": [
-   "Stressfrei Bundle für Hunde: Beruhigungstropfen & Verdauungshilfe",
-   "Proteindrink Schoko",
-   "Proteindrink Vanille",
-   "Pro Peptide Protein Isolate",
-   "Artesisches Hallstein Wasser",
-   "BIOGENA Wellbeing Check - Osteo Essential Urintest",
-   "Wellbeing Check Ultimate 360° Bluttest",
-   "ColonBalance® Sticks",
-   "Zeolith 500",
-   "Zeolith ultrafein",
-   "Vegan Protein CS 198/18 MRP ",
-   "ColonBalance®",
-   "Vegan Protein Sticks",
-   "Lutein + Zeaxanthin Kapseln",
-   "NR PRO Kapseln",
-   "Omega 3 Kapseln Vegan",
-   "Omega 3 Kapseln (Fischöl)",
-   "Testo Support",
-   "Enhanced Fiber (Ballaststoffe)",
-   "Zeolith Pulver",
-   "Hair Restoration Serum",
-   "Melatonin Tabletten",
-   "Kreatin Pulver",
-   "Vitamin B12 Kapseln",
-   "Citicolin Kapseln",
-   "Elektrolyte Sticks",
-   "Vitamin ADEK",
-   "Eisen Kapseln",
-   "Chrom Kapseln",
-   "Ceramide Kapseln",
-   "Nattokinase Kapseln",
-   "Alpha Liponsäure Kapseln",
-   "PQQ (Pyrrolochinolinchinon) Kapseln",
-   "Enhanced Protein Pulver",
-   "Ergothionein Kapseln",
-   "Cognesium Kapseln",
-   "Essential Amino Acids (EAA) Pulver",
-   "ProLithin A® Kapseln",
-   "Magnesium Bisglycinat Kapseln",
-   "Collagen Booster",
-   "Kreatin Sticks",
-   "Vitamin D3 K2 Kapseln",
-   "Vitamin C Kapseln (liposomal)",
-   "Astragalus Kapseln",
-   "Vitamin B Komplex Kapseln",
-   "L-Theanin Kapseln",
-   "ONE Probierpaket",
-   "Zink Kapseln",
-   "Selen Kapseln",
-   "Methylenblau Tropfen",
-   "Lithiumorotat",
-   "Rhodiola Rosea Kapseln",
-   "Ashwagandha Kapseln",
-   "Veganes Omega 3 + Vitamin D3",
-   "Glycin Pulver",
-   "Inositol Pulver",
-   "Magnesium L-Threonat Pulver",
-   "Astaxanthin Kapseln",
-   "Coenzym Q10 Kapseln",
-   "Curcumin Kapseln",
-   "Magnesium L-Threonat Kapseln",
-   "Nicotinamid Ribosid Kapseln",
-   "Essentials Formula Kapseln",
-   "Uthever NMN Pulver",
-   "Kreatin Pulver (Creavitalis®)",
-   "Kollagen (Kollagenpeptide)",
-   "Betain (TMG) Pulver",
-   "Carnosin Pulver",
-   "Spermidin Kapseln",
-   "Quercetin Pulver",
-   "Glucosamin Kapseln",
-   "Vitamin D3 K2 Tropfen",
-   "Magnesium Komplex Kapseln",
-   "Calcium-Alphaketoglutarat Kapseln",
-   "Resveratrol Kapseln",
-   "Resveratrol Pulver",
-   "Quercetin Kapseln",
-   "Betain (TMG) Kapseln",
-   "Omega 3 Kapseln (EPAX®)",
-   "Berberin Kapseln",
-   "Sulforaphan Kapseln",
-   "Hyaluron (Hyaluronsäure)",
-   "regeNAD (NAD Booster)",
-   "Calcium-Alphaketoglutarat Pulver",
-   "GlyNAC (Glycin & N-Acetyl-Cystein)",
-   "ONE - Daily Foundational Formula",
-   "Apigenin Kapseln",
-   "Spermidin PRO Kapseln",
-   "Taurin Kapseln",
-   "Fisetin Kapseln",
-   "QNIGHT (Relaxation & Recovery Support)"
+   "Natives Olivenöl Extra (High Polyphenol)",
+   "QSHAKER PRO (Edelstahlshaker)",
+   "QSHAKER (Glasflasche)"
   ],
   "entfernt": []
  },
