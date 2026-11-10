@@ -103,7 +103,7 @@ const changes={neu:[],geaendert:[],entfernt:[]};for(const p of produkte){p.hash=
 const now=new Set(produkte.map(p=>p.url));for(const o of prevMap.values())if(!now.has(o.url))changes.entfernt.push(o.name);
 report.aenderungen=prev?changes:{erstimport:true};
 for(const [h,R] of Object.entries(report.hersteller)){R.offen_oder_nicht_abrufbar=R.nicht_abrufbar.length;R.produktbilder="nicht geprüft";
-  const andere=R.gefunden-R.nem;R.status={alle_gefundenen_produkte:R.gefunden,nahrungsergaenzungen:R.nem,davon_vollstaendig:R.vollstaendig,davon_teilweise:R.teilweise.length,andere_produktarten:andere,andere_nach_art:R.typen,nicht_abrufbar:R.nicht_abrufbar.length,
+  const andere=R.gefunden-R.nem;R.status={alle_gefundenen_produkte:R.gefunden,nahrungsergaenzungen:R.nem,davon_vollstaendig:R.vollstaendig,davon_teilweise:R.teilweise.length,andere_produktarten:andere,andere_nach_art:Object.fromEntries(Object.entries(R.typen).filter(([t])=>t!=="Nahrungsergänzungsmittel")),nicht_abrufbar:R.nicht_abrufbar.length,
     text:`${h}: ${R.gefunden} Produkte gefunden, davon ${R.nem} Nahrungsergänzungen (${R.vollstaendig} vollständig, ${R.teilweise.length} teilweise erfasst) und ${andere} andere Produktarten.`}}
 for(const p of produkte)p.produktbilder="nicht geprüft";report.unvollstaendig=Object.values(report.hersteller).some(h=>h.teilweise.length||h.nicht_abrufbar.length);
 fs.writeFileSync("katalog/supplement_catalog.json",JSON.stringify({stand:NOW,hinweis:"Herstellerangaben aus den offiziellen Shops; keine Wirksamkeitsbelege. Fehlende Angaben sind leer, nicht geschätzt.",produkte},null,0));

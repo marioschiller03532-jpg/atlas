@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.7.2 (10.11.2026) – Katalog-Status je Hersteller und Produktgruppe
+- Kein pauschales „Katalog vollständig/unvollständig“ mehr. Status getrennt: alle gefundenen Produkte, Nahrungsergänzungen, davon vollständig, davon teilweise, andere Produktarten (nach Art).
+- Fehlende Angaben je Produkt und Feld, Wortlaut „nicht auf der Produktseite gefunden“ (Biogena: „nicht auf Produktseite und Etikett-PDF gefunden“). Nichts geschätzt oder ergänzt.
+- Produktbilder ausdrücklich „nicht geprüft“; keine Werte daraus übernommen.
+- Einstellungen zeigen, ob der Katalog vom Server oder aus der Offline-Kopie im Gerät geladen wurde.
+- Stand 10.11.2026 10:28: Biogena 298 / 253 NEM / 253 vollständig / 0 teilweise / 45 andere. MoleQlar 104 / 74 NEM / 63 vollständig / 11 teilweise / 30 andere.
+- Rückfall: Version 2.7.1 unter /alt/2.7.1/.
+
 ## 2.7.1 (10.11.2026) – Produktkatalog fertiggestellt
 - Zählweise eindeutig: „gefunden“ = alle Produktseiten im offiziellen Verzeichnis (inkl. Zubehör, Sets, Tests, Lebensmittel, Medizinprodukte). „Nahrungsergänzungen“ = davon als NEM gekennzeichnet. „Vollständig“ = NEM mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße.
 - Produkttyp jetzt nach Pflichtkennzeichnung (Biogena) bzw. Nährstofftabelle (MoleQlar) statt Raten. Die 7 früher „teilweisen“ Biogena-Produkte sind keine NEM (2 Wässer, Snack, 2 Speiseöle = Lebensmittel; 2× Zeolith = Medizinprodukt), Hinweise wie Wechselwirkungen/Nebenwirkungen beim Zeolith übernommen.
