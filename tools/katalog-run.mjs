@@ -82,9 +82,15 @@ const GRUND={biogena:{inhaltsstoffe:"keine Inhaltsstofftabelle auf der Seite",zu
     preis:v.price?{betrag:+v.price,waehrung:"EUR",verfuegbar:!!v.available,abgerufen:NOW}:null,ean:v.barcode||null,dokumente:[],tags};
   const T=tables(page).filter(t=>/N(ä|ae)hrst|Portion|NRV|pro Tag/i.test(t.kopf.join(" ")+" "+t.zeilen.flat().join(" ")));p.inhaltsstoffe=T[0]||null;
   const bodyTxt=strip(pr.body_html||"");const pm=(bodyTxt+" "+(p.verzehrempfehlung||"")+" "+pr.title).match(/\(?(\d+)\s*(Kapseln|Sticks|Tabletten|Sachets|Portionen|Beutel|ml|g)\)?(?:\s*\)|\s+entspricht|\s*[-–,]|\s+Vorrat|\s+reich)/i);
-  if(!p.packung&&pm)p.packung=pm[1]+" "+pm[2];
+  // Packungsgröße: zuerst Varianten-/Optionsnamen des Shops, dann ausdrückliche Füllmengen-Angabe im Seitentext
+  const U="(?:Kapseln|Sticks|Tabletten|Sachets|Portionen|Beutel|Softgels|ml|g|kg)";
+  const vt=(pr.variants||[]).map(x=>x.title).concat((pr.options||[]).flatMap(o=>o.values||[])).find(t=>new RegExp("^\\s*\\d+[.,]?\\d*\\s*"+U+"\\b","i").test(String(t)));
+  const fm=strip(page).match(new RegExp("(?:Inhalt|Füllmenge|Nettofüllmenge|Packungsgröße|Packungsinhalt)\\s*:?\\s*(\\d+[.,]?\\d*\\s*"+U+")\\b","i"));
+  if(!p.packung&&vt)p.packung=String(vt).trim();if(!p.packung&&fm)p.packung=fm[1];if(!p.packung&&pm)p.packung=pm[1]+" "+pm[2];
   p.dokumente=[...new Set((page.match(/https?:[^"'\s]+\.pdf/g)||[]).map(x=>x.replace(/^http:/,"https:")))].slice(0,6);
-  p.typ=typOf(pr.title,Object.values(D).join(" ")+" "+bodyTxt,!!p.inhaltsstoffe);const nem=p.typ==="Nahrungsergänzungsmittel";p.kategorie=nem?(p.kategorie||"Nahrungsergänzung"):p.typ;
+  // MoleQlar: das Wort "Nahrungsergänzung" taucht auch in Zubehör-Texten auf -> maßgeblich ist die Nährstofftabelle
+  p.typ=/Bundle|Paket/i.test(pr.title)?"Set/Bundle":/Test\b/i.test(pr.title)?"Test/Analyse":/Medizinprodukt/i.test(Object.values(D).join(" ")+bodyTxt)?"Medizinprodukt":
+    p.inhaltsstoffe?(/Oliven(ö|oe)l|Protein/i.test(pr.title)?"Lebensmittel":"Nahrungsergänzungsmittel"):(p.zutaten&&p.verzehrempfehlung&&/Kapseln|Pulver|Tropfen|Sticks|Tabletten/i.test(pr.title)?"Nahrungsergänzungsmittel":"Zubehör/Sonstiges");const nem=p.typ==="Nahrungsergänzungsmittel";p.kategorie=nem?(p.kategorie||"Nahrungsergänzung"):p.typ;
   const miss=["inhaltsstoffe","zutaten","verzehrempfehlung","packung"].filter(k=>!p[k]);p.fehlend=nem?miss:[];p.vollstaendig=nem?miss.length===0:null;
   R.typen[p.typ]=(R.typen[p.typ]||0)+1;if(nem){R.nem++;if(p.vollstaendig)R.vollstaendig++;else R.teilweise.push({name:pr.title,url,fehlt:miss,grund:miss.map(k=>GRUND.moleqlar[k]).join("; ")})}produkte.push(p);
   if(!r.ok)R.nicht_abrufbar.push({url,status:r.status})}
