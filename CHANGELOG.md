@@ -1,5 +1,15 @@
 # Atlas – Änderungen
 
+## 2.11 (11.11.2026) – Aufwecken durch Bewegung, „Wer ist gerade im Raum?“
+- Aus dem Schlaf weckt nur deutliche, anhaltende Bewegung (ca. 1,5 s, 3 Treffer in Folge statt 2). Lichtwechsel weiterhin ausgefiltert.
+- Nach dem Aufwachen (Bewegung oder Antippen) genau eine Begrüßung: „Hallo, ich bin Atlas, deine persönliche Biohacking-Assistentin. Wer ist gerade im Raum?“
+- Antwort wird lokal ausgewertet (kein Claude-Aufruf, keine Kamera-Erkennung): bekannte Person → „Hallo Mario. Was brauchst du?“ / „Hallo Eva. Was brauchst du?“; neuer Name → „Hallo Gerhard. Was darf ich für dich tun?“; mehrere → „Hallo Mario und Eva. Was braucht ihr?“; nicht verstanden → einmal „Hallo. Wie darf ich dich ansprechen, und womit kann ich dir helfen?“, danach normal weiter. Name plus Anliegen („Mario, wie viel Kreatin …“) → Anliegen wird direkt beantwortet.
+- Während Zuhören, Denken, Sprechen oder laufendem Gespräch löst Bewegung keine Begrüßung aus. Sperrzeit 2 min nach dem Aufwachen.
+- Ohne Kamerazugriff: Hinweis und Statuszeile „Kugel antippen“; Antippen aus dem Schlaf weckt und begrüßt.
+- Ruhemodus nach „Gute Nacht“ bleibt wie bisher: nur „Atlas“ oder Antippen weckt.
+- Kamera: nur nach Freigabe, nur 48×36-Helligkeitswerte im Arbeitsspeicher, nichts gespeichert, keine Gesichtserkennung.
+- Rückfall: /alt/2.10/.
+
 ## 2.10 (11.11.2026) – Gesprächsfaden und Supplement-Runden
 Ursachen:
 - Die Regel „Supplements nie pauschal abhaken“ zwang Atlas, nach „Morgenroutine erledigt“ einzeln nachzufragen („Welche soll ich abhaken?“). Es gab kein Werkzeug für eine ganze Runde.

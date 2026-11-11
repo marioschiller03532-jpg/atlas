@@ -1040,7 +1040,17 @@ const HEARFIX=[[/\bmagnesium[\s-]*b[iy]e?s{1,2}[\s-]*gl[iyü][czs]{0,2}[iy]?nat\
   [/\bkreatin[\s-]+mono[\s-]*hydrat\b/gi,"Kreatin-Monohydrat"],[/\bash?wa[\s-]*gan?dh?a\b/gi,"Ashwagandha"],[/\bbio[\s-]+regulator/gi,"Bioregulator"],[/\bepi[\s-]+talon\b/gi,"Epitalon"],[/\bpine?[\s-]+alon\b/gi,"Pinealon"],[/\bmole?[ck]ular\b/gi,"MoleQlar"],[/\bbio[\s-]?gena\b/gi,"Biogena"]];
 const hearFix=t=>HEARFIX.reduce((x,[a,b])=>x.replace(a,b),String(t));
 function handleUtterance(t){t=hearFix(t);{const c=speechTerms(t);t=c.text;speechHint=c.unsure}$("heard").textContent=t;
-  {const w=(awaitingWho||isUnknown()||/^(atlas,?\s*)?(wechsle?|wechsel)\b/i.test(t.trim()))?whoFrom(t):null;
+  if(awaitingWho){const a=roomAnswer(t);addLog("mensch",t);listening=false;const back=()=>{ignoreUntil=Date.now()+350;if(convo)listen()};
+    if(a&&a.known){const P=a.known.slice().sort((x,y)=>(y.typ==="haupt")-(x.typ==="haupt"));awaitingWho=false;setPerson(P[0].name);touch();
+      if(a.rest){converse(t,{mode:modeOf(t)});return}   // Name plus Anliegen: gleich das Anliegen beantworten
+      const names=a.known.map(x=>x.name),many=names.length>1,nm=many?names.slice(0,-1).join(", ")+" und "+names[names.length-1]:names[0];
+      const msg=many?`Hallo ${nm}. Was braucht ihr?`:(P[0].typ==="haupt"||P[0].typ==="erwachsen")?`Hallo ${nm}. Was brauchst du?`:`Hallo ${nm}. Was darf ich für dich tun?`;
+      addLog("assistent",msg);speak(msg,back);return}
+    if(a&&a.name){awaitingWho=false;setPerson(a.name);touch();const msg=`Hallo ${a.name}. Was darf ich für dich tun?`;addLog("assistent",msg);speak(msg,back);return}
+    // nicht verstanden: einmal höflich nachfragen, danach normal weiter (keine Endlosschleife)
+    whoTries++;if(whoTries===1){const msg="Hallo. Wie darf ich dich ansprechen, und womit kann ich dir helfen?";addLog("assistent",msg);speak(msg,back);return}
+    awaitingWho=false;log.pop()}
+  {const w=(isUnknown()||/^(atlas,?\s*)?(wechsle?|wechsel)\b/i.test(t.trim()))?whoFrom(t):null;
    if(w){addLog("mensch",t);listening=false;awaitingWho=false;
      if(w.p){setPerson(w.p.name);touch();converse(`(System: Die Person hat sich als ${w.p.name} identifiziert. Begrüß ${w.p.name} kurz und persönlich, ohne lange Einleitung.)`,{internal:true,mode:"schnell"});return}
      setPerson(w.name);const a=`Hallo ${w.name}, schön dich kennenzulernen. Wobei kann ich helfen?`;addLog("assistent",a);speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}}
@@ -1361,8 +1371,21 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
     const m=e.message||"";showErr(e.status===401?"API-Schlüssel ist ungültig. Bitte unter Mehr → Einstellungen prüfen.":e.status===429?"Zu viele Anfragen oder Limit erreicht. Kurz warten.":/credit|balance/i.test(m)?"Kein Guthaben mehr im Anthropic-Konto.":e.status===404?"Modell nicht gefunden. Unter Einstellungen ein anderes wählen.":e.status===529||e.status===503?"Claude ist gerade überlastet. Gleich nochmal.":e.status?("Fehler "+e.status+": "+m.slice(0,160)):("Keine Verbindung zu Claude ("+(e.message||e.name||"unbekannt")+"). Unter Mehr → Einstellungen → „Claude testen“ prüfen."))}}
 
 /* ================= Begrüßung & Bewegung ================= */
-function greet(){
+// Wer ist im Raum? Antwort auswerten (nur aus dem Gesagten – keine Kamera-/Gesichtserkennung)
+const WHO_STOP=new Set(["ja","nein","hallo","servus","hi","guten","morgen","abend","tag","danke","ich","bin","hier","ist","der","die","das","da","niemand","keiner","weiss","nicht","atlas","franzi","wer","was","und","es","s","mal","so","grad","gerade","jetzt","im","raum"]);
+function roomAnswer(t){const raw=String(t).trim().replace(/^(atlas|franzi),?\s*/i,""),words=raw.split(/\s+/),N=norm(raw);
+  const known=profiles.filter(p=>norm(p.name)&&(" "+N+" ").includes(" "+norm(p.name)+" "));
+  if(known.length)return {known,rest:words.length>5};
+  const m=raw.match(/^(?:hallo,?\s*|servus,?\s*|hi,?\s*)?(?:ich bin(?:'?s)?(?:,| der| die)?|ich hei(?:ß|ss)e|mein name ist|hier ist(?: der| die)?|hier spricht|das ist(?: der| die)?|da ist(?: der| die)?)?\s*([A-Za-zÄÖÜäöüß-]{3,})(?:\s+hier)?[\s.!,]*$/i);
+  if(m&&!WHO_STOP.has(norm(m[1])))return {name:m[1][0].toUpperCase()+m[1].slice(1).toLowerCase()};
+  return null}
+let whoTries=0;
+function askRoom(){const g=`Hallo, ich bin ${S.aname}, deine persönliche Biohacking-Assistentin. Wer ist gerade im Raum?`;
+  setUnknown();awaitingWho=true;whoTries=0;addLog("intern","(Atlas ist durch Bewegung oder Antippen aufgewacht. Wer im Raum ist, weiß Atlas nicht – nur aus der Antwort.)");addLog("assistent",g);convo=true;diag("begrüßung");speak(g,()=>setTimeout(listen,300))}
+function greet(fromWake){
   const M=main();
+  // Nach dem Aufwachen (Bewegung/Antippen aus dem Schlaf) immer einmal fragen, wer im Raum ist; sonst nur, wenn die Person länger nicht bestätigt ist
+  if(fromWake||Date.now()-identAt>S.cool*60000||isUnknown()){askRoom();return}
   // Identität seit über 20 Minuten nicht bestätigt (oder nie): fragen, wer da ist
   if(askWho()&&(isUnknown()||Date.now()-identAt>S.cool*60000)){setUnknown();awaitingWho=true;const h=new Date().getHours();
     const g=(h<11?"Guten Morgen":h<18?"Hallo":"Guten Abend")+`, ich bin ${S.aname}, ${M.name}s Biohacking-Assistent. Mit wem spreche ich?`;
@@ -1381,7 +1404,7 @@ let roomAsked=false,stream=null,lastMotion=0,lastGreet=0,prevFrame=null,motionTi
 const small=document.createElement("canvas");small.width=48;small.height=36;const sctx=small.getContext("2d",{willReadFrequently:true});
 async function startRoom(){unlockAudio();ensureRec();
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play()}
-  catch{if(away)$("awayBar").textContent="Abwesenheitsmodus · Kugel antippen, um die Bewegungserkennung zu starten";else showErr("Kamera ist nicht erlaubt. Ohne Kamera keine Bewegungserkennung, alles andere funktioniert.");return}
+  catch{diag("kamera nicht erlaubt");if(away)$("awayBar").textContent="Abwesenheitsmodus · Kugel antippen, um die Bewegungserkennung zu starten";else{showErr("Kamera ist nicht erlaubt. Ohne Kamera weckst du Atlas mit einem Tipp auf die Kugel oder mit dem Wort „Atlas“.");setMode(sleeping?"sleep":"idle",sleeping?"Schläft · Kugel antippen":"Bereit · Kugel antippen")}return}
   try{wake=await navigator.wakeLock?.request("screen")}catch{}
   $("roomBtn").textContent="Raum-Modus an";$("roomBtn").classList.add("on");$("roomBtn").classList.remove("primary");lastMotion=Date.now();lastGreet=0;sleeping=false;prevFrame=null;hits=0;
   setMode("idle",idleLabel());motionTimer=setInterval(checkMotion,500)}
@@ -1389,7 +1412,8 @@ function stopRoom(){clearInterval(motionTimer);motionTimer=null;sleeping=false;p
   $("roomBtn").textContent="Raum-Modus";$("roomBtn").classList.remove("on");$("roomBtn").classList.add("primary");setMode("idle",idleLabel())}
 /* Bewegung statt Licht: Die App sieht nur Kamerabilder (keinen Lichtsensor, keine Personenerkennung).
    Darum: Helligkeit jedes Bildes ausgleichen, Lichtsprünge und Ganzbild-Änderungen verwerfen, Bewegung erst nach 2 Treffern in Folge zählen. */
-let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false;
+let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false,wokeAt=0;
+const WAKE_HITS=3,WAKE_LOCK=120000;   // schlafend: ca. 1,5 s anhaltende Bewegung nötig; nach dem Aufwachen 2 min keine neue Begrüßung durch Bewegung
 // Aktivität = Bewegung ODER Sprache, Zuhören, Denken, Sprechen, Antippen (vorher zählte nur Kamera-Bewegung)
 let lastActivity=Date.now();function touch(){lastActivity=Date.now()}
 /* Ruhemodus: nach "Tschüss", "Gute Nacht", "Atlas, Ruhemodus". Einmal verabschieden, dann still.
@@ -1402,7 +1426,7 @@ function enterRest(bye){if(typeof closeList==="function"&&listOpen)closeList();c
 function leaveRest(greetNow){resting=false;ls.del("restUntil");sleeping=false;lastMotion=Date.now();setMode("idle",idleLabel());if(greetNow){lastGreet=Date.now();convo=true;greet()}}
 {const u=ls.get("restUntil",0);if(u&&Date.now()<u){resting=true;sleeping=true}}
 const sleepMs=()=>Math.max(1,+S.sleepMin||20)*60000;
-function goSleep(){if(sleeping)return;sleeping=true;if(convo)endConvo();setMode("sleep","Schläft")}
+function goSleep(){if(sleeping)return;sleeping=true;if(convo)endConvo();setMode("sleep",stream?"Schläft":"Schläft · Kugel antippen")}
 function wakeUp(){if(!sleeping)return false;sleeping=false;setMode("idle",idleLabel());return true}
 function checkMotion(){if(!stream)return;
   sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,n=48*36,g=new Float32Array(n);let m=0;for(let i=0;i<n;i++){g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;m+=g[i]}m/=n;
@@ -1419,14 +1443,18 @@ function checkMotion(){if(!stream)return;
   let ch=0;const th=40-S.sens*3;for(let i=0;i<n;i++)if(Math.abs(raw[i]-shift)>th)ch++;
   const f=ch/n;
   if(f>0.6){hits=0;lightHold=now+1500;return}                 // fast alles auf einmal = Licht/Wackeln
-  if(f>0.06-S.sens*0.005){hits++;if(hits<2)return}else{hits=0;return}
-  hits=0;if(resting)return;   // Ruhemodus: Bewegung weckt nicht
-  const quiet=idleFor>S.cool*60000;lastMotion=now;const woke=wakeUp();
-  if((quiet||woke||!lastGreet)&&now-lastGreet>60000&&!busy&&!listening&&!convo&&!finishing&&!speaking()){lastGreet=now;away?awayVisitor():greet()}}
+  if(f>0.06-S.sens*0.005){hits++;if(hits<(sleeping?WAKE_HITS:2))return}else{hits=0;return}
+  hits=0;if(resting)return;   // Ruhemodus nach "Gute Nacht": Bewegung weckt nicht (nur "Atlas" oder Antippen)
+  lastMotion=now;
+  // Gespräch läuft, Atlas hört zu, denkt oder spricht: Bewegung zählt nur als Anwesenheit, keine Begrüßung
+  if(convo||busy||listening||finishing||speaking()||sessText)return;
+  if(away){if(now-lastGreet>60000){lastGreet=now;wakeUp();awayVisitor()}return}
+  const woke=sleeping&&now-wokeAt>WAKE_LOCK?wakeUp():false;
+  if((woke||!lastGreet)&&now-lastGreet>WAKE_LOCK){wokeAt=now;lastGreet=now;diag(woke?"aufgewacht (bewegung)":"erste bewegung");greet(woke)}}
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
 
 /* ================= Bedienung ================= */
-$("vis").onclick=()=>{unlockAudio();touch();if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now()}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
+$("vis").onclick=()=>{unlockAudio();touch();if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now();if(!away&&!busy&&!convo){wokeAt=lastGreet=Date.now();diag("aufgewacht (antippen)");greet(true);return}}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("lvClose").onclick=e=>{e.stopPropagation();closeList()};
 $("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
@@ -1681,7 +1709,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261111-0529",ATLAS_REL="2.10";
+const APP_VERSION="20261111-0543",ATLAS_REL="2.11";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
