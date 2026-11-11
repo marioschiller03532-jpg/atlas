@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.13 (11.11.2026) – Feste Grundgestalt „Ringkern“
+- Neue, ab jetzt feste visuelle Grundlage (siehe DESIGN.md): dunkler Hintergrund, leuchtendes rundes Zentrum mit dunkler Flamme, klar erkennbarer äußerer Ring. Türkis-Cyan als Grundfarbe.
+- Zustände: Bereit (schwach, atmet langsam) · Zuhören (Ring heller, zwei dezente Lichtwellen) · Denken (Licht wandert langsam im Zentrum, Ring ruhig) · Sprechen (Ring pulsiert sanft mit geglätteter Stimm-Energie) · Ruhe (deutlich dunkler, nahezu statisch). Reduzierte Bewegung berücksichtigt.
+- Emblem in der Mitte austauschbar (EMBLEMS / vis.emblem / vis.emblemImg), ohne die Oberfläche umzubauen.
+- Farbstimmungen: Türkis (Standard), Blau, Violett, Nordlicht (weich mehrfarbig). Oberfläche in Türkis.
+- Ringkern einmalig aktiviert; frühere Kugeln bleiben in den Einstellungen wählbar. Keine Funktionen geändert.
+- Rückfall: /alt/2.12/.
+
 ## 2.12 (11.11.2026) – Morgendlicher Wissensimpuls
 - Ablauf morgens (4–11 Uhr, einmal pro Person und Tag): Begrüßung → ein kurzer Wissensimpuls zu einem Supplement → wie gewohnt weiter zu dem, was heute ansteht (Claude übernimmt den Tagesplan).
 - Auswahl: Mario oder Eva → aus der eigenen Liste (aktive Mittel, bei Eva auch „Status prüfen“); Person unklar (mehrere, Gast) → allgemeiner Eintrag. Abwechselnd: am längsten nicht genannte zuerst.
