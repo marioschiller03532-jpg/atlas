@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.12 (11.11.2026) – Morgendlicher Wissensimpuls
+- Ablauf morgens (4–11 Uhr, einmal pro Person und Tag): Begrüßung → ein kurzer Wissensimpuls zu einem Supplement → wie gewohnt weiter zu dem, was heute ansteht (Claude übernimmt den Tagesplan).
+- Auswahl: Mario oder Eva → aus der eigenen Liste (aktive Mittel, bei Eva auch „Status prüfen“); Person unklar (mehrere, Gast) → allgemeiner Eintrag. Abwechselnd: am längsten nicht genannte zuerst.
+- Texte: vorab geschrieben und in der verschlüsselten Wissensbibliothek hinterlegt (39 Einträge, 1–2 Sätze, max. 37 Wörter ≈ 15 s), ehrlich zur Evidenz, bei Bioregulatoren klar „laut Hersteller … gute Humanstudien fehlen“. Keine Einnahmeempfehlung. Intimes (Libido-Mittel u. Ä.) und unklare Einträge sind ausgenommen. Ohne geladene Bibliothek kein Impuls.
+- Überspringen: „Stopp“ oder „überspring das / gleich zum Tagesplan“ → ohne Diskussion zum Tagesplan.
+- Rückfall: /alt/2.11/ (inkl. alter kb.enc).
+
 ## 2.11 (11.11.2026) – Aufwecken durch Bewegung, „Wer ist gerade im Raum?“
 - Aus dem Schlaf weckt nur deutliche, anhaltende Bewegung (ca. 1,5 s, 3 Treffer in Folge statt 2). Lichtwechsel weiterhin ausgefiltert.
 - Nach dem Aufwachen (Bewegung oder Antippen) genau eine Begrüßung: „Hallo, ich bin Atlas, deine persönliche Biohacking-Assistentin. Wer ist gerade im Raum?“

@@ -1044,9 +1044,10 @@ function handleUtterance(t){t=hearFix(t);{const c=speechTerms(t);t=c.text;speech
     if(a&&a.known){const P=a.known.slice().sort((x,y)=>(y.typ==="haupt")-(x.typ==="haupt"));awaitingWho=false;setPerson(P[0].name);touch();
       if(a.rest){converse(t,{mode:modeOf(t)});return}   // Name plus Anliegen: gleich das Anliegen beantworten
       const names=a.known.map(x=>x.name),many=names.length>1,nm=many?names.slice(0,-1).join(", ")+" und "+names[names.length-1]:names[0];
+      {const imp=morningImpuls(many?null:P[0]);if(imp){const msg=`Hallo ${nm}. ${imp.text}`;addLog("assistent",msg);speak(msg,()=>{ignoreUntil=Date.now()+350;toDayPlan(nm,imp)});return}}
       const msg=many?`Hallo ${nm}. Was braucht ihr?`:(P[0].typ==="haupt"||P[0].typ==="erwachsen")?`Hallo ${nm}. Was brauchst du?`:`Hallo ${nm}. Was darf ich für dich tun?`;
       addLog("assistent",msg);speak(msg,back);return}
-    if(a&&a.name){awaitingWho=false;setPerson(a.name);touch();const msg=`Hallo ${a.name}. Was darf ich für dich tun?`;addLog("assistent",msg);speak(msg,back);return}
+    if(a&&a.name){awaitingWho=false;setPerson(a.name);touch();const imp=morningImpuls(null);const msg=`Hallo ${a.name}. ${imp?imp.text+" ":""}Was darf ich für dich tun?`;addLog("assistent",msg);speak(msg,back);return}
     // nicht verstanden: einmal höflich nachfragen, danach normal weiter (keine Endlosschleife)
     whoTries++;if(whoTries===1){const msg="Hallo. Wie darf ich dich ansprechen, und womit kann ich dir helfen?";addLog("assistent",msg);speak(msg,back);return}
     awaitingWho=false;log.pop()}
@@ -1061,6 +1062,7 @@ function handleUtterance(t){t=hearFix(t);{const c=speechTerms(t);t=c.text;speech
     addLog("assistent",a);speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}perf={end:perf.flushAt||performance.now(),mode:modeOf(t)};
   if(REST_RE.test(t)&&t.trim().split(/\s+/).length<=6){addLog("mensch",t);const bye=pickFresh("bye",/nacht/i.test(t)?["Gute Nacht! Schlaf gut.","Gute Nacht, erhol dich gut.","Schlaf gut, bis morgen."]:["Bis später!","Servus, bis bald.","Mach's gut. Wenn du mich brauchst, sag einfach Atlas.","Ciao! Ich ruh mich aus, bis du wieder da bist."]);addLog("assistent",bye);enterRest(bye);return}
   if(/^((atlas|franzi),?\s*)?(stopp?|stop|halt stopp|hör auf|hoer auf|aufhören|sei still|sei ruhig|ruhe jetzt)\W*$/i.test(t.trim())){interrupt();return}
+  if(SKIP_IMP_RE.test(t)&&log.slice(-4).some(m=>m.rolle==="intern"&&/Wissensimpuls|Morgenbegrüßung/.test(m.text)||m.rolle==="assistent"&&IMP_OPEN.some(o=>m.text.includes(o)))){addLog("mensch",t);listening=false;toDayPlan(cur.name,null);return}
   if(/^(danke,? das war'?s|ende|das war'?s|das wär'?s)\b/i.test(t)){convo=false;listening=false;speak(pickFresh("end",["Alles klar.","Gern.","Passt, ich bin da, wenn du mich brauchst.","Okay."]));addLog("mensch",t);return}
   if(!offerStudy){const L=localAnswer(t);if(L){perf.mode="lokal";addLog("mensch",t);addLog("assistent",L.text);listening=false;
       if(L.end){enterRest(L.text);return}
@@ -1246,6 +1248,7 @@ GESPRÄCH WIE EIN MENSCH: Erkenne, ob er reden, eine Lösung finden oder einfach
 BIOHACKING-ALLTAG: Denk Schlaf, Training und Regeneration, Stress, Supplements und seinen Arbeitsrhythmus im Betrieb zusammen. Sagt er etwa, er kommt nicht zum Training, frag zuerst nach dem Grund und wie sein Rhythmus gerade aussieht, und schlag dann realistische Alternativen vor (kurz, zu Hause, im Raum, Regeneration statt Training), keinen Standardplan. Wissenschaft immer nach Evidenz einordnen: gut belegt (mehrere Humanstudien, Metaanalysen), plausibel aber begrenzt untersucht, experimentell oder anekdotisch, unbelegt oder riskant. Seine persönlichen Erfahrungen sind wertvolle Beobachtungen, aber keine Beweise; stell sie nie als wissenschaftlich belegt dar.
 GESPRÄCHSFADEN: Jede Antwort von ihm bezieht sich auf deine letzte Frage. Ablauf: Frage gestellt → Antwort verstanden → passende Aktion (Werkzeug) → knapp bestätigen → Faden weiterführen (auf seine Antwort eingehen oder die nächste sinnvolle Frage). Nie eine Frage wiederholen, die er gerade beantwortet hat, und nie auf eine erledigte Frage zurückspringen. Bei unklarer Antwort nur gezielt nach dem fehlenden Punkt fragen. Natürliche Bestätigungen verstehen: „ist erledigt“, „hab ich schon genommen“, „alles drin“, „passt, durch“, „die Morgenrunde ist durch“.
 RUNDEN: Bestätigt er eine ganze Runde („Morgenroutine erledigt“, „alles drin“, „Morgenrunde ist durch“) oder antwortet klar mit Ja/erledigt auf deine Frage, ob er die Supplements oder die Routine dieser Runde schon genommen/gemacht hat, ruf runde_abhaken für genau diese Tageszeit auf (Frage nach den Supplements: routine_schritte=false; Frage oder Aussage zur ganzen Routine: true) und hake alles ab, außer er nennt Ausnahmen. Nicht einzeln nachfragen, nicht fragen, welche er abhaken soll. Beispiel: „Hast du deine Supplements heute schon genommen?“ – „Ja, Morgenroutine ist erledigt.“ → runde_abhaken(morgens) → „Abgehakt. Gibt’s heute was Neues oder eine Änderung?“ Bereits abgehakte Einträge nennst du nie wieder als offen.
+WISSENSIMPULS: Morgens bekommt er nach der Begrüßung einen kurzen Wissensimpuls aus der Bibliothek. Will er ihn überspringen oder gleich zum Tagesplan, geh ohne Diskussion zum Tagesplan. Fragt er nach, erklär es gern, aber ohne Einnahmeempfehlung.
 TAG ODER DAUERHAFT: Die gespeicherte Routine bleibt, wie sie ist. „Heute lass ich X weg“, „heute zusätzlich Y“ gilt nur für heute (supplement_status bzw. einmalig_erfassen); danach darfst du kurz fragen, ob das dauerhaft gelten soll. liste_aendern (mit dauerhaft=true) nur, wenn er ausdrücklich „ab jetzt“, „dauerhaft“, „immer“ oder „regelmäßig“ sagt oder deine Frage danach mit Ja beantwortet.
 SUPPLEMENT-TAGEBUCH: Jedes Supplement hat heute genau einen Status: genommen, nicht genommen oder offen. Ändere einen Status nur nach einer eindeutigen Aussage von ihm, jedes Supplement einzeln, nie pauschal; erfinde nie eine Einnahme. Frag einzeln oder höchstens zwei auf einmal ab und werte jede Antwort einzeln aus („Glycin ja, L-Tyrosin nicht“ = zwei verschiedene Einträge). Ein „Ja“ gilt nur für das, wonach du zuletzt gefragt hast; ist unklar, worauf es sich bezieht, frag einmal gezielt nach. „Nur X“ heißt: X genommen, die anderen gerade abgefragten nicht genommen. „Alles außer X“ heißt: die gerade abgefragten außer X genommen, X nicht genommen, jedes einzeln eintragen. Korrigiert er sich („Ich hab mich versprochen“, „doch kein Glycin“), stell den betroffenen Eintrag laut den letzten Änderungen richtig und sag kurz, was du korrigiert hast. Unklare Namen (nur „Magnesium“ bei mehreren Formen) nachfragen. „Nicht genommen“ ist etwas anderes als „offen“. Pausierte Mittel (Status pausiert, z. B. Kurpause bei Bioregulatoren) fragst du nicht ab; Pausen setzt oder beendest du mit supplement_pausieren, nur wenn er es sagt.
 PLAN-STATUS: Neben dem Tagesstatus (genommen, ausgelassen, später geplant, offen) hat jedes Mittel einen dauerhaften Plan-Status: aktiv, pausiert, Status prüfen, erwogen, früher verwendet. Nur aktive Mittel fragst du täglich ab. Erwogene oder früher verwendete Mittel sind KEINE aktuelle Einnahme. Hinweise im Profil (z. B. eine berichtete Unverträglichkeit) nennst du, wenn das Mittel zur Sprache kommt, und stellst es dann nie als uneingeschränkt verträglich dar. Sagt er etwas wie „Rotlicht habe ich gemacht, das Eisbad mache ich später“, trag nur Rotlicht als erledigt und das Eisbad als später ein und frag nicht erneut nach Rotlicht.
@@ -1380,6 +1383,26 @@ function roomAnswer(t){const raw=String(t).trim().replace(/^(atlas|franzi),?\s*/
   if(m&&!WHO_STOP.has(norm(m[1])))return {name:m[1][0].toUpperCase()+m[1].slice(1).toLowerCase()};
   return null}
 let whoTries=0;
+/* Morgendlicher Wissensimpuls: einmal pro Morgen und Person, aus der (verschlüsselten) Wissensbibliothek.
+   Texte sind dort vorab geprüft hinterlegt (1–2 Sätze, ehrlich zur Evidenz, keine Einnahmeempfehlung). Ohne Bibliothek: kein Impuls. */
+const IMP_OPEN=["Hast du schon gewusst?","Kleiner Wissenshappen zum Start:","Kurz was Spannendes:","Ein kleiner Impuls für heute:","Wusstest du schon?","Kleines Morgenwissen:"];
+const IMP_GENERAL=["kreatin","omega3","vitd","mg-bisglycinat","mg-malat","glycin","ltheanin","vitc","protein","kollagen","kuerbiskerne","astaxanthin","safran","ashwagandha","citrullin","schwarzkuemmel"];
+const IMP_SKIP=new Set(["tribulus","maca","testoluten","libidon","floraintima","celluluten","ketodrink"]);   // Intimes nie ungefragt
+const SKIP_IMP_RE=/\b(überspring\w*|ueberspring\w*|lass (den|das) (impuls|wissen\w*)|kein (impuls|wissen\w*)|(gleich|direkt|lieber|sofort) (zum|mit dem|zu dem) tages(plan|programm)|was steht heute an)\b/i;
+const morningNow=()=>{const h=new Date().getHours();return h>=4&&h<11};
+function impulsFor(p){if(!KB||!Array.isArray(KB.eintraege))return null;const byId=Object.fromEntries(KB.eintraege.map(e=>[e.id,e]));let ids=[];
+  if(p&&(p.typ==="haupt"||p.typ==="erwachsen")){const paused=new Set((p.paused||[]).map(x=>x.name));
+    const items=[...(p.supps||[]).filter(x=>!paused.has(x)),...(p.plan||[]).filter(x=>x.plan==="pruefen").map(x=>x.name)];
+    for(const it of items){const h=kbFind(coreOf(it))[0];if(h&&!ids.includes(h.id))ids.push(h.id)}}
+  ids=ids.filter(id=>byId[id]&&byId[id].impuls&&!IMP_SKIP.has(id));
+  if(!ids.length)ids=IMP_GENERAL.filter(id=>byId[id]&&byId[id].impuls);   // Person unklar oder nichts Passendes: allgemeiner Eintrag
+  if(!ids.length)return null;
+  // abwechseln: am längsten nicht genannte zuerst, bei Gleichstand zufällig
+  const H=ls.get("impulsHist",{});ids=ids.map(id=>[id,Math.random()]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]).sort((a,b)=>(H[a]||"")<(H[b]||"")?-1:(H[a]||"")>(H[b]||"")?1:0);
+  const e=byId[ids[0]];H[e.id]=new Date().toISOString();ls.set("impulsHist",H);return {id:e.id,name:e.name.split(" (")[0],text:pickFresh("impOpen",IMP_OPEN)+" "+e.impuls}}
+function morningImpuls(p){if(!morningNow())return null;const key=`impuls:${today}:${p&&p.id||"allg"}`;if(ls.get(key,false))return null;const r=impulsFor(p);if(r){ls.set(key,true);diag("impuls:"+r.id)}return r}
+// nach Begrüßung + Impuls wie gewohnt zum Tag überleiten (Claude kennt Routine, Supplements, Termine)
+function toDayPlan(name,imp){converse(`(System: Morgens. ${name} wurde gerade begrüßt${imp?" und hat einen kurzen Wissensimpuls zu "+imp.name+" gehört":""} – nicht erneut begrüßen, den Impuls nicht wiederholen oder vertiefen, außer er fragt. Geh jetzt wie gewohnt kurz zu dem über, was heute ansteht.)`,{internal:true,mode:"schnell"})}
 function askRoom(){const g=`Hallo, ich bin ${S.aname}, deine persönliche Biohacking-Assistentin. Wer ist gerade im Raum?`;
   setUnknown();awaitingWho=true;whoTries=0;addLog("intern","(Atlas ist durch Bewegung oder Antippen aufgewacht. Wer im Raum ist, weiß Atlas nicht – nur aus der Antwort.)");addLog("assistent",g);convo=true;diag("begrüßung");speak(g,()=>setTimeout(listen,300))}
 function greet(fromWake){
@@ -1391,6 +1414,8 @@ function greet(fromWake){
     const g=(h<11?"Guten Morgen":h<18?"Hallo":"Guten Abend")+`, ich bin ${S.aname}, ${M.name}s Biohacking-Assistent. Mit wem spreche ich?`;
     addLog("intern","(Jemand ist in den Raum gekommen. Identität noch unbekannt.)");addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300));return}
   if(cur.typ!=="haupt"&&cur.typ!=="erwachsen")setPerson(M.name);
+  if(cur.typ==="haupt"||cur.typ==="erwachsen"){const again0=log.some(m=>m.rolle==="assistent"&&Date.now()-Date.parse(m.zeit)<5*3600e3);const imp=!again0&&morningImpuls(cur);
+    if(imp){const g=`${pickFresh("g-imp",["Guten Morgen","Morgen","Servus und guten Morgen"])}, ${cur.name}! ${imp.text}`;addLog("intern","(Morgenbegrüßung mit Wissensimpuls.)");addLog("assistent",g);convo=true;speak(g,()=>{ignoreUntil=Date.now()+350;toDayPlan(cur.name,imp)});return}}
   if(cur.typ==="erwachsen"){const g=pickFresh("g-erw",[`Hallo ${cur.name}! Schön, dass du da bist. Wie geht's dir?`,`Servus ${cur.name}! Was steht an?`]);addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300));return}
   const h=new Date().getHours(),again=log.some(m=>m.rolle==="assistent"&&Date.now()-Date.parse(m.zeit)<5*3600e3);
   const N=M.name,first=!again;
@@ -1709,7 +1734,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261111-0543",ATLAS_REL="2.11";
+const APP_VERSION="20261111-0558",ATLAS_REL="2.12";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
