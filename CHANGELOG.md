@@ -1,5 +1,21 @@
 # Atlas – Änderungen
 
+## 2.10 (11.11.2026) – Gesprächsfaden und Supplement-Runden
+Ursachen:
+- Die Regel „Supplements nie pauschal abhaken“ zwang Atlas, nach „Morgenroutine erledigt“ einzeln nachzufragen („Welche soll ich abhaken?“). Es gab kein Werkzeug für eine ganze Runde.
+- Atlas bekam seine letzte Frage nicht ausdrücklich mitgegeben und konnte sie nach Marios Antwort wiederholen.
+- Hineinreden wurde nur bei „Stopp“ erkannt; bei iOS, das ein Erkennungsergebnis fortschreibt, wurde auch das teilweise übersehen.
+- Meldete iOS das Ende eines Erkennungs-Neustarts nicht, konnte das Zuhören hängen bleiben.
+- Denkpause bei offenem Satzende war mit +2,5 s zu lang.
+Änderungen:
+- Neues Werkzeug runde_abhaken (morgens/mittags/abends): hakt alle aktiven Supplements dieser Runde aus der gespeicherten Liste ab, optional die Routine-Schritte; bewusst Ausgelassenes bleibt, Pausiertes wird übersprungen, Ausnahmen möglich. Nur Tagesstatus, Routine unverändert.
+- Regeln GESPRÄCHSFADEN, RUNDEN, TAG ODER DAUERHAFT; letzte Frage von Atlas wird bei jeder Antwort mitgegeben. Wiederholt Atlas trotzdem die gerade beantwortete Frage, wird dieser Satz nicht vorgelesen.
+- liste_aendern ändert die gespeicherte Routine nur mit dauerhaft=true (ausdrücklich „dauerhaft/ab jetzt/regelmäßig“) oder bestätigt im Listenmodus.
+- Leere/nicht geladene Supplementliste: Atlas sagt das klar, erfindet nichts.
+- Hineinreden: spricht Mario mindestens drei eigene Wörter, während Atlas redet, stoppt Atlas sofort, hört weiter zu und behält diese Wörter.
+- Pausen: Grundpause 2 s (abends 2,5), offenes Satzende +1,5 s, kurze Bruchstücke +0,5 s. Neustart der Erkennung mit Sicherheitsnetz nach 1,2 s.
+- Rückfall: /alt/2.9/.
+
 ## 2.9 (10.11.2026) – Neues Erscheinungsbild „Atemkern“
 - Neuer Avatar: runde, fein gerasterte Pixelhülle um einen weichen, warmen Kern, dezenter Pixelring. Farben: Mitternachtsblau, Türkis/Salbeigrün, warmes Kernlicht.
 - Zustände (bestehende Modi sleep/idle/listen/think/speak): Ruhe fast unbewegt und gedimmt · Zuhören: Kern und Ring heller · Denken: Kernlicht wandert langsam zwischen warm und Salbei · Sprechen: Kugel schwingt räumlich vor und zurück, folgt der Stimm-Energie (Wortgrenzen der Sprachausgabe), höchstens drei leise Pixel-Echos.
