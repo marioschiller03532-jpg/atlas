@@ -1859,7 +1859,8 @@ function renderSetup(){
     if(Array.isArray(j.profiles))for(const q of j.profiles)mergeProfile(q);
     const M=main();if(Array.isArray(j.supps))M.supps=j.supps.map(String).filter(Boolean);if(Array.isArray(j.routine))M.routine=j.routine.map(String).filter(Boolean);saveProfiles();
     $("sImp").value="";renderPane();setTimeout(()=>{const x=$("sImpMsg");if(x)x.textContent="Übernommen ✓"},50)}catch{m.textContent="Code ungültig. Bitte komplett kopieren."}};
-  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.nick=$("sNick").value.trim();S.sleepMin=Math.max(1,+$("sSleep").value||20);S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();if(pv&&pv!==dv)S.persona=pv}   // leeres Feld löscht nichtsS.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
+  $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.nick=$("sNick").value.trim();S.sleepMin=Math.max(1,+$("sSleep").value||20);S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();if(pv&&pv!==dv)S.persona=pv}   /* leeres Feld löscht nichts */
+    S.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
     S.color=$("sColor").value||S.color;saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;applyTheme(S.palette,S.color);vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
@@ -1903,7 +1904,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261112-2023",ATLAS_REL="2.17";
+const APP_VERSION="20261112-2033",ATLAS_REL="2.17.1";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);

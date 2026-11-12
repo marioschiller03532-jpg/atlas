@@ -1,5 +1,10 @@
 # Atlas – Änderungen
 
+## 2.17.1 (12.11.2026) – Einstellungen werden wieder vollständig gespeichert
+- Fehler seit 2.5: In der Speichern-Funktion stand ein Kommentar so, dass der Rest der Zeile nicht ausgeführt wurde. Dadurch wurden Kugel, Effekt, Farbstimmung, Stimme, Sprechtempo, Begrüßungsabstand, Empfindlichkeit und Sperrzeit beim Speichern nicht übernommen (die Auswahl wirkte nur bis zum Neustart).
+- Behoben; geprüft: Farbstimmung (auch Supernova und eigene Farbe), Kugel, Tempo, Empfindlichkeit bleiben nach Neustart erhalten.
+- Rückfall: /alt/2.17/.
+
 ## 2.17 (12.11.2026) – Farbmodus „Supernova (bunt)“, Supplement-Karte
 - Neuer Farbmodus „Supernova (bunt)“: Blau, Türkis, Violett, Magenta und Gold gehen weich ineinander über (Farbverlauf rund um den Ring, wandert langsam; Zentrum wechselt ca. alle 80 s den Ton). Bereit: ruhig · Zuhören: klarer, heller · Denken: einzelne bunte Lichtpunkte tauchen sanft auf · Sprechen: Ring pulsiert, Lichtimpuls, bunte Supernova. Alle bisherigen Farbmodi bleiben wählbar.
 - Supplement-Karte: Erwähnt Atlas beim Sprechen ein konkretes Supplement, erscheint eine kleine Karte mit Name, Herkunft (Hersteller, „aus deiner Liste“ oder Wissensbibliothek) und Bild bzw. neutraler Platzhaltergrafik. Wechselt mit dem Thema (mind. 2,5 s Anzeige), verschwindet ca. 1 s nach dem Sprechen. Quer: links neben der Kugel; hochkant/Handy: oben mittig. Verdeckt weder Kugel noch Knöpfe.
