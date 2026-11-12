@@ -20,14 +20,14 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 /* Hauptbildschirm: nur die Kugel. Alles andere liegt hinter dem Code. */
-body{background:radial-gradient(ellipse 80% 70% at 50% 46%,#0c2028 0%,#081620 45%,#050c12 72%,#03080c 100%) fixed var(--bg)}
+body{background:radial-gradient(ellipse 80% 70% at 50% 46%,var(--tint1,#0c2028) 0%,var(--tint2,#081620) 45%,#050c12 72%,#03080c 100%) fixed var(--bg)}
 .top,.dock,#typeForm,.said,.heard,.state{display:none!important}
 #app{grid-template-rows:1fr auto!important}
 #listView{position:fixed;z-index:14;text-align:left;background:rgba(8,12,22,.9);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:18px 22px;overflow:auto;color:#eef2f7;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 @media (orientation:landscape){#listView{top:24px;right:24px;bottom:24px;width:min(46vw,560px)}body.listOn #vis{transform:translateX(-24vw) scale(.8)}}
 @media (orientation:portrait){#listView{left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);max-height:60vh}body.listOn #vis{transform:translateY(-22vh) scale(.62)}}
 #vis{transition:transform .5s ease}
-#stLbl{color:rgba(150,226,224,.55)!important;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:13;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,225,240,.55);pointer-events:none}
+#stLbl{color:var(--lbl,rgba(150,226,224,.55))!important;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:13;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,225,240,.55);pointer-events:none}
 #stLbl.err{color:#ff9a7a;font-weight:600}body.listOn #stLbl{display:none}
 .lvHead{display:flex;align-items:center;justify-content:space-between;gap:12px}.lvHead h2{margin:0;font-size:24px;font-weight:650}
 #lvClose{background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:999px;width:40px;height:40px;font-size:18px}
@@ -216,7 +216,12 @@ const ORB_PALETTES={
   tuerkis:{name:"Türkis (Standard)",a:[52,214,212],b:[206,252,250],c:[24,150,186]},
   blau:{name:"Blau",a:[74,156,255],b:[208,230,255],c:[44,96,220]},
   violett:{name:"Violett",a:[160,118,255],b:[232,220,255],c:[110,72,220]},
-  nordlicht:{name:"Nordlicht (mehrfarbig, weich)",soft:true}
+  nordlicht:{name:"Nordlicht (mehrfarbig, weich)",soft:true},
+  smaragd:{name:"Smaragd",a:[60,214,150],b:[208,252,228],c:[24,140,96]},
+  bernstein:{name:"Bernstein (warm)",a:[255,178,84],b:[255,236,204],c:[200,110,40]},
+  rose:{name:"Rosé",a:[240,128,170],b:[255,222,236],c:[170,70,120]},
+  eis:{name:"Eisweiß",a:[180,214,232],b:[246,252,255],c:[110,150,180]},
+  eigen:{name:"Eigene Farbe",a:[52,214,212],b:[206,252,250],c:[32,132,131]}
 };
 function mixc(a,b,u){return [0,1,2].map(i=>Math.round(a[i]+(b[i]-a[i])*u))}
 function hsl(h,s,l){h=((h%360)+360)%360/360;const f=n=>{const k=(n+h*12)%12,a=s*Math.min(l,1-l);return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1))))};return [f(0),f(8),f(4)]}
@@ -422,7 +427,7 @@ function makeOrb(cv,opt){
   const RW={sleep:0,idle:1,listen:0,think:0,speak:0};let rkE=0,rkT=0,rkThink=0,rkWave=0,rkSpin=0,rkComet=0,rkSpawn=0;const rkP=[];   // rkP: Supernova-Lichtpunkte (max. 48)
   const EMBLEMS={flamme:{vb:100,shape:"M50 4 C56 22 76 34 76 58 C76 78 64 92 50 92 C36 92 24 80 24 62 C24 48 32 40 36 32 C38 42 42 48 48 50 C44 36 44 20 50 4 Z",cut:"M50 56 C54 63 60 67 60 75 C60 82 55 86 50 86 C45 86 40 82 40 76 C40 69 46 65 50 56 Z"}};
   const emblemPaths={};const emb=k=>{if(!emblemPaths[k]&&EMBLEMS[k]&&typeof Path2D!=="undefined"){const e=EMBLEMS[k];emblemPaths[k]={vb:e.vb,shape:new Path2D(e.shape),cut:e.cut?new Path2D(e.cut):null}}return emblemPaths[k]};
-  function rkColors(t){const p=ORB_PALETTES[st.palette];if(p&&p.a&&["tuerkis","blau","violett"].includes(st.palette))return p;
+  function rkColors(t){const p=ORB_PALETTES[st.palette];if(p&&p.a)return p;
     if(p&&p.soft){const h=200+30*Math.sin(t*0.035)+10*Math.sin(t*0.013);return {a:hsl(h,0.72,0.55),b:hsl(h-10,0.9,0.88),c:hsl(h+45,0.6,0.5)}}   // Nordlicht: Türkis ↔ Blau ↔ Violett, Periode ~3 min
     return ORB_PALETTES.tuerkis}
   function ringkern(t,dt,W,H,S,cx,cy){
@@ -750,7 +755,7 @@ async function addNote(text){const t=String(text||"").trim();if(!t)return "leer"
   (cur.notes=cur.notes||[]).push(n);if(cur.typ!=="gast")saveProfiles();return "Gemerkt."}
 
 /* ================= Erscheinung ================= */
-const vis=makeOrb($("vis"),{variant:S.orb,palette:S.palette,fx:S.fx});vis.label=S.aname.toUpperCase();
+const vis=makeOrb($("vis"),{variant:S.orb,palette:S.palette,fx:S.fx});vis.label=S.aname.toUpperCase();applyTheme(S.palette,S.color);
 const MODE_TXT={idle:"Bereit",listen:"Hört zu",think:"Denkt nach",speak:"Spricht",sleep:"Ruhemodus"};let statusErr=false;
 function setStatus(txt,err){const el=$("stLbl");if(!el)return;el.textContent=txt;el.classList.toggle("err",!!err);statusErr=!!err}
 function setMode(m,label){if(m==="idle"&&typeof sleeping!=="undefined"&&sleeping)m="sleep";vis.mode=m;const s=$("state");s.textContent=label;s.classList.toggle("listen",m==="listen");
@@ -779,19 +784,28 @@ function isEcho(t){const T=typeof toks==="function"?toks(t):[];if(T.length<2)ret
   return spokenRecent.some(x=>now-x.at<15000&&(sim(T,toks(x.t))>=.6||toks(x.t).join(" ").includes(T.join(" "))))}
 function speak(text,then){text=clean(text);noteSpoken(text);touch();$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
   const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
-  const finish=()=>{if(my!==gen||pending<0)return;pending=0;setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;f&&f()};
+  const finish0=()=>{if(my!==gen||pending<0)return;pending=0;setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;resumeRecAfterSpeech();f&&f()};
+  const finish=()=>{if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)){whenAudioIdle(my,finish0);return}finish0()};
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
     for(const p of parts){const u=mkUtt(p);
       u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
-      u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled")diag("tts:"+lastTTSerr);if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
+      u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled")diag("tts:"+lastTTSerr);
+        // nicht von Atlas abgebrochen (z. B. Gerät hat die Audioausgabe kurz unterbrochen): diesen Satz einmal neu sprechen statt abzubrechen
+        if((lastTTSerr==="interrupted"||lastTTSerr==="canceled")&&!u._again){diag("tts: satz wiederholt");const u2=mkUtt(p);u2._again=true;u2.onstart=u.onstart;u2.onboundary=u.onboundary;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
       speechSynthesis.speak(u)}},wasBusy?150:0);
   // Absicherung: startet die Stimme nicht, geht es trotzdem weiter (Text steht ja da)
   setTimeout(()=>{if(my===gen&&!started&&pending>0){diag("tts:startet nicht");if(!gestured){ttsBlocked=true;setStatus("Tipp einmal auf die Kugel, dann darf ich sprechen.",true);finish();return}if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
   // Notbremse, falls das Ende nie gemeldet wird
-  setTimeout(()=>{if(my===gen&&pending>0)finish()},4000+text.length*90/Math.max(.5,S.rate))}
+  setTimeout(()=>{if(my===gen&&pending>0)whenAudioIdle(my,finish0)},4000+text.length*90/Math.max(.5,S.rate))}
 let soundWarned=false,lastTTSerr="",gestured=false,ttsBlocked=false;
+/* Farbschema: färbt Kugel/Ring (über ORB_PALETTES) und die Akzente der Hauptoberfläche – Aufbau und Positionen bleiben gleich */
+function hexRgb(h){const m=String(h||"").match(/^#?([0-9a-f]{6})$/i);if(!m)return [52,214,212];const n=parseInt(m[1],16);return [n>>16&255,n>>8&255,n&255]}
+function setCustomPalette(hex){const a=hexRgb(hex),b=a.map(v=>Math.round(v+(255-v)*0.75)),c=a.map(v=>Math.round(v*0.62));ORB_PALETTES.eigen={name:"Eigene Farbe",a,b,c}}
+function applyTheme(pal,hex){setCustomPalette(hex||S.color);const P=ORB_PALETTES[pal]||ORB_PALETTES.tuerkis,A=P.a||[79,207,203],B=P.b||[189,243,239],C=P.c||A.map(v=>v*0.6),r=document.documentElement.style,rgbS=x=>x.map(Math.round).join(",");
+  r.setProperty("--accent",`rgb(${rgbS(A)})`);r.setProperty("--accent-2",`rgb(${rgbS(B)})`);r.setProperty("--glow",`rgba(${rgbS(A)},.14)`);
+  const t1=C.map(v=>Math.round(v*0.16+6)),t2=C.map(v=>Math.round(v*0.1+5));r.setProperty("--tint1",`rgb(${rgbS(t1)})`);r.setProperty("--tint2",`rgb(${rgbS(t2)})`);r.setProperty("--lbl",`rgba(${rgbS(B)},.55)`)}
 addEventListener("pointerdown",()=>{gestured=true},{capture:true,passive:true});
 // Diagnose: nur Ereignisse und Fehlercodes, nie Gesprächsinhalte
 function diag(ev){try{const L=ls.get("diag",[]);L.push({z:new Date().toISOString().slice(5,19).replace("T"," "),e:String(ev).slice(0,60)});ls.set("diag",L.slice(-40))}catch{}}
@@ -825,16 +839,22 @@ const YESNO=/^(ja|jo|jep|nein|ne|nee|nö|passt|ok|okay|genau|gern|gerne|danke|st
 function pauseFor(t){const b=pauseMs();if(OPEN_END.test(t))return b+1500;if(YESNO.test(t.trim()))return b;if(t.split(/\s+/).length<=2)return b+500;return b}
 // "Stopp" & Co.: unterbricht sofort, auch während Atlas spricht oder nachdenkt
 const STOP_RE=/\b(stopp?|aufhören|aufhoeren|hör auf|hoer auf|sei still|sei ruhig|ruhe jetzt)\b/i;
-let recErrs=0,startFails=0,lastRecEnd=0,restartWanted=false;
+let recErrs=0,startFails=0,lastRecEnd=0,restartWanted=false,recDeferred=false;
+// nach dem Sprechen eine aufgeschobene Erkennung nachholen (auch außerhalb eines Gesprächs, für das Wort "Atlas")
+function resumeRecAfterSpeech(){setTimeout(()=>{if(recDeferred&&!recActive&&!away&&!speaking()&&(convo||stream)){recDeferred=false;ensureRec()}},250)}
+// Notbremse nur, wenn die Audioausgabe wirklich still ist – sonst später nochmal schauen
+function whenAudioIdle(my,fn,tries=0){if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)&&tries<240){setTimeout(()=>whenAudioIdle(my,fn,tries+1),500);return}fn()}
 function stopHeard(full){const w=norm(full).split(/\s+/).slice(-5).join(" ");if(!STOP_RE.test(w))return false;
   // Echo-Schutz: hat Atlas selbst gerade "Stopp" gesagt, zählt es nicht
   return !spokenRecent.some(x=>Date.now()-x.at<20000&&STOP_RE.test(norm(x.t)))}
 // Echo-Anteil: wie viele der gehörten Wörter stammen aus Atlas' eigener, gerade gesprochener Antwort
 function ownShare(txt){const T=toks(txt);if(!T.length)return 1;const own=new Set(spokenRecent.filter(x=>Date.now()-x.at<30000).flatMap(x=>toks(x.t)));return T.filter(w=>own.has(w)).length/T.length}
 let carryText="";
-function interrupt(){diag("stopp");gen++;hush();try{abortCtl&&abortCtl.abort()}catch{}busy=false;offerStudy=false;
-  convo=true;listening=true;flushed=false;resetUtter();ignoreUntil=Date.now()+400;lastHeard=Date.now();touch();$("said").textContent="";$("heard").textContent="…";
-  setMode("listen","Hört zu");setStatus("Gestoppt – ich höre zu");freshRec()}
+// Unterbrechung: sofort still, kurz bestätigen, dann zuhören
+function interrupt(kind){diag("stopp");gen++;hush();try{abortCtl&&abortCtl.abort()}catch{}busy=false;offerStudy=false;
+  convo=true;listening=false;flushed=false;resetUtter();lastHeard=Date.now();touch();$("heard").textContent="…";setMode("idle",idleLabel());setStatus("Unterbrochen – ich höre zu");
+  const ack=kind==="name"?pickFresh("ack-n",["Ja?","Ja, ich höre.","Bin da."]):pickFresh("ack",["Okay, ich hör zu.","Klar, sag.","Gut, ich höre.","Bin ganz Ohr."]);
+  setTimeout(()=>speak(ack,()=>{ignoreUntil=Date.now()+350;listen()}),120)}
 // frische Aufnahme: alter Text (und Echo) der letzten Antwort wird sicher verworfen
 function freshRec(){if(recActive){restartWanted=true;try{rec.abort()}catch{}setTimeout(()=>{if(restartWanted&&recActive){diag("stt-abbruch hängt");recActive=false;restartWanted=false;if(convo&&!away)ensureRec()}},1200)}else ensureRec()}
 const heardAll=()=>(utterPrev+" "+sessText).replace(/\s+/g," ").trim();
@@ -866,7 +886,8 @@ function ensureRec(){if(!SR||away)return false;if(recActive)return true;
       let allT="";for(let i=0;i<e.results.length;i++)allT+=" "+e.results[i][0].transcript;
       if(stopHeard(allT)){interrupt();return}
       // Er redet hinein (mind. 3 Wörter, überwiegend nicht Atlas' eigene Stimme): Ausgabe stoppen, seine Worte behalten
-      if(speaking()&&Date.now()>ignoreUntil){const seg=toks(allT),tail=seg.slice(-8).join(" ");if(seg.length>=3&&ownShare(tail)<=0.5&&seg.slice(-8).length*(1-ownShare(tail))>=3){const own=new Set(spokenRecent.filter(x=>Date.now()-x.at<30000).flatMap(x=>toks(x.t))),rw=allT.trim().split(/\s+/).slice(-8);while(rw.length&&own.has(toks(rw[0])[0]))rw.shift();interrupt();carryText=rw.join(" ");ignoreUntil=Date.now()+100;diag("dazwischen gesprochen");return}}
+      if(speaking()&&Date.now()>ignoreUntil){const tail=norm(allT).split(/\s+/).slice(-6).join(" ");
+        if(wakeRe().test(tail)&&!spokenRecent.some(x=>Date.now()-x.at<20000&&wakeRe().test(norm(x.t)))){interrupt("name");diag("neue ansprache");return}}
       baseIdx=e.results.length;return}   // während Atlas spricht/denkt: nur auf "Stopp" achten
     if(flushed||!convo||Date.now()<ignoreUntil){baseIdx=e.results.length;return}
     clearTimeout(moreTimer);
@@ -882,7 +903,7 @@ function ensureRec(){if(!SR||away)return false;if(recActive)return true;
     else if(!flushed&&sessText){utterPrev=heardAll();sessText=""}
     // Neustart: normal sofort, nach Fehlern mit wachsender Pause statt Dauerschleife
     const delay=recErrs?Math.min(8000,400*2**Math.min(recErrs,5)):fresh?40:120;if(recErrs>=3)setStatus("Spracherkennung hakt – ich versuche es weiter",true);
-    if((convo||stream)&&!away)setTimeout(()=>{if(recActive||away)return;try{rec.start();startFails=0}catch(err){startFails++;diag("stt-start:"+(err&&err.name));
+    if((convo||stream)&&!away)setTimeout(()=>{if(recActive||away)return;if(speaking()){recDeferred=true;return}try{rec.start();startFails=0}catch(err){startFails++;diag("stt-start:"+(err&&err.name));
       if(startFails<4)setTimeout(()=>{if(!recActive&&convo)ensureRec()},700*startFails);else if(convo){listening=false;convo=false;setMode("idle","Kugel antippen zum Weitersprechen")}}},delay)};
   try{rec.start();return true}catch(err){diag("stt-start:"+(err&&err.name));return false}}
 function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safari (iPad) oder Chrome verwenden.");return}
@@ -1375,19 +1396,22 @@ const isRepeatQ=(sent,pq)=>pq&&pq.length>=3&&/\?\s*$/.test(sent)&&sim(toks(sent)
 const OPENER=/^\s*(sehr gute frage|gute frage|natürlich|absolut|selbstverständlich|sehr gerne|klar doch|ich verstehe|verstehe|okay, verstanden|alles klar)[!.,:]\s*/i;
 /* Spricht Satz für Satz, während die Antwort noch entsteht */
 function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;const pq=prevQuestion();let first=false,buf="",queued=0,done=false,started=false,then=null,all="";
-  const finish=()=>{if(my!==gen)return;gen++;setMode("idle",idleLabel());const f=then;then=null;f&&f()};
+  const finish0=()=>{if(my!==gen)return;gen++;setMode("idle",idleLabel());const f=then;then=null;resumeRecAfterSpeech();f&&f()};
+  const finish=()=>{if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)){whenAudioIdle(my,finish0);return}finish0()};
   let bundle="";const flush=()=>{const b=bundle;bundle="";say1(b)};
   // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
   const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
   const say1=s=>{if(my!==gen)return;s=clean(s);if(pq){const parts=s.split(/(?<=[.!?])\s+/),keep=parts.filter(x=>!isRepeatQ(x,pq));if(keep.length<parts.length){diag("doppelte frage übersprungen");s=keep.join(" ");if(!s.trim())return}}if(!first){const o=s.replace(OPENER,"").trim();if(!o)return;s=o;first=true}if(!s||!TTS)return;noteSpoken(s);touch();queued++;const u=mkUtt(s);
     u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
-    u.onend=u.onerror=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
+    const next=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};u.onend=next;
+    u.onerror=ev=>{if(my!==gen)return;const er=(ev&&ev.error)||"";if((er==="interrupted"||er==="canceled")&&!u._again){diag("tts: satz wiederholt");const u2=mkUtt(s);u2._again=true;u2.onstart=u.onstart;u2.onboundary=u.onboundary;u2.onend=next;u2.onerror=next;speechSynthesis.speak(u2);return}next()};
+    try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
   return{feed(d){all+=d;buf+=d;let m;
       if(!started&&queued<=0&&!bundle&&buf.length>70){const c=buf.match(/^[\s\S]{40,}?[,;–](\s+)/);if(c){add(c[0]);buf=buf.slice(c[0].length)}}
       while((m=buf.match(/^[\s\S]*?[.!?…:](\s+|$)/))&&m[0].trim().length>1){if(!/\s$/.test(m[0])&&buf.length===m[0].length)break;add(m[0]);buf=buf.slice(m[0].length)}},
     end(cb){then=cb;if(buf.trim())bundle=bundle?bundle+" "+buf.trim():buf.trim();buf="";done=true;if(bundle)flush();if(queued<=0){finish();return}
       setTimeout(()=>{if(my===gen&&!started){if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke und Tonausgabe am Gerät prüfen.")}finish()}},3500);
-      setTimeout(()=>{if(my===gen)finish()},5000+all.length*90/Math.max(.5,S.rate))},
+      setTimeout(()=>{if(my===gen)whenAudioIdle(my,finish0)},5000+all.length*90/Math.max(.5,S.rate))},
     get spoken(){return all.length>0}}}
 const textOf=res=>(res.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
 function historyMsgs(n=14){
@@ -1476,7 +1500,7 @@ function impulsFor(p){if(!KB||!Array.isArray(KB.eintraege))return null;const byI
 function morningImpuls(p){if(!morningNow())return null;const key=`impuls:${today}:${p&&p.id||"allg"}`;if(ls.get(key,false))return null;const r=impulsFor(p);if(r){ls.set(key,true);diag("impuls:"+r.id)}return r}
 // nach Begrüßung + Impuls wie gewohnt zum Tag überleiten (Claude kennt Routine, Supplements, Termine)
 function toDayPlan(name,imp){converse(`(System: Morgens. ${name} wurde gerade begrüßt${imp?" und hat einen kurzen Wissensimpuls zu "+imp.name+" gehört":""} – nicht erneut begrüßen, den Impuls nicht wiederholen oder vertiefen, außer er fragt. Geh jetzt wie gewohnt kurz zu dem über, was heute ansteht.)`,{internal:true,mode:"schnell"})}
-function askRoom(){const g=`Hallo, ich bin ${S.aname}, deine persönliche Biohacking-Assistentin. Wer ist gerade im Raum?`;
+function askRoom(){const g=`Hallo, ich bin ${S.aname}. Wer ist gerade im Raum und wobei kann ich helfen?`;
   setUnknown();awaitingWho=true;whoTries=0;addLog("intern","(Atlas ist durch Bewegung oder Antippen aufgewacht. Wer im Raum ist, weiß Atlas nicht – nur aus der Antwort.)");addLog("assistent",g);convo=true;diag("begrüßung");speak(g,()=>setTimeout(listen,300))}
 function greet(fromWake){
   const M=main();
@@ -1708,7 +1732,7 @@ function renderSetup(){
     <div class="field"><label for="sPersona">Persönlichkeit (leer = Standard)</label><textarea id="sPersona" rows="8"></textarea><div class="note">So spricht Atlas mit dir. Du kannst den Text jederzeit anpassen. <b id="sPersInfo"></b></div><div class="row"><button class="btn small" type="button" id="sPersDef">Auf Standard zurücksetzen</button></div></div>
     <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="ringkern">Ringkern (Atlas-Standard)</option><option value="atemkern">Atemkern (Pixel)</option><option value="orbit">Orbit-Glaskugel</option><option value="ruhe">Ruhige Kugel</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
     <div class="field"><label for="sFx">Effekt beim Sprechen</label><select id="sFx"><option value="supernova">Supernova (ruhige Kugel)</option><option value="urknall">Urknall (ruhige Kugel)</option><option value="pur">Pur (Partikel-Kern)</option><option value="funken">Funken (Partikel-Kern)</option><option value="atmen">Atmen (Partikel-Kern)</option><option value="hud">Jarvis-HUD (Partikel-Kern)</option></select></div></div>
-    <div class="grid2"><div class="field"><label for="sPal">Farbstimmung</label><select id="sPal"></select></div>
+    <div class="grid2"><div class="field"><label for="sPal">Farbstimmung</label><select id="sPal"></select><label for="sColor" style="margin-top:6px">Eigene Farbe <span class="muted">(bei „Eigene Farbe“)</span></label><input type="color" id="sColor" value="#34d6d4"></div>
     <div class="field"><label for="sVoice">Stimme</label><select id="sVoice"></select></div></div>
     <div class="field"><label for="sRate">Sprechtempo</label><input type="range" id="sRate" min="0.8" max="1.2" step="0.02"></div>
     <div class="note">Natürlicher klingt eine Premium-Stimme: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch → z. B. „Anna (Premium)“ laden.</div>
@@ -1736,11 +1760,12 @@ function renderSetup(){
   <section class="card"><h2>Personen</h2><div class="note">Eine Zeile pro Routine-Schritt bzw. Supplement. Kinder bekommen keine Listen.</div><div id="profEd" style="display:grid;gap:10px"></div><div class="row"><button class="btn small" type="button" id="pAdd">+ Person</button></div></section>
   <div class="row"><button class="btn primary" id="sSave">Speichern</button><span class="note" id="sMsg"></span></div>`;
   Object.entries(ORB_PALETTES).forEach(([k,p])=>{const o=document.createElement("option");o.value=k;o.textContent=p.name;$("sPal").append(o)});
-  ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value}));
+  ["sOrb","sFx","sPal"].forEach(id=>$(id).addEventListener("change",()=>{vis.variant=$("sOrb").value;vis.fx=$("sFx").value;vis.palette=$("sPal").value;applyTheme($("sPal").value,$("sColor").value)}));
+  $("sColor").addEventListener("input",()=>{$("sPal").value="eigen";vis.palette="eigen";applyTheme("eigen",$("sColor").value)});
   $("appVer").textContent="Atlas "+ATLAS_REL+" · Build "+APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sAskWho").checked=S.askWho!==false;$("sAskWho").onchange=()=>{S.askWho=$("sAskWho").checked;saveSettings()};$("sPersInfo").textContent=S.persona&&S.persona.trim()?`Geladen: deine eigene Persönlichkeit (${S.persona.length.toLocaleString("de-AT")} Zeichen).`:"Geladen: Standard-Persönlichkeit.";
   $("sPersDef").onclick=()=>confirmBox("Persönlichkeit zurücksetzen?","Dein eigener Text wird durch den Standard ersetzt. Eine Sicherung bleibt erhalten.",()=>{S.persona="";if(!settingsBroken)ls.set("settings",S);renderPane()});$("sNick").value=S.nick||"";$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
     $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}
-    {const D=ls.get("diag",[]);if(D.length)$("sPerf").textContent+="\nDiagnose (nur Ereignisse, keine Gesprächsinhalte): "+D.slice(-12).map(x=>x.z+" "+x.e).join(" · ")}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
+    {const D=ls.get("diag",[]);if(D.length)$("sPerf").textContent+="\nDiagnose (nur Ereignisse, keine Gesprächsinhalte): "+D.slice(-12).map(x=>x.z+" "+x.e).join(" · ")}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sColor").value=S.color||"#34d6d4";$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
@@ -1784,7 +1809,7 @@ function renderSetup(){
     const M=main();if(Array.isArray(j.supps))M.supps=j.supps.map(String).filter(Boolean);if(Array.isArray(j.routine))M.routine=j.routine.map(String).filter(Boolean);saveProfiles();
     $("sImp").value="";renderPane();setTimeout(()=>{const x=$("sImpMsg");if(x)x.textContent="Übernommen ✓"},50)}catch{m.textContent="Code ungültig. Bitte komplett kopieren."}};
   $("sSave").onclick=async()=>{S.key=cleanKey($("sKey").value);S.model=$("sModel").value;S.fastModel=$("sFast").value;S.quick=$("sQuick").checked;if(!S.quick)ls.del("devkey");S.aname=$("sName").value.trim()||"Atlas";S.nick=$("sNick").value.trim();S.sleepMin=Math.max(1,+$("sSleep").value||20);S.pause=+$("sPause").value||1.6;{const pv=$("sPersona").value.trim(),dv=DEF_PERSONA.replace(/\{NAME\}/g,main().name).trim();if(pv&&pv!==dv)S.persona=pv}   // leeres Feld löscht nichtsS.orb=$("sOrb").value;S.fx=$("sFx").value;S.palette=$("sPal").value;S.voice=$("sVoice").value;S.rate=+$("sRate").value;S.cool=Math.max(1,+$("sCool").value||20);S.sens=+$("sSens").value;S.lockHours=Math.min(48,Math.max(1,+$("sLock").value||16));S.noSearch=false;
-    saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;vis.label=S.aname.toUpperCase();
+    S.color=$("sColor").value||S.color;saveSettings();vis.variant=S.orb;vis.fx=S.fx;vis.palette=S.palette;applyTheme(S.palette,S.color);vis.label=S.aname.toUpperCase();
     syncs.forEach(f=>f());
     profiles=draft.map(p=>({notes:[],...p}));saveProfiles();cur=cur.typ==="gast"?cur:(findProfile(cur.name)||main());renderPerson();
     if(privKey){const u=$("bUrl").value.trim(),t=$("bTok").value;if(u){bridge={url:u,token:t};await putSealed("bridge",bridge)}else{bridge=null;ls.del("bridge")}}
@@ -1827,7 +1852,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261112-0603",ATLAS_REL="2.15";
+const APP_VERSION="20261112-1945",ATLAS_REL="2.16";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);

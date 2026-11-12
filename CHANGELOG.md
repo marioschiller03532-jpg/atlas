@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.16 (12.11.2026) – Begrüßungstext, ausreden lassen, Farbschemata
+- Begrüßung bei Bewegung: „Hallo, ich bin Atlas. Wer ist gerade im Raum und wobei kann ich helfen?“ (Ablauf, Sperrzeit und Erkennung unverändert).
+- Ausreden lassen – Ursachen: (1) Die Spracherkennung wurde während der Sprachausgabe neu gestartet; iOS schaltet dabei die Audio-Sitzung um und schneidet die Stimme ab. (2) Eine Notbremse nach geschätzter Dauer beendete langsame Ausgaben vorzeitig. (3) Seit 2.10 konnten drei „fremde“ Wörter (oft falsch erkanntes Echo der eigenen Stimme) die Ausgabe abbrechen.
+- Jetzt: kein Erkennungs-Neustart während Atlas spricht (wird danach nachgeholt); „fertig“ erst, wenn die Audioausgabe wirklich still ist; von außen abgebrochene Sätze werden einmal neu gesprochen; Unterbrechen nur noch mit „Stopp“/„hör auf“/„sei still“ oder einer neuen Ansprache mit Namen („Atlas, …“). Danach kurze Bestätigung („Okay, ich hör zu.“ bzw. „Ja?“) und Zuhören.
+- Farben: neue Schemata Smaragd, Bernstein, Rosé, Eisweiß und „Eigene Farbe“ mit Farbwähler (Einstellungen → Farbstimmung). Wirkt auf Ring, Zentrum, Lichtimpuls, Hintergrund-Schimmer, Knöpfe und Statuszeile; gespeichert in den Einstellungen.
+- Rückfall: /alt/2.15/.
+
 ## 2.15 (12.11.2026) – Gespräch beginnt von selbst bei Bewegung, mehr Wortschatz
 Ursachen:
 - Die Kamera startete erst nach dem ersten Antippen bzw. „Raum-Modus“ – nach jedem Öffnen war Atlas „blind“.

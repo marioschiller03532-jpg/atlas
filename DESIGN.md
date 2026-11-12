@@ -24,5 +24,6 @@ Festgelegt von Mario: Diese Ring-und-Kern-Gestaltung ist Atlas' feste Grundgesta
 Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwellen ein ruhiger Lichtsaum.
 
 ## Farben
-- Grundfarbe Türkis-Cyan (`tuerkis`). Weitere Farbstimmungen: `blau`, `violett`, `nordlicht` (mehrfarbig, wechselt sehr langsam und weich, Periode ca. 3 min, nie blitzend).
+- Grundfarbe Türkis-Cyan (`tuerkis`). Weitere Farbstimmungen: `blau`, `violett`, `smaragd`, `bernstein`, `rose`, `eis`, `nordlicht` (mehrfarbig, wechselt sehr langsam und weich, Periode ca. 3 min, nie blitzend) und `eigen` (freie Farbe aus dem Farbwähler; hellere und dunklere Töne werden daraus abgeleitet).
+- Das Farbschema färbt Ring, Zentrum, Lichtimpuls, Hintergrund-Schimmer und Akzente (`applyTheme`), nie Aufbau oder Positionen.
 - Oberfläche (Knöpfe, Statuszeile) in Türkis auf dunklem Grund.
