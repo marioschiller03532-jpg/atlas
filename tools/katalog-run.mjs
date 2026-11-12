@@ -44,7 +44,11 @@ let probeLeft=0;const tm0=s=>/<table/.test(s);
   if(!F.recommendedIntake){const z=s.match(/Verzehrempfehlung<\/[^>]+>[\s\S]{0,400}?<div[^>]*>(.*?)<\/div>/);if(z&&strip(z[1]).length>5)F.recommendedIntake=z[1]}
   if(probeLeft>0&&(!F.ingredients||!tm0(s))){fs.mkdirSync("katalog/probe",{recursive:true});fs.writeFileSync("katalog/probe/biogena_"+url.split("/").pop().slice(0,40)+".html",s);probeLeft--}
   const allerg=Object.keys(F).filter(k=>/allerg/i.test(k)).map(k=>strip(F[k])).filter(Boolean);
-  const p={hersteller:"Biogena",name,url,abgerufen:NOW,linie:F.productLine||null,kurz:F.productSubtitleShort||F.productSubtitle||null,
+  // Produktbild: nur das Hauptbild dieser Produktseite (og:image bzw. JSON-LD) – gehört eindeutig zu genau diesem Produkt
+  const og=(s.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)||s.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)||[])[1];
+  const ldImg=ld&&(Array.isArray(ld.image)?ld.image[0]:typeof ld.image==="string"?ld.image:ld.image&&ld.image.url);
+  const bild=(og||ldImg||null);
+  const p={hersteller:"Biogena",name,url,abgerufen:NOW,bild:bild?bild.replace(/&amp;/g,"&"):null,linie:F.productLine||null,kurz:F.productSubtitleShort||F.productSubtitle||null,
     kategorie:null,anwendungsbereiche_hersteller:F.fieldsOfApplication?list(F.fieldsOfApplication):[],
     inhaltsstoffe:tabelle,zutaten:F.ingredients?strip(F.ingredients):null,verzehrempfehlung:F.recommendedIntake?strip(F.recommendedIntake):null,
     tagesdosis:F.dailyDosage??null,packung:F.packageSize?strip(F.packageSize):(v.size||null),form:null,
@@ -78,7 +82,7 @@ let probeLeft=0;const tm0=s=>/<table/.test(s);
   const mengen=[...new Set((info.match(/\d+(?:[.,]\d+)?\s?(?:mg|µg|mcg|g|IE|I\.E\.|Mrd\.?\s?KBE)\s[A-Za-zÄÖÜäöüß][\wÄÖÜäöüß\-®]*(?:\s[\wÄÖÜäöüß\-®]+)?/g)||[]))].slice(0,12);
   const hin=(anw||"").split(/(?<=\.)\s+/).filter(x=>/nicht|Schwanger|Kinder|Stillen|ärzt|Arzt|überschritten|Allerg/i.test(x));
   const fn=pick("Funktion");const v=pr.variants?.[0]||{};const tags=(pr.tags||[]).map(String);
-  const p={hersteller:"MoleQlar",name:pr.title,url,abgerufen:NOW,linie:null,kurz:null,kategorie:tags.find(t=>/^[A-ZÄÖÜ]/.test(t)&&!/^(_|custom_|features_|return_box|no-upsell|sale|new|neu|bundle|bulk|coming soon|bestseller|angebot|black|cyber|gift|geschenk|hidden|subscription|abo)/i.test(t)&&t.length>3)||null,
+  const p={hersteller:"MoleQlar",name:pr.title,url,abgerufen:NOW,bild:(pr.images&&pr.images[0]&&pr.images[0].src)||null,linie:null,kurz:null,kategorie:tags.find(t=>/^[A-ZÄÖÜ]/.test(t)&&!/^(_|custom_|features_|return_box|no-upsell|sale|new|neu|bundle|bulk|coming soon|bestseller|angebot|black|cyber|gift|geschenk|hidden|subscription|abo)/i.test(t)&&t.length>3)||null,
     anwendungsbereiche_hersteller:fn?[fn.split(/(?<=\.)\s+/).slice(0,2).join(" ").slice(0,300)]:[],inhaltsstoffe:null,mengen_aus_text:mengen,zutaten:zut,verzehrempfehlung:einn?einn.split(/(?<=\.)\s+/).slice(0,2).join(" "):null,
     tagesdosis:null,packung:v.title&&v.title!=="Default Title"?v.title:null,form:(pr.title.match(/Kapseln|Pulver|Tropfen|Liquid|Sachets?|Tabletten|Öl|Spray|Gummies/i)||[null])[0],hinweise:hin,allergene:[],
     preis:v.price?{betrag:+v.price,waehrung:"EUR",verfuegbar:!!v.available,abgerufen:NOW}:null,ean:v.barcode||null,dokumente:[],tags};
@@ -102,7 +106,7 @@ let probeLeft=0;const tm0=s=>/<table/.test(s);
 const changes={neu:[],geaendert:[],entfernt:[]};for(const p of produkte){p.hash=hash(p);const o=prevMap.get(p.url);if(!o)changes.neu.push(p.name);else if(o.hash!==p.hash)changes.geaendert.push(p.name)}
 const now=new Set(produkte.map(p=>p.url));for(const o of prevMap.values())if(!now.has(o.url))changes.entfernt.push(o.name);
 report.aenderungen=prev?changes:{erstimport:true};
-for(const [h,R] of Object.entries(report.hersteller)){R.offen_oder_nicht_abrufbar=R.nicht_abrufbar.length;R.produktbilder="nicht geprüft";
+for(const [h,R] of Object.entries(report.hersteller)){R.offen_oder_nicht_abrufbar=R.nicht_abrufbar.length;R.mit_produktbild=produkte.filter(x=>x.hersteller===h&&x.bild).length;R.produktbilder="nicht geprüft";
   const andere=R.gefunden-R.nem;R.status={alle_gefundenen_produkte:R.gefunden,nahrungsergaenzungen:R.nem,davon_vollstaendig:R.vollstaendig,davon_teilweise:R.teilweise.length,andere_produktarten:andere,andere_nach_art:Object.fromEntries(Object.entries(R.typen).filter(([t])=>t!=="Nahrungsergänzungsmittel")),nicht_abrufbar:R.nicht_abrufbar.length,
     text:`${h}: ${R.gefunden} Produkte gefunden, davon ${R.nem} Nahrungsergänzungen (${R.vollstaendig} vollständig, ${R.teilweise.length} teilweise erfasst) und ${andere} andere Produktarten.`}}
 for(const p of produkte)p.produktbilder="nicht geprüft";report.unvollstaendig=Object.values(report.hersteller).some(h=>h.teilweise.length||h.nicht_abrufbar.length);
