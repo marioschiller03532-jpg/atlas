@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.14 (12.11.2026) – Ringkern: Ruhebewegung, Lichtimpuls, Supernova
+- Ruhezustand: drei sanfte Lichtbögen und eine feine Skala kreisen langsam gegeneinander (ca. 90 bzw. 140 s pro Runde), dazu das langsame Atmen. Im Ruhemodus (Schlaf) steht alles nahezu still.
+- Sprechen: äußerer Ring deutlich heller; ein türkis-weißer Lichtpunkt mit kurzem Schweif gleitet um den Ring (ca. 1,8 s pro Runde, bei lauter Stimme etwas schneller); dahinter Supernova: kleine Lichtpunkte erscheinen, strahlen nach außen und vergehen (max. 48, Türkis/Weiß).
+- Einsetzen sofort und weich; nach dem Sprechen verschwindet der Impuls in ca. 0,3 s, Punkte verglimmen in ≤1,5 s. Beim Zuhören kein Impuls, keine Supernova.
+- Bewegung reduzieren: statt Impuls ein ruhig leuchtender Ring, keine Supernova, Kreisbewegung auf ca. 30 %.
+- Grundgestalt (DESIGN.md) unverändert. Rückfall: /alt/2.13/.
+
 ## 2.13 (11.11.2026) – Feste Grundgestalt „Ringkern“
 - Neue, ab jetzt feste visuelle Grundlage (siehe DESIGN.md): dunkler Hintergrund, leuchtendes rundes Zentrum mit dunkler Flamme, klar erkennbarer äußerer Ring. Türkis-Cyan als Grundfarbe.
 - Zustände: Bereit (schwach, atmet langsam) · Zuhören (Ring heller, zwei dezente Lichtwellen) · Denken (Licht wandert langsam im Zentrum, Ring ruhig) · Sprechen (Ring pulsiert sanft mit geglätteter Stimm-Energie) · Ruhe (deutlich dunkler, nahezu statisch). Reduzierte Bewegung berücksichtigt.

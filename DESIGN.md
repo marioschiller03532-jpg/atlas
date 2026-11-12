@@ -15,10 +15,10 @@ Festgelegt von Mario: Diese Ring-und-Kern-Gestaltung ist Atlas' feste Grundgesta
 ## Zustände
 | Zustand | Ring | Zentrum |
 |---|---|---|
-| Bereit | schwach, atmet sehr langsam (~7 s) | schwach, atmet mit |
+| Bereit | schwach, atmet sehr langsam (~7 s); drei Lichtbögen und feine Skala kreisen langsam | schwach, atmet mit |
 | Zuhören | heller, zwei dezente Lichtwellen nach außen | etwas heller |
 | Denken | ruhig | weicher Lichtfleck wandert langsam |
-| Sprechen | pulsiert sanft mit geglätteter Stimm-Energie (Wortgrenzen der Sprachausgabe) | etwas heller |
+| Sprechen | deutlich heller, pulsiert sanft mit der Stimme; K.I.T.T.-Lichtimpuls (türkis-weißer Punkt mit Schweif) läuft um den Ring; dahinter Supernova aus kleinen Lichtpunkten | etwas heller |
 | Ruhemodus | deutlich dunkler, nahezu statisch | dunkel |
 
 Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwellen ein ruhiger Lichtsaum.

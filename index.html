@@ -419,20 +419,20 @@ function makeOrb(cv,opt){
   // Bereit: Ring und Zentrum schwach, atmen sehr langsam · Zuhören: Ring heller, dezente Lichtwellen nach außen
   // Denken: Licht im Zentrum wandert langsam, Ring ruhig · Sprechen: Ring pulsiert sanft mit der Stimme, Zentrum etwas heller
   // Ruhe: deutlich dunkler, nahezu statisch. Das Zeichen in der Mitte (Emblem) ist austauschbar, ohne den Rest zu ändern.
-  const RW={sleep:0,idle:1,listen:0,think:0,speak:0};let rkE=0,rkT=0,rkThink=0,rkWave=0;
+  const RW={sleep:0,idle:1,listen:0,think:0,speak:0};let rkE=0,rkT=0,rkThink=0,rkWave=0,rkSpin=0,rkComet=0,rkSpawn=0;const rkP=[];   // rkP: Supernova-Lichtpunkte (max. 48)
   const EMBLEMS={flamme:{vb:100,shape:"M50 4 C56 22 76 34 76 58 C76 78 64 92 50 92 C36 92 24 80 24 62 C24 48 32 40 36 32 C38 42 42 48 48 50 C44 36 44 20 50 4 Z",cut:"M50 56 C54 63 60 67 60 75 C60 82 55 86 50 86 C45 86 40 82 40 76 C40 69 46 65 50 56 Z"}};
   const emblemPaths={};const emb=k=>{if(!emblemPaths[k]&&EMBLEMS[k]&&typeof Path2D!=="undefined"){const e=EMBLEMS[k];emblemPaths[k]={vb:e.vb,shape:new Path2D(e.shape),cut:e.cut?new Path2D(e.cut):null}}return emblemPaths[k]};
   function rkColors(t){const p=ORB_PALETTES[st.palette];if(p&&p.a&&["tuerkis","blau","violett"].includes(st.palette))return p;
     if(p&&p.soft){const h=200+30*Math.sin(t*0.035)+10*Math.sin(t*0.013);return {a:hsl(h,0.72,0.55),b:hsl(h-10,0.9,0.88),c:hsl(h+45,0.6,0.5)}}   // Nordlicht: Türkis ↔ Blau ↔ Violett, Periode ~3 min
     return ORB_PALETTES.tuerkis}
   function ringkern(t,dt,W,H,S,cx,cy){
-    const m=RW[st.mode]===undefined?"idle":st.mode;for(const k in RW)RW[k]+=((k===m?1:0)-RW[k])*Math.min(1,dt*(k==="sleep"?1.2:3));
+    const m=RW[st.mode]===undefined?"idle":st.mode;for(const k in RW)RW[k]+=((k===m?1:0)-RW[k])*Math.min(1,dt*(k==="sleep"?1.2:k==="speak"?7:3));   // Sprechen setzt sofort ein und klingt schnell ab
     const wZ=RW.sleep,wI=RW.idle,wL=RW.listen,wT=RW.think,wS=RW.speak,mo=reduce?0.3:1;
     rkE+=((st.mode==="speak"?Math.min(1,st.energy):0)-rkE)*Math.min(1,dt*5);   // geglättete Stimm-Energie: keine Ausschläge
     rkT+=dt*(1-0.97*wZ);   // im Ruhemodus steht die Zeit nahezu still
     const C=rkColors(t),A=C.a,B=C.b,Cc=C.c;
     const breathe=0.5+0.5*Math.sin(rkT*2*Math.PI/7)*mo;   // ~7 s pro Atemzug
-    const ringA=(0.34+0.1*breathe)*wI+0.78*wL+0.42*wT+(0.6+0.35*rkE)*wS+0.07*wZ;
+    const ringA=(0.34+0.1*breathe)*wI+0.78*wL+0.42*wT+(0.85+0.15*rkE)*wS+0.07*wZ;
     const coreA=(0.42+0.08*breathe)*wI+0.6*wL+0.55*wT+(0.62+0.25*rkE)*wS+0.1*wZ;
     const R=S*0.355*(1+0.022*rkE*wS*mo),lw=Math.max(1.5,S*(0.006+0.006*rkE*wS*mo+0.002*wL)),Rc=S*0.2*(1+0.015*rkE*wS*mo);
     ctx.globalCompositeOperation="lighter";
@@ -445,12 +445,29 @@ function makeOrb(cv,opt){
     // Ring: weicher Schein + klare Linie + feine innere Spur
     for(const [w,a] of [[lw*7,0.06],[lw*3.2,0.16],[lw,0.95]]){ctx.strokeStyle=`rgba(${rgb(w===lw?B:A)},${a*ringA})`;ctx.lineWidth=w;ctx.beginPath();ctx.arc(cx,cy,R,0,6.283);ctx.stroke()}
     ctx.strokeStyle=`rgba(${rgb(A)},${0.12*ringA})`;ctx.lineWidth=Math.max(1,lw*0.4);ctx.beginPath();ctx.arc(cx,cy,R*0.9,0,6.283);ctx.stroke();
+    // Ruhebewegung: drei sanfte Lichtbögen und eine feine Skala kreisen langsam gegeneinander (ca. 90 s bzw. 140 s pro Runde)
+    rkSpin+=dt*(1-0.97*wZ)*mo;const calm=(0.5*wI+0.35*wL+0.45*wT+0.3*wS)*(1-wZ*0.85);
+    if(calm>0.02){ctx.lineWidth=Math.max(1,lw*0.9);for(let i=0;i<3;i++){const a0=rkSpin*0.07+i*2.094;ctx.strokeStyle=`rgba(${rgb(A)},${0.22*calm})`;ctx.beginPath();ctx.arc(cx,cy,R*0.955,a0,a0+0.55);ctx.stroke()}
+      ctx.fillStyle=`rgba(${rgb(B)},${0.16*calm})`;const tk=Math.max(1.2,S*0.0025);for(let i=0;i<72;i++){if(i%6===0)continue;const a=-rkSpin*0.045+i*0.0873;ctx.fillRect(cx+Math.cos(a)*R*0.86-tk/2,cy+Math.sin(a)*R*0.86-tk/2,tk,tk)}}
+    // Supernova beim Sprechen: kleine Lichtpunkte erscheinen, strahlen nach außen und vergehen (bei reduzierter Bewegung aus)
+    if(!reduce){if(wS>0.3&&st.mode==="speak"){rkSpawn+=dt*(9+22*rkE);while(rkSpawn>1&&rkP.length<48){rkSpawn--;const a=Math.random()*6.283,r0=Rc*(0.7+Math.random()*0.5);
+        rkP.push({a,r:r0,v:S*(0.05+0.09*Math.random())*(0.7+0.6*rkE),life:0,max:0.8+Math.random()*0.7,sz:Math.max(1.5,S*(0.003+0.003*Math.random())),w:Math.random()<0.35})}}else rkSpawn=0;
+      for(let i=rkP.length-1;i>=0;i--){const q=rkP[i];q.life+=dt;q.r+=q.v*dt;if(q.life>=q.max){rkP.splice(i,1);continue}const u=q.life/q.max,al=Math.sin(Math.PI*u)*0.75;
+        ctx.fillStyle=`rgba(${q.w?"235,255,253":rgb(A)},${al})`;const x=cx+Math.cos(q.a)*q.r,y=cy+Math.sin(q.a)*q.r;ctx.fillRect(x-q.sz/2,y-q.sz/2,q.sz,q.sz)}}
     // Zentrum: leuchtende Scheibe
     g=ctx.createRadialGradient(cx,cy,0,cx,cy,Rc*1.35);g.addColorStop(0,`rgba(${rgb(B)},${0.95*coreA})`);g.addColorStop(0.55,`rgba(${rgb(A)},${0.75*coreA})`);g.addColorStop(0.74,`rgba(${rgb(Cc)},${0.35*coreA})`);g.addColorStop(1,`rgba(${rgb(Cc)},0)`);
     ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,Rc*1.35,0,6.283);ctx.fill();
     // Denken: ein weicher Lichtfleck wandert langsam im Zentrum
     if(wT>0.02){rkThink+=dt*0.9*mo;const ox=Math.cos(rkThink)*Rc*0.38,oy=Math.sin(rkThink*0.8)*Rc*0.3;g=ctx.createRadialGradient(cx+ox,cy+oy,0,cx+ox,cy+oy,Rc*0.75);
       g.addColorStop(0,`rgba(255,255,255,${0.32*wT})`);g.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx+ox,cy+oy,Rc*0.75,0,6.283);ctx.fill()}
+    // Lichtimpuls wie bei K.I.T.T.: heller Punkt mit kurzem Schweif gleitet um den äußeren Ring (ca. 1,8 s pro Runde, etwas schneller bei lauter Stimme)
+    if(wS>0.02){const glow=wS*(0.75+0.25*rkE);
+      if(reduce){ctx.strokeStyle=`rgba(${rgb(B)},${0.35*glow})`;ctx.lineWidth=lw*2.2;ctx.beginPath();ctx.arc(cx,cy,R,0,6.283);ctx.stroke()}
+      else{rkComet+=dt*(3.5+1.2*rkE);const h=rkComet,N=22,tail=1.15;
+        for(let i=N;i>=1;i--){const a1=h-tail*i/N,a0=h-tail*(i+1)/N,f=1-i/N;ctx.strokeStyle=`rgba(${rgb(mixc(A,B,f))},${glow*0.55*f*f})`;ctx.lineWidth=lw*(1.2+1.8*f);ctx.beginPath();ctx.arc(cx,cy,R,a0,a1+0.01);ctx.stroke()}
+        const hx=cx+Math.cos(h)*R,hy=cy+Math.sin(h)*R,hr=lw*(5+3*rkE);const hg=ctx.createRadialGradient(hx,hy,0,hx,hy,hr);
+        hg.addColorStop(0,`rgba(255,255,255,${0.95*glow})`);hg.addColorStop(0.35,`rgba(${rgb(B)},${0.6*glow})`);hg.addColorStop(1,`rgba(${rgb(A)},0)`);ctx.fillStyle=hg;ctx.beginPath();ctx.arc(hx,hy,hr,0,6.283);ctx.fill()}}
+    else rkComet=-Math.PI/2;   // nächster Impuls startet oben
     ctx.globalCompositeOperation="source-over";
     // Rand der Scheibe
     ctx.strokeStyle=`rgba(${rgb(B)},${0.28*coreA})`;ctx.lineWidth=Math.max(1,lw*0.6);ctx.beginPath();ctx.arc(cx,cy,Rc,0,6.283);ctx.stroke();
@@ -1788,7 +1805,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261111-0713",ATLAS_REL="2.13";
+const APP_VERSION="20261111-1427",ATLAS_REL="2.14";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
