@@ -24,6 +24,11 @@ Festgelegt von Mario: Diese Ring-und-Kern-Gestaltung ist Atlas' feste Grundgesta
 Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwellen ein ruhiger Lichtsaum.
 
 ## Farben
-- Grundfarbe Türkis-Cyan (`tuerkis`). Weitere Farbstimmungen: `blau`, `violett`, `smaragd`, `bernstein`, `rose`, `eis`, `nordlicht` (mehrfarbig, wechselt sehr langsam und weich, Periode ca. 3 min, nie blitzend) und `eigen` (freie Farbe aus dem Farbwähler; hellere und dunklere Töne werden daraus abgeleitet).
+- Grundfarbe Türkis-Cyan (`tuerkis`). Weitere Farbstimmungen: `blau`, `violett`, `smaragd`, `bernstein`, `rose`, `eis`, `nordlicht` (mehrfarbig, wechselt sehr langsam und weich, Periode ca. 3 min, nie blitzend) `supernova` (bunt: Blau, Türkis, Violett, Magenta, Gold – weich verlaufend, Ring als Farbverlauf, beim Denken einzelne bunte Lichtpunkte) und `eigen` (freie Farbe aus dem Farbwähler; hellere und dunklere Töne werden daraus abgeleitet).
 - Das Farbschema färbt Ring, Zentrum, Lichtimpuls, Hintergrund-Schimmer und Akzente (`applyTheme`), nie Aufbau oder Positionen.
 - Oberfläche (Knöpfe, Statuszeile) in Türkis auf dunklem Grund.
+
+## Supplement-Karte
+- Kleine Karte (Bild/Platzhalter, Name, Herkunft), nur während Atlas über ein konkretes Supplement spricht.
+- Quer: links neben der Kugel, vertikal zentriert, Breite passt sich dem freien Platz an. Hochkant/Handy: oben mittig, kompakt. Nie über Kugel, Ring oder Knöpfen.
+- Bilder ausschließlich über `produktbilder/zuordnung.json` (exakte Schlüssel), sonst neutrale Kapsel-Grafik in Akzentfarbe.

@@ -27,6 +27,19 @@ body{background:radial-gradient(ellipse 80% 70% at 50% 46%,var(--tint1,#0c2028) 
 @media (orientation:landscape){#listView{top:24px;right:24px;bottom:24px;width:min(46vw,560px)}body.listOn #vis{transform:translateX(-24vw) scale(.8)}}
 @media (orientation:portrait){#listView{left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);max-height:60vh}body.listOn #vis{transform:translateY(-22vh) scale(.62)}}
 #vis{transition:transform .5s ease}
+/* Supplement-Karte: erscheint, solange Atlas über ein Supplement spricht – neben der Kugel (quer) bzw. oben (hochkant), nie über Kugel oder Knöpfen */
+#suppCard{position:fixed;z-index:6;display:flex;align-items:center;gap:12px;padding:10px 14px 10px 10px;border-radius:16px;background:rgba(6,16,22,.74);border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--fg);box-shadow:0 8px 30px rgba(0,0,0,.35),0 0 0 1px var(--glow) inset;pointer-events:none;opacity:0;transition:opacity .45s ease,transform .45s ease}
+#suppCard.on{opacity:1}
+#suppCard .sc-img{width:52px;height:52px;flex:0 0 52px;border-radius:12px;background:rgba(255,255,255,.04);display:grid;place-items:center;overflow:hidden}
+#suppCard .sc-img img{width:100%;height:100%;object-fit:contain}
+#suppCard .sc-img svg{width:60%;height:60%;color:var(--accent)}
+#suppCard .sc-t{font-size:15px;font-weight:600;line-height:1.25;color:var(--fg)}#suppCard .sc-s{font-size:12px;color:var(--muted);margin-top:2px}
+@media (min-aspect-ratio:4/3){#suppCard{left:max(16px,env(safe-area-inset-left));top:50%;transform:translate(-8px,-50%);flex-direction:column;text-align:center;padding:14px;width:min(calc((100vw - min(100vw,82vh,760px))/2 - 36px),230px)}
+  #suppCard.on{transform:translate(0,-50%)}#suppCard .sc-img{width:100%;height:auto;aspect-ratio:1;flex:none}#suppCard .sc-img svg{width:42%;height:42%}}
+@media not all and (min-aspect-ratio:4/3){#suppCard{top:calc(env(safe-area-inset-top) + 10px);left:50%;transform:translate(-50%,-8px);max-width:min(72vw,420px)}#suppCard.on{transform:translate(-50%,0)}}
+body.listOn #suppCard{display:none}
+@media (prefers-reduced-motion:reduce){#suppCard{transition:opacity .2s}}
 #stLbl{color:var(--lbl,rgba(150,226,224,.55))!important;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:13;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,225,240,.55);pointer-events:none}
 #stLbl.err{color:#ff9a7a;font-weight:600}body.listOn #stLbl{display:none}
 .lvHead{display:flex;align-items:center;justify-content:space-between;gap:12px}.lvHead h2{margin:0;font-size:24px;font-weight:650}
@@ -152,6 +165,7 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
     <div class="said" id="said"></div>
     <div class="heard" id="heard"></div>
     <div class="err" id="err" hidden></div>
+    <div id="suppCard" aria-live="polite" aria-hidden="true"><div class="sc-img" id="scImg"></div><div><div class="sc-t" id="scT"></div><div class="sc-s" id="scS"></div></div></div>
     <div class="awaybar" id="awayBar" hidden>Abwesenheitsmodus · Gesperrt</div>
   </main>
   <div>
@@ -221,6 +235,7 @@ const ORB_PALETTES={
   bernstein:{name:"Bernstein (warm)",a:[255,178,84],b:[255,236,204],c:[200,110,40]},
   rose:{name:"Rosé",a:[240,128,170],b:[255,222,236],c:[170,70,120]},
   eis:{name:"Eisweiß",a:[180,214,232],b:[246,252,255],c:[110,150,180]},
+  supernova:{name:"Supernova (bunt)",a:[52,214,212],b:[236,244,255],c:[150,100,255],multi:true},
   eigen:{name:"Eigene Farbe",a:[52,214,212],b:[206,252,250],c:[32,132,131]}
 };
 function mixc(a,b,u){return [0,1,2].map(i=>Math.round(a[i]+(b[i]-a[i])*u))}
@@ -427,7 +442,13 @@ function makeOrb(cv,opt){
   const RW={sleep:0,idle:1,listen:0,think:0,speak:0};let rkE=0,rkT=0,rkThink=0,rkWave=0,rkSpin=0,rkComet=0,rkSpawn=0;const rkP=[];   // rkP: Supernova-Lichtpunkte (max. 48)
   const EMBLEMS={flamme:{vb:100,shape:"M50 4 C56 22 76 34 76 58 C76 78 64 92 50 92 C36 92 24 80 24 62 C24 48 32 40 36 32 C38 42 42 48 48 50 C44 36 44 20 50 4 Z",cut:"M50 56 C54 63 60 67 60 75 C60 82 55 86 50 86 C45 86 40 82 40 76 C40 69 46 65 50 56 Z"}};
   const emblemPaths={};const emb=k=>{if(!emblemPaths[k]&&EMBLEMS[k]&&typeof Path2D!=="undefined"){const e=EMBLEMS[k];emblemPaths[k]={vb:e.vb,shape:new Path2D(e.shape),cut:e.cut?new Path2D(e.cut):null}}return emblemPaths[k]};
-  function rkColors(t){const p=ORB_PALETTES[st.palette];if(p&&p.a)return p;
+  // Supernova: Blau → Türkis → Violett → Magenta → Gold, weich und zyklisch ineinander übergehend
+  const MULTI=[[70,124,255],[52,214,212],[150,104,255],[226,96,196],[255,186,96]];
+  function multiAt(u){u=((u%1)+1)%1*MULTI.length;const i=Math.floor(u),f=u-i,s=f*f*(3-2*f);return mixc(MULTI[i],MULTI[(i+1)%MULTI.length],s)}
+  const isMulti=()=>{const p=ORB_PALETTES[st.palette];return !!(p&&p.multi)};
+  function rkColors(t){const p=ORB_PALETTES[st.palette];
+    if(p&&p.multi){const u=t*0.012;return {a:multiAt(u),b:mixc([248,250,255],multiAt(u+0.2),0.22),c:multiAt(u+0.45)}}   // Wechsel ca. alle 80 s, nie sprunghaft
+    if(p&&p.a)return p;
     if(p&&p.soft){const h=200+30*Math.sin(t*0.035)+10*Math.sin(t*0.013);return {a:hsl(h,0.72,0.55),b:hsl(h-10,0.9,0.88),c:hsl(h+45,0.6,0.5)}}   // Nordlicht: Türkis ↔ Blau ↔ Violett, Periode ~3 min
     return ORB_PALETTES.tuerkis}
   function ringkern(t,dt,W,H,S,cx,cy){
@@ -448,7 +469,8 @@ function makeOrb(cv,opt){
     if(wL>0.02){if(reduce){ctx.strokeStyle=`rgba(${rgb(B)},${0.12*wL})`;ctx.lineWidth=lw*3;ctx.beginPath();ctx.arc(cx,cy,R*1.06,0,6.283);ctx.stroke()}
       else{rkWave+=dt/3.4;for(let i=0;i<2;i++){const ph=(rkWave+i*0.5)%1,rr=R*(1.02+0.3*ph),a=wL*0.22*(1-ph)*(1-ph);ctx.strokeStyle=`rgba(${rgb(B)},${a})`;ctx.lineWidth=lw*(1.4-ph*0.8);ctx.beginPath();ctx.arc(cx,cy,rr,0,6.283);ctx.stroke()}}}
     // Ring: weicher Schein + klare Linie + feine innere Spur
-    for(const [w,a] of [[lw*7,0.06],[lw*3.2,0.16],[lw,0.95]]){ctx.strokeStyle=`rgba(${rgb(w===lw?B:A)},${a*ringA})`;ctx.lineWidth=w;ctx.beginPath();ctx.arc(cx,cy,R,0,6.283);ctx.stroke()}
+    if(isMulti()){const NS=72,off=rkT*0.015;for(const [w,a,wh] of [[lw*7,0.07,0],[lw*3.2,0.18,0],[lw,0.95,0.35]]){ctx.lineWidth=w;for(let i=0;i<NS;i++){const c=mixc(multiAt(i/NS+off),[255,255,255],wh);ctx.strokeStyle=`rgba(${rgb(c)},${a*ringA})`;ctx.beginPath();ctx.arc(cx,cy,R,i/NS*6.283,(i+1.08)/NS*6.283);ctx.stroke()}}}
+    else for(const [w,a] of [[lw*7,0.06],[lw*3.2,0.16],[lw,0.95]]){ctx.strokeStyle=`rgba(${rgb(w===lw?B:A)},${a*ringA})`;ctx.lineWidth=w;ctx.beginPath();ctx.arc(cx,cy,R,0,6.283);ctx.stroke()}
     ctx.strokeStyle=`rgba(${rgb(A)},${0.12*ringA})`;ctx.lineWidth=Math.max(1,lw*0.4);ctx.beginPath();ctx.arc(cx,cy,R*0.9,0,6.283);ctx.stroke();
     // Ruhebewegung: drei sanfte Lichtbögen und eine feine Skala kreisen langsam gegeneinander (ca. 90 s bzw. 140 s pro Runde)
     rkSpin+=dt*(1-0.97*wZ)*mo;const calm=(0.5*wI+0.35*wL+0.45*wT+0.3*wS)*(1-wZ*0.85);
@@ -456,9 +478,11 @@ function makeOrb(cv,opt){
       ctx.fillStyle=`rgba(${rgb(B)},${0.16*calm})`;const tk=Math.max(1.2,S*0.0025);for(let i=0;i<72;i++){if(i%6===0)continue;const a=-rkSpin*0.045+i*0.0873;ctx.fillRect(cx+Math.cos(a)*R*0.86-tk/2,cy+Math.sin(a)*R*0.86-tk/2,tk,tk)}}
     // Supernova beim Sprechen: kleine Lichtpunkte erscheinen, strahlen nach außen und vergehen (bei reduzierter Bewegung aus)
     if(!reduce){if(wS>0.3&&st.mode==="speak"){rkSpawn+=dt*(9+22*rkE);while(rkSpawn>1&&rkP.length<48){rkSpawn--;const a=Math.random()*6.283,r0=Rc*(0.7+Math.random()*0.5);
-        rkP.push({a,r:r0,v:S*(0.05+0.09*Math.random())*(0.7+0.6*rkE),life:0,max:0.8+Math.random()*0.7,sz:Math.max(1.5,S*(0.003+0.003*Math.random())),w:Math.random()<0.35})}}else rkSpawn=0;
+        rkP.push({a,r:r0,v:S*(0.05+0.09*Math.random())*(0.7+0.6*rkE),life:0,max:0.8+Math.random()*0.7,sz:Math.max(1.5,S*(0.003+0.003*Math.random())),w:Math.random()<0.35,col:isMulti()?multiAt(Math.random()):null})}}
+      else if(isMulti()&&wT>0.3&&st.mode==="think"){rkSpawn+=dt*4;while(rkSpawn>1&&rkP.length<24){rkSpawn--;const a=Math.random()*6.283,r0=Rc*(0.3+Math.random()*1.9);rkP.push({a,r:r0,v:0,life:0,max:1.2+Math.random()*0.8,sz:Math.max(1.5,S*0.004),w:false,col:multiAt(Math.random())})}}
+      else rkSpawn=0;
       for(let i=rkP.length-1;i>=0;i--){const q=rkP[i];q.life+=dt;q.r+=q.v*dt;if(q.life>=q.max){rkP.splice(i,1);continue}const u=q.life/q.max,al=Math.sin(Math.PI*u)*0.75;
-        ctx.fillStyle=`rgba(${q.w?"235,255,253":rgb(A)},${al})`;const x=cx+Math.cos(q.a)*q.r,y=cy+Math.sin(q.a)*q.r;ctx.fillRect(x-q.sz/2,y-q.sz/2,q.sz,q.sz)}}
+        ctx.fillStyle=`rgba(${q.w?"235,255,253":rgb(q.col||A)},${al})`;const x=cx+Math.cos(q.a)*q.r,y=cy+Math.sin(q.a)*q.r;ctx.fillRect(x-q.sz/2,y-q.sz/2,q.sz,q.sz)}}
     // Zentrum: leuchtende Scheibe
     g=ctx.createRadialGradient(cx,cy,0,cx,cy,Rc*1.35);g.addColorStop(0,`rgba(${rgb(B)},${0.95*coreA})`);g.addColorStop(0.55,`rgba(${rgb(A)},${0.75*coreA})`);g.addColorStop(0.74,`rgba(${rgb(Cc)},${0.35*coreA})`);g.addColorStop(1,`rgba(${rgb(Cc)},0)`);
     ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,Rc*1.35,0,6.283);ctx.fill();
@@ -773,7 +797,7 @@ if(TTS){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
 // "system" = keine Stimme vorgeben: das Gerät nimmt seine eingestellte Systemstimme (z. B. Siri-Stimme 2)
 const voice=()=>S.voice==="system"?null:voices.find(v=>vid(v)===S.voice)||voices.find(v=>v.name===S.voice&&vtier(v)===2)||voices.find(v=>v.name===S.voice)||voices[0]||null;
 const vlabel=v=>`${v.name}${vtier(v)===2?" · Premium":vtier(v)===1?" · Erweitert":""} (${v.lang})`;
-function mkUtt(t){const u=new SpeechSynthesisUtterance(sayForm(t));const v=voice();u.lang=v?v.lang:"de-DE";if(v)u.voice=v;u.rate=S.rate*(evening()?0.93:1);u.pitch=1;return u}
+function mkUtt(t){const u=new SpeechSynthesisUtterance(sayForm(t));u._orig=t;const v=voice();u.lang=v?v.lang:"de-DE";if(v)u.voice=v;u.rate=S.rate*(evening()?0.93:1);u.pitch=1;return u}
 // Sätze zu Abschnitten bis ~230 Zeichen bündeln: weniger Pausen, flüssiger
 function chunk(a,max=230){const out=[];let c="";for(const x of a){const y=x.trim();if(!y)continue;if(c&&c.length+y.length>max){out.push(c);c=y}else c=c?c+" "+y:y}if(c)out.push(c);return out}
 let pending=0,afterSpeak=null,gen=0;
@@ -784,12 +808,12 @@ function isEcho(t){const T=typeof toks==="function"?toks(t):[];if(T.length<2)ret
   return spokenRecent.some(x=>now-x.at<15000&&(sim(T,toks(x.t))>=.6||toks(x.t).join(" ").includes(T.join(" "))))}
 function speak(text,then){text=clean(text);noteSpoken(text);touch();$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
   const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
-  const finish0=()=>{if(my!==gen||pending<0)return;pending=0;setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;resumeRecAfterSpeech();f&&f()};
+  const finish0=()=>{if(my!==gen||pending<0)return;pending=0;hideCard();setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;resumeRecAfterSpeech();f&&f()};
   const finish=()=>{if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)){whenAudioIdle(my,finish0);return}finish0()};
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
     for(const p of parts){const u=mkUtt(p);
-      u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+      u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);cardPlan(p)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
       u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled")diag("tts:"+lastTTSerr);
         // nicht von Atlas abgebrochen (z. B. Gerät hat die Audioausgabe kurz unterbrochen): diesen Satz einmal neu sprechen statt abzubrechen
@@ -800,6 +824,33 @@ function speak(text,then){text=clean(text);noteSpoken(text);touch();$("said").te
   // Notbremse, falls das Ende nie gemeldet wird
   setTimeout(()=>{if(my===gen&&pending>0)whenAudioIdle(my,finish0)},4000+text.length*90/Math.max(.5,S.rate))}
 let soundWarned=false,lastTTSerr="",gestured=false,ttsBlocked=false;
+/* ===== Supplement-Karte =====
+   Erkennung pro gesprochenem Satz: (1) exakter Produktname aus dem Herstellerkatalog (mind. zwei Wörter, nur wenn eindeutig),
+   sonst (2) genau ein Eintrag der Wissensbibliothek. Mehrere Supplements in einem Satz (Aufzählung) -> keine neue Karte.
+   Bilder nur aus produktbilder/zuordnung.json mit exaktem Schlüssel (kat:<Produkt-URL> oder kb:<Bibliotheks-ID>) – nie geraten.
+   Bilder werden auf dem Gerät zwischengespeichert, damit sie offline da sind; sonst neutrale Platzhaltergrafik. */
+const SC_PH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="8.5" width="18" height="7" rx="3.5" transform="rotate(-35 12 12)"/><path d="M12 6.2 L12 17.8" transform="rotate(-35 12 12)"/></svg>';
+let BILD=ls.get("bildMap",{}),scCur=null,scAt=0,scTimer=null,scHide=null;
+async function loadBildMap(){try{const r=await fetch("produktbilder/zuordnung.json?v="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();BILD=j.bilder||{};ls.set("bildMap",BILD);
+  if("caches" in window){const c=await caches.open("atlas-produktbilder");for(const u of new Set(Object.values(BILD))){try{if(!(await c.match(u)))await c.add(u)}catch{}}}}catch{}}
+async function bildUrl(key){const u=key&&BILD[key];if(!u)return null;try{if("caches" in window){const r=await (await caches.open("atlas-produktbilder")).match(u);if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
+let KAT_IDX=null;function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
+function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{for(let i=0;i+T.length<=U.length;i++)if(T.every((w,k)=>U[i+k]===w))return true;return false};
+  const kat=katIdx().filter(x=>has(x.T));if(kat.length){const best=Math.max(...kat.map(x=>x.T.length)),top=kat.filter(x=>x.T.length===best),ids=new Set(top.map(x=>x.p.u));
+    if(ids.size===1){const p=top[0].p;return {key:"kat:"+p.u,title:p.n,sub:p.h}}return null}   // gleich lange Treffer verschiedener Produkte: nicht eindeutig
+  const kb=(typeof kbFind==="function"&&KB)?kbFind(text):[];if(kb.length!==1)return null;const e=kb[0];
+  const mine=(cur&&cur.supps||[]).filter(x=>(kbFind(coreOf(x))[0]||{}).id===e.id);
+  return {key:"kb:"+e.id,title:e.name.split(" (")[0],sub:mine.length===1?(norm(coreOf(mine[0]))===norm(e.name.split(" (")[0])?"aus deiner Liste":"in deiner Liste: "+coreOf(mine[0])):"aus deiner Wissensbibliothek"}}
+async function showCard(c){scCur=c;scAt=Date.now();$("scT").textContent=c.title;$("scS").textContent=c.sub||"";const u=await bildUrl(c.key);if(scCur!==c)return;
+  $("scImg").innerHTML="";if(u){const im=new Image();im.alt=c.title;im.src=u;im.onerror=()=>{$("scImg").innerHTML=SC_PH};$("scImg").append(im)}else $("scImg").innerHTML=SC_PH;
+  $("suppCard").classList.add("on");$("suppCard").setAttribute("aria-hidden","false")}
+// Ein gesprochener Abschnitt kann mehrere Sätze enthalten: jeden Satz zu seinem (geschätzten) Sprechzeitpunkt prüfen
+let scPlan=[];function cardPlan(text){scPlan.forEach(clearTimeout);scPlan=[];if(!text)return;const parts=String(text).match(/[^.!?…:]+[.!?…:]*\s*/g)||[text];let pos=0;const ms=62/Math.max(.5,+S.rate||1);
+  for(const x of parts){const at=pos*ms;pos+=x.length;scPlan.push(setTimeout(()=>cardForSpeech(x),at))}}
+function cardForSpeech(text){if(!text)return;const c=suppOf(text);if(!c)return;clearTimeout(scHide);if(scCur&&scCur.key===c.key&&$("suppCard").classList.contains("on"))return;
+  clearTimeout(scTimer);const wait=scCur&&$("suppCard").classList.contains("on")?Math.max(0,2500-(Date.now()-scAt)):0;   // mind. 2,5 s stehen lassen, kein Flackern
+  scTimer=setTimeout(()=>{if(speaking())showCard(c)},wait)}
+function hideCard(delay=1200){if(!delay){scPlan.forEach(clearTimeout);scPlan=[]}clearTimeout(scTimer);clearTimeout(scHide);scHide=setTimeout(()=>{if(speaking())return;$("suppCard").classList.remove("on");$("suppCard").setAttribute("aria-hidden","true");scCur=null},delay)}
 /* Farbschema: färbt Kugel/Ring (über ORB_PALETTES) und die Akzente der Hauptoberfläche – Aufbau und Positionen bleiben gleich */
 function hexRgb(h){const m=String(h||"").match(/^#?([0-9a-f]{6})$/i);if(!m)return [52,214,212];const n=parseInt(m[1],16);return [n>>16&255,n>>8&255,n&255]}
 function setCustomPalette(hex){const a=hexRgb(hex),b=a.map(v=>Math.round(v+(255-v)*0.75)),c=a.map(v=>Math.round(v*0.62));ORB_PALETTES.eigen={name:"Eigene Farbe",a,b,c}}
@@ -815,7 +866,7 @@ const SAYFIX=[[/Bisglycinat/gi,"Bis-glycinat"],[/\bNMN\b/g,"N M N"],[/\bNAD\s*[+
   [/\bz\.\s?B\./gi,"zum Beispiel"],[/\bca\./gi,"zirka"],[/\bbzw\./gi,"beziehungsweise"],[/\bu\.\s?a\./g,"unter anderem"],[/\bevtl\./gi,"eventuell"],[/\binkl\./gi,"inklusive"],[/\bL-(?=[A-ZÄÖÜ])/g,"L "],[/\bHRV\b/g,"H R V"],[/\bIHHT\b/g,"I H H T"]];
 const sayForm=t=>SAYFIX.reduce((x,[a,b])=>x.replace(a,b),String(t));
 const say=t=>speak(t);
-function hush(){gen++;afterSpeak=null;pending=0;if(TTS)speechSynthesis.cancel()}
+function hush(){gen++;afterSpeak=null;pending=0;if(TTS)speechSynthesis.cancel();if(typeof hideCard==="function")hideCard(0)}
 function unlockAudio(){if(TTS){const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}}
 const speaking=()=>TTS&&(speechSynthesis.speaking||pending>0);
 // Chrome bricht Online-Stimmen nach ~15 s ab: alle 10 s kurz anstupsen
@@ -1396,13 +1447,13 @@ const isRepeatQ=(sent,pq)=>pq&&pq.length>=3&&/\?\s*$/.test(sent)&&sim(toks(sent)
 const OPENER=/^\s*(sehr gute frage|gute frage|natürlich|absolut|selbstverständlich|sehr gerne|klar doch|ich verstehe|verstehe|okay, verstanden|alles klar)[!.,:]\s*/i;
 /* Spricht Satz für Satz, während die Antwort noch entsteht */
 function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;const pq=prevQuestion();let first=false,buf="",queued=0,done=false,started=false,then=null,all="";
-  const finish0=()=>{if(my!==gen)return;gen++;setMode("idle",idleLabel());const f=then;then=null;resumeRecAfterSpeech();f&&f()};
+  const finish0=()=>{if(my!==gen)return;gen++;hideCard();setMode("idle",idleLabel());const f=then;then=null;resumeRecAfterSpeech();f&&f()};
   const finish=()=>{if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)){whenAudioIdle(my,finish0);return}finish0()};
   let bundle="";const flush=()=>{const b=bundle;bundle="";say1(b)};
   // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
   const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
   const say1=s=>{if(my!==gen)return;s=clean(s);if(pq){const parts=s.split(/(?<=[.!?])\s+/),keep=parts.filter(x=>!isRepeatQ(x,pq));if(keep.length<parts.length){diag("doppelte frage übersprungen");s=keep.join(" ");if(!s.trim())return}}if(!first){const o=s.replace(OPENER,"").trim();if(!o)return;s=o;first=true}if(!s||!TTS)return;noteSpoken(s);touch();queued++;const u=mkUtt(s);
-    u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+    u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);cardPlan(s)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
     const next=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};u.onend=next;
     u.onerror=ev=>{if(my!==gen)return;const er=(ev&&ev.error)||"";if((er==="interrupted"||er==="canceled")&&!u._again){diag("tts: satz wiederholt");const u2=mkUtt(s);u2._again=true;u2.onstart=u.onstart;u2.onboundary=u.onboundary;u2.onend=next;u2.onerror=next;speechSynthesis.speak(u2);return}next()};
     try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
@@ -1852,7 +1903,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261112-1945",ATLAS_REL="2.16";
+const APP_VERSION="20261112-2023",ATLAS_REL="2.17";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
@@ -1864,7 +1915,7 @@ function tick(){const d=new Date();$("clock").textContent=hhmm(d);$("dateline").
   if(!S.quick&&privKey&&Date.now()-unlockedAt>S.lockHours*3600e3)lockVault();
   if(dayKey()!==today){const old=today,L=log.slice();clearTimeout(protoTimer);
     (async()=>{try{const t=await summarize(old,L);if(t)await saveProto(old,SESSION,t)}catch{}})();today=dayKey();log=[];protoLen=0;persistChain=Promise.resolve()}}
-setInterval(tick,15000);tick();applyNames();renderPerson();renderLock();applyAway();if(!away)quickUnlock();if(away)startRoom();
+loadBildMap();setInterval(tick,15000);tick();applyNames();renderPerson();renderLock();applyAway();if(!away)quickUnlock();if(away)startRoom();
 else if(S.key&&!ls.get("roomOff",false))camState().then(st=>{if(st==="granted"&&!stream){roomAsked=true;diag("kamera: automatisch gestartet");startRoom()}});
 if(!window.isSecureContext||!crypto.subtle)showErr("Dieses Gerät erlaubt hier keine Verschlüsselung. Bitte über eine https-Adresse öffnen.");
 if(!SR)$("state").textContent="Bereit · Spracheingabe nur in Safari oder Chrome";

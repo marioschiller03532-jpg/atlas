@@ -1,0 +1,4 @@
+{
+  "hinweis": "Feste Bildzuordnung für die Supplement-Karte. Schlüssel: kat:<Produkt-URL aus dem Katalog> oder kb:<ID aus der Wissensbibliothek>. Nur eindeutige, geprüfte Zuordnungen eintragen; ohne Eintrag zeigt Atlas eine neutrale Platzhaltergrafik.",
+  "bilder": {}
+}

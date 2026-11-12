@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.17 (12.11.2026) – Farbmodus „Supernova (bunt)“, Supplement-Karte
+- Neuer Farbmodus „Supernova (bunt)“: Blau, Türkis, Violett, Magenta und Gold gehen weich ineinander über (Farbverlauf rund um den Ring, wandert langsam; Zentrum wechselt ca. alle 80 s den Ton). Bereit: ruhig · Zuhören: klarer, heller · Denken: einzelne bunte Lichtpunkte tauchen sanft auf · Sprechen: Ring pulsiert, Lichtimpuls, bunte Supernova. Alle bisherigen Farbmodi bleiben wählbar.
+- Supplement-Karte: Erwähnt Atlas beim Sprechen ein konkretes Supplement, erscheint eine kleine Karte mit Name, Herkunft (Hersteller, „aus deiner Liste“ oder Wissensbibliothek) und Bild bzw. neutraler Platzhaltergrafik. Wechselt mit dem Thema (mind. 2,5 s Anzeige), verschwindet ca. 1 s nach dem Sprechen. Quer: links neben der Kugel; hochkant/Handy: oben mittig. Verdeckt weder Kugel noch Knöpfe.
+- Erkennung pro Satz: exakter Produktname aus dem Herstellerkatalog (eindeutig, mind. zwei Wörter) oder genau ein Eintrag der Wissensbibliothek; Aufzählungen mehrerer Supplements lösen keine Karte aus.
+- Bilder: nur über produktbilder/zuordnung.json mit exaktem Schlüssel (kat:<Produkt-URL> oder kb:<Bibliotheks-ID>); werden auf dem Gerät zwischengespeichert (offline verfügbar). Derzeit noch keine Bilder hinterlegt → Platzhalter.
+- Rückfall: /alt/2.16/.
+
 ## 2.16 (12.11.2026) – Begrüßungstext, ausreden lassen, Farbschemata
 - Begrüßung bei Bewegung: „Hallo, ich bin Atlas. Wer ist gerade im Raum und wobei kann ich helfen?“ (Ablauf, Sperrzeit und Erkennung unverändert).
 - Ausreden lassen – Ursachen: (1) Die Spracherkennung wurde während der Sprachausgabe neu gestartet; iOS schaltet dabei die Audio-Sitzung um und schneidet die Stimme ab. (2) Eine Notbremse nach geschätzter Dauer beendete langsame Ausgaben vorzeitig. (3) Seit 2.10 konnten drei „fremde“ Wörter (oft falsch erkanntes Echo der eigenen Stimme) die Ausgabe abbrechen.
