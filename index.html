@@ -439,8 +439,8 @@ function makeOrb(cv,opt){
   // Bereit: Ring und Zentrum schwach, atmen sehr langsam · Zuhören: Ring heller, dezente Lichtwellen nach außen
   // Denken: Licht im Zentrum wandert langsam, Ring ruhig · Sprechen: Ring pulsiert sanft mit der Stimme, Zentrum etwas heller
   // Ruhe: deutlich dunkler, nahezu statisch. Das Zeichen in der Mitte (Emblem) ist austauschbar, ohne den Rest zu ändern.
-  const RW={sleep:0,idle:1,listen:0,think:0,speak:0};let rkE=0,rkT=0,rkThink=0,rkWave=0,rkSpin=0,rkComet=0,rkSpawn=0;const rkP=[];   // rkP: Supernova-Lichtpunkte (max. 48)
-  const EMBLEMS={flamme:{vb:100,shape:"M50 4 C56 22 76 34 76 58 C76 78 64 92 50 92 C36 92 24 80 24 62 C24 48 32 40 36 32 C38 42 42 48 48 50 C44 36 44 20 50 4 Z",cut:"M50 56 C54 63 60 67 60 75 C60 82 55 86 50 86 C45 86 40 82 40 76 C40 69 46 65 50 56 Z"}};
+  const RW={sleep:0,idle:1,listen:0,think:0,speak:0};let rkE=0,rkT=0,rkThink=0,rkWave=0,rkSpin=0,rkComet=0,rkSpawn=0,rkCirc=0;const rkP=[];   // rkP: Supernova-Lichtpunkte (max. 48)
+  const EMBLEMS={};   // Platz für ein späteres eigenes Zeichen (SVG-Pfad, Ansicht 100×100). Die Flamme wurde entfernt (gehörte nicht zu Atlas).
   const emblemPaths={};const emb=k=>{if(!emblemPaths[k]&&EMBLEMS[k]&&typeof Path2D!=="undefined"){const e=EMBLEMS[k];emblemPaths[k]={vb:e.vb,shape:new Path2D(e.shape),cut:e.cut?new Path2D(e.cut):null}}return emblemPaths[k]};
   // Supernova: Blau → Türkis → Violett → Magenta → Gold, weich und zyklisch ineinander übergehend
   const MULTI=[[70,124,255],[52,214,212],[150,104,255],[226,96,196],[255,186,96]];
@@ -501,7 +501,15 @@ function makeOrb(cv,opt){
     // Rand der Scheibe
     ctx.strokeStyle=`rgba(${rgb(B)},${0.28*coreA})`;ctx.lineWidth=Math.max(1,lw*0.6);ctx.beginPath();ctx.arc(cx,cy,Rc,0,6.283);ctx.stroke();
     // Emblem in der Mitte (Standard: dunkle Flamme). Später austauschbar über vis.emblem oder ein eigenes Bild (vis.emblemImg).
-    const ek=st.emblem||"flamme";
+    const ek=(st.emblem&&st.emblem!=="flamme")?st.emblem:"kreis";
+    // Standard-Mittelpunkt: schlichter, neutraler Kreis. Ruhe: dreht sich langsam in sich (ca. 40 s pro Runde). Sprechen: hell, pulsiert, dreht schneller.
+    if(ek==="kreis"&&!st.emblemImg){rkCirc+=dt*(0.16+1.0*wS*(0.6+0.6*rkE)+0.12*wL)*(1-0.97*wZ)*mo;
+      const kr=Rc*0.46*(1+0.07*rkE*wS*mo+0.015*breathe*wI),al=Math.min(1,0.35+0.65*coreA+0.25*wS*rkE),lw2=Math.max(1.2,S*(0.0045+0.004*wS*rkE));
+      ctx.lineCap="round";ctx.strokeStyle=`rgba(${rgb(B)},${0.16*al})`;ctx.lineWidth=lw2*0.6;ctx.beginPath();ctx.arc(cx,cy,kr,0,6.283);ctx.stroke();
+      for(const [len,off,w] of [[1.7,0,1],[0.9,2.4,0.8],[0.45,4.3,0.6]]){const a0=rkCirc+off;ctx.strokeStyle=`rgba(${rgb(mixc(B,[255,255,255],0.25))},${al*w})`;ctx.lineWidth=lw2*w;ctx.beginPath();ctx.arc(cx,cy,kr,a0,a0+len);ctx.stroke()}
+      const kr2=kr*0.62,a1=-rkCirc*0.7;ctx.strokeStyle=`rgba(${rgb(A)},${0.55*al})`;ctx.lineWidth=lw2*0.7;ctx.beginPath();ctx.arc(cx,cy,kr2,a1,a1+2.2);ctx.stroke();ctx.beginPath();ctx.arc(cx,cy,kr2,a1+3.14,a1+4.4);ctx.stroke();
+      if(wS>0.05){const g2=ctx.createRadialGradient(cx,cy,0,cx,cy,kr*0.9);g2.addColorStop(0,`rgba(255,255,255,${0.32*wS*(0.5+0.5*rkE)})`);g2.addColorStop(1,"rgba(255,255,255,0)");ctx.globalCompositeOperation="lighter";ctx.fillStyle=g2;ctx.beginPath();ctx.arc(cx,cy,kr*0.9,0,6.283);ctx.fill();ctx.globalCompositeOperation="source-over"}
+      ctx.lineCap="butt";return}
     if(st.emblemImg&&st.emblemImg.complete&&st.emblemImg.naturalWidth){const s2=Rc*1.15;ctx.globalAlpha=0.35+0.6*coreA;ctx.drawImage(st.emblemImg,cx-s2/2,cy-s2/2,s2,s2);ctx.globalAlpha=1}
     else if(ek!=="keins"){const e=emb(ek);if(e){const sz=Rc*1.12,k=sz/e.vb;ctx.save();ctx.translate(cx-sz/2,cy-sz/2+Rc*0.02);ctx.scale(k,k);
       ctx.fillStyle=`rgba(4,18,24,${0.55+0.35*Math.min(1,coreA*1.4)})`;ctx.fill(e.shape);
@@ -833,15 +841,24 @@ const SC_PH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 let BILD=ls.get("bildMap",{}),scCur=null,scAt=0,scTimer=null,scHide=null;
 async function loadBildMap(){try{const r=await fetch("produktbilder/zuordnung.json?v="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();BILD=j.bilder||{};ls.set("bildMap",BILD);
   if("caches" in window){const c=await caches.open("atlas-produktbilder");for(const u of new Set(Object.values(BILD))){try{if(!(await c.match(u)))await c.add(u)}catch{}}}}catch{}}
-async function bildUrl(key){const u=key&&BILD[key];if(!u)return null;try{if("caches" in window){const r=await (await caches.open("atlas-produktbilder")).match(u);if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
-let KAT_IDX=null;function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
+async function bildUrl(key,img){const u=(key&&BILD[key])||img||null;if(!u)return null;
+  try{if("caches" in window){const c=await caches.open("atlas-produktbilder");let r=await c.match(u);
+    if(!r&&navigator.onLine){try{const f=await fetch(u,{mode:"cors"});if(f.ok){await c.put(u,f.clone());r=f}}catch{}}   // fremde Bilder: nur wenn der Server es erlaubt, sonst nur online anzeigen
+    if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
+async function bildUrlAlt(key){const u=key&&BILD[key];if(!u)return null;try{if("caches" in window){const r=await (await caches.open("atlas-produktbilder")).match(u);if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
+let KAT_IDX=null,katTurn={at:0,list:[]};function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
 function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{for(let i=0;i+T.length<=U.length;i++)if(T.every((w,k)=>U[i+k]===w))return true;return false};
   const kat=katIdx().filter(x=>has(x.T));if(kat.length){const best=Math.max(...kat.map(x=>x.T.length)),top=kat.filter(x=>x.T.length===best),ids=new Set(top.map(x=>x.p.u));
-    if(ids.size===1){const p=top[0].p;return {key:"kat:"+p.u,title:p.n,sub:p.h}}return null}   // gleich lange Treffer verschiedener Produkte: nicht eindeutig
+    if(ids.size===1){const p=top[0].p;return {key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im}}return null}   // gleich lange Treffer verschiedener Produkte: nicht eindeutig
   const kb=(typeof kbFind==="function"&&KB)?kbFind(text):[];if(kb.length!==1)return null;const e=kb[0];
+  // Hat Atlas gerade im Herstellerkatalog gesucht, gilt das gefundene Produkt – nie ein anderes (z. B. das eigene Omega-3) einsetzen
+  if(Date.now()-katTurn.at<5*60e3&&katTurn.list.length){const A=[e.name,...(e.aliases||[])].map(a=>tk(a.split(" (")[0])).filter(x=>x.length);
+    const hit=katTurn.list.filter(p=>{const T=tk(p.n);return A.some(a=>a.every(w=>T.includes(w)))});
+    if(hit.length===1)return {key:"kat:"+hit[0].u,title:hit[0].n,sub:hit[0].h,img:hit[0].im};
+    if(hit.length>1)return null}   // mehrere passende Katalogprodukte: nicht eindeutig -> keine Karte
   const mine=(cur&&cur.supps||[]).filter(x=>(kbFind(coreOf(x))[0]||{}).id===e.id);
   return {key:"kb:"+e.id,title:e.name.split(" (")[0],sub:mine.length===1?(norm(coreOf(mine[0]))===norm(e.name.split(" (")[0])?"aus deiner Liste":"in deiner Liste: "+coreOf(mine[0])):"aus deiner Wissensbibliothek"}}
-async function showCard(c){scCur=c;scAt=Date.now();$("scT").textContent=c.title;$("scS").textContent=c.sub||"";const u=await bildUrl(c.key);if(scCur!==c)return;
+async function showCard(c){scCur=c;scAt=Date.now();$("scT").textContent=c.title;$("scS").textContent=c.sub||"";const u=await bildUrl(c.key,c.img);if(scCur!==c)return;diag("karte:"+(u?"bild":"platzhalter"));
   $("scImg").innerHTML="";if(u){const im=new Image();im.alt=c.title;im.src=u;im.onerror=()=>{$("scImg").innerHTML=SC_PH};$("scImg").append(im)}else $("scImg").innerHTML=SC_PH;
   $("suppCard").classList.add("on");$("suppCard").setAttribute("aria-hidden","false")}
 // Ein gesprochener Abschnitt kann mehrere Sätze enthalten: jeden Satz zu seinem (geschätzten) Sprechzeitpunkt prüfen
@@ -1028,7 +1045,7 @@ let KAT=null,KAT_SRC="";
 let KAT_EIGEN=ls.get("katEigen",[]);const saveEigen=()=>ls.set("katEigen",KAT_EIGEN);
 const eigenAsKat=x=>({h:x.hersteller||"Eigener Eintrag",n:x.name,u:null,k:"Eigener Eintrag (von dir ergänzt)",ty:"Eigener Eintrag",a:[],hw:x.notiz?[x.notiz]:[],ab:x.zeit,eigen:true});
 const katAll=()=>[...(KAT?KAT.produkte:[]),...KAT_EIGEN.map(eigenAsKat)];
-function katCompact(j){return {stand:j.stand,produkte:j.produkte.map(p=>({h:p.hersteller,n:p.name,u:p.url,k:p.kategorie,l:p.linie,kz:p.kurz,a:p.anwendungsbereiche_hersteller,t:p.inhaltsstoffe,m:p.mengen_aus_text,z:p.zutaten,v:p.verzehrempfehlung,pk:p.packung,f:p.form,hw:p.hinweise,al:p.allergene,pr:p.preis,fe:p.fehlend,ab:p.abgerufen,ty:p.typ}))}}
+function katCompact(j){return {stand:j.stand,produkte:j.produkte.map(p=>({h:p.hersteller,n:p.name,u:p.url,k:p.kategorie,l:p.linie,kz:p.kurz,a:p.anwendungsbereiche_hersteller,t:p.inhaltsstoffe,m:p.mengen_aus_text,z:p.zutaten,v:p.verzehrempfehlung,pk:p.packung,f:p.form,hw:p.hinweise,al:p.allergene,pr:p.preis,fe:p.fehlend,ab:p.abgerufen,ty:p.typ,im:p.bild||null}))}}
 const KFELD={inhaltsstoffe:"Mengen pro Portion (Nährstofftabelle)",zutaten:"Zutaten",verzehrempfehlung:"Verzehr-/Einnahmeempfehlung",packung:"Packungsgröße"};
 const katFehlt=p=>Object.fromEntries((p.fe||[]).map(k=>[KFELD[k]||k,p.h==="Biogena"?"nicht auf Produktseite und Etikett-PDF gefunden":"nicht auf der Produktseite gefunden"]));
 function katStat(){const by={};for(const p of KAT.produkte){const h=by[p.h]=by[p.h]||{alle_gefundenen_produkte:0,nahrungsergaenzungen:0,vollstaendig:0,teilweise:0,andere_produktarten:0,andere_nach_art:{},teilweise_erfasst:[]};h.alle_gefundenen_produkte++;
@@ -1291,7 +1308,7 @@ async function runTool(name,inp){
     if(a==="entfernen"){const old=KAT_EIGEN.splice(ei,1)[0];saveEigen();return `Eigener Eintrag „${old.name}“ entfernt.`}
     const x=KAT_EIGEN[ei];if(inp.neuer_name)x.name=String(inp.neuer_name).trim();if(inp.hersteller!==undefined)x.hersteller=String(inp.hersteller||"").trim()||null;if(inp.notiz!==undefined)x.notiz=String(inp.notiz||"").trim()||null;saveEigen();return `Eigener Eintrag geändert: ${JSON.stringify(x)}`}
   case "katalog_suchen":{if(!KAT&&!KAT_EIGEN.length)return "Der Produktkatalog ist auf diesem Gerät nicht geladen. Sag ihm das ehrlich; nichts erfinden.";
-    const L=katSearch(inp.suchbegriff||"",inp.hersteller),st=KAT?String(KAT.stand).slice(0,10):"Herstellerkatalog nicht geladen";return L.length?JSON.stringify({katalog_stand:st,treffer:L.map(katOut)}):"Im Katalog (Stand "+st+") nichts Passendes gefunden."}
+    const L=katSearch(inp.suchbegriff||"",inp.hersteller),st=KAT?String(KAT.stand).slice(0,10):"Herstellerkatalog nicht geladen";katTurn={at:Date.now(),list:L.filter(p=>!p.eigen)};return L.length?JSON.stringify({katalog_stand:st,treffer:L.map(katOut)}):"Im Katalog (Stand "+st+") nichts Passendes gefunden."}
   case "katalog_status":{if(!KAT)return "Katalog nicht geladen.";
     return JSON.stringify({geprueft:String(KAT.stand).slice(0,16).replace("T"," ")+" UTC",geladen_aus:KAT_SRC||"unbekannt",hersteller:katStat(),produktbilder:"nicht geprüft – Werte aus Bildern werden nicht übernommen",fehlende_werte:"bleiben leer, werden nicht geschätzt oder ergänzt",
       sprich:"Status immer je Hersteller und Produktgruppe nennen, nie pauschal ‚Katalog vollständig‘ oder ‚unvollständig‘.",aktualisieren:"Eine neue Online-Prüfung startet Mario über Claude im Chat (Katalog aktualisieren). Atlas selbst lädt Produktseiten nicht neu."})}
@@ -1904,7 +1921,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261112-2033",ATLAS_REL="2.17.1";
+const APP_VERSION="20261112-2049",ATLAS_REL="2.18";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);

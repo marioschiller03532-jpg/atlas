@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.18 (12.11.2026) – Kreis statt Flamme, Supplement-Karte fest am Katalog
+- Mitte: Flamme vollständig entfernt (gehörte zu einer Kaffeemaschine). Stattdessen ein schlichter Kreis mit drei Bogensegmenten und gegenläufigem Innenbogen: Ruhe dreht langsam (ca. 40 s/Runde), Zuhören etwas zügiger, Sprechen hell, pulsiert mit der Stimme und dreht schneller, Ruhemodus fast still. Farben/Supernova unverändert.
+- Katalog: für alle 403 Produkte die Adresse des Hauptbilds der jeweiligen Produktseite (nur Adresse, keine Bilddatei im Repo).
+- Karte: hat Atlas im Katalog gesucht, gilt genau das gefundene Produkt (z. B. „Omega 3 forte 700“, Biogena) – auch wenn er danach nur „Omega-3“ sagt. Mehrere passende Treffer → keine Karte statt Raten. Ohne Katalogsuche: Eintrag aus deiner Liste/Bibliothek (z. B. dein Norsan Omega-3) mit Platzhalter.
+- Bild: 1) feste Zuordnung produktbilder/zuordnung.json, 2) Hauptbild genau dieser Katalog-Produktseite. Beim ersten Anzeigen auf dem Gerät gespeichert, danach offline verfügbar (wenn der Bildserver das erlaubt). Diagnose: „karte:bild“ / „karte:platzhalter“.
+- Rückfall: /alt/2.17.1/.
+
 ## 2.17.1 (12.11.2026) – Einstellungen werden wieder vollständig gespeichert
 - Fehler seit 2.5: In der Speichern-Funktion stand ein Kommentar so, dass der Rest der Zeile nicht ausgeführt wurde. Dadurch wurden Kugel, Effekt, Farbstimmung, Stimme, Sprechtempo, Begrüßungsabstand, Empfindlichkeit und Sperrzeit beim Speichern nicht übernommen (die Auswahl wirkte nur bis zum Neustart).
 - Behoben; geprüft: Farbstimmung (auch Supernova und eigene Farbe), Kugel, Tempo, Empfindlichkeit bleiben nach Neustart erhalten.
