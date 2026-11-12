@@ -1,5 +1,19 @@
 # Atlas – Änderungen
 
+## 2.15 (12.11.2026) – Gespräch beginnt von selbst bei Bewegung, mehr Wortschatz
+Ursachen:
+- Die Kamera startete erst nach dem ersten Antippen bzw. „Raum-Modus“ – nach jedem Öffnen war Atlas „blind“.
+- Begrüßt wurde nur beim Aufwachen aus dem Schlaf (nach 20 min) oder bei der allerersten Bewegung; kam jemand nach kürzerer Pause wieder in den Raum, passierte nichts.
+- Bildrauschen, Lampenflimmern und Belichtungsnachregelung konnten Treffer erzeugen.
+Änderungen:
+- Kamera startet beim Öffnen automatisch, wenn sie schon freigegeben ist (keine Nachfrage). Bewusst ausgeschalteter Raum-Modus bleibt aus.
+- Gespräch beginnt von selbst, wenn jemand nach mind. 3 min ohne Bewegung und ohne Aktivität den Raum betritt (ca. 1,5 s deutliche Bewegung), sowie beim Aufwachen. Danach 2 min Sperrzeit; während Gespräch, Zuhören, Denken, Sprechen nie.
+- Erkennung robuster: Helligkeit pro Bildzeile ausgeglichen (Flimmern, Nachregeln), nur zusammenhängende Veränderungen zählen (Rauschen fällt weg), Lichtsprünge wie bisher verworfen.
+- Kamera-Hinweise je Ursache (nicht freigegeben / keine Kamera / belegt / kein https) mit Begründung und Freigabe-Weg für iPad und Laptop; Atlas bleibt per Antippen und „Atlas“ bedienbar.
+- Browser erlaubt Ton erst nach einem Tipp: Statuszeile bittet darum, der nächste Tipp holt die Begrüßung hörbar nach.
+- Wortschatz: mehr Varianten für Begrüßung, Dank, Bestätigung, Abschied; Hinweis auf situativen Humor; Atlas bekommt seine letzten Antwort-Einstiege mit, um nicht gleich anzufangen.
+- Oberfläche unverändert. Rückfall: /alt/2.14/.
+
 ## 2.14 (12.11.2026) – Ringkern: Ruhebewegung, Lichtimpuls, Supernova
 - Ruhezustand: drei sanfte Lichtbögen und eine feine Skala kreisen langsam gegeneinander (ca. 90 bzw. 140 s pro Runde), dazu das langsame Atmen. Im Ruhemodus (Schlaf) steht alles nahezu still.
 - Sprechen: äußerer Ring deutlich heller; ein türkis-weißer Lichtpunkt mit kurzem Schweif gleitet um den Ring (ca. 1,8 s pro Runde, bei lauter Stimme etwas schneller); dahinter Supernova: kleine Lichtpunkte erscheinen, strahlen nach außen und vergehen (max. 48, Türkis/Weiß).

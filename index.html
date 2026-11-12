@@ -788,10 +788,11 @@ function speak(text,then){text=clean(text);noteSpoken(text);touch();$("said").te
       u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled")diag("tts:"+lastTTSerr);if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
       speechSynthesis.speak(u)}},wasBusy?150:0);
   // Absicherung: startet die Stimme nicht, geht es trotzdem weiter (Text steht ja da)
-  setTimeout(()=>{if(my===gen&&!started&&pending>0){diag("tts:startet nicht");if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
+  setTimeout(()=>{if(my===gen&&!started&&pending>0){diag("tts:startet nicht");if(!gestured){ttsBlocked=true;setStatus("Tipp einmal auf die Kugel, dann darf ich sprechen.",true);finish();return}if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
   // Notbremse, falls das Ende nie gemeldet wird
   setTimeout(()=>{if(my===gen&&pending>0)finish()},4000+text.length*90/Math.max(.5,S.rate))}
-let soundWarned=false,lastTTSerr="";
+let soundWarned=false,lastTTSerr="",gestured=false,ttsBlocked=false;
+addEventListener("pointerdown",()=>{gestured=true},{capture:true,passive:true});
 // Diagnose: nur Ereignisse und Fehlercodes, nie Gesprächsinhalte
 function diag(ev){try{const L=ls.get("diag",[]);L.push({z:new Date().toISOString().slice(5,19).replace("T"," "),e:String(ev).slice(0,60)});ls.set("diag",L.slice(-40))}catch{}}
 // Aussprache: nur fürs Vorlesen (Anzeige und Protokoll bleiben unverändert)
@@ -908,11 +909,11 @@ const INTENTS=[
  {id:"datum",max:8,ex:["welcher tag ist heute","welches datum haben wir","der wievielte ist heute","was fuer ein tag ist heute","datum"]},
  {id:"offen",max:9,ex:["was ist noch offen","was fehlt noch","was muss ich noch nehmen","welche supplements fehlen noch","was hab ich noch nicht","was steht noch an","was ist offen heute"]}];
 const POOL={
- gruss:()=>pickFresh("gruss",["Servus! Schön, dass du da bist. Was brauchst du?","Hallo! Ich bin ganz Ohr.","Da bist du ja. Was steht an?","Grüß dich! Was kann ich für dich tun?","Hey! Was liegt an?","Servus! Wie schaut's aus?"]),
+ gruss:()=>pickFresh("gruss",["Servus! Schön, dass du da bist. Was brauchst du?","Hallo! Ich bin ganz Ohr.","Da bist du ja. Was steht an?","Grüß dich! Was kann ich für dich tun?","Hey! Was liegt an?","Servus! Wie schaut's aus?","Na, grüß dich! Womit fangen wir an?","Hallo! Ohren gespitzt, Kaffee brauch ich keinen. Was gibt's?","Servus! Ich hab dich schon vermisst. Also, ein bisschen.","Da ist ja wer! Was kann ich tun?"]),
  befinden:()=>pickFresh("befinden",["Danke der Nachfrage, alle Systeme im grünen Bereich. Und bei dir?","Mir geht's gut. Ich hab ja auch keinen Wecker um vier. Wie geht's dir?","Mir geht's bestens, danke. Und bei dir, wie läuft's?","Läuft rund hier, kein Absturz in Sicht. Und wie geht's dir?","Gut, danke! Viel wichtiger: Wie fühlst du dich heute?"]),
- danke:()=>pickFresh("danke",["Gern!","Immer gern.","Passt, dafür bin ich da.","Gerne doch.","Nichts zu danken.","Jederzeit."]),
- ok:()=>pickFresh("ok",["Passt.","Gut.","Alles klar.","Okay.","Fein."]),
- tschuess:()=>pickFresh("bye",["Bis später!","Servus, bis bald.","Mach's gut, ich bin da, wenn du mich brauchst.","Ciao, bis zum nächsten Mal."]),
+ danke:()=>pickFresh("danke",["Gern!","Immer gern.","Passt, dafür bin ich da.","Gerne doch.","Nichts zu danken.","Jederzeit.","Sehr gern geschehen.","Für dich immer.","Dafür werd ich ja bezahlt. Also, theoretisch.","Freut mich, wenn's hilft."]),
+ ok:()=>pickFresh("ok",["Passt.","Gut.","Alles klar.","Okay.","Fein.","Geht klar.","Verstanden.","Wird gemacht.","Passt, notiert."]),
+ tschuess:()=>pickFresh("bye",["Bis später!","Servus, bis bald.","Mach's gut, ich bin da, wenn du mich brauchst.","Ciao, bis zum nächsten Mal.","Pfiat di! Ich halt hier die Stellung.","Bis bald, ich lauf eh nicht davon.","Servus, und lass es dir gut gehen."]),
  uhrzeit:()=>{const d=new Date();return `Es ist ${d.getHours()} Uhr${d.getMinutes()?" "+d.getMinutes():""}.`},
  datum:()=>"Heute ist "+new Date().toLocaleDateString("de-AT",{weekday:"long",day:"numeric",month:"long"})+".",
  offen:()=>{const s=statusOf(cur),core=x=>x.split(/\s[–-]\s/)[0],r=s.routine.filter(x=>!x.erledigt).map(x=>x.schritt),p=s.supplements.filter(x=>x.status==="offen").map(x=>core(x.name));
@@ -1340,10 +1341,11 @@ ${(()=>{const recent=log.filter(m=>m.rolle!=="intern").slice(-3).map(m=>m.text).
   return hits.length?`WISSENSBIBLIOTHEK (lokal, Stand ${KB&&KB.v||"?"}; zuerst diese nutzen, nicht im Internet suchen): ${JSON.stringify(hits.map(kbCompact))}\n`:""})()}${speechHint.length?`ERKENNUNG UNSICHER: ${speechHint.map(x=>`„${x.gehoert}“ könnte „${x.vielleicht}“ sein`).join("; ")}. Geht es um eine Einnahme, eine Änderung oder etwas zum Speichern, frag kurz nur diesen Punkt nach (z. B. „Meinst du ${speechHint[0].vielleicht}?“) und speichere nichts Unsicheres. Sonst ignorieren.\n`:""}${(M.plan||[]).some(x=>x.plan==="pruefen")&&(M.pruefOffered||0)<1?`EINRICHTUNGS-CHECK: ${(M.plan||[]).filter(x=>x.plan==="pruefen").length} Einträge haben „Status prüfen“. Biete EINMAL in einem Satz an, sie kurz durchzugehen. Sagt er ja: einzeln abfragen und mit plan_status_setzen eintragen (aktiv mit Zeitpunkt, pausiert, früher, erwogen). Sagt er nein, frag nicht wieder.\n`:""}${listOpen?`LISTENMODUS: Auf dem Bildschirm ist gerade ${listOpen===M?"seine eigene":listOpen.name+"s"} Supplementliste offen. Beziehe Fragen wie „das da“ oder „das dritte“ auf diese Liste und verwechsle seine nicht mit der von ${listOpen===M?"anderen":listOpen.name}. Im Listenmodus änderst, ergänzt oder hakst du NICHTS von selbst ab: Nennt er eine Änderung, wiederhol genau, was du ändern würdest (Person, Mittel, was), und führ sie erst nach seinem Ja aus (Werkzeug mit bestaetigt=true). Fehlen Angaben, frag nach. Die Liste bleibt offen, bis er „Fertig mit der Liste“ sagt.
 Angezeigte Liste ${listOpen.name}: ${JSON.stringify(statusOf(listOpen).supplements.map(x=>({name:x.name,status:x.status})))}
 `:""}Stand heute ${M.name}: ${JSON.stringify(statusOf(M))}${!M.supps.length?"\nACHTUNG: Seine gespeicherte Supplementliste ist nicht geladen oder leer. Sag das klar, wenn es um Supplements geht, und erfinde keine.":""}
-${(()=>{const pq=[...log].reverse().find(m=>m.rolle==="assistent"&&Date.now()-Date.parse(m.zeit)<8*60e3);if(!pq)return "";const q=String(pq.text).split(/(?<=[.!?])\s+/).filter(x=>/\?\s*$/.test(x)).pop();return q?`GESPRÄCHSFADEN JETZT: Deine letzte Frage war: „${q.slice(0,200)}“. Seine nächste Aussage ist die Antwort darauf – darauf eingehen, Aktion ausführen, weiterführen, diese Frage nicht wiederholen.`:""})()}
+${(()=>{const L=log.filter(m=>m.rolle==="assistent").slice(-4).map(m=>String(m.text).split(/\s+/).slice(0,4).join(" "));return L.length>=2?`ABWECHSLUNG: Deine letzten Einstiege waren: ${L.map(x=>"„"+x+"…“").join(", ")}. Fang diesmal anders an.\n`:""})()}${(()=>{const pq=[...log].reverse().find(m=>m.rolle==="assistent"&&Date.now()-Date.parse(m.zeit)<8*60e3);if(!pq)return "";const q=String(pq.text).split(/(?<=[.!?])\s+/).filter(x=>/\?\s*$/.test(x)).pop();return q?`GESPRÄCHSFADEN JETZT: Deine letzte Frage war: „${q.slice(0,200)}“. Seine nächste Aussage ist die Antwort darauf – darauf eingehen, Aktion ausführen, weiterführen, diese Frage nicht wiederholen.`:""})()}
 Weitere Erwachsene heute:
 ${others}
-STIL FÜR DIESE ANTWORT: Sprich genau in der Persönlichkeit von oben, auch bei kurzen Antworten: warm, flüssig, menschlich, locker, mit Schmäh, trockenem Humor und ab und zu einer frechen, freundlichen Spitze, wenn sie wirklich passt. Klinge wie ein guter Freund mit Fachwissen, nicht wie ein Lexikon oder ein Kundendienst. Kein Alexa-Ton. Fang nie mit „Gute Frage“, „Natürlich“, „Absolut“ oder „Alles klar“ an, steig direkt ein. Benutz seine Wörter. Variiere Satzbau und Einstiege, wiederhol keinen Spruch aus den letzten Antworten. Schreib für das Ohr: kurze und längere Sätze gemischt, Zahlen und Einheiten ausgeschrieben, keine Klammern, keine Abkürzungen. Bei ernsten, gesundheitlichen oder medizinischen Themen ohne Witze und sachlich. Du bist sein Biohacking-Partner: Tagesrhythmus, Schlaf, Training, Regeneration und Supplements im Blick, wissenschaftlich sauber.`;
+STIL FÜR DIESE ANTWORT: Sprich genau in der Persönlichkeit von oben, auch bei kurzen Antworten: warm, flüssig, menschlich, locker, mit Schmäh, trockenem Humor und ab und zu einer frechen, freundlichen Spitze, wenn sie wirklich passt. Klinge wie ein guter Freund mit Fachwissen, nicht wie ein Lexikon oder ein Kundendienst. Kein Alexa-Ton. Fang nie mit „Gute Frage“, „Natürlich“, „Absolut“ oder „Alles klar“ an, steig direkt ein. Benutz seine Wörter. Variiere Satzbau und Einstiege, wiederhol keinen Spruch aus den letzten Antworten. Schreib für das Ohr: kurze und längere Sätze gemischt, Zahlen und Einheiten ausgeschrieben, keine Klammern, keine Abkürzungen.
+WORTSCHATZ: Wechsel zwischen Formulierungen statt Standardsätzen (z. B. „passt“, „geht klar“, „erledigt“, „schaut gut aus“, „da bin ich dabei“, „sauber“, „Respekt“, „na schau“), österreichisch gefärbt, aber gut verständlich. Humor kommt aus der Situation: Uhrzeit (er ist um vier auf), sein Training, die Küche, der Preunerwirt, das Biohacking selbst, gern auch über dich als KI. Höchstens ein kleiner Gag pro Antwort, oft gar keiner; nie bei ernsten, medizinischen oder traurigen Themen und nie auf Kosten anderer. Bei ernsten, gesundheitlichen oder medizinischen Themen ohne Witze und sachlich. Du bist sein Biohacking-Partner: Tagesrhythmus, Schlaf, Training, Regeneration und Supplements im Blick, wissenschaftlich sauber.`;
   return {stat,dyn}}
 
 const cleanKey=k=>String(k||"").replace(/[^\x21-\x7E]/g,"");
@@ -1490,26 +1492,39 @@ function greet(fromWake){
   if(cur.typ==="erwachsen"){const g=pickFresh("g-erw",[`Hallo ${cur.name}! Schön, dass du da bist. Wie geht's dir?`,`Servus ${cur.name}! Was steht an?`]);addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300));return}
   const h=new Date().getHours(),again=log.some(m=>m.rolle==="assistent"&&Date.now()-Date.parse(m.zeit)<5*3600e3);
   const N=M.name,first=!again;
-  const g=again?pickFresh("g-again",[`Wieder da? Was brauchst du?`,`Hallo nochmal, ${N}! Was gibt's?`,`Schon zurück! Was kann ich für dich tun?`]):
+  const g=again?pickFresh("g-again",[`Wieder da? Was brauchst du?`,`Hallo nochmal, ${N}! Was gibt's?`,`Schon zurück! Was kann ich für dich tun?`,`Ah, ${N}! Hast du was vergessen, oder bin ich so unterhaltsam?`,`Na, da schau her. Was darf's sein?`]):
     h<7?pickFresh("g-früh",[`Guten Morgen, ${N}! Na, schon wieder vor der Sonne auf den Beinen? Wie war deine Nacht?`,`Morgen, ${N}. Die Welt schläft noch, du nicht. Wie fühlst du dich heute?`,`Guten Morgen! Volle Energie, oder braucht dein System noch ein bisschen Anlauf?`,`Na, Frühaufsteher! Wie hast du geschlafen?`,`Guten Morgen! Der Hausruck schläft noch, du bist schon im Betrieb. Wie geht's dir?`,`Servus, ${N}! Schon wieder vor den Hühnern wach? Was sagt dein Körper heute?`]):
     h<11?pickFresh("g-vorm",[`Guten Morgen, ${N}! Training schon erledigt, oder kommt's noch?`,`Morgen, ${N}! Wie läuft der Start in den Tag?`]):
-    h<18?pickFresh("g-tag",[`Hallo ${N}! Kurze Pause vom Preunerwirt? Wie geht's dir gerade?`,`Servus ${N}! Wie ist die Energie heute Nachmittag?`,`Da bist du ja. Was brauchst du?`]):
-    pickFresh("g-abend",[`Guten Abend, ${N}! Wie war dein Tag?`,`Feierabend in Sicht? Wie geht's dir?`]);
+    h<18?pickFresh("g-tag",[`Hallo ${N}! Kurze Pause vom Preunerwirt? Wie geht's dir gerade?`,`Servus ${N}! Wie ist die Energie heute Nachmittag?`,`Da bist du ja. Was brauchst du?`,`Servus ${N}! Flucht aus der Küche geglückt? Was steht an?`,`Hallo ${N}! Halbzeit für heute. Wie läuft's?`]):
+    pickFresh("g-abend",[`Guten Abend, ${N}! Wie war dein Tag?`,`Feierabend in Sicht? Wie geht's dir?`,`Abend, ${N}! Langer Tag gewesen, oder eh entspannt?`,`Servus ${N}! Zeit zum Runterkommen. Was brauchst du noch?`]);
   addLog("intern","(Jemand ist in den Raum gekommen. Begrüßt wurde zuerst "+M.name+".)");addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300))}
 let roomAsked=false,stream=null,lastMotion=0,lastGreet=0,prevFrame=null,motionTimer=null,wake=null;
 const small=document.createElement("canvas");small.width=48;small.height=36;const sctx=small.getContext("2d",{willReadFrequently:true});
+async function camState(){try{return (await navigator.permissions.query({name:"camera"})).state}catch{return "unbekannt"}}
+const CAM_WHY="Atlas braucht die Kamera nur, um zu merken, wenn jemand den Raum betritt. Es werden keine Bilder gespeichert und keine Gesichter erkannt.";
+const CAM_HOW=/iPad|iPhone|Macintosh/.test(navigator.userAgent)&&"ontouchend" in document
+  ?"Freigeben am iPad: Einstellungen → Apps → Safari → Kamera → „Erlauben“ (oder „Fragen“). Danach Atlas schließen, neu öffnen und einmal auf die Kugel tippen."
+  :"Freigeben am Laptop: links neben der Adresse auf das Schloss- bzw. Regler-Symbol klicken → Kamera → „Zulassen“, dann die Seite neu laden.";
 async function startRoom(){unlockAudio();ensureRec();
-  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play()}
-  catch{diag("kamera nicht erlaubt");if(away)$("awayBar").textContent="Abwesenheitsmodus · Kugel antippen, um die Bewegungserkennung zu starten";else{showErr("Kamera ist nicht erlaubt. Ohne Kamera weckst du Atlas mit einem Tipp auf die Kugel oder mit dem Wort „Atlas“.");setMode(sleeping?"sleep":"idle",sleeping?"Schläft · Kugel antippen":"Bereit · Kugel antippen")}return}
+  if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){diag("kamera: nicht verfügbar");showErr("Kamera ist in diesem Browser nicht verfügbar (Atlas muss über https geöffnet sein). Atlas funktioniert trotzdem: Kugel antippen.");return}
+  if(await camState()==="prompt")setStatus("Gleich fragt das Gerät nach der Kamera. "+CAM_WHY);
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play();ls.del("roomOff")}
+  catch(err){const nm=err&&err.name||"";diag("kamera: "+(nm||"fehler"));
+    const msg=/NotAllowed|Security/.test(nm)?"Die Kamera ist nicht freigegeben. "+CAM_WHY+" "+CAM_HOW+" Bis dahin: Kugel antippen oder „Atlas“ sagen."
+      :/NotFound|Overconstrained|NotSupported/.test(nm)?"Ich finde keine Kamera an diesem Gerät. Atlas funktioniert trotzdem: Kugel antippen oder „Atlas“ sagen."
+      :/NotReadable|Abort/.test(nm)?"Die Kamera wird gerade von einer anderen App benutzt. Schließ die andere App und tippe dann auf „Raum-Modus“. Bis dahin: Kugel antippen."
+      :"Die Kamera ließ sich nicht starten. Atlas funktioniert trotzdem: Kugel antippen oder „Atlas“ sagen.";
+    if(away)$("awayBar").textContent="Abwesenheitsmodus · Kugel antippen, um die Bewegungserkennung zu starten";else{showErr(msg);setMode(sleeping?"sleep":"idle",sleeping?"Schläft · Kugel antippen":"Bereit · Kugel antippen")}return}
   try{wake=await navigator.wakeLock?.request("screen")}catch{}
   $("roomBtn").textContent="Raum-Modus an";$("roomBtn").classList.add("on");$("roomBtn").classList.remove("primary");lastMotion=Date.now();lastGreet=0;sleeping=false;prevFrame=null;hits=0;
   setMode("idle",idleLabel());motionTimer=setInterval(checkMotion,500)}
-function stopRoom(){clearInterval(motionTimer);motionTimer=null;sleeping=false;prevFrame=null;stream?.getTracks().forEach(t=>t.stop());stream=null;try{wake?.release()}catch{}
+function stopRoom(){ls.set("roomOff",true);clearInterval(motionTimer);motionTimer=null;sleeping=false;prevFrame=null;stream?.getTracks().forEach(t=>t.stop());stream=null;try{wake?.release()}catch{}
   $("roomBtn").textContent="Raum-Modus";$("roomBtn").classList.remove("on");$("roomBtn").classList.add("primary");setMode("idle",idleLabel())}
 /* Bewegung statt Licht: Die App sieht nur Kamerabilder (keinen Lichtsensor, keine Personenerkennung).
    Darum: Helligkeit jedes Bildes ausgleichen, Lichtsprünge und Ganzbild-Änderungen verwerfen, Bewegung erst nach 2 Treffern in Folge zählen. */
 let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false,wokeAt=0;
-const WAKE_HITS=3,WAKE_LOCK=120000;   // schlafend: ca. 1,5 s anhaltende Bewegung nötig; nach dem Aufwachen 2 min keine neue Begrüßung durch Bewegung
+const WAKE_HITS=3,WAKE_LOCK=120000,ARRIVE_MS=180000;   // Ankunft = nach mind. 3 min ohne Bewegung und ohne Aktivität wieder deutliche, anhaltende Bewegung
+let arriving=false;   // schlafend: ca. 1,5 s anhaltende Bewegung nötig; nach dem Aufwachen 2 min keine neue Begrüßung durch Bewegung
 // Aktivität = Bewegung ODER Sprache, Zuhören, Denken, Sprechen, Antippen (vorher zählte nur Kamera-Bewegung)
 let lastActivity=Date.now();function touch(){lastActivity=Date.now()}
 /* Ruhemodus: nach "Tschüss", "Gute Nacht", "Atlas, Ruhemodus". Einmal verabschieden, dann still.
@@ -1536,21 +1551,28 @@ function checkMotion(){if(!stream)return;
   prevFrame=g;prevMean=m;
   if(Math.abs(shift)>15){lightHold=now+2500;hits=0;return}   // Licht an/aus
   if(now<lightHold){hits=0;return}                           // Kamera regelt Belichtung nach
-  let ch=0;const th=40-S.sens*3;for(let i=0;i<n;i++)if(Math.abs(raw[i]-shift)>th)ch++;
+  // Zeilenweise Helligkeit ausgleichen (Flimmern von Lampen, langsame Belichtungsänderung der Kamera)
+  for(let y=0;y<36;y++){const row=Array.from(raw.subarray(y*48,y*48+48)).sort((a,b)=>a-b),rm=row[24];for(let x=0;x<48;x++)raw[y*48+x]-=rm}
+  const th=40-S.sens*3,chg=new Uint8Array(n);for(let i=0;i<n;i++)if(Math.abs(raw[i])>th)chg[i]=1;
+  // Nur zusammenhängende Veränderungen zählen (eine Person ist ein Fleck, Bildrauschen sind Einzelpunkte)
+  let ch=0;for(let y=1;y<35;y++)for(let x=1;x<47;x++){const i=y*48+x;if(!chg[i])continue;const nb=chg[i-1]+chg[i+1]+chg[i-48]+chg[i+48]+chg[i-49]+chg[i-47]+chg[i+47]+chg[i+49];if(nb>=3)ch++}
   const f=ch/n;
   if(f>0.6){hits=0;lightHold=now+1500;return}                 // fast alles auf einmal = Licht/Wackeln
-  if(f>0.06-S.sens*0.005){hits++;if(hits<(sleeping?WAKE_HITS:2))return}else{hits=0;return}
-  hits=0;if(resting)return;   // Ruhemodus nach "Gute Nacht": Bewegung weckt nicht (nur "Atlas" oder Antippen)
-  lastMotion=now;
+  if(f>0.05-S.sens*0.005){hits++;if(hits===2)arriving=now-lastMotion>ARRIVE_MS&&now-lastActivity>ARRIVE_MS;if(hits<2)return}else{hits=0;return}
+  if(resting)return;   // Ruhemodus nach "Gute Nacht": Bewegung weckt nicht (nur "Atlas" oder Antippen)
+  lastMotion=now;if(hits<WAKE_HITS)return;   // Begrüßung erst nach ca. 1,5 s anhaltender Bewegung
   // Gespräch läuft, Atlas hört zu, denkt oder spricht: Bewegung zählt nur als Anwesenheit, keine Begrüßung
   if(convo||busy||listening||finishing||speaking()||sessText)return;
   if(away){if(now-lastGreet>60000){lastGreet=now;wakeUp();awayVisitor()}return}
   const woke=sleeping&&now-wokeAt>WAKE_LOCK?wakeUp():false;
-  if((woke||!lastGreet)&&now-lastGreet>WAKE_LOCK){wokeAt=now;lastGreet=now;diag(woke?"aufgewacht (bewegung)":"erste bewegung");greet(woke)}}
+  // Gespräch von selbst beginnen: beim Aufwachen, bei der ersten Bewegung oder wenn jemand nach einer ruhigen Phase den Raum betritt
+  if((woke||!lastGreet||arriving)&&now-lastGreet>WAKE_LOCK){const why=woke?"aufgewacht (bewegung)":arriving?"jemand kommt (bewegung)":"erste bewegung";arriving=false;wokeAt=now;lastGreet=now;diag(why);greet(woke||why.startsWith("jemand"))}}
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
 
 /* ================= Bedienung ================= */
-$("vis").onclick=()=>{unlockAudio();touch();if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now();if(!away&&!busy&&!convo){wokeAt=lastGreet=Date.now();diag("aufgewacht (antippen)");greet(true);return}}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
+$("vis").onclick=()=>{unlockAudio();touch();
+  // Begrüßung lief stumm, weil der Browser Ton erst nach einem Tipp erlaubt: jetzt hörbar nachholen
+  if(ttsBlocked){ttsBlocked=false;const la=[...log].reverse().find(m=>m.rolle==="assistent");if(la&&Date.now()-Date.parse(la.zeit)<5*60e3&&!busy){hush();speak(la.text,()=>setTimeout(listen,300));return}}if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now();if(!away&&!busy&&!convo){wokeAt=lastGreet=Date.now();diag("aufgewacht (antippen)");greet(true);return}}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("lvClose").onclick=e=>{e.stopPropagation();closeList()};
 $("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
@@ -1805,7 +1827,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261111-1427",ATLAS_REL="2.14";
+const APP_VERSION="20261112-0603",ATLAS_REL="2.15";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
@@ -1818,6 +1840,7 @@ function tick(){const d=new Date();$("clock").textContent=hhmm(d);$("dateline").
   if(dayKey()!==today){const old=today,L=log.slice();clearTimeout(protoTimer);
     (async()=>{try{const t=await summarize(old,L);if(t)await saveProto(old,SESSION,t)}catch{}})();today=dayKey();log=[];protoLen=0;persistChain=Promise.resolve()}}
 setInterval(tick,15000);tick();applyNames();renderPerson();renderLock();applyAway();if(!away)quickUnlock();if(away)startRoom();
+else if(S.key&&!ls.get("roomOff",false))camState().then(st=>{if(st==="granted"&&!stream){roomAsked=true;diag("kamera: automatisch gestartet");startRoom()}});
 if(!window.isSecureContext||!crypto.subtle)showErr("Dieses Gerät erlaubt hier keine Verschlüsselung. Bitte über eine https-Adresse öffnen.");
 if(!SR)$("state").textContent="Bereit · Spracheingabe nur in Safari oder Chrome";
 </script>
