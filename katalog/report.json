@@ -1,5 +1,5 @@
 {
- "geprueft": "2026-11-10T09:39:23.996Z",
+ "geprueft": "2026-11-12T19:48:56.733Z",
  "definitionen": {
   "gefunden": "alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",
   "nem": "davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",
@@ -9,13 +9,13 @@
  },
  "hersteller": {
   "Biogena": {
-   "gefunden": 298,
-   "nem": 253,
-   "vollstaendig": 253,
+   "gefunden": 299,
+   "nem": 254,
+   "vollstaendig": 254,
    "teilweise": [],
    "nicht_abrufbar": [],
    "typen": {
-    "Nahrungsergänzungsmittel": 253,
+    "Nahrungsergänzungsmittel": 254,
     "Zubehör/Sonstiges": 22,
     "Set/Bundle": 4,
     "Lebensmittel": 13,
@@ -24,11 +24,12 @@
    },
    "quelle": "https://biogena.com/sitemap/sitemap-de-at.xml",
    "offen_oder_nicht_abrufbar": 0,
+   "mit_produktbild": 299,
    "produktbilder": "nicht geprüft",
    "status": {
-    "alle_gefundenen_produkte": 298,
-    "nahrungsergaenzungen": 253,
-    "davon_vollstaendig": 253,
+    "alle_gefundenen_produkte": 299,
+    "nahrungsergaenzungen": 254,
+    "davon_vollstaendig": 254,
     "davon_teilweise": 0,
     "andere_produktarten": 45,
     "andere_nach_art": {
@@ -39,7 +40,7 @@
      "Medizinprodukt": 2
     },
     "nicht_abrufbar": 0,
-    "text": "Biogena: 298 Produkte gefunden, davon 253 Nahrungsergänzungen (253 vollständig, 0 teilweise erfasst) und 45 andere Produktarten."
+    "text": "Biogena: 299 Produkte gefunden, davon 254 Nahrungsergänzungen (254 vollständig, 0 teilweise erfasst) und 45 andere Produktarten."
    }
   },
   "MoleQlar": {
@@ -139,6 +140,7 @@
    "quelle": "https://moleqlar.com/products.json",
    "hinweis": "Mengen pro Portion aus der Nährstofftabelle der Produktseite (Text).",
    "offen_oder_nicht_abrufbar": 0,
+   "mit_produktbild": 104,
    "produktbilder": "nicht geprüft",
    "status": {
     "alle_gefundenen_produkte": 104,
@@ -159,8 +161,14 @@
   }
  },
  "aenderungen": {
-  "neu": [],
-  "geaendert": [],
+  "neu": [
+   "Vitamin B12 1000 Superior"
+  ],
+  "geaendert": [
+   "Geburtstagsgutschein online kaufen & downloaden",
+   "Danke Gutschein zum Dankeschön sagen",
+   "Vitamin K2 100"
+  ],
   "entfernt": []
  },
  "unvollstaendig": true
