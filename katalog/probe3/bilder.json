@@ -1,0 +1,102 @@
+[
+ {
+  "hersteller": "Biogena",
+  "name": "Omega 3 forte 700",
+  "modus": "ohne Referer",
+  "status": 200,
+  "typ": "image/jpeg",
+  "bytes": 12902,
+  "cors": null,
+  "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Omega3forte700_90Kps_275cc_2504-176"
+ },
+ {
+  "hersteller": "Biogena",
+  "name": "Omega 3 forte 700",
+  "modus": "mit Referer+Origin von Atlas",
+  "status": 200,
+  "typ": "image/jpeg",
+  "bytes": 12902,
+  "cors": null,
+  "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Omega3forte700_90Kps_275cc_2504-176"
+ },
+ {
+  "hersteller": "MoleQlar",
+  "name": "Omega 3 Kapseln Vegan",
+  "modus": "ohne Referer",
+  "status": 200,
+  "typ": "image/webp",
+  "bytes": 35990,
+  "cors": "*",
+  "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/OMEGA90K-V3624-render.jpg?v=1792403463"
+ },
+ {
+  "hersteller": "MoleQlar",
+  "name": "Omega 3 Kapseln Vegan",
+  "modus": "mit Referer+Origin von Atlas",
+  "status": 200,
+  "typ": "image/webp",
+  "bytes": 35990,
+  "cors": "*",
+  "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/OMEGA90K-V3624-render.jpg?v=1792403463"
+ },
+ {
+  "hersteller": "MoleQlar",
+  "name": "Kreatin Pulver",
+  "modus": "ohne Referer",
+  "status": 200,
+  "typ": "image/webp",
+  "bytes": 23184,
+  "cors": "*",
+  "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605Kreatin-normal-PouchL.jpg?v=1782832527"
+ },
+ {
+  "hersteller": "MoleQlar",
+  "name": "Kreatin Pulver",
+  "modus": "mit Referer+Origin von Atlas",
+  "status": 200,
+  "typ": "image/webp",
+  "bytes": 23184,
+  "cors": "*",
+  "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605Kreatin-normal-PouchL.jpg?v=1782832527"
+ },
+ {
+  "hersteller": "MoleQlar",
+  "name": "Kreatin Sticks",
+  "modus": "ohne Referer",
+  "status": 200,
+  "typ": "image/webp",
+  "bytes": 17894,
+  "cors": "*",
+  "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512KreatinSticks.jpg?v=1767704887"
+ },
+ {
+  "hersteller": "MoleQlar",
+  "name": "Kreatin Sticks",
+  "modus": "mit Referer+Origin von Atlas",
+  "status": 200,
+  "typ": "image/webp",
+  "bytes": 17894,
+  "cors": "*",
+  "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512KreatinSticks.jpg?v=1767704887"
+ },
+ {
+  "hersteller": "MoleQlar",
+  "name": "Kreatin Pulver (Creavitalis®)",
+  "modus": "ohne Referer",
+  "status": 200,
+  "typ": "image/webp",
+  "bytes": 22424,
+  "cors": "*",
+  "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2607KreatinCreaStand.jpg?v=1782898682"
+ },
+ {
+  "hersteller": "MoleQlar",
+  "name": "Kreatin Pulver (Creavitalis®)",
+  "modus": "mit Referer+Origin von Atlas",
+  "status": 200,
+  "typ": "image/webp",
+  "bytes": 22424,
+  "cors": "*",
+  "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2607KreatinCreaStand.jpg?v=1782898682"
+ }
+]
