@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.21 / 2.22 (13.11.2026) – Produktbilder offline, Selbsttest, eigene Liste
+- Produktbilder offline: GitHub lädt das Hauptbild jedes Katalogprodukts (derzeit 427/427, 9,5 MB) und legt es verschlüsselt unter katalog/bilder/ ab (AES-256-GCM, Schlüssel mit RSA-OAEP verpackt; öffentlicher Teil tools/bilder-public.pem). Der private Schlüssel steckt in der verschlüsselten Wissensbibliothek (kb.enc) – kein neuer Einrichtungscode nötig. Läuft bei jedem Katalog-Lauf mit (nur neue/geänderte Bilder).
+- Atlas holt alle Bilder einmal (mit Internet) in den Gerätespeicher und zeigt sie danach ohne Netz; Hersteller-Server werden dafür nicht mehr gebraucht. Einstellungen: „Produktbilder offline gespeichert: X von Y“.
+- Selbsttest: „Teste die Produktkarte“ zeigt ohne Claude nacheinander Biogena Omega 3 forte 700 und MoleQlar Omega 3 Kapseln Vegan.
+- Produkte aus deiner Liste/Wissensbibliothek bekommen ebenfalls eine Karte (ID l-…, ausgewählt über wissen_nachschlagen; Platzhalter, solange kein eindeutiges Bild).
+- Diagnose zeigt jetzt genau: „karte: bild aus Gerätespeicher“, „… online“, „platzhalter (kein Bild hinterlegt)“, „bild laden fehlgeschlagen“.
+- Rückfall: /alt/2.20/ (inkl. alter kb.enc).
+
 ## 2.20 (13.11.2026) – Produktkarte folgt dem ausgewählten Katalogprodukt
 Ursache: Die Karte war nicht mit der Produktauswahl verbunden. Sie versuchte, das Produkt aus dem gesprochenen Text zu erraten, und fand nur etwas, wenn der vollständige Katalogname wörtlich fiel („Omega 3 forte 700 von Biogena“). Natürliche Formulierungen („das Forte 700“, „die veganen Kapseln von MoleQlar“, „das MoleQlar Omega 3 mit EPAX“) ergaben keine Karte – im Projekt nachgeprüft.
 Änderungen:

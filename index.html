@@ -814,7 +814,7 @@ const clean=s=>String(s).replace(/https?:\/\/\S+/g,"").replace(/\[[^\]]*\]\([^)]
 const spokenRecent=[];function noteSpoken(t){spokenRecent.push({t,at:Date.now()});while(spokenRecent.length>12)spokenRecent.shift()}
 function isEcho(t){const T=typeof toks==="function"?toks(t):[];if(T.length<2)return false;const now=Date.now();
   return spokenRecent.some(x=>now-x.at<15000&&(sim(T,toks(x.t))>=.6||toks(x.t).join(" ").includes(T.join(" "))))}
-function speak(text,then){text=clean(String(text).replace(PMARK,""));noteSpoken(text);touch();$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
+function speak(text,then){text=clean(text);const shown=text.replace(PMARK,"").replace(/\s+/g," ").trim();noteSpoken(shown);touch();$("said").textContent=shown;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
   const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
   const finish0=()=>{if(my!==gen||pending<0)return;pending=0;hideCard();setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;resumeRecAfterSpeech();f&&f()};
   const finish=()=>{if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)){whenAudioIdle(my,finish0);return}finish0()};
@@ -847,6 +847,27 @@ async function bildUrl(key,img){const u=(key&&BILD[key])||img||null;if(!u)return
     if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
 async function bildUrlAlt(key){const u=key&&BILD[key];if(!u)return null;try{if("caches" in window){const r=await (await caches.open("atlas-produktbilder")).match(u);if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
 let KAT_IDX=null,katTurn={at:0,list:[]},turnStart=0,KAT_ID=null;
+/* ===== Produktbilder offline =====
+   katalog/bilder/: verschlüsselte Kopie des Hauptbilds jedes Katalogprodukts (AES-GCM, Schlüssel mit RSA verpackt).
+   Der private Schlüssel steckt in der verschlüsselten Wissensbibliothek – nur Atlas auf deinem Gerät kann die Bilder öffnen.
+   Atlas lädt alle Bilder einmal (mit Internet) in den Gerätespeicher; danach kommen sie immer offline von dort. */
+let BIDX=ls.get("bildIdx",null),bildPriv=null,bildKeys={},bildMemo={},bildSync={laeuft:false,ok:0,gesamt:0,fehler:0};
+async function loadBildIdx(){try{const r=await fetch("katalog/bilder/index.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&j.bilder){BIDX=j;ls.set("bildIdx",j)}}}catch{}return BIDX}
+async function bildDataKey(kid){if(bildKeys[kid])return bildKeys[kid];const bk=KB&&KB.bildKey;if(!bk||!crypto.subtle||!BIDX||!BIDX.keys[kid])return null;
+  if(!bildPriv)bildPriv=await crypto.subtle.importKey("pkcs8",fromB64(bk),{name:"RSA-OAEP",hash:"SHA-256"},false,["decrypt"]);
+  const raw=await crypto.subtle.decrypt({name:"RSA-OAEP"},bildPriv,fromB64(BIDX.keys[kid]));return bildKeys[kid]=await crypto.subtle.importKey("raw",raw,"AES-GCM",false,["decrypt"])}
+async function encFile(f,mayFetch=true){const u="katalog/bilder/"+f;const c=await caches.open("atlas-bilder-v1");let r=await c.match(u);
+  if(!r&&mayFetch&&navigator.onLine){const x=await fetch(u,{cache:"no-store"});if(x.ok){await c.put(u,x.clone());r=x}}return r?await r.arrayBuffer():null}
+async function localBild(id){if(!id||!BIDX||!BIDX.bilder||!BIDX.bilder[id]||!("caches" in window))return null;if(bildMemo[id])return bildMemo[id];
+  const e=BIDX.bilder[id];try{const key=await bildDataKey(e.kid);if(!key)return null;const buf=await encFile(e.f);if(!buf)return null;const b=new Uint8Array(buf);
+    const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:b.slice(0,12)},key,b.slice(12));return bildMemo[id]=URL.createObjectURL(new Blob([plain],{type:e.typ||"image/jpeg"}))}catch{return null}}
+// Alle Bilder einmal in den Gerätespeicher holen (im Hintergrund, schonend, nur mit Internet)
+async function syncBilder(){if(bildSync.laeuft||!navigator.onLine||!("caches" in window))return;await loadBildIdx();if(!BIDX||!BIDX.bilder)return;bildSync.laeuft=true;
+  const L=Object.values(BIDX.bilder),c=await caches.open("atlas-bilder-v1");bildSync.gesamt=L.length;bildSync.ok=0;bildSync.fehler=0;
+  const keep=new Set(L.map(e=>new URL("katalog/bilder/"+e.f,location.href).href));for(const k of await c.keys())if(!keep.has(k.url))await c.delete(k);   // alte Bilder entfernen
+  let i=0;const worker=async()=>{while(i<L.length){const e=L[i++];try{if(await c.match("katalog/bilder/"+e.f)){bildSync.ok++;continue}if(!navigator.onLine)break;
+      const x=await fetch("katalog/bilder/"+e.f,{cache:"no-store"});if(x.ok){await c.put("katalog/bilder/"+e.f,x);bildSync.ok++}else bildSync.fehler++}catch{bildSync.fehler++}await new Promise(r=>setTimeout(r,30))}};
+  await Promise.all([worker(),worker(),worker()]);bildSync.laeuft=false;diag(`bilder offline: ${bildSync.ok}/${bildSync.gesamt}`)}
 // Feste Produkt-ID aus der Adresse der Produktseite: b-… (Biogena), m-… (MoleQlar), e-… (eigener Eintrag) – eindeutig je Produkt
 const katId=p=>p.eigen?"e-"+norm(p.n).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""):(p.h==="Biogena"?"b-":p.h==="MoleQlar"?"m-":"x-")+String(p.u||"").replace(/[?#].*$/,"").replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]/g,"");
 function katById(id){if(!KAT_ID||KAT_ID.n!==(KAT?KAT.produkte.length:0)+KAT_EIGEN.length){const M=new Map();for(const p of katAll())M.set(katId(p),p);KAT_ID={n:(KAT?KAT.produkte.length:0)+KAT_EIGEN.length,M}}return KAT_ID.M.get(String(id||"").toLowerCase())||null}
@@ -856,8 +877,13 @@ function takeMarks(s){const marks=[];let out="",last=0;String(s).replace(PMARK,(
 let prodTimers=[];
 function prodPlan(marks,textLen){prodTimers.forEach(clearTimeout);prodTimers=[];const ms=62/Math.max(.5,+S.rate||1);
   for(const mk of marks||[])prodTimers.push(setTimeout(()=>applyMark(mk.id),mk.pos*ms))}
-function applyMark(id){if(id==="ende"){hideCard(300,true);return}const p=katById(id);if(!p){diag("karte: unbekannte id");return}
-  diag("karte: "+id);showCard({key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im||null})}function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}for(const x of KAT_EIGEN){const T=tk(x.name);if(T.length>=2)L.push({T,p:{n:x.name,h:x.hersteller||"eigener Eintrag",u:"eigen:"+norm(x.name),im:null}})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
+let kbTurn={at:0,e:null};
+function listCard(e){const mine=(main()&&main().supps||[]).filter(x=>(kbFind(coreOf(x))[0]||{}).id===e.id);
+  return {key:"kb:"+e.id,title:mine.length===1?coreOf(mine[0]):e.name.split(" (")[0],sub:mine.length===1?"aus deiner Liste":"aus deiner Wissensbibliothek",img:null}}
+function applyMark(id){if(id==="ende"){hideCard(300,true);return}const pid=id;
+  if(id.startsWith("l-")){const e=kbList().find(x=>x.id===id.slice(2));if(!e){diag("karte: unbekannte id");return}diag("karte: "+id);showCard(listCard(e));return}
+  const p=katById(id);if(!p){diag("karte: unbekannte id");return}
+  diag("karte: "+id);showCard({id:pid,key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im||null})}function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}for(const x of KAT_EIGEN){const T=tk(x.name);if(T.length>=2)L.push({T,p:{n:x.name,h:x.hersteller||"eigener Eintrag",u:"eigen:"+norm(x.name),im:null}})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
 function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{for(let i=0;i+T.length<=U.length;i++)if(T.every((w,k)=>U[i+k]===w))return true;return false};
   const kat=katIdx().filter(x=>has(x.T));if(kat.length){const best=Math.max(...kat.map(x=>x.T.length)),top=kat.filter(x=>x.T.length===best),ids=new Set(top.map(x=>x.p.u));
     if(ids.size===1){const p=top[0].p;return {key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im}}return null}   // gleich lange Treffer verschiedener Produkte: nicht eindeutig
@@ -875,14 +901,21 @@ function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{fo
   return {key:"kb:"+e.id,title:mine.length===1?coreOf(mine[0]):e.name.split(" (")[0],sub:mine.length===1?"aus deiner Liste":"aus deiner Wissensbibliothek"}}
 function showCard(c){scCur=c;scAt=Date.now();scMiss=0;$("scT").textContent=c.title;$("scS").textContent=c.sub||"";$("scImg").innerHTML=SC_PH;
   $("suppCard").classList.add("on");$("suppCard").setAttribute("aria-hidden","false");
-  bildUrl(c.key,c.img).then(u=>{if(scCur!==c)return;diag("karte:"+(u?"bild":"platzhalter"));if(!u)return;const im=new Image();im.alt=c.title;im.onload=()=>{if(scCur===c){$("scImg").innerHTML="";$("scImg").append(im)}};im.src=u}).catch(()=>{})}
+  const hasLocal=!!(c.id&&BIDX&&BIDX.bilder&&BIDX.bilder[c.id]);
+  if(!hasLocal&&!c.img&&!(c.key&&BILD[c.key])){diag("karte: platzhalter (kein Bild hinterlegt)");return}
+  (hasLocal?localBild(c.id).then(u=>u||bildUrl(c.key,c.img)):bildUrl(c.key,c.img)).then(u=>{if(scCur!==c)return;if(!u){diag("karte: platzhalter (offline, Bild nicht gespeichert)");return}
+    const im=new Image();im.alt=c.title;im.referrerPolicy="no-referrer";im.decoding="async";
+    im.onload=()=>{diag("karte: bild "+(u.startsWith("blob:")?"aus Gerätespeicher":"online"));if(scCur===c){$("scImg").innerHTML="";$("scImg").append(im)}};
+    im.onerror=()=>diag("karte: bild laden fehlgeschlagen");im.src=u}).catch(()=>diag("karte: bild fehler"))}
 // Ein gesprochener Abschnitt kann mehrere Sätze enthalten: jeden Satz zu seinem (geschätzten) Sprechzeitpunkt prüfen
 let scPlan=[];function cardPlan(text){scPlan.forEach(clearTimeout);scPlan=[];if(!text)return;const parts=String(text).match(/[^.!?…:]+[.!?…:]*\s*/g)||[text];let pos=0;const ms=62/Math.max(.5,+S.rate||1);
   for(const x of parts){const at=pos*ms;pos+=x.length;scPlan.push(setTimeout(()=>cardForSpeech(x),at))}}
 let scMiss=0,turnMarked=false;
 function startCards(u){if(u._marks&&u._marks.length){turnMarked=true;prodPlan(u._marks);return}
   // Rückfall ohne Marke: die Suche dieser Antwort hat genau ein Produkt eindeutig getroffen (einziger Treffer bzw. einziger, dessen Name alle Suchwörter enthält)
-  const sel=katTurn.at>=turnStart?(katTurn.list.length===1?katTurn.list[0]:katTurn.exact):null;if(!turnMarked&&!scCur&&sel){turnMarked=true;applyMark(katId(sel))}}
+  const sel=katTurn.at>=turnStart?(katTurn.list.length===1?katTurn.list[0]:katTurn.exact):null;if(!turnMarked&&!scCur&&sel){turnMarked=true;applyMark(katId(sel));return}
+  // sonst: der Eintrag, den Atlas in dieser Antwort in deiner Wissensbibliothek nachgeschlagen hat
+  if(!turnMarked&&!scCur&&kbTurn.at>=turnStart&&kbTurn.e){turnMarked=true;applyMark("l-"+kbTurn.e.id)}}
 function cardForSpeech(text){if(!text)return;const c=suppOf(text);
   if(!c){if(scCur&&$("suppCard").classList.contains("on")&&/[a-zäöü]{3}/i.test(text)&&++scMiss>=2&&Date.now()-scAt>2500)hideCard(300,true);return}scMiss=0;clearTimeout(scHide);if(scCur&&scCur.key===c.key&&$("suppCard").classList.contains("on"))return;
   clearTimeout(scTimer);const wait=scCur&&$("suppCard").classList.contains("on")?Math.max(0,2500-(Date.now()-scAt)):0;   // mind. 2,5 s stehen lassen, kein Flackern
@@ -1220,7 +1253,12 @@ const HEARFIX=[[/\bmagnesium[\s-]*b[iy]e?s{1,2}[\s-]*gl[iyü][czs]{0,2}[iy]?nat\
   [/\b(en em en|n m n|enemen)\b/gi,"NMN"],[/\b(en a de|n a d|enade)\b/gi,"NAD"],[/\bomega[\s-]*(drei|3)\b/gi,"Omega-3"],[/\bvitamin[\s-]*d[\s-]*(drei|3)\b/gi,"Vitamin D3"],[/\b(d3|d drei)[\s-]*(und[\s-]*)?k[\s-]*(zwei|2)\b/gi,"D3 K2"],
   [/\bkreatin[\s-]+mono[\s-]*hydrat\b/gi,"Kreatin-Monohydrat"],[/\bash?wa[\s-]*gan?dh?a\b/gi,"Ashwagandha"],[/\bbio[\s-]+regulator/gi,"Bioregulator"],[/\bepi[\s-]+talon\b/gi,"Epitalon"],[/\bpine?[\s-]+alon\b/gi,"Pinealon"],[/\bmole?[ck]ular\b/gi,"MoleQlar"],[/\bbio[\s-]?gena\b/gi,"Biogena"]];
 const hearFix=t=>HEARFIX.reduce((x,[a,b])=>x.replace(a,b),String(t));
+function cardSelfTest(){const p=katById("b-omega-3-forte-700-73");diag("karte: selbsttest");
+  if(!KAT){speak("Selbsttest Produktkarte: Der Hersteller-Katalog ist auf diesem Gerät nicht geladen. Deshalb kann ich keine Produktkarte zeigen. Bitte einmal mit Internet öffnen.");return}
+  if(!p){speak("Selbsttest Produktkarte: Das Testprodukt fehlt im Katalog.");return}
+  speak(`{{b-omega-3-forte-700-73}}Selbsttest Produktkarte. Links neben dem Kreis siehst du jetzt das Omega 3 forte 700 von Biogena. Der Katalog hat ${KAT.produkte.length} Produkte, ${KAT.produkte.filter(x=>x.im).length} davon mit Bild. {{m-vegan-omega-3-kapseln}}Und jetzt wechselt die Karte zu den Omega 3 Kapseln Vegan von MoleQlar. Wenn du beide Karten gesehen hast, funktioniert die Anzeige.`,()=>setTimeout(listen,300))}
 function handleUtterance(t){t=hearFix(t);{const c=speechTerms(t);t=c.text;speechHint=c.unsure}$("heard").textContent=t;
+  if(/produkt\s*karte\b.*\b(test|teste|testen|prüf|pruef)|\b(test|teste|testen|prüf\w*)\b.*produkt\s*karte/i.test(t)){listening=false;addLog("mensch",t);cardSelfTest();return}
   if(awaitingWho){const a=roomAnswer(t);addLog("mensch",t);listening=false;const back=()=>{ignoreUntil=Date.now()+350;if(convo)listen()};
     if(a&&a.known){const P=a.known.slice().sort((x,y)=>(y.typ==="haupt")-(x.typ==="haupt"));awaitingWho=false;setPerson(P[0].name);touch();
       if(a.rest){converse(t,{mode:modeOf(t)});return}   // Name plus Anliegen: gleich das Anliegen beantworten
@@ -1332,7 +1370,7 @@ async function runTool(name,inp){
   case "katalog_status":{if(!KAT)return "Katalog nicht geladen.";
     return JSON.stringify({geprueft:String(KAT.stand).slice(0,16).replace("T"," ")+" UTC",geladen_aus:KAT_SRC||"unbekannt",hersteller:katStat(),produktbilder:"nicht geprüft – Werte aus Bildern werden nicht übernommen",fehlende_werte:"bleiben leer, werden nicht geschätzt oder ergänzt",
       sprich:"Status immer je Hersteller und Produktgruppe nennen, nie pauschal ‚Katalog vollständig‘ oder ‚unvollständig‘.",aktualisieren:"Eine neue Online-Prüfung startet Mario über Claude im Chat (Katalog aktualisieren). Atlas selbst lädt Produktseiten nicht neu."})}
-  case "wissen_nachschlagen":{const e=kbLookup(inp.begriff||"");if(e)return JSON.stringify({...kbCompact(e),quellen:e.quellen});
+  case "wissen_nachschlagen":{const e=kbLookup(inp.begriff||"");if(e){kbTurn={at:Date.now(),e};return JSON.stringify({id:"l-"+e.id,...kbCompact(e),quellen:e.quellen})}
     const near2=kbList().filter(x=>tk(x.name).some(w=>tk(inp.begriff||"").some(u=>near(u,w)))).map(x=>x.name);
     return near2.length?"Nicht eindeutig. Meinst du: "+near2.join(", ")+"?":"Nicht in der Bibliothek. Allgemeinwissen kennzeichnen oder auf Wunsch recherchieren."}
   case "studien_abrufen":{if(!isMain())return "Nicht erlaubt.";if(!privKey)return "Tresor gesperrt.";const q=norm(inp.stichwort||"");
@@ -1422,7 +1460,7 @@ function mainParts(mode,memBlock,others){const M=main();
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}${S.nick?` Er nennt dich auch ${S.nick}; reagier auf beide Namen.`:""}
 ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
 KATALOG-AUFTRÄGE: Sagt er, ein Supplement soll in den Katalog („füg … zum Katalog hinzu“, „trag … im Katalog ein“, „ändere/lösch meinen Katalog-Eintrag …“), ist das ein Auftrag: Steht der Name nicht eindeutig fest (unsichere Erkennung, unbekannter oder halber Name), frag einmal kurz nur nach dem Namen. Dann katalog_eintragen aufrufen und in einem Satz bestätigen, was genau eingetragen wurde. Meint er seine Einnahmeliste („nimm ich ab morgen“, „in meine Routine“), gilt NEUES SUPPLEMENT. Ist unklar, ob Katalog oder Einnahmeliste, frag kurz. Herstellerdaten nie ändern, nichts ohne Auftrag löschen.
-PRODUKTKARTE: Erklärst oder empfiehlst du ein konkretes Produkt aus dem Katalog, schreib direkt vor den Satz, in dem du es zum ersten Mal nennst, seine id aus katalog_suchen in doppelten geschweiften Klammern, z. B. {{b-omega-3-forte-700-73}}. Dann zeigt der Bildschirm genau dieses Produkt; die Klammer wird nicht vorgelesen. Wechselst du zu einem anderen Produkt, setz dessen id. Verlässt du das Produktthema, schreib {{ende}}. Nur ids aus katalog_suchen verwenden, nie erfinden; um ein bestimmtes Katalogprodukt zu erklären, such es vorher mit katalog_suchen.
+PRODUKTKARTE: Erklärst oder empfiehlst du ein konkretes Produkt aus dem Katalog oder ein Supplement aus seiner Liste/Wissensbibliothek (id aus wissen_nachschlagen, beginnt mit l-), schreib direkt vor den Satz, in dem du es zum ersten Mal nennst, seine id aus katalog_suchen in doppelten geschweiften Klammern, z. B. {{b-omega-3-forte-700-73}}. Dann zeigt der Bildschirm genau dieses Produkt; die Klammer wird nicht vorgelesen. Wechselst du zu einem anderen Produkt, setz dessen id. Verlässt du das Produktthema, schreib {{ende}}. Nur ids aus katalog_suchen verwenden, nie erfinden; um ein bestimmtes Katalogprodukt zu erklären, such es vorher mit katalog_suchen.
 PRODUKTKATALOG: Fragt er nach Produkten von Biogena oder MoleQlar oder nach einem Produkt für ein Ziel, such zuerst mit katalog_suchen im lokalen Katalog (kein Internet). Nenne passende Produkte mit Hersteller, relevanten Inhaltsstoffen pro Portion und dem Link (Link nur nennen, nicht vorlesen; sag „Link steht im Katalog“). Trenne klar: Herstellerangabe (Katalog), unabhängige Studienlage (Wissensbibliothek), seine persönlichen Erfahrungen und Hinweise aus dem Profil (z. B. Unverträglichkeiten). Nenne erkennbare Risiken und Wechselwirkungen mit seinen aktuellen Mitteln, doppelte Wirkstoffe (z. B. zweimal Magnesium) und sag dazu, wann der Katalog geprüft wurde. Fehlen Angaben, sag das; keine Dosierungen erfinden, nichts als notwendig oder wirksam hinstellen, wenn die Daten das nicht tragen. Websuche nur, wenn er ausdrücklich aktuelle Angaben will.
 WISSEN: Für Präparate aus seinen Listen nutzt du zuerst die lokale Wissensbibliothek (wird dir bei Bedarf mitgegeben, sonst wissen_nachschlagen). Trenne beim Erklären klar: allgemeines Wissen, Studienergebnis (mit Evidenzstärke), Herstellerangabe, persönliche Angabe aus seinem Profil. Keine persönliche Empfehlung als Tatsache. Websuche nur für neue Studien oder wenn er es ausdrücklich will. Frühere Studien-Updates findest du mit studien_abrufen.
 DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
@@ -1884,7 +1922,7 @@ function renderSetup(){
   drawProfiles();
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
   $("sCacheInfo").textContent=ls.get("acache",[]).filter(e=>e.key&&Date.now()-e.at<CACHE_TTL).length+" gespeicherte Antworten";$("sCacheClr").onclick=()=>{ls.del("acache");pendingCache=null;$("sCacheInfo").textContent="Geleert."};
-  const katTxt=KAT?" Produktkatalog (geprüft "+String(KAT.stand).slice(0,10)+", geladen aus: "+(KAT_SRC||"unbekannt")+"): "+Object.entries(katStat()).map(([h,x])=>`${h} – ${x.alle_gefundenen_produkte} Produkte gefunden; ${x.nahrungsergaenzungen} Nahrungsergänzungen: ${x.vollstaendig} vollständig, ${x.teilweise} teilweise; ${x.andere_produktarten} andere Produktarten`).join(". ")+". Produktbilder: nicht geprüft.":" Produktkatalog: nicht geladen.";
+  const katTxt=KAT?" Produktkatalog (geprüft "+String(KAT.stand).slice(0,10)+", geladen aus: "+(KAT_SRC||"unbekannt")+"): "+Object.entries(katStat()).map(([h,x])=>`${h} – ${x.alle_gefundenen_produkte} Produkte gefunden; ${x.nahrungsergaenzungen} Nahrungsergänzungen: ${x.vollstaendig} vollständig, ${x.teilweise} teilweise; ${x.andere_produktarten} andere Produktarten`).join(". ")+". Produktbilder offline gespeichert: "+(bildSync.gesamt?bildSync.ok+" von "+bildSync.gesamt+(bildSync.laeuft?" (wird geladen)":""):(BIDX&&BIDX.bilder?"wird geprüft":"noch nicht geladen"))+".":" Produktkatalog: nicht geladen.";
   $("sKbInfo").textContent=(KB?`Wissensbibliothek: ${kbList().length} Präparate, Stand ${KB.v}, lokal gespeichert.`:"Wissensbibliothek: noch nicht geladen (Einrichtungs-Code einfügen).")+katTxt;
   $("sObsOn").checked=!!S.obsStore;$("sObsOn").onchange=()=>{S.obsStore=$("sObsOn").checked;saveSettings()};
   $("sRest").value=S.restHours||6;$("sRest").onchange=()=>{S.restHours=Math.max(1,Math.min(24,+$("sRest").value||6));saveSettings()};
@@ -1942,10 +1980,10 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261113-2038",ATLAS_REL="2.20";
+const APP_VERSION="20261113-2055",ATLAS_REL="2.22";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
-setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
+setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setTimeout(()=>{syncBilder()},9000);setInterval(()=>{if(bildSync.ok<bildSync.gesamt||!bildSync.gesamt)syncBilder()},10*60000);addEventListener("online",()=>setTimeout(syncBilder,3000));setInterval(checkUpdate,10*60000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")checkUpdate()});
 
 /* ================= Start ================= */
