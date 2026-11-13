@@ -1,5 +1,5 @@
 {
- "geprueft": "2026-11-12T19:48:56.733Z",
+ "geprueft": "2026-11-13T19:54:59.832Z",
  "definitionen": {
   "gefunden": "alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",
   "nem": "davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",
@@ -9,44 +9,44 @@
  },
  "hersteller": {
   "Biogena": {
-   "gefunden": 299,
-   "nem": 254,
-   "vollstaendig": 254,
+   "gefunden": 323,
+   "nem": 262,
+   "vollstaendig": 262,
    "teilweise": [],
    "nicht_abrufbar": [],
    "typen": {
-    "Nahrungsergänzungsmittel": 254,
-    "Zubehör/Sonstiges": 22,
-    "Set/Bundle": 4,
+    "Nahrungsergänzungsmittel": 262,
+    "Zubehör/Sonstiges": 36,
+    "Set/Bundle": 5,
     "Lebensmittel": 13,
-    "Test/Analyse": 4,
+    "Test/Analyse": 5,
     "Medizinprodukt": 2
    },
    "quelle": "https://biogena.com/sitemap/sitemap-de-at.xml",
    "offen_oder_nicht_abrufbar": 0,
-   "mit_produktbild": 299,
+   "mit_produktbild": 323,
    "produktbilder": "nicht geprüft",
    "status": {
-    "alle_gefundenen_produkte": 299,
-    "nahrungsergaenzungen": 254,
-    "davon_vollstaendig": 254,
+    "alle_gefundenen_produkte": 323,
+    "nahrungsergaenzungen": 262,
+    "davon_vollstaendig": 262,
     "davon_teilweise": 0,
-    "andere_produktarten": 45,
+    "andere_produktarten": 61,
     "andere_nach_art": {
-     "Zubehör/Sonstiges": 22,
-     "Set/Bundle": 4,
+     "Zubehör/Sonstiges": 36,
+     "Set/Bundle": 5,
      "Lebensmittel": 13,
-     "Test/Analyse": 4,
+     "Test/Analyse": 5,
      "Medizinprodukt": 2
     },
     "nicht_abrufbar": 0,
-    "text": "Biogena: 299 Produkte gefunden, davon 254 Nahrungsergänzungen (254 vollständig, 0 teilweise erfasst) und 45 andere Produktarten."
+    "text": "Biogena: 323 Produkte gefunden, davon 262 Nahrungsergänzungen (262 vollständig, 0 teilweise erfasst) und 61 andere Produktarten."
    }
   },
   "MoleQlar": {
    "gefunden": 104,
    "nem": 74,
-   "vollstaendig": 63,
+   "vollstaendig": 64,
    "teilweise": [
     {
      "name": "Omega 3 Kapseln Vegan",
@@ -114,13 +114,6 @@
      }
     },
     {
-     "name": "Kreatin Pulver (Creavitalis®)",
-     "url": "https://moleqlar.com/products/kreatin-monohydrat-pulver",
-     "fehlende_angaben": {
-      "Packungsgröße": "nicht auf der Produktseite gefunden"
-     }
-    },
-    {
      "name": "Vitamin D3 K2 Tropfen",
      "url": "https://moleqlar.com/products/vitamin-d3-k2-tropfen",
      "fehlende_angaben": {
@@ -145,8 +138,8 @@
    "status": {
     "alle_gefundenen_produkte": 104,
     "nahrungsergaenzungen": 74,
-    "davon_vollstaendig": 63,
-    "davon_teilweise": 11,
+    "davon_vollstaendig": 64,
+    "davon_teilweise": 10,
     "andere_produktarten": 30,
     "andere_nach_art": {
      "Set/Bundle": 10,
@@ -156,18 +149,42 @@
      "Test/Analyse": 4
     },
     "nicht_abrufbar": 0,
-    "text": "MoleQlar: 104 Produkte gefunden, davon 74 Nahrungsergänzungen (63 vollständig, 11 teilweise erfasst) und 30 andere Produktarten."
+    "text": "MoleQlar: 104 Produkte gefunden, davon 74 Nahrungsergänzungen (64 vollständig, 10 teilweise erfasst) und 30 andere Produktarten."
    }
   }
  },
  "aenderungen": {
   "neu": [
-   "Vitamin B12 1000 Superior"
+   "Fell & Haut Leckerlis für Hunde – mit Biotin & Zink",
+   "DOG CHECK - DNA Health+",
+   "Gelenk Leckerlis",
+   "Gutschein “Happy Wuffday”",
+   "Gutschein “Für die beste Fellnase der Welt”",
+   "Gutschein “Besser als Kekse”",
+   "Gutschein “Willkommen im Rudel”",
+   "Gutschein “Tapfere Pfoten”",
+   "Signature Bottle",
+   "ADD+ ONE CHOLESTEROL SUPPORT",
+   "ADD+ ONE OMEGA-3 SUPPORT ",
+   "Starter Bundle",
+   "Probe",
+   "BIOGENA minis - fit@work® Premium Gold",
+   "Biogena Minis - Ashwagandha Formula",
+   "Nachfüll-Box",
+   "BIOGENA minis - Siebensalz® Magnesium",
+   "BIOGENA minis - Antistress Formula®",
+   "Senior Tropfen",
+   "Gelenk Tropfen",
+   "Multivitamin Tropfen",
+   "Relax Tropfen",
+   "Bauch Tropfen",
+   "Fell & Haut Tropfen"
   ],
   "geaendert": [
-   "Geburtstagsgutschein online kaufen & downloaden",
-   "Danke Gutschein zum Dankeschön sagen",
-   "Vitamin K2 100"
+   "Geburtstagsgutschein",
+   "Danke Gutschein",
+   "Coenzym Q10 active Gold 30 mg",
+   "Kreatin Pulver (Creavitalis®)"
   ],
   "entfernt": []
  },

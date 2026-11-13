@@ -1,0 +1,3859 @@
+{
+ "v": 1,
+ "keys": {
+  "63f5003c83": "Uve235lksvYzC/Ciza7nNRxiVDrhm6H0WTrJj1/vVzS5B3rhVwOMOxd2uN8Q1zpkhPQc/KodrFo+bm4O/i0Jjl/tKypdY1GTC9TORg/e6eAT4Gb9Q+Vkh6koSATGk9FV2TzoRM7hWfI0emGX4yBc1AKCvZeZamKNrL/VYKvcDSq3vuf9KzPa7TM8bY1F13G4AMx5BDBM6ndnc5KTLJGjTotgAl7WAKmYcwnvDsmJj7jkS/48jmNAPRctGY4V1/lA9sZ0YfTiR44dV8zoJqbfZbJtBOu/7IAicPU43N3eet9GIEM+qrdEmjMPGCG20J80OQXFwqSmlMAT/CjY8ohhLQ=="
+ },
+ "bilder": {
+  "b-vitamin-c-liposomal-583": {
+   "f": "b-vitamin-c-liposomal-583.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_VitaminC_liposomal_100ml_2605-1780645612.png",
+   "name": "Vitamin C liposomal",
+   "hersteller": "Biogena",
+   "bytes": 24347
+  },
+  "b-omni-lactis-glp-1-companion-582": {
+   "f": "b-omni-lactis-glp-1-companion-582.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_OmniLactis_GLP_60Kps_125cc_2606-1789113810.png",
+   "name": "Omni Lactis® GLP-1 Companion",
+   "hersteller": "Biogena",
+   "bytes": 15417
+  },
+  "b-fell-haut-leckerlis-fuer-hunde-mit-biotin-zink-576": {
+   "f": "b-fell-haut-leckerlis-fuer-hunde-mit-biotin-zink-576.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_PETS_Leckerlis_Fell_Haut_Standbeutel_frontal_2608-1790775053.png",
+   "name": "Fell & Haut Leckerlis für Hunde – mit Biotin & Zink",
+   "hersteller": "Biogena",
+   "bytes": 20322
+  },
+  "b-the-clear-one-glas-trinkflasche-575": {
+   "f": "b-the-clear-one-glas-trinkflasche-575.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Flasche_THE_CLEAR_ONE_Frontal_FS_empty_2609-1790583581.png",
+   "name": "THE CLEAR ONE",
+   "hersteller": "Biogena",
+   "bytes": 13702
+  },
+  "b-biogena-aesthetics-nr-skin-longevity-574": {
+   "f": "b-biogena-aesthetics-nr-skin-longevity-574.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_Skin_Longevity__Glas_FS_100cc_2608-1791195912.png",
+   "name": "NR SKIN LONGEVITY+",
+   "hersteller": "Biogena",
+   "bytes": 26358
+  },
+  "b-sleep-superior-schlaf-komplex-573": {
+   "f": "b-sleep-superior-schlaf-komplex-573.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_SleepSuperior_FS_Sachet_2606-1790316797.png",
+   "name": "Sleep Superior – Premium Schlaf Komplex",
+   "hersteller": "Biogena",
+   "bytes": 14379
+  },
+  "b-the-core-one-edelstahl-trinkflasche-571": {
+   "f": "b-the-core-one-edelstahl-trinkflasche-571.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Flasche_THE_CORE_ONE_Frontal_FS_2608-1788793292.png",
+   "name": "THE CORE ONE",
+   "hersteller": "Biogena",
+   "bytes": 17826
+  },
+  "b-biogena-aesthetics-tumbler-thermobecher-beauty-edition-563": {
+   "f": "b-biogena-aesthetics-tumbler-thermobecher-beauty-edition-563.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_Tumbler_v2_2607-1787750956.png",
+   "name": "Tumbler - The Beauty Edition",
+   "hersteller": "Biogena",
+   "bytes": 11029
+  },
+  "b-biogena-aesthetics-kollagen-pulver-neutral-starterbundle-562": {
+   "f": "b-biogena-aesthetics-kollagen-pulver-neutral-starterbundle-562.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_Kollagen_NEUTRAL_Starterset_Bundle_Magnetbox_offen_2601-1786608287.png",
+   "name": "Kollagen Pulver+ Neutral Starterbundle",
+   "hersteller": "Biogena",
+   "bytes": 20090
+  },
+  "b-magtein-magnesium-l-threonat-561": {
+   "f": "b-magtein-magnesium-l-threonat-561.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Magtein_R__Magnesium_L_Threonat_180K_400cc_2607-1786528486.png",
+   "name": "Magtein® Magnesium L-Threonat Kapseln",
+   "hersteller": "Biogena",
+   "bytes": 13252
+  },
+  "b-stressfrei-unterwegs-bundle-beruhigungstropfen-verdauungshilfe-fuer-hunde-560": {
+   "f": "b-stressfrei-unterwegs-bundle-beruhigungstropfen-verdauungshilfe-fuer-hunde-560.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_dog_stressfrei_unterwegs_bundle_productshot_de-1785925938.png",
+   "name": "Stressfrei Bundle für Hunde: Beruhigungstropfen & Verdauungshilfe",
+   "hersteller": "Biogena",
+   "bytes": 29678
+  },
+  "b-biogena-sports-power-3-hybrid-548": {
+   "f": "b-biogena-sports-power-3-hybrid-548.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Power3_Hybrid_FS_Stick_2607-1785911086.png",
+   "name": "Power³ Hybrid ",
+   "hersteller": "Biogena",
+   "bytes": 20968
+  },
+  "b-venoprime-venen-komplex-495": {
+   "f": "b-venoprime-venen-komplex-495.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_VenoPrime_60Kps_125cc_2605-1779455862.png",
+   "name": "VenoPrime® Venen-Komplex",
+   "hersteller": "Biogena",
+   "bytes": 14468
+  },
+  "b-haemoprime-diosmin-hesperidin-komplex-494": {
+   "f": "b-haemoprime-diosmin-hesperidin-komplex-494.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_H_moPrime_60Kps_125cc_2605-1779455776.png",
+   "name": "HämoPrime® Diosmin-Hesperidin Komplex",
+   "hersteller": "Biogena",
+   "bytes": 14408
+  },
+  "b-biogena-sports-intra-workout-electrolytes-478": {
+   "f": "b-biogena-sports-intra-workout-electrolytes-478.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS__IntraWorkoutElectrolytes_FS_Stick_2604-1779801392.png",
+   "name": "Intra-Workout Electrolytes",
+   "hersteller": "Biogena",
+   "bytes": 21280
+  },
+  "b-prokollagen-hyaluron-neutral-starterbundle-472": {
+   "f": "b-prokollagen-hyaluron-neutral-starterbundle-472.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_ProKollagen__Hyaluron_NEUTRAL_Starterset_Bundle_Magnetbox_offen_2601-1780487041.png",
+   "name": "ProKollagen & Hyaluron+ Neutral Starterbundle",
+   "hersteller": "Biogena",
+   "bytes": 20153
+  },
+  "b-omni-lactis-butyrat-500-456": {
+   "f": "b-omni-lactis-butyrat-500-456.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Omni_Lactis_Butyrat500_60Kps_125cc_2604-1778679200.png",
+   "name": "Omni Lactis® Butyrat 500",
+   "hersteller": "Biogena",
+   "bytes": 14679
+  },
+  "b-proteindrink-455": {
+   "f": "b-proteindrink-455.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Protein_Drink__Schoko_330ml_2605-1779978594.png",
+   "name": "Proteindrink Schoko",
+   "hersteller": "Biogena",
+   "bytes": 22773
+  },
+  "b-proteindrink-454": {
+   "f": "b-proteindrink-454.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Protein_Drink__Vanille_330ml_2605-1779978680.png",
+   "name": "Proteindrink Vanille",
+   "hersteller": "Biogena",
+   "bytes": 23027
+  },
+  "b-junior-multi-bo-13-453": {
+   "f": "b-junior-multi-bo-13-453.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Junior_Multi__Bo13_120Kps_275cc_2504-1776940234.png",
+   "name": "Junior Multi Bo® 13 ",
+   "hersteller": "Biogena",
+   "bytes": 12455
+  },
+  "b-biogena-sports-pro-peptide-protein-isolate-448": {
+   "f": "b-biogena-sports-pro-peptide-protein-isolate-448.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_ProPeptideProteinIsolate_FS_Stick_2604-1777542568.png",
+   "name": "Pro Peptide Protein Isolate",
+   "hersteller": "Biogena",
+   "bytes": 21941
+  },
+  "b-dog-check-dna-health-plus-dna-test-hund-444": {
+   "f": "b-dog-check-dna-health-plus-dna-test-hund-444.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_PETS_DogCheck_DNA_Health_FS_Right_2605-1778572587.png",
+   "name": "DOG CHECK - DNA Health+",
+   "hersteller": "Biogena",
+   "bytes": 26896
+  },
+  "b-biogena-sports-omega-3-oel-vegan-443": {
+   "f": "b-biogena-sports-omega-3-oel-vegan-443.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Omega3Oil_vegan_150ml_2603-1775821918.png",
+   "name": "Omega-3 Öl vegan",
+   "hersteller": "Biogena",
+   "bytes": 23303
+  },
+  "b-das-prinzip-biogena-441": {
+   "f": "b-das-prinzip-biogena-441.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_buch_das_prinzip_albert_schmidbauer_de-1779784911.png",
+   "name": "DAS PRINZIP BIOGENA",
+   "hersteller": "Biogena",
+   "bytes": 27752
+  },
+  "b-biogena-aesthetics-prokollagen-hyaluron-starterbundle-437": {
+   "f": "b-biogena-aesthetics-prokollagen-hyaluron-starterbundle-437.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_ProKollagen_Hyaluron_Starterset_Bundle_mit_Flasche_Sachet_26012-1773130354.png",
+   "name": "ProKollagen & Hyaluron+ Starterbundle",
+   "hersteller": "Biogena",
+   "bytes": 29013
+  },
+  "b-nutrident-o-p-pro-superior-436": {
+   "f": "b-nutrident-o-p-pro-superior-436.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_NutridentO_P_ProSuperior_FS_Stick_2512-1773676297.png",
+   "name": "Nutrident® O-P Pro Superior",
+   "hersteller": "Biogena",
+   "bytes": 15132
+  },
+  "b-thyrocare-calm-schilddruesen-komplex-434": {
+   "f": "b-thyrocare-calm-schilddruesen-komplex-434.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ThyrocareCalm_90Kps_125cc_2601-1773676273.png",
+   "name": "Thyrocare® Calm Schilddrüsen Komplex",
+   "hersteller": "Biogena",
+   "bytes": 15698
+  },
+  "b-thyrocare-jod-432": {
+   "f": "b-thyrocare-jod-432.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ThyrocareJod_90Kps_125cc_2601-1773676341.png",
+   "name": "Thyrocare® Jod",
+   "hersteller": "Biogena",
+   "bytes": 15196
+  },
+  "b-thyrocare-active-430": {
+   "f": "b-thyrocare-active-430.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ThyrocareActive_90Kps_275cc_2601-1773676313.png",
+   "name": "Thyrocare® Active",
+   "hersteller": "Biogena",
+   "bytes": 13861
+  },
+  "b-supplement-pill-organizer-box-429": {
+   "f": "b-supplement-pill-organizer-box-429.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Biogena_Pill_Organizer_Box_2505_black_v1-1774942441.png",
+   "name": "Supplement & Pill Organizer Box",
+   "hersteller": "Biogena",
+   "bytes": 10504
+  },
+  "b-biogena-sports-magnesium-wasser-428": {
+   "f": "b-biogena-sports-magnesium-wasser-428.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Magnesiumwasser_Dose_Umkarton_330ml_2604-1784617231.png",
+   "name": "Magnesium Wasser",
+   "hersteller": "Biogena",
+   "bytes": 21302
+  },
+  "b-supplement-pill-organizer-box-427": {
+   "f": "b-supplement-pill-organizer-box-427.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Biogena_Pill_Organizer_Box_2505_white_v1-1774942473.png",
+   "name": "Supplement & Pill Organizer Box",
+   "hersteller": "Biogena",
+   "bytes": 8840
+  },
+  "b-biogena-sports-omega-3-ultra-426": {
+   "f": "b-biogena-sports-omega-3-ultra-426.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Omega3ultra_90Kps_275cc_2603-1775803967.png",
+   "name": "Omega-3 ultra",
+   "hersteller": "Biogena",
+   "bytes": 16980
+  },
+  "b-hallsteinwasser-416": {
+   "f": "b-hallsteinwasser-416.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Hallstein_Wasser_330ml_Mockup-1775120299.png",
+   "name": "Artesisches Hallstein Wasser",
+   "hersteller": "Biogena",
+   "bytes": 22402
+  },
+  "b-premium-kollagen-pulver-starterbundle-mit-geschmack-408": {
+   "f": "b-premium-kollagen-pulver-starterbundle-mit-geschmack-408.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_Kollagen_Starterset_Bundle_mit_Flasche_Sachet_2511-1773068511.png",
+   "name": "Premium Kollagen Pulver+ Starterbundle mit Geschmack",
+   "hersteller": "Biogena",
+   "bytes": 30735
+  },
+  "b-soludrops-astaxanthin-404": {
+   "f": "b-soludrops-astaxanthin-404.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_SoluDrops_Astaxanthin_FS_30ml_2509-1774867311.png",
+   "name": "SoluDrops® Astaxanthin",
+   "hersteller": "Biogena",
+   "bytes": 17333
+  },
+  "b-micronutrients-coach-394": {
+   "f": "b-micronutrients-coach-394.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Buch_Mikronaehrstoffe_Coach_EN_2510-1769260670.png",
+   "name": "Micronutrients-Coach®",
+   "hersteller": "Biogena",
+   "bytes": 39431
+  },
+  "b-biogena-aesthetics-premium-kollagen-pulver-neutral-389": {
+   "f": "b-biogena-aesthetics-premium-kollagen-pulver-neutral-389.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_Kollagen_Pulver__NEUTRAL_FS_Sachet_2510-1773055192.png",
+   "name": "Premium Kollagen Pulver+ Neutral",
+   "hersteller": "Biogena",
+   "bytes": 29074
+  },
+  "b-biogena-aesthetics-premium-prokollagen-hyaluron-neutral-388": {
+   "f": "b-biogena-aesthetics-premium-prokollagen-hyaluron-neutral-388.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_ProKollagen__Hyaluron_NEUTRAL_FS_Sachet_2510-1771316544.png",
+   "name": "Premium ProKollagen & Hyaluron+ Neutral",
+   "hersteller": "Biogena",
+   "bytes": 26767
+  },
+  "b-mikronaehrstoff-coach-387": {
+   "f": "b-mikronaehrstoff-coach-387.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Mikronhrstoff_Coach__img_product_10192-1769262155.png",
+   "name": "Mikronährstoff-Coach®",
+   "hersteller": "Biogena",
+   "bytes": 40992
+  },
+  "b-die-zweiten-50-biogena-erfolgsgeschichten-383": {
+   "f": "b-die-zweiten-50-biogena-erfolgsgeschichten-383.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Buch_Erfolgsgeschichten_2510-1769260634.png",
+   "name": "DIE ZWEITEN 50 BIOGENA ERFOLGSGESCHICHTEN",
+   "hersteller": "Biogena",
+   "bytes": 37066
+  },
+  "b-biogena-aesthetics-premium-kollagen-pulver-382": {
+   "f": "b-biogena-aesthetics-premium-kollagen-pulver-382.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_Kollagen_Pulver_FS__Sachet_25091_3000x3000_2-1771315755.png",
+   "name": "Premium Kollagen Pulver+",
+   "hersteller": "Biogena",
+   "bytes": 38314
+  },
+  "b-biogena-aesthetics-premium-prokollagen-hyaluron-381": {
+   "f": "b-biogena-aesthetics-premium-prokollagen-hyaluron-381.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_ProKollagen__Hyaluron_FS_Sachet_2510-1773062488.png",
+   "name": "Premium ProKollagen & Hyaluron+",
+   "hersteller": "Biogena",
+   "bytes": 34589
+  },
+  "b-supplement-pill-organizer-box-378": {
+   "f": "b-supplement-pill-organizer-box-378.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Biogena_Pill_Organizer_Box_2503_v1_1-1769259980.png",
+   "name": "Supplement & Pill Organizer Box",
+   "hersteller": "Biogena",
+   "bytes": 12532
+  },
+  "b-nutrifem-mamma-mia-schwangerschafts-paket-377": {
+   "f": "b-nutrifem-mamma-mia-schwangerschafts-paket-377.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_MammaMia_FS_2509-1769245705.png",
+   "name": "Nutrifem® Mamma Mia Schwangerschafts-Paket",
+   "hersteller": "Biogena",
+   "bytes": 14358
+  },
+  "b-nutrident-paro-pro-superior-375": {
+   "f": "b-nutrident-paro-pro-superior-375.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Nutrident_ParoPro_120K_400cc_2601_1_-1773651170.png",
+   "name": "Nutrident Paro Pro® Superior",
+   "hersteller": "Biogena",
+   "bytes": 14022
+  },
+  "b-nutrifem-basic-komplex-372": {
+   "f": "b-nutrifem-basic-komplex-372.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Nutrifem_Basic__120Kps_275cc_2504-1769246452.png",
+   "name": "Nutrifem® Basic Komplex",
+   "hersteller": "Biogena",
+   "bytes": 13426
+  },
+  "b-nutrident-dolozym-forte-superior-371": {
+   "f": "b-nutrident-dolozym-forte-superior-371.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Nutrident_DoloZym_forte_sup_90Kps_275cc_2511-1769250235.png",
+   "name": "Nutrident DoloZym® forte Superior",
+   "hersteller": "Biogena",
+   "bytes": 13424
+  },
+  "b-nutrifem-omega-3-vegan-367": {
+   "f": "b-nutrifem-omega-3-vegan-367.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Nutrifem_Omega3_vegan_90Kps_275cc_2509-1769246568.png",
+   "name": "Nutrifem® Omega-3 vegan",
+   "hersteller": "Biogena",
+   "bytes": 13556
+  },
+  "b-biogena-one-the-nordic-one-366": {
+   "f": "b-biogena-one-the-nordic-one-366.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Bottle_LimitedEdition_NORDIC_Front_Back_2507_1-1769251094.png",
+   "name": "THE NORDIC ONE",
+   "hersteller": "Biogena",
+   "bytes": 22037
+  },
+  "b-biogena-wellbeing-check-osteo-essential-urintest-365": {
+   "f": "b-biogena-wellbeing-check-osteo-essential-urintest-365.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_Wellbeing__Check_Osteo_FS_2512-1769252408.png",
+   "name": "BIOGENA Wellbeing Check - Osteo Essential Urintest",
+   "hersteller": "Biogena",
+   "bytes": 24291
+  },
+  "b-biogena-wellbeing-check-omega-3-test-essential-364": {
+   "f": "b-biogena-wellbeing-check-omega-3-test-essential-364.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_Wellbeing_Check__Omega3_FS_2512-1769252437.png",
+   "name": "BIOGENA Wellbeing Check - Omega-3 Test Essential",
+   "hersteller": "Biogena",
+   "bytes": 26260
+  },
+  "b-biogena-one-the-sporty-one-363": {
+   "f": "b-biogena-one-the-sporty-one-363.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Bottle_LimitedEdition_SPORTY_Front_Back_2507-1769251151.png",
+   "name": "THE SPORTY ONE",
+   "hersteller": "Biogena",
+   "bytes": 15985
+  },
+  "b-biogena-one-the-pure-one-362": {
+   "f": "b-biogena-one-the-pure-one-362.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Bottle_LimitedEdition_PURE_Front_Back_2507-1769251119.png",
+   "name": "THE PURE ONE",
+   "hersteller": "Biogena",
+   "bytes": 14180
+  },
+  "b-biogena-wellbeing-check-vitamin-d-test-essential-361": {
+   "f": "b-biogena-wellbeing-check-vitamin-d-test-essential-361.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_Wellbeing_Check__VitaminD_FS_2512-1769252481.png",
+   "name": "BIOGENA Wellbeing Check – Vitamin D Test Essential",
+   "hersteller": "Biogena",
+   "bytes": 25448
+  },
+  "b-gelenk-leckerlis-360": {
+   "f": "b-gelenk-leckerlis-360.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_gelenk_leckerlis-1769259837.png",
+   "name": "Gelenk Leckerlis",
+   "hersteller": "Biogena",
+   "bytes": 20283
+  },
+  "b-wellbeing-check-ultimate-360-bluttest-359": {
+   "f": "b-wellbeing-check-ultimate-360-bluttest-359.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_wellbeing_check_1-1769260038.png",
+   "name": "Wellbeing Check Ultimate 360° Bluttest",
+   "hersteller": "Biogena",
+   "bytes": 25843
+  },
+  "b-gutschein-happy-wuffday-355": {
+   "f": "b-gutschein-happy-wuffday-355.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_birthday_cover-1769259859.png",
+   "name": "Gutschein “Happy Wuffday”",
+   "hersteller": "Biogena",
+   "bytes": 29179
+  },
+  "b-gutschein-fuer-die-beste-fellnase-der-welt-353": {
+   "f": "b-gutschein-fuer-die-beste-fellnase-der-welt-353.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_neutral_cover-1769259932.png",
+   "name": "Gutschein “Für die beste Fellnase der Welt”",
+   "hersteller": "Biogena",
+   "bytes": 30094
+  },
+  "b-gutschein-besser-als-kekse-351": {
+   "f": "b-gutschein-besser-als-kekse-351.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_christmas_cover-1769259887.png",
+   "name": "Gutschein “Besser als Kekse”",
+   "hersteller": "Biogena",
+   "bytes": 24497
+  },
+  "b-gutschein-willkommen-im-rudel-350": {
+   "f": "b-gutschein-willkommen-im-rudel-350.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_new_member_cover-1769259959.png",
+   "name": "Gutschein “Willkommen im Rudel”",
+   "hersteller": "Biogena",
+   "bytes": 26208
+  },
+  "b-gutschein-tapfere-pfoten-345": {
+   "f": "b-gutschein-tapfere-pfoten-345.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_get_well_cover-1769259912.png",
+   "name": "Gutschein “Tapfere Pfoten”",
+   "hersteller": "Biogena",
+   "bytes": 23934
+  },
+  "b-basogena-5-basenpulver-343": {
+   "f": "b-basogena-5-basenpulver-343.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Basogena5e_Biogena_Kartonwickeldose_250g_2408_1-1769153003.png",
+   "name": "Basogena® 5 Basenpulver",
+   "hersteller": "Biogena",
+   "bytes": 12392
+  },
+  "b-biogena-one-signature-bottle-342": {
+   "f": "b-biogena-one-signature-bottle-342.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BiogenaOne_SignatureBottle__img_product_108931-1769260303.png",
+   "name": "Signature Bottle",
+   "hersteller": "Biogena",
+   "bytes": 9163
+  },
+  "b-biogena-aesthetics-signature-bottle-341": {
+   "f": "b-biogena-aesthetics-signature-bottle-341.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/DE_AES_PDP_Images_Bottle_01-1769261281.png",
+   "name": "Signature Bottle",
+   "hersteller": "Biogena",
+   "bytes": 7107
+  },
+  "b-add-one-cholesterin-support-340": {
+   "f": "b-add-one-cholesterin-support-340.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ADD_ONE_Cholesterol_FS_Stick_2505_1-1769151740.png",
+   "name": "ADD+ ONE CHOLESTEROL SUPPORT",
+   "hersteller": "Biogena",
+   "bytes": 30284
+  },
+  "b-safrodia-superior-339": {
+   "f": "b-safrodia-superior-339.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Safrodia_Superior_120Kps_275cc_2504-1769247538.png",
+   "name": "Safrodia® Superior ",
+   "hersteller": "Biogena",
+   "bytes": 12108
+  },
+  "b-biogena-aesthetics-kollagen-trinkampullen-338": {
+   "f": "b-biogena-aesthetics-kollagen-trinkampullen-338.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_Kollagen_Trinkampulle_FS_2508_1-1769151899.png",
+   "name": "PREMIUM KOLLAGEN+ TRINKAMPULLEN",
+   "hersteller": "Biogena",
+   "bytes": 50037
+  },
+  "b-biogena-sports-shaker-337": {
+   "f": "b-biogena-sports-shaker-337.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BlenderBottle_Shaker450ml__img_product_2030-1769260560.png",
+   "name": "Shaker",
+   "hersteller": "Biogena",
+   "bytes": 12464
+  },
+  "b-colonbalance-sticks-336": {
+   "f": "b-colonbalance-sticks-336.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ColonBalance_FS_Stick_2503-1769153621.png",
+   "name": "ColonBalance® Sticks",
+   "hersteller": "Biogena",
+   "bytes": 20528
+  },
+  "b-bio-zahn-ziehoel-dx-334": {
+   "f": "b-bio-zahn-ziehoel-dx-334.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Bio_Zahnoel_ZiehoelDX_100ml_2507_1_-1769153187.png",
+   "name": "Bio Zahn- & Ziehöl DX",
+   "hersteller": "Biogena",
+   "bytes": 13787
+  },
+  "b-l-arginin-600-331": {
+   "f": "b-l-arginin-600-331.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_L_Arginin_180K_400cc_2507_1_-1769155277.png",
+   "name": "L-Arginin 600",
+   "hersteller": "Biogena",
+   "bytes": 10517
+  },
+  "b-geburtstagsgutschein-329": {
+   "f": "b-geburtstagsgutschein-329.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pdp_giftcard_geburtstag_generic-1769259717.png",
+   "name": "Geburtstagsgutschein",
+   "hersteller": "Biogena",
+   "bytes": 20393
+  },
+  "b-biogena-sports-kalium-magnesium-taurin-326": {
+   "f": "b-biogena-sports-kalium-magnesium-taurin-326.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_KaliumMagnesiumTaurin_120Kps_275cc_2505_-1769251499.png",
+   "name": "Kalium Magnesium Taurin",
+   "hersteller": "Biogena",
+   "bytes": 16842
+  },
+  "b-maculaplex-1-2-325": {
+   "f": "b-maculaplex-1-2-325.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_MaculaPlex_FS_2502_-1769155820.png",
+   "name": "MaculaPlex® 1 - 2",
+   "hersteller": "Biogena",
+   "bytes": 13406
+  },
+  "b-zinkcreme-324": {
+   "f": "b-zinkcreme-324.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Zinkcreme_2507_1_-1769249775.png",
+   "name": "Zinkcreme",
+   "hersteller": "Biogena",
+   "bytes": 11056
+  },
+  "b-add-one-omega-3-support-323": {
+   "f": "b-add-one-omega-3-support-323.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ADD_ONE_Omega3__Support_150ml_2504-1779867641.png",
+   "name": "ADD+ ONE OMEGA-3 SUPPORT ",
+   "hersteller": "Biogena",
+   "bytes": 19885
+  },
+  "b-darm-care-bundle-322": {
+   "f": "b-darm-care-bundle-322.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_DARM_CARE_BUNDLE_Biogena_2508_1_-1769152269.png",
+   "name": "Darm-Care-Bundle",
+   "hersteller": "Biogena",
+   "bytes": 13892
+  },
+  "b-biogena-sports-muscle-bundle-321": {
+   "f": "b-biogena-sports-muscle-bundle-321.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Produktgruppe_Muscel_Bundle_2506_1_-1769251715.png",
+   "name": "Muscle Bundle - BCAA, Creatin und Protein",
+   "hersteller": "Biogena",
+   "bytes": 13139
+  },
+  "b-biogena-one-starter-bundle-319": {
+   "f": "b-biogena-one-starter-bundle-319.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_one_starter_bundle_productshot_de_1_-1793719065.png",
+   "name": "Starter Bundle",
+   "hersteller": "Biogena",
+   "bytes": 20953
+  },
+  "b-gutschein-318": {
+   "f": "b-gutschein-318.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pdp_giftcard_fur_jeden_anlass_generic-1769259671.png",
+   "name": "BIOGENA Gutschein online kaufen: Wertgutschein für jeden Anlass",
+   "hersteller": "Biogena",
+   "bytes": 28045
+  },
+  "b-biogena-moments-immun-bites-317": {
+   "f": "b-biogena-moments-immun-bites-317.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BIOGENAmoments_immunbites10x30g__img_product_10630-1769260206.png",
+   "name": "BIOGENA moments - immun bites",
+   "hersteller": "Biogena",
+   "bytes": 38842
+  },
+  "b-msm-gel-316": {
+   "f": "b-msm-gel-316.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_MSMGel_100ml_2503-1769245948.png",
+   "name": "MSM Gel",
+   "hersteller": "Biogena",
+   "bytes": 8591
+  },
+  "b-cordyceps-c-315": {
+   "f": "b-cordyceps-c-315.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_CordycepsC_120Kps_275cc_2504-1769153787.png",
+   "name": "Cordyceps & C",
+   "hersteller": "Biogena",
+   "bytes": 12610
+  },
+  "b-biogena-moments-beauty-bites-314": {
+   "f": "b-biogena-moments-beauty-bites-314.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BIOGENAmoments_beautybites_10x30g__img_product_10697-1781168021.png",
+   "name": "BIOGENA moments - beauty bites",
+   "hersteller": "Biogena",
+   "bytes": 37497
+  },
+  "b-biogena-one-probe-312": {
+   "f": "b-biogena-one-probe-312.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Produktkarte_closed_2602-1773059272.png",
+   "name": "Probe",
+   "hersteller": "Biogena",
+   "bytes": 15924
+  },
+  "b-vitamin-b12-tropfen-311": {
+   "f": "b-vitamin-b12-tropfen-311.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_VitaminB12_30ml_FS_2507_1_-1769249436.png",
+   "name": "Vitamin B12 Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 14645
+  },
+  "b-biogena-sports-package-307": {
+   "f": "b-biogena-sports-package-307.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Produktgruppe_Essentials_MagnesiumSport_D3_K2_2408_1_-1769251677.png",
+   "name": "BIOGENA SPORTS Package",
+   "hersteller": "Biogena",
+   "bytes": 26604
+  },
+  "b-danke-gutschein-305": {
+   "f": "b-danke-gutschein-305.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pdp_giftcard_danke_generic-1769259616.png",
+   "name": "Danke Gutschein",
+   "hersteller": "Biogena",
+   "bytes": 29827
+  },
+  "b-reishi-c-302": {
+   "f": "b-reishi-c-302.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ReishiC_120Kps_275cc_2504-1769248812.png",
+   "name": "Reishi & C",
+   "hersteller": "Biogena",
+   "bytes": 12248
+  },
+  "b-fit-at-work-sleep-300": {
+   "f": "b-fit-at-work-sleep-300.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_fit_work_SLEEP_60Kps_125cc_2507_-1769154389.png",
+   "name": "fit@work® Sleep",
+   "hersteller": "Biogena",
+   "bytes": 14554
+  },
+  "b-spermidin-cellimmun-299": {
+   "f": "b-spermidin-cellimmun-299.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_SpermdinCellImmun_60Kps_125cc_2504-1769249020.png",
+   "name": "Spermidin CellImmun®",
+   "hersteller": "Biogena",
+   "bytes": 14564
+  },
+  "b-glutezym-298": {
+   "f": "b-glutezym-298.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_GluteZym_120Kps_275cc_2504-1769154640.png",
+   "name": "GluteZym®",
+   "hersteller": "Biogena",
+   "bytes": 11214
+  },
+  "b-arthro-ump-lumbal-gold-297": {
+   "f": "b-arthro-ump-lumbal-gold-297.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_ArthroUMPLumbal_120Kps_275cc_2504-1769249853.png",
+   "name": "Arthro UMP Lumbal Gold ",
+   "hersteller": "Biogena",
+   "bytes": 12854
+  },
+  "b-zeolith-500-296": {
+   "f": "b-zeolith-500-296.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Zeolith_500_200Kps_2404_-1769247280.png",
+   "name": "Zeolith 500",
+   "hersteller": "Biogena",
+   "bytes": 17264
+  },
+  "b-vitamin-k2-100-295": {
+   "f": "b-vitamin-k2-100-295.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Vitamin_K2_100_120Kps_125cc_2504-1769249407.png",
+   "name": "Vitamin K2 100",
+   "hersteller": "Biogena",
+   "bytes": 12865
+  },
+  "b-ah-glutamin-formula-294": {
+   "f": "b-ah-glutamin-formula-294.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AH_Glutamin_60Kps_125cc_2504-1769152400.png",
+   "name": "AH & Glutamin Formula",
+   "hersteller": "Biogena",
+   "bytes": 13943
+  },
+  "b-omni-lactis-20-pur-gold-293": {
+   "f": "b-omni-lactis-20-pur-gold-293.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_OsteoCaldebor_90Kps_275cc_2505-1769248538.png",
+   "name": "Omni Lactis® 20 Pur Gold",
+   "hersteller": "Biogena",
+   "bytes": 15484
+  },
+  "b-vitamin-b6-aktiviert-p5p-292": {
+   "f": "b-vitamin-b6-aktiviert-p5p-292.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_VitaminB6_P5P_120Kps_125cc_2504-1769249452.png",
+   "name": "Vitamin B6 aktiviert P5P ",
+   "hersteller": "Biogena",
+   "bytes": 13310
+  },
+  "b-gaba-500-291": {
+   "f": "b-gaba-500-291.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_GABA500_120Kps_275cc_2504-1769154553.png",
+   "name": "GABA 500",
+   "hersteller": "Biogena",
+   "bytes": 11082
+  },
+  "b-magnesiumbisglycinat-125-289": {
+   "f": "b-magnesiumbisglycinat-125-289.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Magnesiumbisglycinat125_90Kps_275cc_2504-1769155872.png",
+   "name": "Magnesiumbisglycinat 125",
+   "hersteller": "Biogena",
+   "bytes": 13153
+  },
+  "b-basogena-5-sticks-288": {
+   "f": "b-basogena-5-sticks-288.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Basogena5_FS_Stick_2502-1769152922.png",
+   "name": "Basogena® 5 Sticks",
+   "hersteller": "Biogena",
+   "bytes": 21986
+  },
+  "b-smartferrin-b12-287": {
+   "f": "b-smartferrin-b12-287.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_SmartFerrin_B12_90Kps_125cc_2504-1769249004.png",
+   "name": "SmartFerrin® B12",
+   "hersteller": "Biogena",
+   "bytes": 15435
+  },
+  "b-nitrostress-formula-i-286": {
+   "f": "b-nitrostress-formula-i-286.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_NitroStress_Formula_I_60Kps_125cc_2504-1769246255.png",
+   "name": "NitroStress® Formula I",
+   "hersteller": "Biogena",
+   "bytes": 14992
+  },
+  "b-nutrifem-p-m-s-formula-285": {
+   "f": "b-nutrifem-p-m-s-formula-285.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Nutrifem_PMS_Formula_60Kps_125cc_2504-1769246598.png",
+   "name": "Nutrifem P-M-S Formula®",
+   "hersteller": "Biogena",
+   "bytes": 14883
+  },
+  "b-lactrozym-20-000-284": {
+   "f": "b-lactrozym-20-000-284.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_LactroZym_120Kps_275cc_2504-1769155534.png",
+   "name": "LactroZym® 20.000",
+   "hersteller": "Biogena",
+   "bytes": 13780
+  },
+  "b-melatonin-tropfen-283": {
+   "f": "b-melatonin-tropfen-283.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Melatonin_FS_Tropfen_2506-1769245774.png",
+   "name": "Melatonin Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 15088
+  },
+  "b-fit-at-work-premium-gold-282": {
+   "f": "b-fit-at-work-premium-gold-282.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_fit_work_Premium_60Kps_125cc_2506-1769247341.png",
+   "name": "fit@work® Premium Gold",
+   "hersteller": "Biogena",
+   "bytes": 14687
+  },
+  "b-vitamin-e-natural-vegan-281": {
+   "f": "b-vitamin-e-natural-vegan-281.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Vitamin_E_natural_vegan_60Kps_125cc_2504-1769249375.png",
+   "name": "Vitamin E natural vegan",
+   "hersteller": "Biogena",
+   "bytes": 14751
+  },
+  "b-yams-balance-280": {
+   "f": "b-yams-balance-280.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_YamsBalance_180Kps_275cc_2504-1769249621.png",
+   "name": "Yams Balance",
+   "hersteller": "Biogena",
+   "bytes": 10972
+  },
+  "b-kupferbisglycinat-279": {
+   "f": "b-kupferbisglycinat-279.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Kupferbisglycinat_120Kps_125cc_2504-1769155252.png",
+   "name": "Kupferbisglycinat",
+   "hersteller": "Biogena",
+   "bytes": 14401
+  },
+  "b-vitamin-d-2000-duo-gold-278": {
+   "f": "b-vitamin-d-2000-duo-gold-278.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_VitaminD2000DUO_Nutrigellets_60Kps_125cc_2504Kopie-1769250659.png",
+   "name": "Vitamin D 2000 DUO Gold",
+   "hersteller": "Biogena",
+   "bytes": 12803
+  },
+  "b-5-hydroxytryptophan-100-277": {
+   "f": "b-5-hydroxytryptophan-100-277.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_5Hydroxytryptophan100_60Kps_125cc_2504-1769152327.png",
+   "name": "5-Hydroxytryptophan 100",
+   "hersteller": "Biogena",
+   "bytes": 15464
+  },
+  "b-cleanocol-276": {
+   "f": "b-cleanocol-276.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_CleanoCOL_FS_Stick_2503-1769153496.png",
+   "name": "CleanoCOL®",
+   "hersteller": "Biogena",
+   "bytes": 20010
+  },
+  "b-ubiquinol-coq10-100-mg-vegan-gold-275": {
+   "f": "b-ubiquinol-coq10-100-mg-vegan-gold-275.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_UbiquinolCoQ10_vegan_180Kps_275cc_2504-1769250641.png",
+   "name": "Ubiquinol CoQ10 100 mg vegan Gold",
+   "hersteller": "Biogena",
+   "bytes": 14251
+  },
+  "b-d-biotin-formula-274": {
+   "f": "b-d-biotin-formula-274.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_D_BiotinFormula_120Kps_125cc_2504-1769153890.png",
+   "name": "D-Biotin Formula",
+   "hersteller": "Biogena",
+   "bytes": 13750
+  },
+  "b-361-multi-superior-273": {
+   "f": "b-361-multi-superior-273.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_361_Multi_Superior_90Kps_275cc_2504-1769247359.png",
+   "name": "361° Multi+ Superior",
+   "hersteller": "Biogena",
+   "bytes": 11451
+  },
+  "b-fit-at-work-basic-272": {
+   "f": "b-fit-at-work-basic-272.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_fit_work_basic_60Kps_125cc_2506-1769154312.png",
+   "name": "fit@work® Basic",
+   "hersteller": "Biogena",
+   "bytes": 14646
+  },
+  "b-astaxanthin-4-mg-271": {
+   "f": "b-astaxanthin-4-mg-271.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Astaxanthin_60Kps_125cc_2504-1769152808.png",
+   "name": "Astaxanthin 4mg",
+   "hersteller": "Biogena",
+   "bytes": 13445
+  },
+  "b-schwarzkuemmeloel-1000-270": {
+   "f": "b-schwarzkuemmeloel-1000-270.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Schwarzkuemmeloel_Kapseln_90Kps_275cc_2504-1769247038.png",
+   "name": "Schwarzkümmelöl 1000",
+   "hersteller": "Biogena",
+   "bytes": 12964
+  },
+  "b-nitrostress-formula-ii-269": {
+   "f": "b-nitrostress-formula-ii-269.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_NitroStressFormula_II_60Kps_125cc_2506-1769246287.png",
+   "name": "NitroStress® Formula II",
+   "hersteller": "Biogena",
+   "bytes": 14808
+  },
+  "b-moferrin-21-268": {
+   "f": "b-moferrin-21-268.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_MoFerrin21_60Kps_125cc_2504-1769245836.png",
+   "name": "MoFerrin® 21",
+   "hersteller": "Biogena",
+   "bytes": 14751
+  },
+  "b-vitamin-d3-2000-vegan-267": {
+   "f": "b-vitamin-d3-2000-vegan-267.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_VitaminD3_2000vegan_180Kps_125cc_2504_-1769249506.png",
+   "name": "Vitamin D3 2000 vegan",
+   "hersteller": "Biogena",
+   "bytes": 13408
+  },
+  "b-nutrident-paro-pro-266": {
+   "f": "b-nutrident-paro-pro-266.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Nutrident_ParoPro_120Kps_275cc_2504-1769246318.png",
+   "name": "Nutrident Paro Pro®",
+   "hersteller": "Biogena",
+   "bytes": 12047
+  },
+  "b-osteo-caldebor-vegan-265": {
+   "f": "b-osteo-caldebor-vegan-265.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_OsteoCaldebor_90Kps_275cc_2505_-1769248572.png",
+   "name": "Osteo Caldebor® vegan",
+   "hersteller": "Biogena",
+   "bytes": 13688
+  },
+  "b-selen-forte-264": {
+   "f": "b-selen-forte-264.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Selenforte_120Kps_125cc_2504-1769248905.png",
+   "name": "Selen forte",
+   "hersteller": "Biogena",
+   "bytes": 14453
+  },
+  "b-oculaplex-263": {
+   "f": "b-oculaplex-263.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_OculaPlex_120Kps_275cc_2504-1769246638.png",
+   "name": "OculaPlex®",
+   "hersteller": "Biogena",
+   "bytes": 12620
+  },
+  "b-griffonia-50-serolution-262": {
+   "f": "b-griffonia-50-serolution-262.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Griffonia50Serolution_60Kps_125cc_2504-1769154670.png",
+   "name": "Griffonia 50 Serolution® ",
+   "hersteller": "Biogena",
+   "bytes": 14874
+  },
+  "b-a-d-e-k-vitamine-261": {
+   "f": "b-a-d-e-k-vitamine-261.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_A_D_E_K_Vitamine_120Kps_125cc_2507_-1769152354.png",
+   "name": "A-D-E-K Vitamine",
+   "hersteller": "Biogena",
+   "bytes": 12761
+  },
+  "b-ashwagandha-komplex-fusion-complete-260": {
+   "f": "b-ashwagandha-komplex-fusion-complete-260.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Ashwagandha_FusionCompl_120Kps_275cc_2504-1769152763.png",
+   "name": "Ashwagandha Fusion Complete",
+   "hersteller": "Biogena",
+   "bytes": 14094
+  },
+  "b-biogena-aesthetics-skin-biotic-259": {
+   "f": "b-biogena-aesthetics-skin-biotic-259.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_SkinBiotic_Glas_FS_100cc_2501-1769152193.png",
+   "name": "SKIN BIOTIC+",
+   "hersteller": "Biogena",
+   "bytes": 21303
+  },
+  "b-leber-galle-formula-258": {
+   "f": "b-leber-galle-formula-258.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_LeberGalleFormula_120Kps_275cc_2504-1769155582.png",
+   "name": "Leber Galle Formula",
+   "hersteller": "Biogena",
+   "bytes": 13563
+  },
+  "b-daozym-diaminoxidase-257": {
+   "f": "b-daozym-diaminoxidase-257.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_DAOZym__60Kps_125cc_2504-1769153940.png",
+   "name": "DAOZym® (Diaminoxidase)",
+   "hersteller": "Biogena",
+   "bytes": 12713
+  },
+  "b-junior-ausgleich-formula-coq10-256": {
+   "f": "b-junior-ausgleich-formula-coq10-256.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_JUNIOR_Ausgleich_FormulaCoQ10_120Kps_125cc_2605_1_-1783433908.png",
+   "name": "Junior Ausgleich Formula + CoQ10 ",
+   "hersteller": "Biogena",
+   "bytes": 16730
+  },
+  "b-best-age-superior-255": {
+   "f": "b-best-age-superior-255.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_BestAge_Formula_180K_400cc_2506-1769249962.png",
+   "name": "Best Age Superior ",
+   "hersteller": "Biogena",
+   "bytes": 11648
+  },
+  "b-biogena-aesthetics-miraskin-superior-254": {
+   "f": "b-biogena-aesthetics-miraskin-superior-254.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_MiraSkin_Superior_Glas_FS_100cc_2501-1769151991.png",
+   "name": "MiraSkin+ Superior",
+   "hersteller": "Biogena",
+   "bytes": 20601
+  },
+  "b-diaantioxidans-formula-253": {
+   "f": "b-diaantioxidans-formula-253.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_DiaAntioxidansFormula_120Kps_275cc_2504-1769154083.png",
+   "name": "DiaAntioxidans® Formula",
+   "hersteller": "Biogena",
+   "bytes": 13069
+  },
+  "b-biogena-akuthaut-balance-252": {
+   "f": "b-biogena-akuthaut-balance-252.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AkutHaut_Balance_60Kps_125cc_2504-1769152447.png",
+   "name": "AkutHaut® Balance",
+   "hersteller": "Biogena",
+   "bytes": 13915
+  },
+  "b-daozym-vegan-251": {
+   "f": "b-daozym-vegan-251.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_DAOZym_60Kps_125cc_2504-1769153919.png",
+   "name": "DAOZym® vegan ",
+   "hersteller": "Biogena",
+   "bytes": 14403
+  },
+  "b-bio-moringa-500-250": {
+   "f": "b-bio-moringa-500-250.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Bio_Moringa500_120Kps_275cc_2504-1769153112.png",
+   "name": "Bio-Moringa 500",
+   "hersteller": "Biogena",
+   "bytes": 12449
+  },
+  "b-junior-vitamin-d3-249": {
+   "f": "b-junior-vitamin-d3-249.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_JUNIOR_VitaminD_Tropfen_2605-1793880870.png",
+   "name": "Junior Vitamin D3 ",
+   "hersteller": "Biogena",
+   "bytes": 22564
+  },
+  "b-quattroferrin-21-eisen-komplex-248": {
+   "f": "b-quattroferrin-21-eisen-komplex-248.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Quattroferrin21_60Kps_125cc_2504-1769248784.png",
+   "name": "QuattroFerrin® 21  Eisen-Komplex",
+   "hersteller": "Biogena",
+   "bytes": 15047
+  },
+  "b-chlorella-pur-c-plus-247": {
+   "f": "b-chlorella-pur-c-plus-247.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ChlorellaPur_Cplus_120Kps_275cc_2504-1769153428.png",
+   "name": "Chlorella Pur C plus",
+   "hersteller": "Biogena",
+   "bytes": 12571
+  },
+  "b-fit-at-work-immun-astaxanthin-246": {
+   "f": "b-fit-at-work-immun-astaxanthin-246.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_fit_work_ImmunAstaxanthin_30Kps_125cc_2506-1769154350.png",
+   "name": "fit@work® IMMUN Astaxanthin",
+   "hersteller": "Biogena",
+   "bytes": 15261
+  },
+  "b-zeolith-ultrafein-245": {
+   "f": "b-zeolith-ultrafein-245.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Zeolith_ultrafein_250g_2402-1769249668.png",
+   "name": "Zeolith ultrafein",
+   "hersteller": "Biogena",
+   "bytes": 23588
+  },
+  "b-quercetin-phytoactive-gold-244": {
+   "f": "b-quercetin-phytoactive-gold-244.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Quercetin_Phytoactive_60Kps_125cc_2504-1769250561.png",
+   "name": "Quercetin Phytoactive Gold",
+   "hersteller": "Biogena",
+   "bytes": 15263
+  },
+  "b-panthoplex-b5-243": {
+   "f": "b-panthoplex-b5-243.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_PanthoPlex_B5_120Kps_275cc_2504-1769248590.png",
+   "name": "PanthoPlex B5® ",
+   "hersteller": "Biogena",
+   "bytes": 12088
+  },
+  "b-gruener-tee-epiverde-222-242": {
+   "f": "b-gruener-tee-epiverde-222-242.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Gruener_TeeEpiVerde222_DE_EN_120Kps_275cc_2504-1769154707.png",
+   "name": "Grüner Tee EpiVerde® 222",
+   "hersteller": "Biogena",
+   "bytes": 13934
+  },
+  "b-ashwagandha-triple-superior-241": {
+   "f": "b-ashwagandha-triple-superior-241.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_AshwagandhaTripleSuperior_120Kps_DE_EN_275cc_2504-1769249884.png",
+   "name": "Ashwagandha Triple Superior KSM-66®",
+   "hersteller": "Biogena",
+   "bytes": 12982
+  },
+  "b-betaglucan-formula-240": {
+   "f": "b-betaglucan-formula-240.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Betaglucan_120Kps_125cc_2504-1769153059.png",
+   "name": "Betaglucan Formula",
+   "hersteller": "Biogena",
+   "bytes": 14746
+  },
+  "b-nutrifem-agnubalance-239": {
+   "f": "b-nutrifem-agnubalance-239.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Nutrifem_Agnubalance_60Kps_125cc_2504-1769246334.png",
+   "name": "Nutrifem Agnubalance®",
+   "hersteller": "Biogena",
+   "bytes": 14813
+  },
+  "b-immun-24-7-238": {
+   "f": "b-immun-24-7-238.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Immun2472_60Kps_125cc_2504-1769154751.png",
+   "name": "Immun 24/7",
+   "hersteller": "Biogena",
+   "bytes": 12607
+  },
+  "b-biogena-aesthetics-summer-skin-superior-237": {
+   "f": "b-biogena-aesthetics-summer-skin-superior-237.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_Summerskin_Glas_FS_100cc_2410-1769152232.png",
+   "name": "SUMMER SKIN+ SUPERIOR",
+   "hersteller": "Biogena",
+   "bytes": 16075
+  },
+  "b-vitamin-b12-1000-superior-236": {
+   "f": "b-vitamin-b12-1000-superior-236.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Vitamin_B12_Superior_90Kps_125cc_2504-1769249195.png",
+   "name": "Vitamin B12 1000 Superior",
+   "hersteller": "Biogena",
+   "bytes": 15658
+  },
+  "b-omni-lactis-20-gold-235": {
+   "f": "b-omni-lactis-20-gold-235.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_OmniLactis20_60Kps_125cc_2504-1769250386.png",
+   "name": "Omni Lactis® 20 Gold",
+   "hersteller": "Biogena",
+   "bytes": 14723
+  },
+  "b-osteo-calbon-komplex-gold-234": {
+   "f": "b-osteo-calbon-komplex-gold-234.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_OsteoCalbonKomplex_125cc_2504-1769250435.png",
+   "name": "Osteo Calbon Komplex® Gold",
+   "hersteller": "Biogena",
+   "bytes": 14985
+  },
+  "b-bio-schwarzkuemmeloel-233": {
+   "f": "b-bio-schwarzkuemmeloel-233.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Bio_Schwarzkuemmeloel_100ml_2507_1_-1769153149.png",
+   "name": "Bio Schwarzkümmelöl",
+   "hersteller": "Biogena",
+   "bytes": 10761
+  },
+  "b-fit-at-work-stressbiotic-231": {
+   "f": "b-fit-at-work-stressbiotic-231.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_fit_work_Stressbiotic_60Kps_125cc_2506-1769154429.png",
+   "name": "fit@work® Stressbiotic",
+   "hersteller": "Biogena",
+   "bytes": 14994
+  },
+  "b-ac7-komplex-230": {
+   "f": "b-ac7-komplex-230.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AC7Komplex_120Kps_275cc_2504-1769152377.png",
+   "name": "AC7 Komplex",
+   "hersteller": "Biogena",
+   "bytes": 11585
+  },
+  "b-multispektrum-24-7-ohne-229": {
+   "f": "b-multispektrum-24-7-ohne-229.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Multispektrum247_OHNE_60Kps_DP_125cc_2504-1769246103.png",
+   "name": "Multispektrum 24/7® OHNE",
+   "hersteller": "Biogena",
+   "bytes": 16118
+  },
+  "b-neurosagena-vitamin-b-komplex-active-gold-228": {
+   "f": "b-neurosagena-vitamin-b-komplex-active-gold-228.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Neurosagena_B_Komplex_60Kps_125cc_2504-1769250205.png",
+   "name": "Neurosagena® Vitamin B-Komplex active Gold",
+   "hersteller": "Biogena",
+   "bytes": 15504
+  },
+  "b-bio-bitterspray-227": {
+   "f": "b-bio-bitterspray-227.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Bio_Bitterspray_Biogena_20ml_mit_FS_2408-1769153084.png",
+   "name": "Bio-Bitterspray",
+   "hersteller": "Biogena",
+   "bytes": 12496
+  },
+  "b-vitamin-d3-k2-tropfen-226": {
+   "f": "b-vitamin-d3-k2-tropfen-226.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Vitamin_D3_K2_Tropfen_2502-1769249350.png",
+   "name": "Vitamin D3 & K2 Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 24510
+  },
+  "b-zinkpicolinat-15-225": {
+   "f": "b-zinkpicolinat-15-225.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Zinkpicolinat15_120Kps_125cc_2504-1769249791.png",
+   "name": "Zinkpicolinat 15",
+   "hersteller": "Biogena",
+   "bytes": 13468
+  },
+  "b-aufbau-formula-b-map-12-224": {
+   "f": "b-aufbau-formula-b-map-12-224.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AufbauFormulaB_MAP_120Kps_275cc_2504-1769152864.png",
+   "name": "Aufbau Formula B-Map® 12",
+   "hersteller": "Biogena",
+   "bytes": 13091
+  },
+  "b-phyto-biotika-223": {
+   "f": "b-phyto-biotika-223.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Phyto_Biotika_120Kps_275cc_2504-1769246882.png",
+   "name": "Phyto Biotika®",
+   "hersteller": "Biogena",
+   "bytes": 13319
+  },
+  "b-nadh-20-superior-m-s-s-222": {
+   "f": "b-nadh-20-superior-m-s-s-222.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_NADH_Superior_MSS_60Kps_125cc_2504-1769246192.png",
+   "name": "NADH 20 Superior M-S-S",
+   "hersteller": "Biogena",
+   "bytes": 15512
+  },
+  "b-tendo-formula-221": {
+   "f": "b-tendo-formula-221.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_TendoFormula_60Kps_125cc_2504-1769249098.png",
+   "name": "Tendo Formula®",
+   "hersteller": "Biogena",
+   "bytes": 13305
+  },
+  "b-senocetin-active-gold-220": {
+   "f": "b-senocetin-active-gold-220.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_SenoCetin_60Kps_125cc_2504Kopie-1769250587.png",
+   "name": "SenoCetin active Gold",
+   "hersteller": "Biogena",
+   "bytes": 13774
+  },
+  "b-multispektrum-24-7-multivitamin-komplex-219": {
+   "f": "b-multispektrum-24-7-multivitamin-komplex-219.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Multispektrum247_60Kps_125cc_2504-1769246031.png",
+   "name": "Multispektrum 24/7® Multivitamin Komplex",
+   "hersteller": "Biogena",
+   "bytes": 15026
+  },
+  "b-homocystein-formula-218": {
+   "f": "b-homocystein-formula-218.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_HomocysteinFormula_90Kps_125cc_2504-1769154733.png",
+   "name": "Homocystein Formula ",
+   "hersteller": "Biogena",
+   "bytes": 14107
+  },
+  "b-epig-stabilize-217": {
+   "f": "b-epig-stabilize-217.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_EpiGstabilize_60Kps_125cc_2504-1769250068.png",
+   "name": "EpiG stabilize",
+   "hersteller": "Biogena",
+   "bytes": 14828
+  },
+  "b-chrom-200-216": {
+   "f": "b-chrom-200-216.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Chrom200_120Kps_125cc_2504-1769153471.png",
+   "name": "Chrom 200",
+   "hersteller": "Biogena",
+   "bytes": 12859
+  },
+  "b-ferrogena-10-215": {
+   "f": "b-ferrogena-10-215.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Ferrogena10_60Kps_125cc_2504-1769154253.png",
+   "name": "Ferrogena® 10",
+   "hersteller": "Biogena",
+   "bytes": 14597
+  },
+  "b-arthro-formula-4-gold-214": {
+   "f": "b-arthro-formula-4-gold-214.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_ArthroFormula4_90Kps_275cc_2504-1769249826.png",
+   "name": "Arthro Formula® 4 Gold",
+   "hersteller": "Biogena",
+   "bytes": 13321
+  },
+  "b-bittermagic-213": {
+   "f": "b-bittermagic-213.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_BitterMagic_120Kps_275cc_2504-1769153217.png",
+   "name": "BitterMagic® Bitterstoffe Kapseln",
+   "hersteller": "Biogena",
+   "bytes": 11985
+  },
+  "b-rythmoplex-212": {
+   "f": "b-rythmoplex-212.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_RythmoPlex_120Kps_275cc_2504-1769247000.png",
+   "name": "RythmoPlex®",
+   "hersteller": "Biogena",
+   "bytes": 12897
+  },
+  "b-nattokinase-superior-211": {
+   "f": "b-nattokinase-superior-211.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_NattokinaseSuperior_60Kps_125cc_2504-1769250176.png",
+   "name": "Nattokinase Superior ",
+   "hersteller": "Biogena",
+   "bytes": 14301
+  },
+  "b-my-daily-doze-hair-by-christian-sturmayr-210": {
+   "f": "b-my-daily-doze-hair-by-christian-sturmayr-210.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_mydailydose_60Kps_125cc_2211_-1769251061.png",
+   "name": "my daily doze hair + by Christian Sturmayr",
+   "hersteller": "Biogena",
+   "bytes": 17978
+  },
+  "b-pycnogenol-100-gold-209": {
+   "f": "b-pycnogenol-100-gold-209.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Pycnogenol100_30Kps_125cc_2504-1769250507.png",
+   "name": "Pycnogenol® 100 Gold",
+   "hersteller": "Biogena",
+   "bytes": 16085
+  },
+  "b-ap-komplex-208": {
+   "f": "b-ap-komplex-208.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AP_Komplex_120Kps_275cc_2504-1769152701.png",
+   "name": "AP Komplex",
+   "hersteller": "Biogena",
+   "bytes": 12164
+  },
+  "b-ginkgo-80-forte-206": {
+   "f": "b-ginkgo-80-forte-206.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Ginkgo80forte_120Kps_275cc_2507_-1769154589.png",
+   "name": "Ginkgo 80 forte",
+   "hersteller": "Biogena",
+   "bytes": 12482
+  },
+  "b-gepuffertes-vitamin-c-750-c-l-a-205": {
+   "f": "b-gepuffertes-vitamin-c-750-c-l-a-205.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Vitamin_C_750_90Kps_275cc_2504-1769249226.png",
+   "name": "Vitamin C 750 C-L-A",
+   "hersteller": "Biogena",
+   "bytes": 13210
+  },
+  "b-vegan-protein-cs-198-18-mrp-204": {
+   "f": "b-vegan-protein-cs-198-18-mrp-204.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/VeganProteinCS198_18MRP_20Sticks__img_product_10898-1769263182.png",
+   "name": "Vegan Protein CS 198/18 MRP ",
+   "hersteller": "Biogena",
+   "bytes": 29361
+  },
+  "b-l-glutamin-3000-203": {
+   "f": "b-l-glutamin-3000-203.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_L_Glutamin3000_FS_Stick_2502_2-1769155373.png",
+   "name": "L-Glutamin 3000",
+   "hersteller": "Biogena",
+   "bytes": 20309
+  },
+  "b-zink-tropfen-202": {
+   "f": "b-zink-tropfen-202.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Zink_Tropfen_30ml_FS_2607-1783932400.png",
+   "name": "Zink Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 17770
+  },
+  "b-flatuzym-200-201": {
+   "f": "b-flatuzym-200-201.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_FlatuZym_120Kps_275cc_2507-1769154457.png",
+   "name": "FlatuZym®200",
+   "hersteller": "Biogena",
+   "bytes": 11295
+  },
+  "b-rhodiola-rosea-200": {
+   "f": "b-rhodiola-rosea-200.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_RhodiolaRosea_120Kps_125cc_2504-1769248850.png",
+   "name": "Rhodiola Rosea",
+   "hersteller": "Biogena",
+   "bytes": 15403
+  },
+  "b-folsaeure-800-aktiviert-199": {
+   "f": "b-folsaeure-800-aktiviert-199.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Fols_ure800_120Kps_125cc_2504_-1769154521.png",
+   "name": "Folsäure 800 aktiviert",
+   "hersteller": "Biogena",
+   "bytes": 15308
+  },
+  "b-ai-basis-formula-197": {
+   "f": "b-ai-basis-formula-197.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AI_BasisFormula_90Kps_275cc_2504-1769152424.png",
+   "name": "AI Basis Formula",
+   "hersteller": "Biogena",
+   "bytes": 11901
+  },
+  "b-biogena-aesthetics-skin-balance-196": {
+   "f": "b-biogena-aesthetics-skin-balance-196.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_AEST_SkinBalance_Glas_FS_100cc_2410-1769152111.png",
+   "name": "SKIN BALANCE+",
+   "hersteller": "Biogena",
+   "bytes": 15071
+  },
+  "b-kpu-formula-195": {
+   "f": "b-kpu-formula-195.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_KPU_Formula_60Kps_125cc_2504-1769155207.png",
+   "name": "KPU Formula® ",
+   "hersteller": "Biogena",
+   "bytes": 12238
+  },
+  "b-vitamin-d3-k2-194": {
+   "f": "b-vitamin-d3-k2-194.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_VitaminD3_K2_120Kps_125cc_2504-1769249521.png",
+   "name": "Vitamin D3 & K2",
+   "hersteller": "Biogena",
+   "bytes": 11880
+  },
+  "b-taurin-750-193": {
+   "f": "b-taurin-750-193.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Taurin750_120Kps_275cc_2504-1769247105.png",
+   "name": "Taurin 750",
+   "hersteller": "Biogena",
+   "bytes": 11791
+  },
+  "b-nac-350-192": {
+   "f": "b-nac-350-192.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_NAC350_180Kps_275cc_2504-1769246134.png",
+   "name": "NAC 350",
+   "hersteller": "Biogena",
+   "bytes": 11514
+  },
+  "b-weihrauch-400-191": {
+   "f": "b-weihrauch-400-191.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Weihrauch400_60Kps_125cc_2504-1769249593.png",
+   "name": "Weihrauch 400",
+   "hersteller": "Biogena",
+   "bytes": 13632
+  },
+  "b-coenzym-q10-active-spray-ubiquinol-190": {
+   "f": "b-coenzym-q10-active-spray-ubiquinol-190.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_CoenzymQ10active_Spray_FS_2506-1769153550.png",
+   "name": "Coenzym Q10 active Spray Ubiquinol",
+   "hersteller": "Biogena",
+   "bytes": 18348
+  },
+  "b-gedaechtnis-kraft-gold-189": {
+   "f": "b-gedaechtnis-kraft-gold-189.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_GedaechtnisKraft_120Kps_275cc_2504-1769250095.png",
+   "name": "Gedächtnis-Kraft Gold",
+   "hersteller": "Biogena",
+   "bytes": 12379
+  },
+  "b-l-tyrosin-400-188": {
+   "f": "b-l-tyrosin-400-188.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_L_Tyrosin400_120Kps_275cc_2504-1769155486.png",
+   "name": "L-Tyrosin 400",
+   "hersteller": "Biogena",
+   "bytes": 10901
+  },
+  "b-biogena-juno-187": {
+   "f": "b-biogena-juno-187.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_JUNO_275cc_2506-1769251022.png",
+   "name": "JUNO®",
+   "hersteller": "Biogena",
+   "bytes": 17142
+  },
+  "b-spermidin-superior-kapseln-186": {
+   "f": "b-spermidin-superior-kapseln-186.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Spermidin_Superior_60Kps_125cc_2504-1769249054.png",
+   "name": "Spermidin Superior",
+   "hersteller": "Biogena",
+   "bytes": 14983
+  },
+  "b-astragalus-300-12-185": {
+   "f": "b-astragalus-300-12-185.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Astragalus300_12_120Kps_275cc_2507-1769152837.png",
+   "name": "Astragalus 300/12 ",
+   "hersteller": "Biogena",
+   "bytes": 11896
+  },
+  "b-omni-lactis-metabolic-enterococcus-184": {
+   "f": "b-omni-lactis-metabolic-enterococcus-184.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_OmniLactisMetabolicE_90Kps_125cc_2504-1769250419.png",
+   "name": "Omni Lactis® Metabolic Enterococcus",
+   "hersteller": "Biogena",
+   "bytes": 16367
+  },
+  "b-vitamin-d3-15000-183": {
+   "f": "b-vitamin-d3-15000-183.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_VitaminD15000_120Kps_400cc_2507_-1769247213.png",
+   "name": "Vitamin D3 15.000",
+   "hersteller": "Biogena",
+   "bytes": 12610
+  },
+  "b-phyto-jod-200-182": {
+   "f": "b-phyto-jod-200-182.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_PhytoJod_200_90Kps_125cc_2504-1769246917.png",
+   "name": "Phyto-Jod 200",
+   "hersteller": "Biogena",
+   "bytes": 13311
+  },
+  "b-zinkcitrat-30-181": {
+   "f": "b-zinkcitrat-30-181.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Zinkcitrat30_60Kps_125cc_2504-1769249752.png",
+   "name": "Zinkcitrat 30",
+   "hersteller": "Biogena",
+   "bytes": 12949
+  },
+  "b-l-tryptophan-250-180": {
+   "f": "b-l-tryptophan-250-180.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_L_Tryptophan250_120Kps_400cc_2506-1769155464.png",
+   "name": "L-Tryptophan 250",
+   "hersteller": "Biogena",
+   "bytes": 11680
+  },
+  "b-fibochol-179": {
+   "f": "b-fibochol-179.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_FiboCHOL_FS_Stick_2501-1769154278.png",
+   "name": "FiboCHOL®",
+   "hersteller": "Biogena",
+   "bytes": 21430
+  },
+  "b-diamonds-178": {
+   "f": "b-diamonds-178.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_DIAMONDS_275cc_2206_-1769152295.png",
+   "name": "Diamonds®",
+   "hersteller": "Biogena",
+   "bytes": 10558
+  },
+  "b-berberin-phytoactive-gold-177": {
+   "f": "b-berberin-phytoactive-gold-177.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Berberin_Phytoactive_60Kps_125cc_2504-1769249946.png",
+   "name": "Berberin Phytoactive Gold ",
+   "hersteller": "Biogena",
+   "bytes": 15525
+  },
+  "b-marie-immun-176": {
+   "f": "b-marie-immun-176.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Marie_IMMUN_120Kps_275cc_2504-1769156103.png",
+   "name": "Marie IMMUN®",
+   "hersteller": "Biogena",
+   "bytes": 11922
+  },
+  "b-prosta-care-superior-175": {
+   "f": "b-prosta-care-superior-175.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_ProstaCareSuperior_120Kps_275cc_2504-1769250450.png",
+   "name": "Prosta Care Superior",
+   "hersteller": "Biogena",
+   "bytes": 12210
+  },
+  "b-pyloplex-200-174": {
+   "f": "b-pyloplex-200-174.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_PyloPlex200_120Kps_125cc_2504-1769248718.png",
+   "name": "PyloPlex® 200",
+   "hersteller": "Biogena",
+   "bytes": 13839
+  },
+  "b-selen-natural-173": {
+   "f": "b-selen-natural-173.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Selen_natural_120Kps_125cc_2504-1769248879.png",
+   "name": "Selen natural",
+   "hersteller": "Biogena",
+   "bytes": 13497
+  },
+  "b-panto-h-gena-172": {
+   "f": "b-panto-h-gena-172.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Panto_H_Gena_120Kps_125cc_2504-1769248616.png",
+   "name": "Panto-H-Gena®",
+   "hersteller": "Biogena",
+   "bytes": 13414
+  },
+  "b-eisen-vitamin-c-171": {
+   "f": "b-eisen-vitamin-c-171.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_EisenVitaminC_60Kps_125cc_2504-1769154186.png",
+   "name": "Eisen & Vitamin C",
+   "hersteller": "Biogena",
+   "bytes": 14571
+  },
+  "b-kalium-magnesiumcitrat-170": {
+   "f": "b-kalium-magnesiumcitrat-170.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_KaliumMagnesiumCitrat_90Kps_275cc_2504-1769155180.png",
+   "name": "Kalium- & Magnesiumcitrat",
+   "hersteller": "Biogena",
+   "bytes": 12744
+  },
+  "b-junior-omni-lactis-6-168": {
+   "f": "b-junior-omni-lactis-6-168.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Junior_Omni_Lactis6_FS_2501_-1769155067.png",
+   "name": "Junior Omni Lactis® 6",
+   "hersteller": "Biogena",
+   "bytes": 26285
+  },
+  "b-biogena-sports-essentials-167": {
+   "f": "b-biogena-sports-essentials-167.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Essentials_120Kps_275cc_2505-1769251438.png",
+   "name": "Essentials",
+   "hersteller": "Biogena",
+   "bytes": 16523
+  },
+  "b-biogena-sports-kalium-magnesium-sport-166": {
+   "f": "b-biogena-sports-kalium-magnesium-sport-166.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BIOGENASPORTS_KaliumMagnesiumSport_30Sticks__img_product_10951-1769260441.png",
+   "name": "Kalium Magnesium Sport ",
+   "hersteller": "Biogena",
+   "bytes": 33473
+  },
+  "b-glanduplex-165": {
+   "f": "b-glanduplex-165.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_GlanduPlex_90Kps_275cc_2504-1769154618.png",
+   "name": "GlanduPlex ",
+   "hersteller": "Biogena",
+   "bytes": 12127
+  },
+  "b-magnesiumcitrat-164": {
+   "f": "b-magnesiumcitrat-164.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Magnesiumcitrat_180K_400cc_2504-1769155906.png",
+   "name": "Magnesiumcitrat",
+   "hersteller": "Biogena",
+   "bytes": 13396
+  },
+  "b-biogena-minis-fit-at-work-premium-gold-163": {
+   "f": "b-biogena-minis-fit-at-work-premium-gold-163.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_MINI_fit_work_PREMiUM_Biogena_10Kps_50cc_2312-1769250731.png",
+   "name": "BIOGENA minis - fit@work® Premium Gold",
+   "hersteller": "Biogena",
+   "bytes": 10039
+  },
+  "b-biogena-sports-immunity-162": {
+   "f": "b-biogena-sports-immunity-162.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Immunity_90Kps_275cc_2505-1769251471.png",
+   "name": "Immunity",
+   "hersteller": "Biogena",
+   "bytes": 16449
+  },
+  "b-bromezym-zink-10-161": {
+   "f": "b-bromezym-zink-10-161.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_BromeZymZink10_60Kps_125cc_2504-1769153266.png",
+   "name": "BromeZym® Zink 10",
+   "hersteller": "Biogena",
+   "bytes": 13971
+  },
+  "b-confizym-160": {
+   "f": "b-confizym-160.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ConfiZym100_90Kps_125cc_2504-1769153706.png",
+   "name": "ConfiZym®",
+   "hersteller": "Biogena",
+   "bytes": 13018
+  },
+  "b-dolozym-forte-gold-159": {
+   "f": "b-dolozym-forte-gold-159.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_DoloZymforte_90Kps_275cc_2504-1769250031.png",
+   "name": "DoloZym® forte Gold",
+   "hersteller": "Biogena",
+   "bytes": 12584
+  },
+  "b-colonbalance-156": {
+   "f": "b-colonbalance-156.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ColonBalance_Standbeutel_300g_2509_1-1769153656.png",
+   "name": "ColonBalance®",
+   "hersteller": "Biogena",
+   "bytes": 12025
+  },
+  "b-biogena-minis-ashwagandha-formula-155": {
+   "f": "b-biogena-minis-ashwagandha-formula-155.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_MINI_AshwagandhaFormula_Biogena_18Kps_50cc_2312-1769250706.png",
+   "name": "Biogena Minis - Ashwagandha Formula",
+   "hersteller": "Biogena",
+   "bytes": 9757
+  },
+  "b-opc-resveratrol-formula-154": {
+   "f": "b-opc-resveratrol-formula-154.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_OPCResveratrolFormula_60Kps_125cc_2504-1769248503.png",
+   "name": "OPC Resveratrol Formula",
+   "hersteller": "Biogena",
+   "bytes": 16538
+  },
+  "b-biogena-sports-magnesium-sport-153": {
+   "f": "b-biogena-sports-magnesium-sport-153.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_MagnesiumSport_120Kps_275cc_2505-1769251554.png",
+   "name": "Magnesium Sport ",
+   "hersteller": "Biogena",
+   "bytes": 16803
+  },
+  "b-biogena-one-nachfuell-box-152": {
+   "f": "b-biogena-one-nachfuell-box-152.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Faltschachtel_2x15er_2601-1773059342.png",
+   "name": "Nachfüll-Box",
+   "hersteller": "Biogena",
+   "bytes": 22621
+  },
+  "b-lecithin-b-komplex-151": {
+   "f": "b-lecithin-b-komplex-151.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Lecithin_B_Komplex_60Kps_125cc_2504-1769155616.png",
+   "name": "Lecithin B-Komplex",
+   "hersteller": "Biogena",
+   "bytes": 14702
+  },
+  "b-kupfer-2-mg-149": {
+   "f": "b-kupfer-2-mg-149.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Kupfer2mg_60Kps_125cc_2504-1769155228.png",
+   "name": "Kupfer 2 mg",
+   "hersteller": "Biogena",
+   "bytes": 12658
+  },
+  "b-kurkuma-500-148": {
+   "f": "b-kurkuma-500-148.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Curcuma_500_60Kps_125cc_2504-1769153865.png",
+   "name": "Kurkuma 500",
+   "hersteller": "Biogena",
+   "bytes": 14143
+  },
+  "b-thrombophenol-150-50-gold-147": {
+   "f": "b-thrombophenol-150-50-gold-147.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_ThromboPhenol15050_60Kps_125cc_2504Kopie-1769250603.png",
+   "name": "ThromboPhenol® 150/50 Gold",
+   "hersteller": "Biogena",
+   "bytes": 14159
+  },
+  "b-biogena-sports-d3-k2-liquid-146": {
+   "f": "b-biogena-sports-d3-k2-liquid-146.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BIOGENASPORTS_D3K2liquid_225ml__img_product_10944-1769260360.png",
+   "name": "D3 & K2 liquid",
+   "hersteller": "Biogena",
+   "bytes": 17602
+  },
+  "b-biogena-sports-creatine-sticks-145": {
+   "f": "b-biogena-sports-creatine-sticks-145.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_CreatinSticks_FS_Stick_2411-1769251425.png",
+   "name": "Creatine Sticks – 3 g Creapure®",
+   "hersteller": "Biogena",
+   "bytes": 23579
+  },
+  "b-amino-abendtrunk-144": {
+   "f": "b-amino-abendtrunk-144.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Amino_Abendtrunk_FS_Stick_2506-1769152503.png",
+   "name": "Amino-Abendtrunk®",
+   "hersteller": "Biogena",
+   "bytes": 21548
+  },
+  "b-b12-folsaeure-143": {
+   "f": "b-b12-folsaeure-143.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_B12Fols_ure_120Kps_125cc_2504-1769152892.png",
+   "name": "B12 Folsäure",
+   "hersteller": "Biogena",
+   "bytes": 13011
+  },
+  "b-mucosa-formula-142": {
+   "f": "b-mucosa-formula-142.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Mucosa_180K_400cc_2504-1769245976.png",
+   "name": "Mucosa Formula®",
+   "hersteller": "Biogena",
+   "bytes": 12255
+  },
+  "b-molybdaen-200-141": {
+   "f": "b-molybdaen-200-141.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Molybd_n200_60Kps_125cc_2504-1769245892.png",
+   "name": "Molybdän 200",
+   "hersteller": "Biogena",
+   "bytes": 13535
+  },
+  "b-magnesium-150-139": {
+   "f": "b-magnesium-150-139.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Magnesium150_120Kps_275cc_2504-1769155843.png",
+   "name": "Magnesium 150 mg",
+   "hersteller": "Biogena",
+   "bytes": 12043
+  },
+  "b-nachtkerzenoel-500-138": {
+   "f": "b-nachtkerzenoel-500-138.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Nachtkerzenoel500_60Kps_125cc_2506_-1779867976.png",
+   "name": "Nachtkerzenöl 500",
+   "hersteller": "Biogena",
+   "bytes": 13140
+  },
+  "b-colostrum-300-137": {
+   "f": "b-colostrum-300-137.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Colostrum300_90Kps_125cc_2504-1769153684.png",
+   "name": "Colostrum 300",
+   "hersteller": "Biogena",
+   "bytes": 13147
+  },
+  "b-mineralstoff-formula-136": {
+   "f": "b-mineralstoff-formula-136.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_MineralstoffFormula_90Kps_275cc_2504-1769245802.png",
+   "name": "Mineralstoff Formula",
+   "hersteller": "Biogena",
+   "bytes": 12721
+  },
+  "b-biogena-sports-zmb6-135": {
+   "f": "b-biogena-sports-zmb6-135.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_ZMB6_90Kps_275cc_2505-1769251823.png",
+   "name": "ZMB6 ",
+   "hersteller": "Biogena",
+   "bytes": 15622
+  },
+  "b-cranberry-formula-134": {
+   "f": "b-cranberry-formula-134.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_CranberryFormula_90Kps_275cc_2504-1769153808.png",
+   "name": "Cranberry Formula",
+   "hersteller": "Biogena",
+   "bytes": 12816
+  },
+  "b-bor-3-mg-133": {
+   "f": "b-bor-3-mg-133.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Bor3mg_120Kps_125cc_2504-1769153243.png",
+   "name": "Bor 3 mg",
+   "hersteller": "Biogena",
+   "bytes": 12638
+  },
+  "b-zink-acerola-132": {
+   "f": "b-zink-acerola-132.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ZinkAcerola_120Kps_275cc_2504-1769249728.png",
+   "name": "Zink & Acerola",
+   "hersteller": "Biogena",
+   "bytes": 11511
+  },
+  "b-ashwagandha-formula-131": {
+   "f": "b-ashwagandha-formula-131.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AshwagandhaFormula_60Kps_125cc_2504-1769152785.png",
+   "name": "Ashwagandha Formula",
+   "hersteller": "Biogena",
+   "bytes": 13868
+  },
+  "b-maca-energy-130": {
+   "f": "b-maca-energy-130.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_MacaEnergy_90Kps_275cc_2504-1769155685.png",
+   "name": "Maca Energy",
+   "hersteller": "Biogena",
+   "bytes": 12124
+  },
+  "b-eisensaft-moferrin-liquid-herbal-elixier-129": {
+   "f": "b-eisensaft-moferrin-liquid-herbal-elixier-129.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_MoFerrin_liquid_330ml_FS_Flasche_2506-1769245875.png",
+   "name": "Eisensaft MoFerrin® liquid Herbal Elixier",
+   "hersteller": "Biogena",
+   "bytes": 16047
+  },
+  "b-dreisalz-zink-9-mg-128": {
+   "f": "b-dreisalz-zink-9-mg-128.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_DreiSalz_Zink_60Kps_125cc_2504-1769154161.png",
+   "name": "DreiSalz® Zink 9 mg",
+   "hersteller": "Biogena",
+   "bytes": 13382
+  },
+  "b-biogena-sports-melatonin-sleep-spray-127": {
+   "f": "b-biogena-sports-melatonin-sleep-spray-127.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BIOGENASPORTS_MelatoninSleepSpray_175ml__img_product_10875-1769260481.png",
+   "name": "Melatonin Sleep Spray",
+   "hersteller": "Biogena",
+   "bytes": 20768
+  },
+  "b-calmacit-calcium-magnesium-citrat-126": {
+   "f": "b-calmacit-calcium-magnesium-citrat-126.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_CalMaCit_90Kps_275cc_2504_-1769153370.png",
+   "name": "CalMaCit - Calcium Magnesium Citrat ",
+   "hersteller": "Biogena",
+   "bytes": 11357
+  },
+  "b-basogena-kapseln-124": {
+   "f": "b-basogena-kapseln-124.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_BasogenaKapseln_90Kps_125cc_2504-1769153028.png",
+   "name": "Basogena® Basen-Kapseln",
+   "hersteller": "Biogena",
+   "bytes": 13715
+  },
+  "b-biogena-sports-l-glutamine-sticks-5000-123": {
+   "f": "b-biogena-sports-l-glutamine-sticks-5000-123.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_L_Glutamin_FS_Stick_2506_-1769251537.png",
+   "name": "L-Glutamine Sticks 5000 ",
+   "hersteller": "Biogena",
+   "bytes": 21057
+  },
+  "b-kaliumcitrat-122": {
+   "f": "b-kaliumcitrat-122.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Kaliumcitrat_120Kps_275cc_2504-1769155153.png",
+   "name": "Kaliumcitrat",
+   "hersteller": "Biogena",
+   "bytes": 11886
+  },
+  "b-cal-mag-citrat-komplex-121": {
+   "f": "b-cal-mag-citrat-komplex-121.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Cal_Mag_Citrat_120Kps_275cc_2504-1769153293.png",
+   "name": "Cal-Mag-Citrat Komplex",
+   "hersteller": "Biogena",
+   "bytes": 12805
+  },
+  "b-same-200-118": {
+   "f": "b-same-200-118.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_SAMe_60Kps_125cc_2504-1769248864.png",
+   "name": "SAMe 200",
+   "hersteller": "Biogena",
+   "bytes": 11990
+  },
+  "b-sirt-formula-116": {
+   "f": "b-sirt-formula-116.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_SIRT_Formula_60Kps_125cc_2506-1769248981.png",
+   "name": "SIRT-Formula®",
+   "hersteller": "Biogena",
+   "bytes": 15301
+  },
+  "b-biogena-minis-siebensalz-magnesium-115": {
+   "f": "b-biogena-minis-siebensalz-magnesium-115.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_MINI_SiebensalzMagnesium_Biogena_18Kps_50cc_2312-1769250864.png",
+   "name": "BIOGENA minis - Siebensalz® Magnesium",
+   "hersteller": "Biogena",
+   "bytes": 10017
+  },
+  "b-biogena-sports-active-coq10-200-mg-ubiquinol-113": {
+   "f": "b-biogena-sports-active-coq10-200-mg-ubiquinol-113.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_ActiveCoQ10_200_120Kps_275cc_2505-1769251371.png",
+   "name": "Active CoQ10 200",
+   "hersteller": "Biogena",
+   "bytes": 16963
+  },
+  "b-diaphyt-formula-112": {
+   "f": "b-diaphyt-formula-112.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_DiaPhyt_Formula_60Kps_125cc_2506-1769154111.png",
+   "name": "DiaPhyt® Formula",
+   "hersteller": "Biogena",
+   "bytes": 13245
+  },
+  "b-biogena-minis-antistress-formula-111": {
+   "f": "b-biogena-minis-antistress-formula-111.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_MINI_AntistressFormula_Biogena_14Kps_50cc_2312-1769250690.png",
+   "name": "BIOGENA minis - Antistress Formula®",
+   "hersteller": "Biogena",
+   "bytes": 9692
+  },
+  "b-l-glutathion-reduziert-110": {
+   "f": "b-l-glutathion-reduziert-110.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_L_Glutathion_reduziert_60Kps_125cc_2504-1769155404.png",
+   "name": "L-Glutathion reduziert",
+   "hersteller": "Biogena",
+   "bytes": 12837
+  },
+  "b-erdensalz-mineralien-109": {
+   "f": "b-erdensalz-mineralien-109.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Erdensalz_Mineralien_60Kps_125cc_2504-1769154217.png",
+   "name": "Erdensalz® Mineralien",
+   "hersteller": "Biogena",
+   "bytes": 14718
+  },
+  "b-alpha-liponsaeure-200-108": {
+   "f": "b-alpha-liponsaeure-200-108.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AlphaLiponsaeure200_60Kps_125cc_2504-1769152472.png",
+   "name": "Alpha Liponsäure 200",
+   "hersteller": "Biogena",
+   "bytes": 12785
+  },
+  "b-jod-100-107": {
+   "f": "b-jod-100-107.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Jod100_120Kps_125cc_2504-1769154886.png",
+   "name": "Jod 100",
+   "hersteller": "Biogena",
+   "bytes": 12563
+  },
+  "b-vitamin-a-100-kapseln-106": {
+   "f": "b-vitamin-a-100-kapseln-106.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Vitamin_A_60Kps_125cc_2504-1769249171.png",
+   "name": "Vitamin A 1000",
+   "hersteller": "Biogena",
+   "bytes": 13046
+  },
+  "b-l-lysin-500-105": {
+   "f": "b-l-lysin-500-105.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_L_Lysin500_180K_400cc_2504-1769155433.png",
+   "name": "L-Lysin 500",
+   "hersteller": "Biogena",
+   "bytes": 11650
+  },
+  "b-qinkgo-heart-brain-formula-gold-104": {
+   "f": "b-qinkgo-heart-brain-formula-gold-104.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_QinkGo_60Kps_125cc_2504-1769250540.png",
+   "name": "QinkGo® Heart & Brain Formula Gold",
+   "hersteller": "Biogena",
+   "bytes": 13274
+  },
+  "b-m-formula-103": {
+   "f": "b-m-formula-103.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_M_Formula_60Kps_125cc_2504-1769155654.png",
+   "name": "M-Formula®",
+   "hersteller": "Biogena",
+   "bytes": 15342
+  },
+  "b-mangan-4-mg-102": {
+   "f": "b-mangan-4-mg-102.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Mangan4mg_120Kps_125cc_2504-1769156073.png",
+   "name": "Mangan 4 mg",
+   "hersteller": "Biogena",
+   "bytes": 13394
+  },
+  "b-calcin-250-101": {
+   "f": "b-calcin-250-101.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Calcin250_90Kps_125cc_2504-1769153322.png",
+   "name": "Calcin 250",
+   "hersteller": "Biogena",
+   "bytes": 14926
+  },
+  "b-opc-polymax-250-30-100": {
+   "f": "b-opc-polymax-250-30-100.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_OPC_PolyMax250_60Kps_125cc_2504-1769248464.png",
+   "name": "OPC PolyMax® 250/30",
+   "hersteller": "Biogena",
+   "bytes": 15314
+  },
+  "b-biogena-sports-bcaa-500-99": {
+   "f": "b-biogena-sports-bcaa-500-99.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_BCAA500_120Kps_275cc_2505-1769251386.png",
+   "name": "BCAA 500",
+   "hersteller": "Biogena",
+   "bytes": 15771
+  },
+  "b-digestiocym-200-vegan-98": {
+   "f": "b-digestiocym-200-vegan-98.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Digestiocym200_90Kps_125cc_2504-1769154144.png",
+   "name": "DigestioCym® 200 vegan",
+   "hersteller": "Biogena",
+   "bytes": 15604
+  },
+  "b-androsafe-lyco-10-97": {
+   "f": "b-androsafe-lyco-10-97.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AndroSafe_Lyco10_60Kps_125cc_2504-1769152532.png",
+   "name": "AndroSafe® Lyco 10",
+   "hersteller": "Biogena",
+   "bytes": 13730
+  },
+  "b-selenit-200-96": {
+   "f": "b-selenit-200-96.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Selenit200_180Kps_275cc_2504-1769248936.png",
+   "name": "Selenit 200",
+   "hersteller": "Biogena",
+   "bytes": 11378
+  },
+  "b-immunomyk-vitalpilz-komplex-95": {
+   "f": "b-immunomyk-vitalpilz-komplex-95.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ImmunoMyk_90Kps_125cc_2504-1769154809.png",
+   "name": "ImmunoMyk® Vitalpilz-Komplex",
+   "hersteller": "Biogena",
+   "bytes": 13824
+  },
+  "b-niaplex-b3-93": {
+   "f": "b-niaplex-b3-93.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_NiaPlexB3_60Kps_125cc_2504-1769246238.png",
+   "name": "NiaPlex B3®",
+   "hersteller": "Biogena",
+   "bytes": 13353
+  },
+  "b-antioxidans-formula-92": {
+   "f": "b-antioxidans-formula-92.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AntioxidansFormula_60Kps_125cc_2504-1769152608.png",
+   "name": "Antioxidans Formula",
+   "hersteller": "Biogena",
+   "bytes": 16365
+  },
+  "b-uro-caps-pac40-91": {
+   "f": "b-uro-caps-pac40-91.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_UroCapsPAC40_60Kps_125cc_2504-1769249148.png",
+   "name": "Uro Caps PAC40",
+   "hersteller": "Biogena",
+   "bytes": 13556
+  },
+  "b-mirachol-3-0-gold-90": {
+   "f": "b-mirachol-3-0-gold-90.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_GOLD_MiraCHOL_3_0_90Kps_125cc_2410_1_-1769250148.png",
+   "name": "MiraChol® 3.0 Gold",
+   "hersteller": "Biogena",
+   "bytes": 14641
+  },
+  "b-senior-tropfen-89": {
+   "f": "b-senior-tropfen-89.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_PETS_Senior_Tropfen_25011-1769251303.png",
+   "name": "Senior Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 21093
+  },
+  "b-coralicea-87": {
+   "f": "b-coralicea-87.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Coralicea_60Kps_125cc_2504-1769153753.png",
+   "name": "Coralicea®",
+   "hersteller": "Biogena",
+   "bytes": 12836
+  },
+  "b-antistress-formula-84": {
+   "f": "b-antistress-formula-84.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_AntistressFormula_60Kps_125cc_2504-1769152667.png",
+   "name": "Antistress Formula®",
+   "hersteller": "Biogena",
+   "bytes": 15780
+  },
+  "b-ester-c-gold-83": {
+   "f": "b-ester-c-gold-83.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_EsterC_90Kps_275cc_2504-1769247446.png",
+   "name": "Ester-C® Gold",
+   "hersteller": "Biogena",
+   "bytes": 12594
+  },
+  "b-vitamin-d3-tropfen-81": {
+   "f": "b-vitamin-d3-tropfen-81.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Vitamin_D3_Tropfen_BVB_FS_2502-1769247171.png",
+   "name": "Vitamin D3 Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 16181
+  },
+  "b-omega-3-vegan-dha-250-80": {
+   "f": "b-omega-3-vegan-dha-250-80.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Omega3veganDHA250_60Kps_125cc_2504-1769246812.png",
+   "name": "Omega 3 vegan DHA 250",
+   "hersteller": "Biogena",
+   "bytes": 14582
+  },
+  "b-spirulina-400-mg-79": {
+   "f": "b-spirulina-400-mg-79.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Spirulina_180K_400cc_2504-1769249082.png",
+   "name": "Spirulina 400",
+   "hersteller": "Biogena",
+   "bytes": 12232
+  },
+  "b-coenzym-q10-active-gold-30-mg-78": {
+   "f": "b-coenzym-q10-active-gold-30-mg-78.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_CoenzymQ10active_UBI30_60Kps_125cc_2411-1769249999.png",
+   "name": "Coenzym Q10 active Gold 30 mg",
+   "hersteller": "Biogena",
+   "bytes": 12588
+  },
+  "b-nutrifem-calmagocean-76": {
+   "f": "b-nutrifem-calmagocean-76.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Nutrifem_CalMagOcean_120Kps_275cc_2504-1769246497.png",
+   "name": "Nutrifem CalMagOcean®",
+   "hersteller": "Biogena",
+   "bytes": 12730
+  },
+  "b-bio-leinoel-74": {
+   "f": "b-bio-leinoel-74.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BioLeinl_250ml__img_product_10884-1769260541.png",
+   "name": "Bio-Leinöl",
+   "hersteller": "Biogena",
+   "bytes": 9169
+  },
+  "b-omega-3-forte-700-73": {
+   "f": "b-omega-3-forte-700-73.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Omega3forte700_90Kps_275cc_2504-1769246760.png",
+   "name": "Omega 3 forte 700",
+   "hersteller": "Biogena",
+   "bytes": 12902
+  },
+  "b-phytodoxx-72": {
+   "f": "b-phytodoxx-72.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENt_PhytoDoxx_90Kps_125cc_2504-1769248670.png",
+   "name": "PhytoDoxx®",
+   "hersteller": "Biogena",
+   "bytes": 14417
+  },
+  "b-gelenk-tropfen-71": {
+   "f": "b-gelenk-tropfen-71.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Gelenk_Product-1769262979.png",
+   "name": "Gelenk Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 21020
+  },
+  "b-marines-omega-3-liquid-70": {
+   "f": "b-marines-omega-3-liquid-70.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Marines_Omega3_liquid_150ml_2507-1769245743.png",
+   "name": "Marines Omega-3 liquid",
+   "hersteller": "Biogena",
+   "bytes": 21774
+  },
+  "b-omega-3-vegan-dha-epa-450-69": {
+   "f": "b-omega-3-vegan-dha-epa-450-69.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_Omega3_450vegan_90Kps_275cc_2504_-1769250266.png",
+   "name": "Omega 3 vegan DHA & EPA 450",
+   "hersteller": "Biogena",
+   "bytes": 13244
+  },
+  "b-intradoxx-255-68": {
+   "f": "b-intradoxx-255-68.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_IntraDoxx_90Kps_125cc_2504-1769154856.png",
+   "name": "IntraDoxx® 255",
+   "hersteller": "Biogena",
+   "bytes": 12763
+  },
+  "b-pycnocardio-q10-gold-67": {
+   "f": "b-pycnocardio-q10-gold-67.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Pycnogenol_100Gold-1769262727.png",
+   "name": "PycnoCardio® Q10 Gold",
+   "hersteller": "Biogena",
+   "bytes": 12729
+  },
+  "b-nutrident-os-pro-66": {
+   "f": "b-nutrident-os-pro-66.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Nutrident_OsPro_90Kps_275cc_2507-1769246304.png",
+   "name": "Nutrident OsPro®",
+   "hersteller": "Biogena",
+   "bytes": 11751
+  },
+  "b-biogena-sports-performance-by-marcel-hirscher-63": {
+   "f": "b-biogena-sports-performance-by-marcel-hirscher-63.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_Performance_by_MarcelHirscher_Sticks_2411-1769251641.png",
+   "name": "Performance by Marcel Hirscher",
+   "hersteller": "Biogena",
+   "bytes": 32930
+  },
+  "b-msm-formula-62": {
+   "f": "b-msm-formula-62.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_MSM_Formula_120K_400cc_2507-1769245919.png",
+   "name": "MSM Formula",
+   "hersteller": "Biogena",
+   "bytes": 10754
+  },
+  "b-prosta-caps-60": {
+   "f": "b-prosta-caps-60.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_ProstaCaps_60Kps_125cc_2504-1769246946.png",
+   "name": "Prosta Caps",
+   "hersteller": "Biogena",
+   "bytes": 13444
+  },
+  "b-darm-formula-plus-59": {
+   "f": "b-darm-formula-plus-59.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_DarmFormulaPlus_90Kps_125cc_2504-1769153992.png",
+   "name": "Darm Formula Plus",
+   "hersteller": "Biogena",
+   "bytes": 13222
+  },
+  "b-multivitamin-tropfen-58": {
+   "f": "b-multivitamin-tropfen-58.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Multivitamin_Product-1769263040.png",
+   "name": "Multivitamin Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 21764
+  },
+  "b-blutdruck-formula-gold-56": {
+   "f": "b-blutdruck-formula-gold-56.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BlutdruckFormulaGold__img_product_10154-1769260587.png",
+   "name": "Blutdruck Formula Gold",
+   "hersteller": "Biogena",
+   "bytes": 14379
+  },
+  "b-l-carnipur-500-55": {
+   "f": "b-l-carnipur-500-55.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_L_Carnipur500_120Kps_275cc_2504-1769155323.png",
+   "name": "L-Carnipur 500",
+   "hersteller": "Biogena",
+   "bytes": 10947
+  },
+  "b-omega-tropfen-54": {
+   "f": "b-omega-tropfen-54.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Omega_Product-1769263071.png",
+   "name": "Omega Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 20909
+  },
+  "b-relax-tropfen-52": {
+   "f": "b-relax-tropfen-52.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Relax_Product-1769263095.png",
+   "name": "Relax Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 21026
+  },
+  "b-bauch-tropfen-50": {
+   "f": "b-bauch-tropfen-50.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_PETS_Bauch_Tropfen_2501-1769251196.png",
+   "name": "Bauch Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 20986
+  },
+  "b-algenoel-omega-3-liquid-vegan-superior-49": {
+   "f": "b-algenoel-omega-3-liquid-vegan-superior-49.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_GOLD_Omega3liquid_vegan_Superior_150ml_2408-1756453946.png",
+   "name": "Omega-3 liquid vegan Superior",
+   "hersteller": "Biogena",
+   "bytes": 16323
+  },
+  "b-dha-250-48": {
+   "f": "b-dha-250-48.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_DHA250_120Kps_275cc_2504-1769154054.png",
+   "name": "DHA 250",
+   "hersteller": "Biogena",
+   "bytes": 12666
+  },
+  "b-vitamin-e-caps-47": {
+   "f": "b-vitamin-e-caps-47.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_VitaminE_Caps_90Kps_275cc_2504-1769249566.png",
+   "name": "Vitamin E Caps",
+   "hersteller": "Biogena",
+   "bytes": 12064
+  },
+  "b-omega-3-duo-9": {
+   "f": "b-omega-3-duo-9.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Omega3duo_180K_400cc_2504_-1769246697.png",
+   "name": "Omega 3 duo - 120 Kapseln",
+   "hersteller": "Biogena",
+   "bytes": 11443
+  },
+  "b-multispektrum-24-7-aktiv-saft-8": {
+   "f": "b-multispektrum-24-7-aktiv-saft-8.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_Multispektrum247_AktivSaft_2411-1769246069.png",
+   "name": "Multispektrum 24/7® Aktiv Saft",
+   "hersteller": "Biogena",
+   "bytes": 21905
+  },
+  "b-fell-haut-tropfen-7": {
+   "f": "b-fell-haut-tropfen-7.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Fell_Haut_Product-1769262925.png",
+   "name": "Fell & Haut Tropfen",
+   "hersteller": "Biogena",
+   "bytes": 21495
+  },
+  "b-coenzym-q10-active-gold-60-mg-4": {
+   "f": "b-coenzym-q10-active-gold-60-mg-4.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_Gold_CoenzymQ10active_120Kps_275cc_2504-1769249985.png",
+   "name": "Coenzym Q10 active Gold 60 mg",
+   "hersteller": "Biogena",
+   "bytes": 11318
+  },
+  "b-siebensalz-magnesium-komplex-3": {
+   "f": "b-siebensalz-magnesium-komplex-3.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ESSENT_SiebensalzMagnesium_180K_400cc_2504-1769248953.png",
+   "name": "Siebensalz® Magnesium Komplex",
+   "hersteller": "Biogena",
+   "bytes": 12909
+  },
+  "b-biogena-sports-vegan-protein-sticks-2": {
+   "f": "b-biogena-sports-vegan-protein-sticks-2.bin",
+   "kid": "63f5003c83",
+   "typ": "image/jpeg",
+   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_SPORTS_VeganProteinSticks_FS_Stick_2411_9_-1769251792.png",
+   "name": "Vegan Protein Sticks",
+   "hersteller": "Biogena",
+   "bytes": 21932
+  },
+  "m-energy-bundle": {
+   "f": "m-energy-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606Bundle-EnergyBundle.jpg?v=1782467699",
+   "name": "Energy Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 48230
+  },
+  "m-lutein-zeaxanthin-kapseln": {
+   "f": "m-lutein-zeaxanthin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2608LUZEA60K-render.jpg?v=1793093698",
+   "name": "Lutein + Zeaxanthin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 38634
+  },
+  "m-nr-pro-kapseln": {
+   "f": "m-nr-pro-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f4f4f4-2512NRpro-Glas60ml.jpg?v=1785396527",
+   "name": "NR PRO Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 38726
+  },
+  "m-vegan-omega-3-kapseln": {
+   "f": "m-vegan-omega-3-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/OMEGA90K-V3624-render.jpg?v=1792403463",
+   "name": "Omega 3 Kapseln Vegan",
+   "hersteller": "MoleQlar",
+   "bytes": 35990
+  },
+  "m-fischoel-omega-3-kapseln": {
+   "f": "m-fischoel-omega-3-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/OMEGA90K-F5025-render.jpg?v=1791966505",
+   "name": "Omega 3 Kapseln (Fischöl)",
+   "hersteller": "MoleQlar",
+   "bytes": 39582
+  },
+  "m-blaulichtfilter-brille": {
+   "f": "m-blaulichtfilter-brille.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606BlueLightBlocker-v2.jpg?v=1783934431",
+   "name": "QBLOCKER (Blaulichtfilterbrille)",
+   "hersteller": "MoleQlar",
+   "bytes": 17102
+  },
+  "m-natives-olivenoel-extra": {
+   "f": "m-natives-olivenoel-extra.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/OLIVE250ML.jpg?v=1791297793",
+   "name": "Natives Olivenöl Extra (High Polyphenol)",
+   "hersteller": "MoleQlar",
+   "bytes": 31302
+  },
+  "m-testo-support-kapseln": {
+   "f": "m-testo-support-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/TESTO60K-render.jpg?v=1789378722",
+   "name": "Testo Support",
+   "hersteller": "MoleQlar",
+   "bytes": 35664
+  },
+  "m-scalp-brush": {
+   "f": "m-scalp-brush.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/ScalpBrush.jpg?v=1785393717",
+   "name": "Scalp Brush",
+   "hersteller": "MoleQlar",
+   "bytes": 12980
+  },
+  "m-tote-bag": {
+   "f": "m-tote-bag.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Tote-bag.jpg?v=1788790844",
+   "name": "Tote Bag",
+   "hersteller": "MoleQlar",
+   "bytes": 54208
+  },
+  "m-schlaf-bundle": {
+   "f": "m-schlaf-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2608Bundle-SchlafBundle.jpg?v=1786354600",
+   "name": "Schlaf Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 49742
+  },
+  "m-nad-bundle": {
+   "f": "m-nad-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606Bundle-NADBundle.jpg?v=1782467639",
+   "name": "NAD Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 46162
+  },
+  "m-sport-bundle": {
+   "f": "m-sport-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606bundle-SportsBundle.jpg?v=1782402697",
+   "name": "Sport Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 39758
+  },
+  "m-recovery-bundle": {
+   "f": "m-recovery-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606Bundle-RecoveryBundle.jpg?v=1782467588",
+   "name": "Recovery Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 49738
+  },
+  "m-skin-bundle": {
+   "f": "m-skin-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606Bundle-SkinBundle.jpg?v=1782467534",
+   "name": "Skin Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 49652
+  },
+  "m-fokus-bundle": {
+   "f": "m-fokus-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606Bundle-FokusBundle.jpg?v=1785935170",
+   "name": "Fokus Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 39248
+  },
+  "m-diagnostic-starter-bundle": {
+   "f": "m-diagnostic-starter-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606bundle-DiagnosticStarterBundle.jpg?v=1782467439",
+   "name": "Diagnostic Starter Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 33042
+  },
+  "m-enhanced-fiber-ballaststoffe": {
+   "f": "m-enhanced-fiber-ballaststoffe.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Fiber-raspberry.jpg?v=1785395737",
+   "name": "Enhanced Fiber (Ballaststoffe)",
+   "hersteller": "MoleQlar",
+   "bytes": 27202
+  },
+  "m-zeolith-pulver": {
+   "f": "m-zeolith-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605Zeolith-Dose.jpg?v=1784189899",
+   "name": "Zeolith Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 21478
+  },
+  "m-nasenpflaster": {
+   "f": "m-nasenpflaster.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605NasalStrips-Aktuelle_Ansicht.jpg?v=1783930477",
+   "name": "Nasenpflaster",
+   "hersteller": "MoleQlar",
+   "bytes": 37596
+  },
+  "m-hair-restoration-serum": {
+   "f": "m-hair-restoration-serum.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/260804HairRestorationSerum_heller3.jpg?v=1785837132",
+   "name": "Hair Restoration Serum",
+   "hersteller": "MoleQlar",
+   "bytes": 26078
+  },
+  "m-melatonin-tabletten": {
+   "f": "m-melatonin-tabletten.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605Melatonin-Glas60ml.jpg?v=1782917632",
+   "name": "Melatonin Tabletten",
+   "hersteller": "MoleQlar",
+   "bytes": 33710
+  },
+  "m-kreatin-pulver": {
+   "f": "m-kreatin-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605Kreatin-normal-PouchL.jpg?v=1782832527",
+   "name": "Kreatin Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 23184
+  },
+  "m-vitamin-b12-kapseln": {
+   "f": "m-vitamin-b12-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605VitaminB12.jpg?v=1782218906",
+   "name": "Vitamin B12 Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 36946
+  },
+  "m-citicolin-kapseln": {
+   "f": "m-citicolin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2603Citicolin-Glas60ml.jpg?v=1781618869",
+   "name": "Citicolin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 35380
+  },
+  "m-elektrolyte-sticks": {
+   "f": "m-elektrolyte-sticks.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2603Electrolytes-ElectrolytesBox.jpg?v=1781688028",
+   "name": "Elektrolyte Sticks",
+   "hersteller": "MoleQlar",
+   "bytes": 21682
+  },
+  "m-vitamin-adek-tropfen": {
+   "f": "m-vitamin-adek-tropfen.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2605VitaminADEK.jpg?v=1781100710",
+   "name": "Vitamin ADEK",
+   "hersteller": "MoleQlar",
+   "bytes": 26978
+  },
+  "m-eisen-kapseln": {
+   "f": "m-eisen-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2603Eisen-Glas60ml.jpg?v=1781003389",
+   "name": "Eisen Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 35226
+  },
+  "m-chrom-kapseln": {
+   "f": "m-chrom-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2603Chromv2-Glas60ml.jpg?v=1779178986",
+   "name": "Chrom Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 35176
+  },
+  "m-schlafmaske": {
+   "f": "m-schlafmaske.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/SleepMask-v1.jpg?v=1779280828",
+   "name": "Schlafmaske",
+   "hersteller": "MoleQlar",
+   "bytes": 13768
+  },
+  "m-ceramide-kapseln": {
+   "f": "m-ceramide-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/26Ceramide-Glas60ml.jpg?v=1773741262",
+   "name": "Ceramide Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 34614
+  },
+  "m-nattokinase-kapseln": {
+   "f": "m-nattokinase-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/Nattokinase-Glas60ml.jpg?v=1777898260",
+   "name": "Nattokinase Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 38620
+  },
+  "m-qshaker-pro": {
+   "f": "m-qshaker-pro.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2604ShakerPRO.jpg?v=1777908499",
+   "name": "QSHAKER PRO (Edelstahlshaker)",
+   "hersteller": "MoleQlar",
+   "bytes": 15718
+  },
+  "m-alpha-liponsaeure-kapseln": {
+   "f": "m-alpha-liponsaeure-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2603Alphalipon-Glas100ml.jpg?v=1776427916",
+   "name": "Alpha Liponsäure Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 35416
+  },
+  "m-pqq-kapseln": {
+   "f": "m-pqq-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/PQQ2-Glas60ml.jpg?v=1776171915",
+   "name": "PQQ (Pyrrolochinolinchinon) Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 34174
+  },
+  "m-enhanced-protein-pulver": {
+   "f": "m-enhanced-protein-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2603Protein-PouchXXLslim.jpg?v=1775705408",
+   "name": "Enhanced Protein Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 37012
+  },
+  "m-ergothionein-kapseln": {
+   "f": "m-ergothionein-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/26Ergothionein-Glas60ml.jpg?v=1774096088",
+   "name": "Ergothionein Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 35540
+  },
+  "m-cognesium-kapseln": {
+   "f": "m-cognesium-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Cognesium-Glas120ml.jpg?v=1771555450",
+   "name": "Cognesium Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 42550
+  },
+  "m-eaa-pulver": {
+   "f": "m-eaa-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512EAA-v2-DoseEAA.jpg?v=1767863348",
+   "name": "Essential Amino Acids (EAA) Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 38950
+  },
+  "m-prolithin-a-kapseln": {
+   "f": "m-prolithin-a-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512ProlithinA-Glas100ml.jpg?v=1767704888",
+   "name": "ProLithin A® Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 36048
+  },
+  "m-magnesium-bisglycinat-kapseln": {
+   "f": "m-magnesium-bisglycinat-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512MagnesiumBisglycinat-Glas250ml.jpg?v=1767704888",
+   "name": "Magnesium Bisglycinat Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 41970
+  },
+  "m-collagen-booster": {
+   "f": "m-collagen-booster.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512CollagenBooster.jpg?v=1767704888",
+   "name": "Collagen Booster",
+   "hersteller": "MoleQlar",
+   "bytes": 20050
+  },
+  "m-kreatin-monohydrat-sticks": {
+   "f": "m-kreatin-monohydrat-sticks.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512KreatinSticks.jpg?v=1767704887",
+   "name": "Kreatin Sticks",
+   "hersteller": "MoleQlar",
+   "bytes": 17894
+  },
+  "m-vitamin-d3-k2-kapseln": {
+   "f": "m-vitamin-d3-k2-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512VitaminD3K2Kapseln-Glas60ml.jpg?v=1767704887",
+   "name": "Vitamin D3 K2 Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 42076
+  },
+  "m-vitamin-c-liposomal-kapseln": {
+   "f": "m-vitamin-c-liposomal-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512VitaminC-Glas120ml.jpg?v=1767704887",
+   "name": "Vitamin C Kapseln (liposomal)",
+   "hersteller": "MoleQlar",
+   "bytes": 41366
+  },
+  "m-astragalus-kapseln": {
+   "f": "m-astragalus-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Astragalus-Glas120ml.jpg?v=1767704887",
+   "name": "Astragalus Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 38740
+  },
+  "m-vitamin-b-komplex": {
+   "f": "m-vitamin-b-komplex.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512VitaminB-Glas120ml.jpg?v=1767704888",
+   "name": "Vitamin B Komplex Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 43282
+  },
+  "m-l-theanin-kapseln": {
+   "f": "m-l-theanin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512L-Theanin-Glas100ml.jpg?v=1767704887",
+   "name": "L-Theanin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 32448
+  },
+  "m-one-probierpaket": {
+   "f": "m-one-probierpaket.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512ONE_StarterSet.jpg?v=1767704888",
+   "name": "ONE Probierpaket",
+   "hersteller": "MoleQlar",
+   "bytes": 19416
+  },
+  "m-zink-kapseln": {
+   "f": "m-zink-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Zinc-Glas60ml.jpg?v=1767704888",
+   "name": "Zink Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 39598
+  },
+  "m-selen-kapseln": {
+   "f": "m-selen-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Selen-Glas60ml.jpg?v=1767704889",
+   "name": "Selen Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 39322
+  },
+  "m-methylenblau": {
+   "f": "m-methylenblau.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Methylenblau-bottle100ml.jpg?v=1767704888",
+   "name": "Methylenblau Tropfen",
+   "hersteller": "MoleQlar",
+   "bytes": 24638
+  },
+  "m-lithium-orotat": {
+   "f": "m-lithium-orotat.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Lithium.jpg?v=1767704887",
+   "name": "Lithiumorotat",
+   "hersteller": "MoleQlar",
+   "bytes": 26002
+  },
+  "m-vitamin-d-test": {
+   "f": "m-vitamin-d-test.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512TestVitaminD.jpg?v=1767704888",
+   "name": "Vitamin D Test",
+   "hersteller": "MoleQlar",
+   "bytes": 23532
+  },
+  "m-omega-3-test": {
+   "f": "m-omega-3-test.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512TestOmega3.jpg?v=1767704889",
+   "name": "Omega 3 Test",
+   "hersteller": "MoleQlar",
+   "bytes": 23328
+  },
+  "m-rhodiola-rosea-kapseln": {
+   "f": "m-rhodiola-rosea-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512RhodiolaRosea-Glas60ml.jpg?v=1767704889",
+   "name": "Rhodiola Rosea Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 35640
+  },
+  "m-ashwagandha-kapseln": {
+   "f": "m-ashwagandha-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Ashwagandha-Glas100ml.jpg?v=1767704889",
+   "name": "Ashwagandha Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 34174
+  },
+  "m-vegan-omega3-vitamin-d": {
+   "f": "m-vegan-omega3-vitamin-d.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2606OmegaSOL100ml.jpg?v=1782387456",
+   "name": "Veganes Omega 3 + Vitamin D3",
+   "hersteller": "MoleQlar",
+   "bytes": 38752
+  },
+  "m-glycin-pulver": {
+   "f": "m-glycin-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2604Glycin-pulver.jpg?v=1776686826",
+   "name": "Glycin Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 20726
+  },
+  "m-inositol-pulver": {
+   "f": "m-inositol-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Inositol-Pouch_XLshort.jpg?v=1767704888",
+   "name": "Inositol Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 25120
+  },
+  "m-magnesium-l-threonat-pulver": {
+   "f": "m-magnesium-l-threonat-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Magtein-Pouch_M.jpg?v=1767704889",
+   "name": "Magnesium L-Threonat Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 25650
+  },
+  "m-astaxanthin-kapseln": {
+   "f": "m-astaxanthin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Astaxanthin-Glas100ml.jpg?v=1767704889",
+   "name": "Astaxanthin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 37276
+  },
+  "m-coenzym-q10-kapseln": {
+   "f": "m-coenzym-q10-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512CoQ10-Glas100ml.jpg?v=1767704890",
+   "name": "Coenzym Q10 Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 36958
+  },
+  "m-curcumin-kapseln": {
+   "f": "m-curcumin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Curcusome-Glas100ml.jpg?v=1767704890",
+   "name": "Curcumin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 37626
+  },
+  "m-magnesium-l-threonat-kapseln": {
+   "f": "m-magnesium-l-threonat-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Magtein-Glas200ml.jpg?v=1767704889",
+   "name": "Magnesium L-Threonat Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 32572
+  },
+  "m-geschenkgutschein": {
+   "f": "m-geschenkgutschein.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2512karte-v9.jpg?v=1767704889",
+   "name": "MOLEQLAR Geschenkgutschein",
+   "hersteller": "MoleQlar",
+   "bytes": 34702
+  },
+  "m-nmn-serum": {
+   "f": "m-nmn-serum.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512NMN_Serum.jpg?v=1767704890",
+   "name": "NMN Serum",
+   "hersteller": "MoleQlar",
+   "bytes": 19532
+  },
+  "m-nicotinamid-ribosid-kapseln": {
+   "f": "m-nicotinamid-ribosid-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512NR-Glas60ml.jpg?v=1767704890",
+   "name": "Nicotinamid Ribosid Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 34688
+  },
+  "m-daily-essentials-complex": {
+   "f": "m-daily-essentials-complex.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512essentialsformula-Glas60ml.jpg?v=1767704890",
+   "name": "Essentials Formula Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 42164
+  },
+  "m-uthever-nmn": {
+   "f": "m-uthever-nmn.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512NMN15g-Pouch_S.jpg?v=1767704891",
+   "name": "Uthever NMN Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 23398
+  },
+  "m-essentials-bundle": {
+   "f": "m-essentials-bundle.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/261022Bundle-EssentialsBundle.jpg?v=1792675945",
+   "name": "Essentials Bundle",
+   "hersteller": "MoleQlar",
+   "bytes": 66030
+  },
+  "m-kreatin-monohydrat-pulver": {
+   "f": "m-kreatin-monohydrat-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2607KreatinCreaStand.jpg?v=1782898682",
+   "name": "Kreatin Pulver (Creavitalis®)",
+   "hersteller": "MoleQlar",
+   "bytes": 22424
+  },
+  "m-kollagen-peptide-pulver": {
+   "f": "m-kollagen-peptide-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Kollagen-Pouch_block.jpg?v=1767704947",
+   "name": "Kollagen (Kollagenpeptide)",
+   "hersteller": "MoleQlar",
+   "bytes": 23312
+  },
+  "m-betain-tmg-pulver": {
+   "f": "m-betain-tmg-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512TMGbetain-Pouch_M.jpg?v=1767704891",
+   "name": "Betain (TMG) Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 25440
+  },
+  "m-carnosin-pulver": {
+   "f": "m-carnosin-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Carnosin30g-Pouch_S.jpg?v=1767704890",
+   "name": "Carnosin Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 25494
+  },
+  "m-spermidin-kapseln": {
+   "f": "m-spermidin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Spermidin-Glas100ml.jpg?v=1767704890",
+   "name": "Spermidin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 33738
+  },
+  "m-quercetin-pulver": {
+   "f": "m-quercetin-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Quercetin-Pouch_M.jpg?v=1767704891",
+   "name": "Quercetin Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 27402
+  },
+  "m-glucosamin-kapseln": {
+   "f": "m-glucosamin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Glucosamin-Glas200ml.jpg?v=1767704891",
+   "name": "Glucosamin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 33216
+  },
+  "m-vitamin-d3-k2-tropfen": {
+   "f": "m-vitamin-d3-k2-tropfen.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512VitaminD3K2Tropfen-D3K2_20ml.jpg?v=1767704890",
+   "name": "Vitamin D3 K2 Tropfen",
+   "hersteller": "MoleQlar",
+   "bytes": 27260
+  },
+  "m-magnesium-komplex": {
+   "f": "m-magnesium-komplex.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Qnesium-Glas250ml.jpg?v=1767704891",
+   "name": "Magnesium Komplex Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 36906
+  },
+  "m-calcium-alphaketoglutarat-kapseln": {
+   "f": "m-calcium-alphaketoglutarat-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512CaAKG-Glas100ml.jpg?v=1767704891",
+   "name": "Calcium-Alphaketoglutarat Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 34240
+  },
+  "m-resveratrol-kapseln": {
+   "f": "m-resveratrol-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Resveratrol-Glas100ml.jpg?v=1767704890",
+   "name": "Resveratrol Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 36458
+  },
+  "m-resveratrol-pulver": {
+   "f": "m-resveratrol-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Resveratrol-Pouch_S.jpg?v=1767704891",
+   "name": "Resveratrol Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 26594
+  },
+  "m-qjar": {
+   "f": "m-qjar.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Qjar.jpg?v=1767704891",
+   "name": "QJAR",
+   "hersteller": "MoleQlar",
+   "bytes": 13222
+  },
+  "m-qscoop": {
+   "f": "m-qscoop.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512QSCOOP.jpg?v=1767704890",
+   "name": "QSCOOP",
+   "hersteller": "MoleQlar",
+   "bytes": 7878
+  },
+  "m-nad-test": {
+   "f": "m-nad-test.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512TestNAD.jpg?v=1767704891",
+   "name": "NAD-Test (intrazellulär)",
+   "hersteller": "MoleQlar",
+   "bytes": 20842
+  },
+  "m-quercetin-kapseln": {
+   "f": "m-quercetin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Quercesome-Glas60ml.jpg?v=1767704892",
+   "name": "Quercetin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 38088
+  },
+  "m-betain-tmg-kapseln": {
+   "f": "m-betain-tmg-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512TMG-Glas100ml.jpg?v=1767704891",
+   "name": "Betain (TMG) Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 32566
+  },
+  "m-omega-3-kapseln": {
+   "f": "m-omega-3-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Qmega-Glas250ml.jpg?v=1767704891",
+   "name": "Omega 3 Kapseln (EPAX®)",
+   "hersteller": "MoleQlar",
+   "bytes": 41452
+  },
+  "m-berberin-kapseln": {
+   "f": "m-berberin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Berbersome-Glas120ml.jpg?v=1767704891",
+   "name": "Berberin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 41690
+  },
+  "m-sulforaphan-kapseln": {
+   "f": "m-sulforaphan-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512sulforapro-Glas100ml.jpg?v=1767704891",
+   "name": "Sulforaphan Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 36978
+  },
+  "m-hyaluron-glycin-kapseln": {
+   "f": "m-hyaluron-glycin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Hyaluron-Glas100ml.jpg?v=1767704892",
+   "name": "Hyaluron (Hyaluronsäure)",
+   "hersteller": "MoleQlar",
+   "bytes": 35340
+  },
+  "m-nad-booster-kapseln": {
+   "f": "m-nad-booster-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512regeNAD-Glas100ml.jpg?v=1767704892",
+   "name": "regeNAD (NAD Booster)",
+   "hersteller": "MoleQlar",
+   "bytes": 46296
+  },
+  "m-calcium-alphaketoglutarat-pulver": {
+   "f": "m-calcium-alphaketoglutarat-pulver.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512CaAKG-Pouch_M.jpg?v=1767704893",
+   "name": "Calcium-Alphaketoglutarat Pulver",
+   "hersteller": "MoleQlar",
+   "bytes": 24802
+  },
+  "m-glynac-kapseln": {
+   "f": "m-glynac-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512GlyNAC-Glas250ml.jpg?v=1767704947",
+   "name": "GlyNAC (Glycin & N-Acetyl-Cystein)",
+   "hersteller": "MoleQlar",
+   "bytes": 31004
+  },
+  "m-qshaker": {
+   "f": "m-qshaker.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2604Shaker-v2-Aktuelle_Ansicht.jpg?v=1777299085",
+   "name": "QSHAKER (Glasflasche)",
+   "hersteller": "MoleQlar",
+   "bytes": 15120
+  },
+  "m-daily-longevity-complex": {
+   "f": "m-daily-longevity-complex.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512ONEnatural3.jpg?v=1767704947",
+   "name": "ONE - Daily Foundational Formula",
+   "hersteller": "MoleQlar",
+   "bytes": 15428
+  },
+  "m-apigenin-kapseln": {
+   "f": "m-apigenin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Apigenin-Glas100ml.jpg?v=1767704949",
+   "name": "Apigenin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 32672
+  },
+  "m-spermidin-pro-kapseln": {
+   "f": "m-spermidin-pro-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512SpermidinPro-Glas100ml.jpg?v=1767704950",
+   "name": "Spermidin PRO Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 35538
+  },
+  "m-qrganizer": {
+   "f": "m-qrganizer.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/2512Qrganizer.jpg?v=1767704948",
+   "name": "QRGANIZER",
+   "hersteller": "MoleQlar",
+   "bytes": 88916
+  },
+  "m-epi-proteomics-test": {
+   "f": "m-epi-proteomics-test.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/biologischer-alterstest-moleqlar.jpg?v=1770302408",
+   "name": "Biologischer Alterstest",
+   "hersteller": "MoleQlar",
+   "bytes": 14776
+  },
+  "m-taurin-kapseln": {
+   "f": "m-taurin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Taurin-Glas200ml.jpg?v=1767704948",
+   "name": "Taurin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 32830
+  },
+  "m-fisetin-kapseln": {
+   "f": "m-fisetin-kapseln.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Fisetin-Glas120ml.jpg?v=1767704948",
+   "name": "Fisetin Kapseln",
+   "hersteller": "MoleQlar",
+   "bytes": 37018
+  },
+  "m-qnight-relax-complex": {
+   "f": "m-qnight-relax-complex.bin",
+   "kid": "63f5003c83",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0659/7024/1726/files/f8f8f8-2512Qnight-Glas100ml.jpg?v=1767704949",
+   "name": "QNIGHT (Relaxation & Recovery Support)",
+   "hersteller": "MoleQlar",
+   "bytes": 47910
+  }
+ },
+ "stand": "2026-11-13T20:06:15.638Z",
+ "bericht": {
+  "produkte_mit_bildadresse": 427,
+  "gespeichert": 427,
+  "neu": 427,
+  "unveraendert": 0,
+  "fehler": []
+ }
+}
