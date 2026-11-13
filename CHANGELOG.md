@@ -1,5 +1,15 @@
 # Atlas – Änderungen
 
+## 2.20 (13.11.2026) – Produktkarte folgt dem ausgewählten Katalogprodukt
+Ursache: Die Karte war nicht mit der Produktauswahl verbunden. Sie versuchte, das Produkt aus dem gesprochenen Text zu erraten, und fand nur etwas, wenn der vollständige Katalogname wörtlich fiel („Omega 3 forte 700 von Biogena“). Natürliche Formulierungen („das Forte 700“, „die veganen Kapseln von MoleQlar“, „das MoleQlar Omega 3 mit EPAX“) ergaben keine Karte – im Projekt nachgeprüft.
+Änderungen:
+- Jedes Katalogprodukt hat eine feste ID aus seiner Produktseite (b-… Biogena, m-… MoleQlar, e-… eigener Eintrag); katalog_suchen liefert sie mit.
+- Atlas setzt im Antworttext vor das erklärte Produkt die Marke {{id}} (bei Wechsel die nächste, {{ende}} beim Themenwechsel). Die Marke wird aus Sprache und Protokoll entfernt und an genau den Satz gehängt, der sie enthält; beim Sprechen dieses Satzes erscheint die Karte dieses Produkts (Bild, Name, Hersteller).
+- Rückfall ohne Marke: hat die Katalogsuche dieser Antwort genau ein Produkt eindeutig getroffen, gilt dieses.
+- Kein Raten mehr aus dem Text: ohne ausgewähltes Katalogprodukt keine Karte; erfundene IDs werden ignoriert (Diagnose „karte: unbekannte id“).
+- Bild nur vom Hauptbild genau dieses Produkts, sonst Platzhalter; Laden im Hintergrund, offline aus dem Gerätespeicher.
+- Rückfall: /alt/2.19/.
+
 ## 2.19 (13.11.2026) – Produktkarte verfeinert
 - Firma im Satz zählt: „… von Biogena“ / „… von MoleQlar“ + Supplement → genau ein passendes Produkt dieser Firma, sonst keine Karte (nie raten, nie das eigene Produkt einer anderen Firma einsetzen). Wechsel zu einem Produkt einer anderen Firma aktualisiert die Karte.
 - Themenwechsel: zwei Sätze ohne Produkt → Karte verschwindet, auch wenn Atlas weiterspricht.

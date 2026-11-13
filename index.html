@@ -805,7 +805,7 @@ if(TTS){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
 // "system" = keine Stimme vorgeben: das Gerät nimmt seine eingestellte Systemstimme (z. B. Siri-Stimme 2)
 const voice=()=>S.voice==="system"?null:voices.find(v=>vid(v)===S.voice)||voices.find(v=>v.name===S.voice&&vtier(v)===2)||voices.find(v=>v.name===S.voice)||voices[0]||null;
 const vlabel=v=>`${v.name}${vtier(v)===2?" · Premium":vtier(v)===1?" · Erweitert":""} (${v.lang})`;
-function mkUtt(t){const u=new SpeechSynthesisUtterance(sayForm(t));u._orig=t;const v=voice();u.lang=v?v.lang:"de-DE";if(v)u.voice=v;u.rate=S.rate*(evening()?0.93:1);u.pitch=1;return u}
+function mkUtt(t){const tm=takeMarks(t);t=tm.text;const u=new SpeechSynthesisUtterance(sayForm(t));u._orig=t;u._marks=tm.marks;const v=voice();u.lang=v?v.lang:"de-DE";if(v)u.voice=v;u.rate=S.rate*(evening()?0.93:1);u.pitch=1;return u}
 // Sätze zu Abschnitten bis ~230 Zeichen bündeln: weniger Pausen, flüssiger
 function chunk(a,max=230){const out=[];let c="";for(const x of a){const y=x.trim();if(!y)continue;if(c&&c.length+y.length>max){out.push(c);c=y}else c=c?c+" "+y:y}if(c)out.push(c);return out}
 let pending=0,afterSpeak=null,gen=0;
@@ -814,14 +814,14 @@ const clean=s=>String(s).replace(/https?:\/\/\S+/g,"").replace(/\[[^\]]*\]\([^)]
 const spokenRecent=[];function noteSpoken(t){spokenRecent.push({t,at:Date.now()});while(spokenRecent.length>12)spokenRecent.shift()}
 function isEcho(t){const T=typeof toks==="function"?toks(t):[];if(T.length<2)return false;const now=Date.now();
   return spokenRecent.some(x=>now-x.at<15000&&(sim(T,toks(x.t))>=.6||toks(x.t).join(" ").includes(T.join(" "))))}
-function speak(text,then){text=clean(text);noteSpoken(text);touch();$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
+function speak(text,then){text=clean(String(text).replace(PMARK,""));noteSpoken(text);touch();$("said").textContent=text;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
   const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
   const finish0=()=>{if(my!==gen||pending<0)return;pending=0;hideCard();setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;resumeRecAfterSpeech();f&&f()};
   const finish=()=>{if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)){whenAudioIdle(my,finish0);return}finish0()};
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
     for(const p of parts){const u=mkUtt(p);
-      u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);cardPlan(p)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+      u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
       u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled")diag("tts:"+lastTTSerr);
         // nicht von Atlas abgebrochen (z. B. Gerät hat die Audioausgabe kurz unterbrochen): diesen Satz einmal neu sprechen statt abzubrechen
@@ -846,7 +846,18 @@ async function bildUrl(key,img){const u=(key&&BILD[key])||img||null;if(!u)return
     if(!r&&navigator.onLine){try{const f=await fetch(u,{mode:"cors"});if(f.ok){await c.put(u,f.clone());r=f}}catch{}}   // fremde Bilder: nur wenn der Server es erlaubt, sonst nur online anzeigen
     if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
 async function bildUrlAlt(key){const u=key&&BILD[key];if(!u)return null;try{if("caches" in window){const r=await (await caches.open("atlas-produktbilder")).match(u);if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
-let KAT_IDX=null,katTurn={at:0,list:[]};function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}for(const x of KAT_EIGEN){const T=tk(x.name);if(T.length>=2)L.push({T,p:{n:x.name,h:x.hersteller||"eigener Eintrag",u:"eigen:"+norm(x.name),im:null}})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
+let KAT_IDX=null,katTurn={at:0,list:[]},turnStart=0,KAT_ID=null;
+// Feste Produkt-ID aus der Adresse der Produktseite: b-… (Biogena), m-… (MoleQlar), e-… (eigener Eintrag) – eindeutig je Produkt
+const katId=p=>p.eigen?"e-"+norm(p.n).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""):(p.h==="Biogena"?"b-":p.h==="MoleQlar"?"m-":"x-")+String(p.u||"").replace(/[?#].*$/,"").replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]/g,"");
+function katById(id){if(!KAT_ID||KAT_ID.n!==(KAT?KAT.produkte.length:0)+KAT_EIGEN.length){const M=new Map();for(const p of katAll())M.set(katId(p),p);KAT_ID={n:(KAT?KAT.produkte.length:0)+KAT_EIGEN.length,M}}return KAT_ID.M.get(String(id||"").toLowerCase())||null}
+// Produktmarke im Antworttext: {{b-omega-3-forte-700-73}} = „ab hier geht es um dieses Katalogprodukt“, {{ende}} = Karte weg. Wird nie vorgelesen.
+const PMARK=/\{\{\s*([a-z]-[a-z0-9-]+|ende)\s*\}\}/gi;
+function takeMarks(s){const marks=[];let out="",last=0;String(s).replace(PMARK,(m,id,off)=>{out+=String(s).slice(last,off);marks.push({pos:out.length,id:id.toLowerCase()});last=off+m.length;return m});out+=String(s).slice(last);return {text:out,marks}}
+let prodTimers=[];
+function prodPlan(marks,textLen){prodTimers.forEach(clearTimeout);prodTimers=[];const ms=62/Math.max(.5,+S.rate||1);
+  for(const mk of marks||[])prodTimers.push(setTimeout(()=>applyMark(mk.id),mk.pos*ms))}
+function applyMark(id){if(id==="ende"){hideCard(300,true);return}const p=katById(id);if(!p){diag("karte: unbekannte id");return}
+  diag("karte: "+id);showCard({key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im||null})}function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}for(const x of KAT_EIGEN){const T=tk(x.name);if(T.length>=2)L.push({T,p:{n:x.name,h:x.hersteller||"eigener Eintrag",u:"eigen:"+norm(x.name),im:null}})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
 function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{for(let i=0;i+T.length<=U.length;i++)if(T.every((w,k)=>U[i+k]===w))return true;return false};
   const kat=katIdx().filter(x=>has(x.T));if(kat.length){const best=Math.max(...kat.map(x=>x.T.length)),top=kat.filter(x=>x.T.length===best),ids=new Set(top.map(x=>x.p.u));
     if(ids.size===1){const p=top[0].p;return {key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im}}return null}   // gleich lange Treffer verschiedener Produkte: nicht eindeutig
@@ -868,12 +879,15 @@ function showCard(c){scCur=c;scAt=Date.now();scMiss=0;$("scT").textContent=c.tit
 // Ein gesprochener Abschnitt kann mehrere Sätze enthalten: jeden Satz zu seinem (geschätzten) Sprechzeitpunkt prüfen
 let scPlan=[];function cardPlan(text){scPlan.forEach(clearTimeout);scPlan=[];if(!text)return;const parts=String(text).match(/[^.!?…:]+[.!?…:]*\s*/g)||[text];let pos=0;const ms=62/Math.max(.5,+S.rate||1);
   for(const x of parts){const at=pos*ms;pos+=x.length;scPlan.push(setTimeout(()=>cardForSpeech(x),at))}}
-let scMiss=0;
+let scMiss=0,turnMarked=false;
+function startCards(u){if(u._marks&&u._marks.length){turnMarked=true;prodPlan(u._marks);return}
+  // Rückfall ohne Marke: die Suche dieser Antwort hat genau ein Produkt eindeutig getroffen (einziger Treffer bzw. einziger, dessen Name alle Suchwörter enthält)
+  const sel=katTurn.at>=turnStart?(katTurn.list.length===1?katTurn.list[0]:katTurn.exact):null;if(!turnMarked&&!scCur&&sel){turnMarked=true;applyMark(katId(sel))}}
 function cardForSpeech(text){if(!text)return;const c=suppOf(text);
   if(!c){if(scCur&&$("suppCard").classList.contains("on")&&/[a-zäöü]{3}/i.test(text)&&++scMiss>=2&&Date.now()-scAt>2500)hideCard(300,true);return}scMiss=0;clearTimeout(scHide);if(scCur&&scCur.key===c.key&&$("suppCard").classList.contains("on"))return;
   clearTimeout(scTimer);const wait=scCur&&$("suppCard").classList.contains("on")?Math.max(0,2500-(Date.now()-scAt)):0;   // mind. 2,5 s stehen lassen, kein Flackern
   scTimer=setTimeout(()=>{if(speaking())showCard(c)},wait)}
-function hideCard(delay=1200,force=false){if(!delay){scPlan.forEach(clearTimeout);scPlan=[]}clearTimeout(scTimer);clearTimeout(scHide);scHide=setTimeout(()=>{if(!force&&speaking())return;$("suppCard").classList.remove("on");$("suppCard").setAttribute("aria-hidden","true");scCur=null},delay)}
+function hideCard(delay=1200,force=false){if(!delay){scPlan.forEach(clearTimeout);scPlan=[];prodTimers.forEach(clearTimeout);prodTimers=[]}clearTimeout(scTimer);clearTimeout(scHide);scHide=setTimeout(()=>{if(!force&&speaking())return;$("suppCard").classList.remove("on");$("suppCard").setAttribute("aria-hidden","true");scCur=null},delay)}
 /* Farbschema: färbt Kugel/Ring (über ORB_PALETTES) und die Akzente der Hauptoberfläche – Aufbau und Positionen bleiben gleich */
 function hexRgb(h){const m=String(h||"").match(/^#?([0-9a-f]{6})$/i);if(!m)return [52,214,212];const n=parseInt(m[1],16);return [n>>16&255,n>>8&255,n&255]}
 function setCustomPalette(hex){const a=hexRgb(hex),b=a.map(v=>Math.round(v+(255-v)*0.75)),c=a.map(v=>Math.round(v*0.62));ORB_PALETTES.eigen={name:"Eigene Farbe",a,b,c}}
@@ -1068,7 +1082,7 @@ function katSearch(q,hersteller,max=6){if(!KAT&&!KAT_EIGEN.length)return [];cons
   const sc=p=>{const hay={n:tk(p.n).join(" "),z:tk((p.z||"")+" "+(p.t?p.t.zeilen.map(r=>r[0]).join(" "):"")).join(" "),a:tk((p.a||[]).join(" ")+" "+(p.kz||"")+" "+(p.k||"")).join(" ")};let s=0;
     for(const w of T){if(hay.n.includes(w))s+=5;if(hay.z.includes(w))s+=3;if(hay.a.includes(w))s+=2}return s};
   return katAll().filter(p=>!hersteller||norm(p.h).includes(norm(hersteller))).map(p=>({p,s:sc(p)})).filter(x=>x.s>0).map(x=>(!katNem(x.p)&&!x.p.eigen&&(x.s-=2),x.p.eigen&&(x.s+=3),x)).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,max).map(x=>x.p)}
-const katOut=p=>p.eigen?{eigener_eintrag:true,name:p.n,hersteller:p.h,notiz:p.hw[0]||null,erfasst:String(p.ab).slice(0,10),hinweis:"von Mario ergänzt, keine Herstellerdaten"}:({hersteller:p.h,name:p.n,produkttyp:p.ty||null,link:p.u,linie:p.l,kategorie:p.k,anwendung_laut_hersteller:p.a,inhaltsstoffe_pro_portion:p.t?{kopf:p.t.kopf,zeilen:p.t.zeilen.slice(0,10)}:(p.m&&p.m.length?{aus_text:p.m}:null),
+const katOut=p=>p.eigen?{id:katId(p),eigener_eintrag:true,name:p.n,hersteller:p.h,notiz:p.hw[0]||null,erfasst:String(p.ab).slice(0,10),hinweis:"von Mario ergänzt, keine Herstellerdaten"}:({id:katId(p),hersteller:p.h,name:p.n,produkttyp:p.ty||null,link:p.u,linie:p.l,kategorie:p.k,anwendung_laut_hersteller:p.a,inhaltsstoffe_pro_portion:p.t?{kopf:p.t.kopf,zeilen:p.t.zeilen.slice(0,10)}:(p.m&&p.m.length?{aus_text:p.m}:null),
   zutaten:p.z,verzehrempfehlung:p.v,packung:p.pk,form:p.f,hinweise:p.hw,allergene:p.al,preis:p.pr?`${p.pr.betrag} ${p.pr.waehrung} (abgerufen ${String(p.pr.abgerufen).slice(0,10)})`:null,fehlende_angaben:(p.fe||[]).length?katFehlt(p):null,produktbilder:"nicht geprüft – keine Werte daraus übernommen",abgerufen:String(p.ab).slice(0,10)});
 
 // ===== Supplement-Tagebuch: drei Zustände je Supplement (genommen / nicht genommen / offen), nur eindeutige Aussagen zählen =====
@@ -1257,7 +1271,7 @@ const T={
  runde_abhaken:{name:"runde_abhaken",description:"Hakt eine GANZE Runde von heute ab: alle aktiven Supplements dieser Tageszeit aus seiner gespeicherten Liste (nur offene oder später geplante; bewusst ausgelassene bleiben so) und optional die Routine-Schritte. Für 'Morgenroutine erledigt', 'alles drin', 'Morgenrunde ist durch' oder ein klares Ja auf deine Frage nach dieser Runde. Ändert nur den Tagesstatus, nie die gespeicherte Routine.",input_schema:{type:"object",properties:{tageszeit:{type:"string",enum:["morgens","mittags","abends"]},ausser:{type:"array",items:{type:"string"},description:"was er ausdrücklich NICHT genommen hat"},routine_schritte:{type:"boolean",description:"true, wenn sich seine Aussage auf die ganze Routine bezieht (inkl. Schritte wie Eisbad, Rotlicht); false, wenn es nur um Supplements ging"},bestaetigt:{type:"boolean"}},required:["tageszeit"]}},
  supplement_status:{name:"supplement_status",description:"Supplement-Tagebuch von heute: setzt für JEDES genannte Supplement einzeln den Status genommen, nicht_genommen oder offen. Nur Supplements eintragen, zu denen er eine eindeutige Aussage gemacht hat; nie pauschal mehrere. 'Alles außer X' heißt nur die Supplements, nach denen du gerade gefragt hast, jedes einzeln aufgeführt. Korrekturen genauso. Mehrdeutige Namen (z. B. nur 'Magnesium') werden abgelehnt: dann nachfragen.",input_schema:{type:"object",properties:{bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},eintraege:{type:"array",items:{type:"object",properties:{name:{type:"string"},status:{type:"string",enum:["genommen","nicht_genommen","spaeter","offen"],description:"genommen = eingenommen, nicht_genommen = ausgelassen, spaeter = später geplant, offen = noch unbekannt"},grund:{type:"string",description:"optional, z. B. bewusst ausgelassen, vergessen"}},required:["name","status"]}}},required:["eintraege"]}},
  katalog_eintragen:{name:"katalog_eintragen",description:"Trägt ein Supplement als EIGENEN Katalog-Eintrag ein (aktion hinzufuegen), ändert oder entfernt einen eigenen Eintrag. Herstellerdaten werden nie geändert. Nur auf ausdrücklichen Auftrag und mit sicher erkanntem Namen. Nicht für seine Einnahmeliste (dafür liste_aendern).",input_schema:{type:"object",properties:{aktion:{type:"string",enum:["hinzufuegen","aendern","entfernen"]},name:{type:"string"},hersteller:{type:"string"},notiz:{type:"string",description:"z. B. Dosis pro Portion laut Packung, nur wenn er sie nennt"},neuer_name:{type:"string"}},required:["aktion","name"]}},
- katalog_suchen:{name:"katalog_suchen",description:"Durchsucht den lokal gespeicherten Produktkatalog von Biogena und MoleQlar (Herstellerangaben: Inhaltsstoffe pro Portion, Zutaten, Verzehrempfehlung, Hinweise, Preis mit Abrufdatum, Link). Ohne Internet. Für Fragen nach Produkten, z. B. für ein Ziel oder einen Wirkstoff.",input_schema:{type:"object",properties:{suchbegriff:{type:"string",description:"Wirkstoff, Produktname oder Ziel, z. B. Magnesium Threonat, Schlaf, Omega-3"},hersteller:{type:"string",enum:["Biogena","MoleQlar"]}},required:["suchbegriff"]}},
+ katalog_suchen:{name:"katalog_suchen",description:"Durchsucht den lokal gespeicherten Produktkatalog von Biogena und MoleQlar (Herstellerangaben: Inhaltsstoffe pro Portion, Zutaten, Verzehrempfehlung, Hinweise, Preis mit Abrufdatum, Link). Ohne Internet. Für Fragen nach Produkten, z. B. für ein Ziel oder einen Wirkstoff. Jeder Treffer hat eine id für die Produktkarte ({{id}} im Antworttext).",input_schema:{type:"object",properties:{suchbegriff:{type:"string",description:"Wirkstoff, Produktname oder Ziel, z. B. Magnesium Threonat, Schlaf, Omega-3"},hersteller:{type:"string",enum:["Biogena","MoleQlar"]}},required:["suchbegriff"]}},
  katalog_status:{name:"katalog_status",description:"Stand des Produktkatalogs: Prüfdatum, Zahlen je Hersteller und Produktgruppe (alle Produkte, Nahrungsergänzungen vollständig/teilweise, andere Produktarten) und offene Angaben je Produkt.",input_schema:{type:"object",properties:{}}},
  wissen_nachschlagen:{name:"wissen_nachschlagen",description:"Schlägt ein Supplement, Peptid oder einen Bioregulator in der lokalen Wissensbibliothek nach (Inhaltsstoffe, Einsatz, Evidenz, Risiken, Quellen mit Datum). Ohne Internet.",input_schema:{type:"object",properties:{begriff:{type:"string"}},required:["begriff"]}},
  studien_abrufen:{name:"studien_abrufen",description:"Gibt frühere gespeicherte Studien-Updates mit Datum zurück, optional nach Stichwort gefiltert.",input_schema:{type:"object",properties:{stichwort:{type:"string"}}}},
@@ -1314,7 +1328,7 @@ async function runTool(name,inp){
     if(a==="entfernen"){const old=KAT_EIGEN.splice(ei,1)[0];saveEigen();return `Eigener Eintrag „${old.name}“ entfernt.`}
     const x=KAT_EIGEN[ei];if(inp.neuer_name)x.name=String(inp.neuer_name).trim();if(inp.hersteller!==undefined)x.hersteller=String(inp.hersteller||"").trim()||null;if(inp.notiz!==undefined)x.notiz=String(inp.notiz||"").trim()||null;saveEigen();return `Eigener Eintrag geändert: ${JSON.stringify(x)}`}
   case "katalog_suchen":{if(!KAT&&!KAT_EIGEN.length)return "Der Produktkatalog ist auf diesem Gerät nicht geladen. Sag ihm das ehrlich; nichts erfinden.";
-    const L=katSearch(inp.suchbegriff||"",inp.hersteller),st=KAT?String(KAT.stand).slice(0,10):"Herstellerkatalog nicht geladen";katTurn={at:Date.now(),list:L.filter(p=>!p.eigen)};return L.length?JSON.stringify({katalog_stand:st,treffer:L.map(katOut)}):"Im Katalog (Stand "+st+") nichts Passendes gefunden."}
+    const L=katSearch(inp.suchbegriff||"",inp.hersteller),st=KAT?String(KAT.stand).slice(0,10):"Herstellerkatalog nicht geladen";katTurn={at:Date.now(),list:L.filter(p=>!p.eigen)};{const q=tk(inp.suchbegriff||""),ex=L.filter(p=>q.length&&q.every(w=>tk(p.n).includes(w)));katTurn.exact=ex.length===1?ex[0]:null}return L.length?JSON.stringify({katalog_stand:st,treffer:L.map(katOut)}):"Im Katalog (Stand "+st+") nichts Passendes gefunden."}
   case "katalog_status":{if(!KAT)return "Katalog nicht geladen.";
     return JSON.stringify({geprueft:String(KAT.stand).slice(0,16).replace("T"," ")+" UTC",geladen_aus:KAT_SRC||"unbekannt",hersteller:katStat(),produktbilder:"nicht geprüft – Werte aus Bildern werden nicht übernommen",fehlende_werte:"bleiben leer, werden nicht geschätzt oder ergänzt",
       sprich:"Status immer je Hersteller und Produktgruppe nennen, nie pauschal ‚Katalog vollständig‘ oder ‚unvollständig‘.",aktualisieren:"Eine neue Online-Prüfung startet Mario über Claude im Chat (Katalog aktualisieren). Atlas selbst lädt Produktseiten nicht neu."})}
@@ -1408,6 +1422,7 @@ function mainParts(mode,memBlock,others){const M=main();
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}${S.nick?` Er nennt dich auch ${S.nick}; reagier auf beide Namen.`:""}
 ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
 KATALOG-AUFTRÄGE: Sagt er, ein Supplement soll in den Katalog („füg … zum Katalog hinzu“, „trag … im Katalog ein“, „ändere/lösch meinen Katalog-Eintrag …“), ist das ein Auftrag: Steht der Name nicht eindeutig fest (unsichere Erkennung, unbekannter oder halber Name), frag einmal kurz nur nach dem Namen. Dann katalog_eintragen aufrufen und in einem Satz bestätigen, was genau eingetragen wurde. Meint er seine Einnahmeliste („nimm ich ab morgen“, „in meine Routine“), gilt NEUES SUPPLEMENT. Ist unklar, ob Katalog oder Einnahmeliste, frag kurz. Herstellerdaten nie ändern, nichts ohne Auftrag löschen.
+PRODUKTKARTE: Erklärst oder empfiehlst du ein konkretes Produkt aus dem Katalog, schreib direkt vor den Satz, in dem du es zum ersten Mal nennst, seine id aus katalog_suchen in doppelten geschweiften Klammern, z. B. {{b-omega-3-forte-700-73}}. Dann zeigt der Bildschirm genau dieses Produkt; die Klammer wird nicht vorgelesen. Wechselst du zu einem anderen Produkt, setz dessen id. Verlässt du das Produktthema, schreib {{ende}}. Nur ids aus katalog_suchen verwenden, nie erfinden; um ein bestimmtes Katalogprodukt zu erklären, such es vorher mit katalog_suchen.
 PRODUKTKATALOG: Fragt er nach Produkten von Biogena oder MoleQlar oder nach einem Produkt für ein Ziel, such zuerst mit katalog_suchen im lokalen Katalog (kein Internet). Nenne passende Produkte mit Hersteller, relevanten Inhaltsstoffen pro Portion und dem Link (Link nur nennen, nicht vorlesen; sag „Link steht im Katalog“). Trenne klar: Herstellerangabe (Katalog), unabhängige Studienlage (Wissensbibliothek), seine persönlichen Erfahrungen und Hinweise aus dem Profil (z. B. Unverträglichkeiten). Nenne erkennbare Risiken und Wechselwirkungen mit seinen aktuellen Mitteln, doppelte Wirkstoffe (z. B. zweimal Magnesium) und sag dazu, wann der Katalog geprüft wurde. Fehlen Angaben, sag das; keine Dosierungen erfinden, nichts als notwendig oder wirksam hinstellen, wenn die Daten das nicht tragen. Websuche nur, wenn er ausdrücklich aktuelle Angaben will.
 WISSEN: Für Präparate aus seinen Listen nutzt du zuerst die lokale Wissensbibliothek (wird dir bei Bedarf mitgegeben, sonst wissen_nachschlagen). Trenne beim Erklären klar: allgemeines Wissen, Studienergebnis (mit Evidenzstärke), Herstellerangabe, persönliche Angabe aus seinem Profil. Keine persönliche Empfehlung als Tatsache. Websuche nur für neue Studien oder wenn er es ausdrücklich will. Frühere Studien-Updates findest du mit studien_abrufen.
 DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
@@ -1475,8 +1490,8 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;const pq=prevQ
   let bundle="";const flush=()=>{const b=bundle;bundle="";say1(b)};
   // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
   const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
-  const say1=s=>{if(my!==gen)return;s=clean(s);if(pq){const parts=s.split(/(?<=[.!?])\s+/),keep=parts.filter(x=>!isRepeatQ(x,pq));if(keep.length<parts.length){diag("doppelte frage übersprungen");s=keep.join(" ");if(!s.trim())return}}if(!first){const o=s.replace(OPENER,"").trim();if(!o)return;s=o;first=true}if(!s||!TTS)return;noteSpoken(s);touch();queued++;const u=mkUtt(s);
-    u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);cardPlan(s)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+  const say1=s=>{if(my!==gen)return;const tm=takeMarks(s);s=clean(tm.text);const marks=tm.marks;if(pq){const parts=s.split(/(?<=[.!?])\s+/),keep=parts.filter(x=>!isRepeatQ(x,pq));if(keep.length<parts.length){diag("doppelte frage übersprungen");s=keep.join(" ");if(!s.trim())return}}if(!first){const o=s.replace(OPENER,"").trim();if(!o)return;s=o;first=true}if(!s||!TTS){if(marks.length)prodPlan(marks);return}noteSpoken(s);touch();queued++;const u=mkUtt(s);u._marks=marks;
+    u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
     const next=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};u.onend=next;
     u.onerror=ev=>{if(my!==gen)return;const er=(ev&&ev.error)||"";if((er==="interrupted"||er==="canceled")&&!u._again){diag("tts: satz wiederholt");const u2=mkUtt(s);u2._again=true;u2.onstart=u.onstart;u2.onboundary=u.onboundary;u2.onend=next;u2.onerror=next;speechSynthesis.speak(u2);return}next()};
     try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
@@ -1498,7 +1513,7 @@ let abortCtl=null,busy=false,perf={},timedOut=false;
 function perfDone(){if(!perf.end||!perf.audio)return;const r=x=>x?Math.round(x-perf.end):null;const e={zeit:new Date().toISOString(),modus:perf.mode,bisAnfrage:r(perf.req),bisErstesWort:r(perf.tok),bisTon:r(perf.audio)};
   const L=ls.get("perf",[]);L.push(e);ls.set("perf",L.slice(-30));perf={}}
 function whenIdle(fn){const tick=()=>{if(!busy&&!speaking()&&!listening)fn();else setTimeout(tick,300)};setTimeout(tick,200)}
-async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"}={}){
+async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"}={}){turnStart=Date.now();turnMarked=false;
   if(away)return;
   if(!S.key){openSheet("setup");showErr("Bitte zuerst den API-Schlüssel eintragen.");return}
   if(busy)return;busy=true;touch();showErr("");
@@ -1529,7 +1544,7 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
       usedTool=true;const results=[];for(const b of res.content)if(b.type==="tool_use")results.push({type:"tool_result",tool_use_id:b.id,content:String(await runTool(b.name,b.input||{}))});
       msgs.push({role:"user",content:results});
     }
-    const marked=/⟦\s*⟧/.test(answer);answer=clean(answer.replace(/[⟦⟧]/g,""));if(!answer){answer="Erledigt.";sp.feed(answer)}
+    const marked=/⟦\s*⟧/.test(answer);answer=clean(answer.replace(/[⟦⟧]/g,"").replace(PMARK,""));if(!answer){answer="Erledigt.";sp.feed(answer)}
     addLog("assistent",answer);busy=false;scheduleProto();
     if(isMain()&&(main().plan||[]).some(x=>x.plan==="pruefen")&&/prüf|durchgehen/i.test(answer)){main().pruefOffered=(main().pruefOffered||0)+1;saveProfiles()}
     if(brief&&privKey)putSealed("stud:"+today,{datum:today,text:answer});
@@ -1927,7 +1942,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261113-0551",ATLAS_REL="2.19";
+const APP_VERSION="20261113-2038",ATLAS_REL="2.20";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);
