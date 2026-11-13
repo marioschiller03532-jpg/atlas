@@ -846,28 +846,34 @@ async function bildUrl(key,img){const u=(key&&BILD[key])||img||null;if(!u)return
     if(!r&&navigator.onLine){try{const f=await fetch(u,{mode:"cors"});if(f.ok){await c.put(u,f.clone());r=f}}catch{}}   // fremde Bilder: nur wenn der Server es erlaubt, sonst nur online anzeigen
     if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
 async function bildUrlAlt(key){const u=key&&BILD[key];if(!u)return null;try{if("caches" in window){const r=await (await caches.open("atlas-produktbilder")).match(u);if(r)return URL.createObjectURL(await r.blob())}}catch{}return navigator.onLine?u:null}
-let KAT_IDX=null,katTurn={at:0,list:[]};function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
+let KAT_IDX=null,katTurn={at:0,list:[]};function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}for(const x of KAT_EIGEN){const T=tk(x.name);if(T.length>=2)L.push({T,p:{n:x.name,h:x.hersteller||"eigener Eintrag",u:"eigen:"+norm(x.name),im:null}})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
 function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{for(let i=0;i+T.length<=U.length;i++)if(T.every((w,k)=>U[i+k]===w))return true;return false};
   const kat=katIdx().filter(x=>has(x.T));if(kat.length){const best=Math.max(...kat.map(x=>x.T.length)),top=kat.filter(x=>x.T.length===best),ids=new Set(top.map(x=>x.p.u));
     if(ids.size===1){const p=top[0].p;return {key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im}}return null}   // gleich lange Treffer verschiedener Produkte: nicht eindeutig
   const kb=(typeof kbFind==="function"&&KB)?kbFind(text):[];if(kb.length!==1)return null;const e=kb[0];
+  const A0=[e.name,...(e.aliases||[])].map(a=>tk(a.split(" (")[0])).filter(x=>x.length);
+  const firm=/\bbiogena\b/i.test(text)?"Biogena":/\bmole[qk]?c?lar\b/i.test(text)?"MoleQlar":null;
+  if(firm&&KAT){const hit=KAT.produkte.filter(p=>p.h===firm&&katNem(p)&&A0.some(a=>a.every(w=>tk(p.n).includes(w))));
+    if(hit.length===1)return {key:"kat:"+hit[0].u,title:hit[0].n,sub:hit[0].h,img:hit[0].im};return null}   // Firma genannt, aber mehrere/kein passendes Produkt: nicht raten
   // Hat Atlas gerade im Herstellerkatalog gesucht, gilt das gefundene Produkt – nie ein anderes (z. B. das eigene Omega-3) einsetzen
   if(Date.now()-katTurn.at<5*60e3&&katTurn.list.length){const A=[e.name,...(e.aliases||[])].map(a=>tk(a.split(" (")[0])).filter(x=>x.length);
     const hit=katTurn.list.filter(p=>{const T=tk(p.n);return A.some(a=>a.every(w=>T.includes(w)))});
     if(hit.length===1)return {key:"kat:"+hit[0].u,title:hit[0].n,sub:hit[0].h,img:hit[0].im};
     if(hit.length>1)return null}   // mehrere passende Katalogprodukte: nicht eindeutig -> keine Karte
   const mine=(cur&&cur.supps||[]).filter(x=>(kbFind(coreOf(x))[0]||{}).id===e.id);
-  return {key:"kb:"+e.id,title:e.name.split(" (")[0],sub:mine.length===1?(norm(coreOf(mine[0]))===norm(e.name.split(" (")[0])?"aus deiner Liste":"in deiner Liste: "+coreOf(mine[0])):"aus deiner Wissensbibliothek"}}
-async function showCard(c){scCur=c;scAt=Date.now();$("scT").textContent=c.title;$("scS").textContent=c.sub||"";const u=await bildUrl(c.key,c.img);if(scCur!==c)return;diag("karte:"+(u?"bild":"platzhalter"));
-  $("scImg").innerHTML="";if(u){const im=new Image();im.alt=c.title;im.src=u;im.onerror=()=>{$("scImg").innerHTML=SC_PH};$("scImg").append(im)}else $("scImg").innerHTML=SC_PH;
-  $("suppCard").classList.add("on");$("suppCard").setAttribute("aria-hidden","false")}
+  return {key:"kb:"+e.id,title:mine.length===1?coreOf(mine[0]):e.name.split(" (")[0],sub:mine.length===1?"aus deiner Liste":"aus deiner Wissensbibliothek"}}
+function showCard(c){scCur=c;scAt=Date.now();scMiss=0;$("scT").textContent=c.title;$("scS").textContent=c.sub||"";$("scImg").innerHTML=SC_PH;
+  $("suppCard").classList.add("on");$("suppCard").setAttribute("aria-hidden","false");
+  bildUrl(c.key,c.img).then(u=>{if(scCur!==c)return;diag("karte:"+(u?"bild":"platzhalter"));if(!u)return;const im=new Image();im.alt=c.title;im.onload=()=>{if(scCur===c){$("scImg").innerHTML="";$("scImg").append(im)}};im.src=u}).catch(()=>{})}
 // Ein gesprochener Abschnitt kann mehrere Sätze enthalten: jeden Satz zu seinem (geschätzten) Sprechzeitpunkt prüfen
 let scPlan=[];function cardPlan(text){scPlan.forEach(clearTimeout);scPlan=[];if(!text)return;const parts=String(text).match(/[^.!?…:]+[.!?…:]*\s*/g)||[text];let pos=0;const ms=62/Math.max(.5,+S.rate||1);
   for(const x of parts){const at=pos*ms;pos+=x.length;scPlan.push(setTimeout(()=>cardForSpeech(x),at))}}
-function cardForSpeech(text){if(!text)return;const c=suppOf(text);if(!c)return;clearTimeout(scHide);if(scCur&&scCur.key===c.key&&$("suppCard").classList.contains("on"))return;
+let scMiss=0;
+function cardForSpeech(text){if(!text)return;const c=suppOf(text);
+  if(!c){if(scCur&&$("suppCard").classList.contains("on")&&/[a-zäöü]{3}/i.test(text)&&++scMiss>=2&&Date.now()-scAt>2500)hideCard(300,true);return}scMiss=0;clearTimeout(scHide);if(scCur&&scCur.key===c.key&&$("suppCard").classList.contains("on"))return;
   clearTimeout(scTimer);const wait=scCur&&$("suppCard").classList.contains("on")?Math.max(0,2500-(Date.now()-scAt)):0;   // mind. 2,5 s stehen lassen, kein Flackern
   scTimer=setTimeout(()=>{if(speaking())showCard(c)},wait)}
-function hideCard(delay=1200){if(!delay){scPlan.forEach(clearTimeout);scPlan=[]}clearTimeout(scTimer);clearTimeout(scHide);scHide=setTimeout(()=>{if(speaking())return;$("suppCard").classList.remove("on");$("suppCard").setAttribute("aria-hidden","true");scCur=null},delay)}
+function hideCard(delay=1200,force=false){if(!delay){scPlan.forEach(clearTimeout);scPlan=[]}clearTimeout(scTimer);clearTimeout(scHide);scHide=setTimeout(()=>{if(!force&&speaking())return;$("suppCard").classList.remove("on");$("suppCard").setAttribute("aria-hidden","true");scCur=null},delay)}
 /* Farbschema: färbt Kugel/Ring (über ORB_PALETTES) und die Akzente der Hauptoberfläche – Aufbau und Positionen bleiben gleich */
 function hexRgb(h){const m=String(h||"").match(/^#?([0-9a-f]{6})$/i);if(!m)return [52,214,212];const n=parseInt(m[1],16);return [n>>16&255,n>>8&255,n&255]}
 function setCustomPalette(hex){const a=hexRgb(hex),b=a.map(v=>Math.round(v+(255-v)*0.75)),c=a.map(v=>Math.round(v*0.62));ORB_PALETTES.eigen={name:"Eigene Farbe",a,b,c}}
@@ -1921,7 +1927,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261112-2049",ATLAS_REL="2.18";
+const APP_VERSION="20261113-0551",ATLAS_REL="2.19";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setInterval(checkUpdate,10*60000);

@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.19 (13.11.2026) – Produktkarte verfeinert
+- Firma im Satz zählt: „… von Biogena“ / „… von MoleQlar“ + Supplement → genau ein passendes Produkt dieser Firma, sonst keine Karte (nie raten, nie das eigene Produkt einer anderen Firma einsetzen). Wechsel zu einem Produkt einer anderen Firma aktualisiert die Karte.
+- Themenwechsel: zwei Sätze ohne Produkt → Karte verschwindet, auch wenn Atlas weiterspricht.
+- Karte erscheint sofort mit Name und Firma; das Bild wird im Hintergrund geladen und eingesetzt (Sprachausgabe startet ohne Wartezeit).
+- Eigene Liste: Titel ist dein Produktname (z. B. „Omega-3 Norsan vegan“, „aus deiner Liste“). Eigene Katalog-Einträge werden ebenfalls erkannt.
+- Sonst unverändert (Farben, Animationen, Sprachausgabe, Bewegungserkennung). Rückfall: /alt/2.18/.
+
 ## 2.18 (12.11.2026) – Kreis statt Flamme, Supplement-Karte fest am Katalog
 - Mitte: Flamme vollständig entfernt (gehörte zu einer Kaffeemaschine). Stattdessen ein schlichter Kreis mit drei Bogensegmenten und gegenläufigem Innenbogen: Ruhe dreht langsam (ca. 40 s/Runde), Zuhören etwas zügiger, Sprechen hell, pulsiert mit der Stimme und dreht schneller, Ruhemodus fast still. Farben/Supernova unverändert.
 - Katalog: für alle 403 Produkte die Adresse des Hauptbilds der jeweiligen Produktseite (nur Adresse, keine Bilddatei im Repo).
