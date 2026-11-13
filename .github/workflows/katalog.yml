@@ -2,7 +2,7 @@ name: Supplement-Katalog
 on:
   workflow_dispatch:
   push:
-    paths: ["tools/katalog-*.mjs", ".github/workflows/katalog.yml", "tools/katalog-run.txt"]
+    paths: ["tools/katalog-*.mjs", "tools/bilder-sync.mjs", ".github/workflows/katalog.yml", "tools/katalog-run.txt"]
 permissions:
   contents: write
 concurrency: katalog
@@ -16,6 +16,7 @@ jobs:
         with: { node-version: 20 }
       - run: sudo apt-get install -y -q poppler-utils >/dev/null || true
       - run: node tools/katalog-$(cat tools/katalog-run.txt 2>/dev/null || echo probe).mjs
+      - run: node tools/bilder-sync.mjs
       - run: |
           git config user.name "atlas-katalog-bot"
           git config user.email "atlas-katalog-bot@users.noreply.github.com"
