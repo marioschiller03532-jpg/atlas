@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.24 (14.11.2026) – Karte antippbar nach der Antwort, Inhaltsstoffe erklärt, Nährwerttabellen offline
+- Ursache „Antippen geht nicht“: Die Produktkarte verschwand 1,2 s nach dem Ende der Antwort – zum Antippen blieb keine Zeit. Jetzt bleibt sie 30 s stehen (neue Frage räumt sie nach 4 s weg, offene Detailkarte hält sie).
+- Ursache „kein Bild“ bei deinen eigenen Mitteln: Karten aus deiner Liste/Wissensbibliothek hatten kein Katalogprodukt, daher Platzhalter und nicht antippbar. Jetzt öffnet auch diese Karte eine Detailkarte (Inhalt, Wofür, Studienlage, Risiken, Quellen). Mit Katalogprodukt verknüpft ist bisher nur Omega-3 (Norsan Vegan EPA Kapseln).
+- Detailkarte: neuer Abschnitt „Inhaltsstoffe erklärt“ (z. B. Omega-3, EPA, DPA, DHA, Algenöl, Kapselhülle, Antioxidationsmittel) mit der Menge aus dem Herstellertext; allgemeine Erklärung, keine Dosierempfehlung. Bei verknüpften Produkten zusätzlich „Aus deiner Wissensbibliothek“.
+- Nährwerttabellen von Norsan (26) und edubily (110) – beim Hersteller nur als Bild – werden jetzt verschlüsselt offline gespeichert und in der Detailkarte gezeigt (antippen = groß).
+- Neues Werkzeug naehrwerttabelle_lesen: Atlas kann die Tabelle bei Fragen nach Inhaltsstoffen selbst ablesen (über den bestehenden Claude-Zugang, kein neuer Dienst) und nennt die Werte „laut Nährwerttabelle des Herstellers“.
+- iPhone: Detailkarte einspaltig. Getestet im Browser mit Touch-Bedienung auf iPad hoch/quer und iPhone hoch. Rückfall: /alt/2.23.1/.
+
 ## 2.23.1 (14.11.2026) – dein Omega-3 fest verknüpft
 - Listeneintrag Omega-3 ist jetzt fest mit dem Katalogprodukt Norsan Omega-3 Vegan EPA Kapseln verknüpft (verschlüsselte Wissensbibliothek). Die Karte zeigt dazu Bild, Name und Marke; Antippen öffnet die Detailkarte.
 - Wissensbibliothek nennt die Herstellerangabe (4 Kapseln = 1.700 mg Omega-3, davon 920 mg EPA, 628 mg DHA). Deine gespeicherte Routine/Einnahme bleibt unverändert. Rückfall: /alt/2.23/.
