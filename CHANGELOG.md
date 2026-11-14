@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.25 (14.11.2026) – Offline-Start
+- Neu: Service Worker (sw.js). Nach einem vollständigen ersten Laden mit Internet startet Atlas auch im Flugmodus. Offline verfügbar: App-Oberfläche, Produktkatalog, Wissensbibliothek (verschlüsselt), Produktbilder und Nährwerttabellen (691, verschlüsselt), Produkt- und Detailkarten, „Inhaltsstoffe erklärt“.
+- Speicher: „atlas-app-<Version>“ (nur die App-Datei der aktuellen Version), „atlas-daten-v1“ (je eine Kopie von Katalog, Bild-Verzeichnis, Wissensbibliothek, Bild-Zuordnung), „atlas-bilder-v1“ (Bilder mit Schlüssel-Kennung). Die bisherige zweite Katalogkopie im Gerätespeicher (localStorage) entfällt, wenn der Service Worker aktiv ist.
+- Sichere Aktualisierung: Neue App-Version wird erst komplett geladen und geprüft (richtige Version, vollständige Datei), dann umgeschaltet und die alte gelöscht; bricht der Download ab, bleibt die alte Offline-Version. Katalog/Bibliothek/Bild-Verzeichnis werden nur gespeichert, wenn sie vollständig lesbar sind. Neue Bilder werden erst übernommen und Veraltetes erst gelöscht, wenn alle Bilder geladen sind.
+- Anzeige oben beim Start: online/offline, Fortschritt beim ersten Download („… von 691 Bildern“), Abschluss „Offline-Daten vollständig ✓“, Hinweis bei fehlenden oder von iOS freigegebenen Daten mit Knopf „Neu laden“ (nur mit Internet). In den Einstellungen: Zeile „Offline-Start“ mit Details und Knopf „Offline-Daten neu laden“. Atlas bittet iOS, den Speicher dauerhaft zu behalten.
+- Offline gesprochen oder getippt: Atlas fragt nicht Claude, sondern sagt ehrlich, dass er offline ist, und zeigt bei Produktfragen passende Produkte aus dem lokalen Katalog (antippbar).
+- Online bleiben: Gespräche mit Claude, Nährwerttabelle vorlesen lassen, Bestellseiten, Update-Prüfung, Katalog-/Bild-Aktualisierung, Spracherkennung (je nach iOS über Apple-Server). Rückfall: /alt/2.24/.
+
 ## 2.24 (14.11.2026) – Karte antippbar nach der Antwort, Inhaltsstoffe erklärt, Nährwerttabellen offline
 - Ursache „Antippen geht nicht“: Die Produktkarte verschwand 1,2 s nach dem Ende der Antwort – zum Antippen blieb keine Zeit. Jetzt bleibt sie 30 s stehen (neue Frage räumt sie nach 4 s weg, offene Detailkarte hält sie).
 - Ursache „kein Bild“ bei deinen eigenen Mitteln: Karten aus deiner Liste/Wissensbibliothek hatten kein Katalogprodukt, daher Platzhalter und nicht antippbar. Jetzt öffnet auch diese Karte eine Detailkarte (Inhalt, Wofür, Studienlage, Risiken, Quellen). Mit Katalogprodukt verknüpft ist bisher nur Omega-3 (Norsan Vegan EPA Kapseln).

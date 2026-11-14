@@ -34,3 +34,8 @@ Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwe
 - Bilder: feste Zuordnung `produktbilder/zuordnung.json` (exakte Schlüssel) oder das Hauptbild genau des Katalogprodukts, über das Atlas spricht; sonst neutrale Kapsel-Grafik. Nie geraten.
 - Mehrere Produkte (z. B. Auswahl über mehrere Marken): dieselbe Karte zeigt eine kurze Liste mit höchstens 4 Zeilen (kleines Bild, Name, Marke). Gleiche Position, gleicher Stil.
 - Antippen: die Karte (bzw. eine Zeile der Liste) öffnet die Detailkarte genau dieses Katalogeintrags (über die Produkt-ID). Dunkles, mittig liegendes Feld im Stil der Karte: Bild, Name, Marke, gespeicherte Angaben; fehlende Angaben als „unbekannt – Grund“. Knopf „Zur Bestellseite“ nur mit gültigem Link und Internet. Schließen mit ✕, Tippen daneben oder Escape. Kugel und Ring bleiben unverändert dahinter. Abschnitte darunter: „Nährwerttabelle (Bild des Herstellers)“ (antippen = Vollbild) und „Inhaltsstoffe erklärt“. Die Karte bleibt nach der Antwort 30 s stehen, damit man sie antippen kann.
+
+## Offline-Anzeige (ab 2.25)
+- Schmale Leiste oben im Stil der Einrichtungs-Leiste (gleiche Form/Farbe), über Kugel und Ring; im Offline-Fall mit dezentem grauem Rand.
+- Inhalte: „Online · Offline-Daten vollständig“ (blendet nach 4 s aus), Fortschritt beim Laden mit schmalem Balken, „Offline-Daten vollständig ✓“, „Offline · …“ (bleibt stehen, solange offline), Hinweis bei fehlenden/freigegebenen Daten mit Knopf „Neu laden“.
+

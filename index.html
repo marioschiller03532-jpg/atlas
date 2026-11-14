@@ -104,6 +104,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .said{max-width:52ch;min-height:1.5em;font-size:17px;padding-inline:8px}
 .heard{max-width:52ch;min-height:1.3em;color:var(--muted);font-size:14.5px}
 .err{color:var(--accent);font-size:14px;max-width:52ch}
+#netBar{margin-bottom:8px;font-size:14px}#netBar.off{border-color:rgba(255,255,255,.28)}#netProg{width:140px;height:6px;accent-color:var(--accent)}
 .setupbar{border:1px solid var(--accent);border-radius:12px;padding:10px 14px;max-width:520px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
 .dock{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding-block:10px 12px}
 .btn{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-weight:600;font-size:15px}
@@ -175,6 +176,7 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
     <div class="clock" id="clock">--:--</div>
   </header>
   <main class="stage">
+    <div class="setupbar" id="netBar" hidden role="status" aria-live="polite"><span id="netTxt"></span><progress id="netProg" max="1" value="0" hidden></progress><button class="btn small" id="netGo" type="button" hidden>Neu laden</button></div>
     <div class="setupbar" id="setupBar" hidden><span id="setupTxt">Einrichtung fehlt noch.</span><button class="btn small primary" id="setupGo">Einrichten</button></div>
     <canvas id="vis" role="button" aria-label="Antippen zum Sprechen"></canvas>
     <div id="stLbl" aria-live="polite">Bereit</div>
@@ -871,23 +873,38 @@ let KAT_IDX=null,katTurn={at:0,list:[]},turnStart=0,KAT_ID=null;
    katalog/bilder/: verschlüsselte Kopie des Hauptbilds jedes Katalogprodukts (AES-GCM, Schlüssel mit RSA verpackt).
    Der private Schlüssel steckt in der verschlüsselten Wissensbibliothek – nur Atlas auf deinem Gerät kann die Bilder öffnen.
    Atlas lädt alle Bilder einmal (mit Internet) in den Gerätespeicher; danach kommen sie immer offline von dort. */
-let BIDX=ls.get("bildIdx",null),bildPriv=null,bildKeys={},bildMemo={},bildSync={laeuft:false,ok:0,gesamt:0,fehler:0};
-async function loadBildIdx(){try{const r=await fetch("katalog/bilder/index.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&j.bilder){BIDX=j;ls.set("bildIdx",j)}}}catch{}return BIDX}
-async function bildDataKey(kid){if(bildKeys[kid])return bildKeys[kid];const bk=KB&&KB.bildKey;if(!bk||!crypto.subtle||!BIDX||!BIDX.keys[kid])return null;
+let BIDX=ls.get("bildIdx",null),BNEXT=null,bildPriv=null,bildKeys={},bildMemo={},bildSync={laeuft:false,ok:0,gesamt:0,fehler:0};
+// BIDX = zuletzt VOLLSTÄNDIG geladenes Bild-Verzeichnis (gilt offline); BNEXT = neues Verzeichnis vom Server, wird erst nach komplettem Download übernommen
+async function loadBildIdx(){try{const r=await fetch("katalog/bilder/index.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&j.bilder&&j.keys){BNEXT=j;if(!BIDX){BIDX=j;ls.set("bildIdx",j)}}}}catch{}return BIDX}
+const bEntry=id=>(BNEXT&&BNEXT.bilder&&BNEXT.bilder[id])||(BIDX&&BIDX.bilder&&BIDX.bilder[id])||null;
+const bKey=e=>"katalog/bilder/"+e.f+"?k="+e.kid;   // gleiche Datei, neuer Schlüssel = neuer Eintrag (keine falsch entschlüsselten Altbilder)
+async function bildDataKey(kid,idx){if(bildKeys[kid])return bildKeys[kid];const bk=KB&&KB.bildKey,I=idx||BIDX;if(!bk||!crypto.subtle||!I||!I.keys[kid])return null;
   if(!bildPriv)bildPriv=await crypto.subtle.importKey("pkcs8",fromB64(bk),{name:"RSA-OAEP",hash:"SHA-256"},false,["decrypt"]);
-  const raw=await crypto.subtle.decrypt({name:"RSA-OAEP"},bildPriv,fromB64(BIDX.keys[kid]));return bildKeys[kid]=await crypto.subtle.importKey("raw",raw,"AES-GCM",false,["decrypt"])}
-async function encFile(f,mayFetch=true){const u="katalog/bilder/"+f;const c=await caches.open("atlas-bilder-v1");let r=await c.match(u);
-  if(!r&&mayFetch&&navigator.onLine){const x=await fetch(u,{cache:"no-store"});if(x.ok){await c.put(u,x.clone());r=x}}return r?await r.arrayBuffer():null}
-async function localBild(id){if(!id||!BIDX||!BIDX.bilder||!BIDX.bilder[id]||!("caches" in window))return null;if(bildMemo[id])return bildMemo[id];
-  const e=BIDX.bilder[id];try{const key=await bildDataKey(e.kid);if(!key)return null;const buf=await encFile(e.f);if(!buf)return null;const b=new Uint8Array(buf);
-    const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:b.slice(0,12)},key,b.slice(12));return bildMemo[id]=URL.createObjectURL(new Blob([plain],{type:e.typ||"image/jpeg"}))}catch{return null}}
-// Alle Bilder einmal in den Gerätespeicher holen (im Hintergrund, schonend, nur mit Internet)
-async function syncBilder(){if(bildSync.laeuft||!navigator.onLine||!("caches" in window))return;await loadBildIdx();if(!BIDX||!BIDX.bilder)return;bildSync.laeuft=true;
-  const L=Object.values(BIDX.bilder),c=await caches.open("atlas-bilder-v1");bildSync.gesamt=L.length;bildSync.ok=0;bildSync.fehler=0;
-  const keep=new Set(L.map(e=>new URL("katalog/bilder/"+e.f,location.href).href));for(const k of await c.keys())if(!keep.has(k.url))await c.delete(k);   // alte Bilder entfernen
-  let i=0;const worker=async()=>{while(i<L.length){const e=L[i++];try{if(await c.match("katalog/bilder/"+e.f)){bildSync.ok++;continue}if(!navigator.onLine)break;
-      const x=await fetch("katalog/bilder/"+e.f,{cache:"no-store"});if(x.ok){await c.put("katalog/bilder/"+e.f,x);bildSync.ok++}else bildSync.fehler++}catch{bildSync.fehler++}await new Promise(r=>setTimeout(r,30))}};
-  await Promise.all([worker(),worker(),worker()]);bildSync.laeuft=false;diag(`bilder offline: ${bildSync.ok}/${bildSync.gesamt}`)}
+  const raw=await crypto.subtle.decrypt({name:"RSA-OAEP"},bildPriv,fromB64(I.keys[kid]));return bildKeys[kid]=await crypto.subtle.importKey("raw",raw,"AES-GCM",false,["decrypt"])}
+async function bCache(){return caches.open("atlas-bilder-v1")}
+async function encFile(e,mayFetch=true){const c=await bCache();let r=await c.match(bKey(e));
+  if(!r){const old=await c.match("katalog/bilder/"+e.f);if(old){await c.put(bKey(e),old.clone());await c.delete("katalog/bilder/"+e.f);r=old}}   // Übernahme aus 2.24
+  if(!r&&mayFetch&&navigator.onLine){const x=await fetch("katalog/bilder/"+e.f+"?k="+e.kid,{cache:"no-store"});if(x.ok){await c.put(bKey(e),x.clone());r=x}}return r?await r.arrayBuffer():null}
+async function localBild(id){if(!id||!("caches" in window))return null;if(bildMemo[id])return bildMemo[id];
+  for(const I of [BNEXT,BIDX]){const e=I&&I.bilder&&I.bilder[id];if(!e)continue;
+    try{const key=await bildDataKey(e.kid,I);if(!key)continue;const buf=await encFile(e,I===BIDX);if(!buf)continue;const b=new Uint8Array(buf);
+      const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:b.slice(0,12)},key,b.slice(12));return bildMemo[id]=URL.createObjectURL(new Blob([plain],{type:e.typ||"image/jpeg"}))}catch{}}
+  return null}
+// Alle Bilder + Nährwerttabellen einmal in den Gerätespeicher holen; erst wenn ALLES da ist, wird das neue Verzeichnis übernommen und Veraltetes gelöscht
+async function syncBilder(){if(bildSync.laeuft||!navigator.onLine||!("caches" in window))return;await loadBildIdx();const N=BNEXT||BIDX;if(!N||!N.bilder)return;bildSync.laeuft=true;
+  const L=Object.values(N.bilder),c=await bCache();bildSync.gesamt=L.length;bildSync.ok=0;bildSync.fehler=0;bildSync.neu=0;
+  const have=new Set((await c.keys()).map(k=>k.url));
+  for(const e of L){const u=new URL(bKey(e),location.href).href;if(!have.has(u)){const old=await c.match("katalog/bilder/"+e.f);if(old){await c.put(bKey(e),old.clone());await c.delete("katalog/bilder/"+e.f);have.add(u)}}}
+  let i=0,last=0;const worker=async()=>{while(i<L.length){const e=L[i++];try{if(have.has(new URL(bKey(e),location.href).href)){bildSync.ok++;continue}if(!navigator.onLine)break;
+      const x=await fetch("katalog/bilder/"+e.f+"?k="+e.kid,{cache:"no-store"});const buf=x.ok?await x.clone().arrayBuffer():null;
+      if(buf&&buf.byteLength>28){await c.put(bKey(e),x);bildSync.ok++;bildSync.neu++}else bildSync.fehler++}catch{bildSync.fehler++}
+      if(bildSync.neu&&Date.now()-last>400){last=Date.now();netBar()}await new Promise(r=>setTimeout(r,30))}};
+  await Promise.all([worker(),worker(),worker()]);
+  const komplett=bildSync.ok===L.length;
+  if(komplett){BIDX=N;BNEXT=null;try{ls.set("bildIdx",N)}catch{}bildMemo={};
+    const keep=new Set(L.map(e=>new URL(bKey(e),location.href).href));for(const k of await c.keys())if(!keep.has(k.url))await c.delete(k);   // veraltete Bilder erst jetzt entfernen
+    ls.set("offlineOk",Date.now())}
+  bildSync.laeuft=false;bildSync.fertig=komplett;diag(`bilder offline: ${bildSync.ok}/${bildSync.gesamt}`);netBar(komplett?"fertig":"")}
 // Feste Produkt-ID: b-… (Biogena), m-… (MoleQlar), n-… (Norsan), d-… (edubily) aus der Adresse der Produktseite (Varianten mit Zusatz), e-… (eigener Eintrag) – eindeutig je Produkt
 const katId=p=>p.eigen?"e-"+norm(p.n).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""):p.id?p.id:(p.h==="Biogena"?"b-":p.h==="MoleQlar"?"m-":"x-")+String(p.u||"").replace(/[?#].*$/,"").replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]/g,"");
 function katById(id){if(!KAT_ID||KAT_ID.n!==(KAT?KAT.produkte.length:0)+KAT_EIGEN.length){const M=new Map();for(const p of katAll())M.set(katId(p),p);KAT_ID={n:(KAT?KAT.produkte.length:0)+KAT_EIGEN.length,M}}return KAT_ID.M.get(String(id||"").toLowerCase())||null}
@@ -923,7 +940,7 @@ function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{fo
   return {key:"kb:"+e.id,title:mine.length===1?coreOf(mine[0]):e.name.split(" (")[0],sub:mine.length===1?"aus deiner Liste":"aus deiner Wissensbibliothek"}}
 function showCard(c){$("suppCard").classList.remove("multi");scCur=c;scAt=Date.now();scMiss=0;$("scT").textContent=c.title;$("scS").textContent=c.sub||"";$("scImg").innerHTML=SC_PH;
   $("suppCard").classList.add("on");$("suppCard").setAttribute("aria-hidden","false");
-  const hasLocal=!!(c.id&&BIDX&&BIDX.bilder&&BIDX.bilder[c.id]);
+  const hasLocal=!!(c.id&&bEntry(c.id));
   if(!hasLocal&&!c.img&&!(c.key&&BILD[c.key])){diag("karte: platzhalter (kein Bild hinterlegt)");return}
   (hasLocal?localBild(c.id).then(u=>u||bildUrl(c.key,c.img)):bildUrl(c.key,c.img)).then(u=>{if(scCur!==c)return;if(!u){diag("karte: platzhalter (offline, Bild nicht gespeichert)");return}
     const im=new Image();im.alt=c.title;im.referrerPolicy="no-referrer";im.decoding="async";
@@ -947,7 +964,7 @@ const CARD_KEEP=30000;
 function hideCard(delay=1200,force=false){if(!delay){scPlan.forEach(clearTimeout);scPlan=[];prodTimers.forEach(clearTimeout);prodTimers=[]}clearTimeout(scTimer);clearTimeout(scHide);scHide=setTimeout(()=>{if(!force&&speaking())return;if($("prodDet")&&!$("prodDet").hidden)return;$("suppCard").classList.remove("on");$("suppCard").setAttribute("aria-hidden","true");scCur=null},delay)}
 // ===== 2.23: mehrere Produkte (markenübergreifend) und Detailkarte zum Antippen =====
 // Bildadresse für eine Produkt-ID: zuerst die verschlüsselte Kopie im Gerät, sonst (nur online) das Herstellerbild
-function prodImgUrl(id,key,img){const hasLocal=!!(id&&BIDX&&BIDX.bilder&&BIDX.bilder[id]);if(!hasLocal&&!img&&!(key&&BILD[key]))return Promise.resolve(null);
+function prodImgUrl(id,key,img){const hasLocal=!!(id&&bEntry(id));if(!hasLocal&&!img&&!(key&&BILD[key]))return Promise.resolve(null);
   return (hasLocal?localBild(id).then(u=>u||bildUrl(key,img)):bildUrl(key,img)).catch(()=>null)}
 function putImg(el,u,alt,ok){if(!u)return;const im=new Image();im.alt=alt;im.referrerPolicy="no-referrer";im.decoding="async";im.onload=()=>{if(ok()){el.innerHTML="";el.append(im)}};im.src=u}
 // {{n-…,d-…,b-…}}: bis zu 4 Katalogprodukte als kurze Liste (Bild, Name, Marke); jede Zeile öffnet ihre eigene Detailkarte
@@ -1027,12 +1044,12 @@ function openDetail(id){const p=katById(id);if(!p||p.eigen){diag("detail: unbeka
   h+=row("Datenstand",txt(String(p.ab||"").slice(0,10)||"unbekannt")+" · Herstellerangaben, keine Wirksamkeitsbelege");
   h+="</dl>";
   // Nährwerttabelle als Bild (Norsan/edubily geben sie nur so heraus) – offline aus dem Gerätespeicher
-  const tid=id+"--tabelle",hasTab=!!(BIDX&&BIDX.bilder&&BIDX.bilder[tid])||!!p.nb;
+  const tid=id+"--tabelle",hasTab=!!bEntry(tid)||!!p.nb;
   if(hasTab)h+=`<div class="pdSec"><h3>Nährwerttabelle (Bild des Herstellers)</h3><div id="pdTabBox"><span class="unk">wird geladen …</span></div></div>`;
   const G=glossFor(p);if(G.length)h+=`<div class="pdSec"><h3>Inhaltsstoffe erklärt</h3>`+G.map(g=>`<p class="pdG"><b>${esc(g.name)}:</b> ${esc(g.txt)}${g.menge?`<span class="mg">In diesem Produkt laut Hersteller: ${esc(g.menge)}</span>`:""}</p>`).join("")+`<p class="pdG unk">Allgemeine Erklärung, keine Dosierempfehlung.</p></div>`;
   const kbE=kbList().find(e=>e.katalog===id);if(kbE)h+=`<div class="pdSec"><h3>Aus deiner Wissensbibliothek</h3><dl>${[["Wofür",kbE.wofuer],["Studienlage",[kbE.evidenz,kbE.evidenz_text].filter(Boolean).join(": ")],["Risiken",kbE.risiken]].filter(x=>x[1]).map(x=>row(x[0],txt(x[1]))).join("")}</dl></div>`;
   $("pdBody").innerHTML=h;pdFoot();$("prodDet").hidden=false;$("pdBox").scrollTop=0;diag("detail: "+id);
-  if(hasTab)prodImgUrl(BIDX&&BIDX.bilder&&BIDX.bilder[tid]?tid:null,null,p.nb).then(u=>{const b=$("pdTabBox");if(!b||pdCur!==id)return;if(!u){b.innerHTML='<span class="unk">Bild nicht verfügbar (offline noch nicht gespeichert)</span>';return}
+  if(hasTab)prodImgUrl(bEntry(tid)?tid:null,null,p.nb).then(u=>{const b=$("pdTabBox");if(!b||pdCur!==id)return;if(!u){b.innerHTML='<span class="unk">Bild nicht verfügbar (offline noch nicht gespeichert)</span>';return}
     const im=new Image();im.className="pdTab";im.alt="Nährwerttabelle "+p.n;im.referrerPolicy="no-referrer";im.onload=()=>{if(pdCur===id){b.innerHTML="";b.append(im)}};im.onerror=()=>{b.innerHTML='<span class="unk">Bild nicht verfügbar</span>'};im.onclick=e=>{e.stopPropagation();im.classList.toggle("big")};im.src=u});
   return true}
 // Detailkarte für einen Eintrag deiner Wissensbibliothek/Liste (ohne Katalogprodukt)
@@ -1231,7 +1248,9 @@ function katStat(){const by={};for(const p of KAT.produkte){const h=by[p.h]=by[p
 const katNem=p=>p.ty?p.ty==="Nahrungsergänzungsmittel":!/^kein /.test(p.k||"");
 // für Suche/Karte: auch Produkte, deren Art der Hersteller nicht als Text angibt (edubily), nicht abwerten
 const katSupp=p=>katNem(p)||p.ty==="Produktart nicht angegeben";
-async function loadKatalog(){try{const r=await fetch("katalog/supplement_catalog.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&Array.isArray(j.produkte)&&j.produkte.length){KAT=katCompact(j);KAT_SRC="Server";try{localStorage.setItem(P+"katalog",JSON.stringify(KAT))}catch{}return}}}catch{}
+async function loadKatalog(){try{const r=await fetch("katalog/supplement_catalog.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&Array.isArray(j.produkte)&&j.produkte.length){KAT=katCompact(j);KAT_SRC=navigator.onLine?"Server":"Offline-Speicher";
+    // Mit Service Worker liegt der Katalog bereits im Offline-Speicher – keine zweite Kopie im Gerät; ohne Service Worker wie bisher
+    try{if(navigator.serviceWorker&&navigator.serviceWorker.controller)localStorage.removeItem(P+"katalog");else localStorage.setItem(P+"katalog",JSON.stringify(KAT))}catch{}return}}}catch{}
   // ohne Netz: gespeicherte Kopie verwenden
   if(!KAT){try{KAT=JSON.parse(localStorage.getItem(P+"katalog")||"null");if(KAT)KAT_SRC="Offline-Kopie im Gerät"}catch{}}}
 function katSearch(q,hersteller,max=6){if(!KAT&&!KAT_EIGEN.length)return [];const T=tk(q).filter(w=>w.length>2&&!/^(fuer|mit|und|der|die|das|ein|eine|was|gibt|welches|welche|produkt|produkte|biogena|moleqlar|molekular|norsan|edubily|supplement|praeparat|praeparate|moechte|brauche|suche)$/.test(w));if(!T.length)return [];const T0=[...T];
@@ -1248,7 +1267,7 @@ function katSearch(q,hersteller,max=6){if(!KAT&&!KAT_EIGEN.length)return [];cons
   const out=[],per={};for(const x of R){const h=x.p.h;if((per[h]||0)<2&&x.s>=Math.min(5,R[0].s*0.4)){out.push(x);per[h]=(per[h]||0)+1}}
   for(const x of R){if(out.length>=max)break;if(!out.includes(x))out.push(x)}return out.slice(0,Math.max(max,out.length)).sort((a,b)=>b.s-a.s).map(x=>x.p)}
 const katOut=p=>p.eigen?{id:katId(p),eigener_eintrag:true,name:p.n,hersteller:p.h,notiz:p.hw[0]||null,erfasst:String(p.ab).slice(0,10),hinweis:"von Mario ergänzt, keine Herstellerdaten"}:({id:katId(p),hersteller:p.h,name:p.n,produkttyp:p.ty||null,link:p.u,linie:p.l,kategorie:p.k,anwendung_laut_hersteller:p.a,inhaltsstoffe_pro_portion:p.t?{kopf:p.t.kopf,zeilen:p.t.zeilen.slice(0,10)}:(p.m&&p.m.length?{aus_text:p.m}:null),
-  zutaten:p.z,verzehrempfehlung:p.v,packung:p.pk,form:p.f,tagesdosis_laut_hersteller:p.td||null,naehrwerttabelle_als_bild:p.nb||(BIDX&&BIDX.bilder&&BIDX.bilder[katId(p)+"--tabelle"])?true:undefined,varianten:p.vr||null,hinweise:p.hw,allergene:p.al,preis:p.pr?`${p.pr.betrag} ${p.pr.waehrung}${p.pr.hinweis?" – "+p.pr.hinweis:""} (abgerufen ${String(p.pr.abgerufen).slice(0,10)})`:null,fehlende_angaben:(p.fe||[]).length?katFehlt(p):null,produktbilder:"nicht geprüft – keine Werte daraus übernommen",abgerufen:String(p.ab).slice(0,10)});
+  zutaten:p.z,verzehrempfehlung:p.v,packung:p.pk,form:p.f,tagesdosis_laut_hersteller:p.td||null,naehrwerttabelle_als_bild:p.nb||bEntry(katId(p)+"--tabelle")?true:undefined,varianten:p.vr||null,hinweise:p.hw,allergene:p.al,preis:p.pr?`${p.pr.betrag} ${p.pr.waehrung}${p.pr.hinweis?" – "+p.pr.hinweis:""} (abgerufen ${String(p.pr.abgerufen).slice(0,10)})`:null,fehlende_angaben:(p.fe||[]).length?katFehlt(p):null,produktbilder:"nicht geprüft – keine Werte daraus übernommen",abgerufen:String(p.ab).slice(0,10)});
 
 // ===== Supplement-Tagebuch: drei Zustände je Supplement (genommen / nicht genommen / offen), nur eindeutige Aussagen zählen =====
 const tk=s=>toks(String(s).replace(/[-–\/]/g," "));
@@ -1499,7 +1518,7 @@ async function runTool(name,inp){
     if(a==="entfernen"){const old=KAT_EIGEN.splice(ei,1)[0];saveEigen();return `Eigener Eintrag „${old.name}“ entfernt.`}
     const x=KAT_EIGEN[ei];if(inp.neuer_name)x.name=String(inp.neuer_name).trim();if(inp.hersteller!==undefined)x.hersteller=String(inp.hersteller||"").trim()||null;if(inp.notiz!==undefined)x.notiz=String(inp.notiz||"").trim()||null;saveEigen();return `Eigener Eintrag geändert: ${JSON.stringify(x)}`}
   case "naehrwerttabelle_lesen":{const p=katById(inp.id||"");if(!p)return "Unbekannte id – erst mit katalog_suchen suchen.";const tid=katId(p)+"--tabelle";
-    try{let blob=null,typ="image/png";const e=BIDX&&BIDX.bilder&&BIDX.bilder[tid];
+    try{let blob=null,typ="image/png";const e=bEntry(tid);
       if(e){const u=await localBild(tid);if(u){blob=await (await fetch(u)).blob();typ=e.typ||blob.type}}
       if(!blob&&p.nb&&navigator.onLine){try{const r=await fetch(p.nb,{mode:"cors"});if(r.ok){blob=await r.blob();typ=blob.type}}catch{}}
       if(!blob)return p.nb?"Die Nährwerttabelle ist auf diesem Gerät noch nicht gespeichert (braucht einmal Internet). Sag das ehrlich, nichts schätzen.":"Für dieses Produkt gibt es keine Nährwerttabelle als Bild; nutze die Angaben aus katalog_suchen.";
@@ -1697,6 +1716,7 @@ function perfDone(){if(!perf.end||!perf.audio)return;const r=x=>x?Math.round(x-p
 function whenIdle(fn){const tick=()=>{if(!busy&&!speaking()&&!listening)fn();else setTimeout(tick,300)};setTimeout(tick,200)}
 async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"}={}){turnStart=Date.now();turnMarked=false;
   if(away)return;
+  if(!navigator.onLine&&!internal){offlineReply(text);return}
   if(!S.key){openSheet("setup");showErr("Bitte zuerst den API-Schlüssel eintragen.");return}
   if(busy)return;busy=true;touch();showErr("");
   addLog(internal?"intern":"mensch",text);
@@ -2021,6 +2041,7 @@ function renderSetup(){
   <section class="card"><h2>Speicher</h2>
     <div class="note">Allgemeiner Antwort-Cache: zeitloses Allgemeinwissen, das Atlas selbst als allgemein gültig markiert hat und das du nicht korrigiert hast. Läuft nach 14 Tagen ab.</div>
     <div class="note" id="sKbInfo"></div>
+    <div class="note" id="sOffInfo"></div><div class="row"><button class="btn small" type="button" id="sOffGo">Offline-Daten neu laden</button></div>
     <div class="row"><button class="btn small" id="sCacheClr" type="button">Allgemeinen Antwortspeicher leeren</button><span class="note" id="sCacheInfo"></span></div>
     <label class="row" for="sPrefOn" style="gap:10px;margin-top:14px"><input type="checkbox" id="sPrefOn" style="width:22px;height:22px"> Persönliche Infos speichern erlauben (nur nach deiner Bestätigung, Gesundheit nur mit ausdrücklicher Zustimmung)</label>
     <label class="row" for="sObsOn" style="gap:10px;margin-top:10px"><input type="checkbox" id="sObsOn" style="width:22px;height:22px"> Beobachtungen aus Gesprächen merken (Training, Schlaf, Stress, Ziele, Reaktionen auf Supplements). Ein = deine Zustimmung dafür.</label>
@@ -2070,6 +2091,7 @@ function renderSetup(){
   $("pAdd").onclick=()=>{draft.push({id:"p"+Date.now().toString(36),name:"Neue Person",typ:"erwachsen",info:"",routine:[],supps:[],notes:[]});drawProfiles()};
   $("sCacheInfo").textContent=ls.get("acache",[]).filter(e=>e.key&&Date.now()-e.at<CACHE_TTL).length+" gespeicherte Antworten";$("sCacheClr").onclick=()=>{ls.del("acache");pendingCache=null;$("sCacheInfo").textContent="Geleert."};
   const katTxt=KAT?" Produktkatalog (geprüft "+String(KAT.stand).slice(0,10)+", geladen aus: "+(KAT_SRC||"unbekannt")+"): "+Object.entries(katStat()).map(([h,x])=>`${h} – ${x.alle_gefundenen_produkte} Produkte gefunden; ${x.nahrungsergaenzungen} Nahrungsergänzungen: ${x.vollstaendig} vollständig, ${x.teilweise} teilweise; ${x.andere_produktarten} andere Produktarten`).join(". ")+". Produktbilder offline gespeichert: "+(bildSync.gesamt?bildSync.ok+" von "+bildSync.gesamt+(bildSync.laeuft?" (wird geladen)":""):(BIDX&&BIDX.bilder?"wird geprüft":"noch nicht geladen"))+".":" Produktkatalog: nicht geladen.";
+  offlineStatus().then(o=>{$("sOffInfo").textContent=offTxt(o)});$("sOffGo").onclick=()=>{offlineRefresh();$("sOffInfo").textContent="Lädt neu … (Fortschritt oben auf dem Hauptbildschirm)"};
   $("sKbInfo").textContent=(KB?`Wissensbibliothek: ${kbList().length} Präparate, Stand ${KB.v}, lokal gespeichert.`:"Wissensbibliothek: noch nicht geladen (Einrichtungs-Code einfügen).")+katTxt;
   $("sObsOn").checked=!!S.obsStore;$("sObsOn").onchange=()=>{S.obsStore=$("sObsOn").checked;saveSettings()};
   $("sRest").value=S.restHours||6;$("sRest").onchange=()=>{S.restHours=Math.max(1,Math.min(24,+$("sRest").value||6));saveSettings()};
@@ -2127,9 +2149,48 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261114-2151",ATLAS_REL="2.24";
+const APP_VERSION="20261114-2230",ATLAS_REL="2.25";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
-  if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
+  if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
+
+// ===== 2.25: Offline-Start (Service Worker), Offline-Status, sichere Aktualisierung =====
+if("serviceWorker" in navigator&&(location.protocol==="https:"||/^(localhost|127\.0\.0\.1)$/.test(location.hostname))){
+  navigator.serviceWorker.register("sw.js").then(r=>{diag("sw: registriert");r.addEventListener("updatefound",()=>diag("sw: neue Version wird geladen"))}).catch(e=>diag("sw: "+String(e.message||e).slice(0,60)))}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().then(p=>diag("speicher dauerhaft: "+p))}catch{}
+async function offlineStatus(){const o={online:navigator.onLine,sw:!!(navigator.serviceWorker&&navigator.serviceWorker.controller),shell:false,kat:!!KAT,kb:!!KB,bilder:0,bilderGes:0,fehlt:[]};
+  try{if("caches" in window){const home=new URL("./",location.href).href;for(const k of await caches.keys())if(k.startsWith("atlas-app-")&&await (await caches.open(k)).match(home)){o.shell=true;break}
+    const N=BIDX||BNEXT;if(N&&N.bilder){const have=new Set((await (await bCache()).keys()).map(k=>k.url));const L=Object.values(N.bilder);o.bilderGes=L.length;o.bilder=L.filter(e=>have.has(new URL(bKey(e),location.href).href)).length}}
+    if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();o.mb=Math.round((e.usage||0)/1048576)}if(navigator.storage&&navigator.storage.persisted)o.dauerhaft=await navigator.storage.persisted()}catch{}
+  if(!o.shell)o.fehlt.push("App-Oberfläche");if(!o.kat)o.fehlt.push("Produktkatalog");if(!o.kb&&ls.get("kbKey",null))o.fehlt.push("Wissensbibliothek");
+  if(!o.bilderGes||o.bilder<o.bilderGes)o.fehlt.push(`Bilder ${o.bilder} von ${o.bilderGes||"?"}`);o.ready=!o.fehlt.length;
+  o.freigegeben=!o.ready&&!!ls.get("offlineOk",0)&&(!o.shell||o.bilder===0);return o}
+const offTxt=o=>`Offline-Start: ${o.ready?"bereit":"unvollständig"} · ${o.online?"jetzt online":"jetzt offline"} · App-Oberfläche ${o.shell?"gespeichert":"fehlt"} · Katalog ${o.kat?"da":"fehlt"} · Wissensbibliothek ${o.kb?"da":"fehlt"} · Bilder und Nährwerttabellen ${o.bilder} von ${o.bilderGes||"?"}`+(o.mb!=null?` · belegt ca. ${o.mb} MB`:"")+(o.dauerhaft!=null?` · ${o.dauerhaft?"dauerhaft gespeichert":"iOS darf den Speicher bei Platzmangel freigeben"}`:"")+". Ohne Internet bleiben: Gespräche mit Claude, Nährwerttabelle vorlesen lassen, Bestellseiten, Update-Prüfung.";
+let netHide=0;
+function netShow(t,{prog=null,btn=false,btnOn=true,off=false,hide=0}={}){const b=$("netBar");b.hidden=false;b.classList.toggle("off",off);$("netTxt").textContent=t;
+  $("netProg").hidden=prog==null;if(prog!=null)$("netProg").value=prog;$("netGo").hidden=!btn;$("netGo").disabled=!btnOn;$("netGo").textContent=btnOn?"Neu laden":"Neu laden (braucht Internet)";
+  clearTimeout(netHide);if(hide)netHide=setTimeout(()=>{$("netBar").hidden=true},hide)}
+async function netBar(ev){if(!$("netBar"))return;
+  if(bildSync.laeuft&&navigator.onLine&&bildSync.neu){netShow(`Offline-Daten werden geladen: ${bildSync.ok} von ${bildSync.gesamt} Bildern`,{prog:bildSync.gesamt?bildSync.ok/bildSync.gesamt:0});return}
+  if(bildSync.laeuft)return;
+  const o=await offlineStatus();
+  if(ev==="fertig"&&o.ready&&bildSync.neu){netShow("Offline-Daten vollständig ✓ – Atlas startet jetzt auch ohne Internet.",{hide:6000});return}
+  if(o.online&&o.ready)return netShow("Online · Offline-Daten vollständig",{hide:4000});
+  if(o.online)return netShow(`Online · Offline-Daten unvollständig (${o.fehlt.join(", ")})`,{btn:true});
+  if(o.ready)return netShow("Offline · Katalog, Bilder und Produktkarten gehen. Gespräche mit Atlas brauchen Internet.",{off:true});
+  netShow(`Offline · ${o.freigegeben?"iOS hat die gespeicherten Offline-Daten freigegeben":"Offline-Daten fehlen"} (${o.fehlt.join(", ")}). Mit Internet „Neu laden“ tippen.`,{btn:true,btnOn:false,off:true})}
+async function offlineRefresh(){if(!navigator.onLine){netBar();return}netShow("Offline-Daten werden neu geladen …",{prog:0});
+  try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();if(r)await r.update().catch(()=>{});else if(navigator.serviceWorker)await navigator.serviceWorker.register("sw.js").catch(()=>{})}catch{}
+  await Promise.all([loadKatalog(),loadKB(),loadBildMap()].map(p=>p.catch(()=>{})));await syncBilder();if(!bildSync.neu)netBar()}
+// Offline: keine Anfrage an Claude, sondern ehrliche Antwort + passende Produkte aus dem lokalen Katalog
+function offlineReply(text){addLog("mensch",text);const hits=/produkt|präparat|praeparat|omega|magnes|vitamin|kreatin|zeig|katalog|norsan|biogena|moleqlar|edubily|kapsel|zink|kollagen|elektrolyt/i.test(text)?katSearch(text,null,8):[];let msg;
+  if(hits.length>1){const pick=[],seen=new Set();for(const x of hits)if(!seen.has(x.h)){seen.add(x.h);pick.push(x)}for(const x of hits)if(pick.length<4&&!pick.includes(x))pick.push(x);
+    showCardList(pick.slice(0,4).map(katId));msg="Ich bin gerade offline. Ich zeige dir passende Produkte aus dem Katalog – tipp eins an für die Details."}
+  else if(hits.length===1){applyMark(katId(hits[0]));msg=`Ich bin gerade offline. Hier ist ${hits[0].n} von ${hits[0].h} – tipp die Karte an für die Details.`}
+  else msg="Ich bin gerade offline. Für Antworten brauche ich Internet. Katalog, Bilder und Produktkarten kannst du trotzdem nutzen.";
+  diag("offline-antwort: "+hits.length);addLog("assistent",msg);speak(msg)}
+$("netGo").onclick=()=>offlineRefresh();
+addEventListener("online",()=>netBar());addEventListener("offline",()=>netBar());
+setTimeout(()=>netBar(),5000);
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setTimeout(()=>{syncBilder()},9000);setInterval(()=>{if(bildSync.ok<bildSync.gesamt||!bildSync.gesamt)syncBilder()},10*60000);addEventListener("online",()=>setTimeout(syncBilder,3000));setInterval(checkUpdate,10*60000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")checkUpdate()});
 
