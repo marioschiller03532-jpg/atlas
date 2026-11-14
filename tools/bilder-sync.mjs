@@ -12,19 +12,21 @@ const pub=fs.readFileSync("tools/bilder-public.pem","utf8");
 const dataKey=crypto.randomBytes(32),kid=crypto.createHash("sha1").update(dataKey).digest("hex").slice(0,10);
 const wrapped=crypto.publicEncrypt({key:pub,padding:crypto.constants.RSA_PKCS1_OAEP_PADDING,oaepHash:"sha256"},dataKey).toString("base64");
 let neu=0,fehler=[],gleich=0;const ids=new Set();
-const todo=kat.produkte.filter(p=>p.bild);
-for(const p of todo){const id=katId(p);ids.add(id);const old=idx.bilder[id];if(old&&old.url===p.bild&&fs.existsSync(DIR+"/"+old.f)){gleich++;continue}
+// Hauptbild jedes Produkts + (falls vorhanden) die Nährwerttabelle als Bild (ID mit Zusatz „--tabelle“)
+const todo=kat.produkte.filter(p=>p.bild).map(p=>({id:katId(p),bild:p.bild,name:p.name,hersteller:p.hersteller}))
+  .concat(kat.produkte.filter(p=>p.naehrwert_bild).map(p=>({id:katId(p)+"--tabelle",bild:p.naehrwert_bild,name:p.name+" – Nährwerttabelle",hersteller:p.hersteller,art:"tabelle"})));
+for(const p of todo){const id=p.id;ids.add(id);const old=idx.bilder[id];if(old&&old.url===p.bild&&fs.existsSync(DIR+"/"+old.f)){gleich++;continue}
   try{let r;for(let t=0;t<4;t++){r=await fetch(p.bild,{headers:{"user-agent":UA,"accept":"image/avif,image/webp,image/png,image/jpeg,image/*"}});await sleep(/cdn\.shopify\.com/.test(p.bild)?1200:250);
       if(r.status!==403&&r.status!==429)break;await sleep([15000,45000,90000][t]||90000)}   // Shopify-CDN drosselt: warten und erneut versuchen
     if(!r.ok)throw new Error("HTTP "+r.status);const typ=(r.headers.get("content-type")||"image/jpeg").split(";")[0];if(!/^image\//.test(typ))throw new Error("kein Bild: "+typ);
     const buf=Buffer.from(await r.arrayBuffer());if(buf.length<500||buf.length>3e6)throw new Error("Größe "+buf.length);
     const iv=crypto.randomBytes(12),c=crypto.createCipheriv("aes-256-gcm",dataKey,iv),ct=Buffer.concat([c.update(buf),c.final(),c.getAuthTag()]);
-    const f=id+".bin";fs.writeFileSync(DIR+"/"+f,Buffer.concat([iv,ct]));idx.bilder[id]={f,kid,typ,url:p.bild,name:p.name,hersteller:p.hersteller,bytes:buf.length};neu++}
+    const f=id+".bin";fs.writeFileSync(DIR+"/"+f,Buffer.concat([iv,ct]));idx.bilder[id]={f,kid,typ,url:p.bild,name:p.name,hersteller:p.hersteller,bytes:buf.length,...(p.art?{art:p.art}:{})};neu++}
   catch(e){fehler.push({id,name:p.name,grund:String(e.message||e).slice(0,120)})}}
 if(neu)idx.keys[kid]=wrapped;
 // Bilder entfernter Produkte aufräumen
 for(const id of Object.keys(idx.bilder))if(!ids.has(id)){try{fs.unlinkSync(DIR+"/"+idx.bilder[id].f)}catch{}delete idx.bilder[id]}
 const used=new Set(Object.values(idx.bilder).map(b=>b.kid));for(const k of Object.keys(idx.keys))if(!used.has(k))delete idx.keys[k];
-idx.stand=new Date().toISOString();idx.bericht={produkte_mit_bildadresse:todo.length,gespeichert:Object.keys(idx.bilder).length,neu,unveraendert:gleich,fehler};
+idx.stand=new Date().toISOString();idx.bericht={produkte_mit_bildadresse:todo.filter(x=>!x.art).length,naehrwerttabellen:todo.filter(x=>x.art).length,gespeichert:Object.keys(idx.bilder).length,neu,unveraendert:gleich,fehler};
 fs.writeFileSync(IDX,JSON.stringify(idx,null,1));
 console.log(JSON.stringify(idx.bericht).slice(0,500));

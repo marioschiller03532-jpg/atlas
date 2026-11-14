@@ -14,7 +14,8 @@ const uniq=a=>[...new Set(a.filter(Boolean))];
 const FELD={inhaltsstoffe:"Mengen pro Portion (Nährstofftabelle)",zutaten:"Zutaten",verzehrempfehlung:"Verzehr-/Einnahmeempfehlung",packung:"Packungsgröße"};
 const BILDTAB="nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen";
 function finish(p,R,grund){if(!p.form&&/\d\s?ml$/.test(p.packung||"")&&p.typ!=="Zubehör/Sonstiges")p.form="flüssig";const nem=p.typ==="Nahrungsergänzungsmittel";const miss=["inhaltsstoffe","zutaten","verzehrempfehlung","packung"].filter(k=>!p[k]);
-  p.fehlend=nem?miss:[];p.fehlend_grund=Object.fromEntries(p.fehlend.map(k=>[k,grund[k]||"nicht auf der Produktseite gefunden"]));p.vollstaendig=nem?miss.length===0:null;
+  p.fehlend=nem?miss:[];p.fehlend_grund=Object.fromEntries(p.fehlend.map(k=>[k,grund[k]||"nicht auf der Produktseite gefunden"]));
+  if(p.naehrwert_bild)for(const k of p.fehlend)if(/nur als Bild/.test(p.fehlend_grund[k]))p.fehlend_grund[k]="beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)";p.vollstaendig=nem?miss.length===0:null;
   R.typen[p.typ]=(R.typen[p.typ]||0)+1;if(nem){R.nem++;if(p.vollstaendig)R.vollstaendig++;else R.teilweise.push({name:p.name,url:p.url,fehlende_angaben:Object.fromEntries(p.fehlend.map(k=>[FELD[k],p.fehlend_grund[k]]))})}
   return p}
 const formOf=(name,t)=>/Jell(y|ies)/i.test(name)?"Fruchtgummi (Jelly)":/Fruchtgumm/i.test(name+" "+t)?"Fruchtgummis":/Kapseln|Softgels?/i.test(name)?"Kapseln":/Tropfen/i.test(name)||/pro Tropfen/i.test(t)?"Tropfen":/Pulver/i.test(name)?"Pulver":
@@ -50,10 +51,11 @@ export async function norsan(get,NOW){
     const pk=(D.match(/In einer (?:Dose|Flasche|Packung) sind (\d+\s?(?:Kapseln|ml|Stück))/i)||D.match(/Inhalt:\s*(\d+\s?ml(?: entsprechen \d+ Tropfen)?)/i)||name.match(/(\d+)er Packung/)&&[0,name.match(/(\d+)er Packung/)[1]+" Stück"]||D.match(/\((\d+ Stück)\)/)||(!/Kapseln|Jelly|Set\b|Trio/i.test(name)&&[...D.matchAll(/\((\d+)\s?ml\)/g)].map(m=>[0,m[1]+" ml"]).find(m=>parseInt(m[1])>=30))||[])[1]||null;
     let typ=/\bSet\b|Power Trio|Check-up/i.test(name)?"Set/Bundle":/Analyse/i.test(name)?"Test/Analyse":/Olivenöl|OLIVENÖL/i.test(name)?"Lebensmittel":NEMTXT.test(ALL)?"Nahrungsergänzungsmittel":"Zubehör/Sonstiges";
     const imgs=(pr.images||[]).map(i=>i.src).filter(u=>!/N(ae|ä)hrwert|Infografik|Labor|\.svg$/i.test(u));
+    const tabs=(pr.images||[]).map(i=>i.src).filter(u=>/N(ae|ä)hrwert/i.test(u)&&!/ohne-Rahmen/i.test(u));   // Nährwerttabelle (nur als Bild beim Hersteller)
     const price=pr.prices?{betrag:+pr.prices.price/10**(pr.prices.currency_minor_unit??2),waehrung:pr.prices.currency_code||"EUR",verfuegbar:!!pr.is_in_stock,abgerufen:NOW,hinweis:"Shoppreis norsan.de (Deutschland)"}:null;
     const base={hersteller:"Norsan",name,url:pr.permalink,abgerufen:NOW,bild:imgs[0]||null,linie:((pr.categories||[]).map(c=>ent(c.name)).find(c=>/^Omega-3 |^nadarra$/i.test(c))||null),kurz:null,
       kategorie:null,anwendungsbereiche_hersteller:[],inhaltsstoffe:null,mengen_aus_text:dose,zutaten:zut?clip(zut,700):null,verzehrempfehlung:verz,tagesdosis:tdoseS,packung:pk,form:formOf(name,D)||(/\d\s?ml\b|Teelöffel|Esslöffel/i.test(einn||"")&&!/Set\b|Trio|Check-up/i.test(name)?"Öl (flüssig)":null),
-      hinweise:hin,allergene:[],preis:price,ean:pr.sku||null,dokumente:[],quelle_ergaenzt:[]};
+      hinweise:hin,allergene:[],preis:price,ean:pr.sku||null,dokumente:[],quelle_ergaenzt:[],naehrwert_bild:tabs[0]||null};
     if(/NÀDARRA|NADARRA/i.test(name))base.linie="NÀDARRA (Vertrieb über Norsan)";
     base.kategorie=typ==="Nahrungsergänzungsmittel"?(/Vitamin D/i.test(name)?"Vitamin D":/Magnes/i.test(name)?"Magnesium":"Omega-3"):typ;
     const grund={inhaltsstoffe:BILDTAB,zutaten:"nicht als Text auf der Produktseite",verzehrempfehlung:"nicht als Text auf der Produktseite",packung:"nicht als Text auf der Produktseite"};
@@ -63,6 +65,8 @@ export async function norsan(get,NOW){
         const p={...base,name:`${name} (${val})`,url:`${pr.permalink}?attribute_${slug(a.name)}=${encodeURIComponent(a.value)}`,variante:{[ent(a.name)]:val},typ,
           hinweise:[...base.hinweise],quelle_ergaenzt:["Variante des Shop-Produkts "+name+"; Zutatenliste gilt laut Herstellerseite für alle Varianten"]};
         if(/ohne Vitamin D3/i.test(val)&&p.zutaten&&/Cholecalciferol/i.test(p.zutaten))p.hinweise.unshift("Achtung: Die Zutatenliste der Herstellerseite nennt Cholecalciferol (Vitamin D3) – sie gilt für beide Varianten; für „ohne Vitamin D3“ nicht variantengenau.");
+        // Variante mit eigener Tabelle (z. B. TOTAL_Z = Zitrone, TOTAL_N = Naturell); sonst keine Tabelle, statt eine falsche zu zeigen
+        if(tabs.length>1){const k=/^mit\b/i.test(val)?/_mit/i:/^ohne\b/i.test(val)?/_ohne/i:new RegExp("_"+val.trim()[0]+"(-\\d+)?\\.(png|jpe?g|webp)$","i");p.naehrwert_bild=tabs.find(u=>k.test(u))||null}
         p.id="n-"+slug(pr.slug)+"-"+slug(val);out.push(finish(p,R,grund))}}
     else{const p={...base,typ};p.id="n-"+slug(pr.slug);out.push(finish(p,R,grund))}}
   R.hinweis="Zutaten, Einnahme und Hinweise als Text von der Produktseite. Mengen pro Portion stehen dort nur in einer Bild-Tabelle: übernommen werden nur ausdrücklich im Text genannte Mengen (z. B. „Tagesdosis enthält …“).";
@@ -85,6 +89,8 @@ export async function edubily(get,NOW){
     const body=txt(pr.body_html)||ldDesc,faqTxt=FAQ.map(f=>f.a).join(" "),ALL=body+" "+faqTxt;
     const fq=re=>{const f=FAQ.find(x=>re.test(x.q));return f?f.a:null};
     const einn=fq(/eingenommen|einnehmen|Einnahme|dosier|Verzehr|anwenden|Anwendung|verwende|zubereit/i);
+    const nwP=page.indexOf("content-panel-nutrition"),nwM=nwP>=0?page.slice(nwP,nwP+4000).match(/src="((?:https:)?\/\/[^"]+?\.(?:webp|png|jpe?g)[^"]*)"/i):null;
+    const tabImg=nwM?(nwM[1].startsWith("//")?"https:"+nwM[1]:nwM[1]).replace(/&amp;/g,"&").replace(/([?&])width=\d+/,"$1width=1200"):null;
     const zutM=(txt(page).match(/Zutaten:?\s+([^.]{10,600}\.)/)||[])[1]||null;
     const hin=uniq([...sentences(fq(/beachten|Hinweis|Warnhinweis/i)||""),...sentences(faqTxt).filter(s=>/Schwanger|Stillzeit|Kinder|ab \d+ Jahren|Arzt|Medikament|nicht überschritten|Kühlschrank/i.test(s))].map(s=>clip(s,220))).slice(0,6);
     const dose=uniq([body,...FAQ.map(f=>f.a)].flatMap(t=>sentences(t.replace(/(\d)\s*(mg|µg|μg)(?=[A-ZÄÖÜ\d])/g,"$1 $2 · "))).filter(s=>UNIT.test(s)&&/enthält|enthalten|pro (Tagesdos|Portion|Kapsel|Tropfen|ml|Messlöffel|Stick)|Tagesdos|je Kapsel|in \d+ Kapseln/i.test(s)&&!/Zufuhr|Weltbevölkerung|Studie|Forsch|Probanden|empfiehlt|Referenzwert|legen nahe|Bedarf|Index|optimal|Lebensmittel|Fisch|Nahrung|Fleisch|\bEi\b|Eies|Tasse|Ernährung|Synthese|Quellen|pro 100 g/i.test(s)&&/Kapsel|Portion|Tagesdosis|Tropfen|Messlöffel|Stick|\bunser|Produkt|1 ml Öl/i.test(s)).map(s=>clip(s,240))).slice(0,4);
@@ -103,7 +109,7 @@ export async function edubily(get,NOW){
         kategorie:pr.product_type||null,anwendungsbereiche_hersteller:[],inhaltsstoffe:null,mengen_aus_text:dose,zutaten:zutM?clip(zutM,700):null,verzehrempfehlung:einn?clip(einn,420):null,
         tagesdosis:dose.find(s=>/Tagesdos|pro Tag/i.test(s))||null,packung:pk,form:formOf(nm+" "+(G.g||"")+" "+V.map(v=>v.t).join(" "),ALL),hinweise:hin,allergene:[],
         preis:v0.p?{betrag:v0.p,waehrung:"EUR",verfuegbar:v0.a,abgerufen:NOW,hinweis:G.V.length>1?"für "+v0.t:"Shoppreis edubily.de"}:null,
-        varianten:G.V.length>1?G.V.map(v=>({variante:v.t,preis:v.p})):null,geschmack:flav.length?flav:null,ean:null,dokumente:[],typ,quelle_ergaenzt:G.g?["Variante „"+G.g+"“ des Shop-Produkts "+name]:[]};
+        varianten:G.V.length>1?G.V.map(v=>({variante:v.t,preis:v.p})):null,naehrwert_bild:groups.length>1?null:tabImg,geschmack:flav.length?flav:null,ean:null,dokumente:[],typ,quelle_ergaenzt:G.g?["Variante „"+G.g+"“ des Shop-Produkts "+name]:[]};
       if(typ==="Produktart nicht angegeben")p.hinweise.unshift("Produktart (z. B. Nahrungsergänzungsmittel) steht nicht als Text auf der Produktseite.");
       p.id="d-"+slug(pr.handle)+(G.g?"-"+slug(G.g.replace(/\(.*?\)/g,"")):"");out.push(finish(p,R,grund))}}
   R.hinweis="Einnahme und Hinweise aus den Fragen & Antworten der Produktseite; Mengen nur, wo sie im Text stehen. Zutaten und Nährwerttabelle zeigt edubily nur als Bild – daher als fehlend markiert.";
