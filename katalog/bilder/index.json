@@ -1,7 +1,8 @@
 {
  "v": 1,
  "keys": {
-  "63f5003c83": "Uve235lksvYzC/Ciza7nNRxiVDrhm6H0WTrJj1/vVzS5B3rhVwOMOxd2uN8Q1zpkhPQc/KodrFo+bm4O/i0Jjl/tKypdY1GTC9TORg/e6eAT4Gb9Q+Vkh6koSATGk9FV2TzoRM7hWfI0emGX4yBc1AKCvZeZamKNrL/VYKvcDSq3vuf9KzPa7TM8bY1F13G4AMx5BDBM6ndnc5KTLJGjTotgAl7WAKmYcwnvDsmJj7jkS/48jmNAPRctGY4V1/lA9sZ0YfTiR44dV8zoJqbfZbJtBOu/7IAicPU43N3eet9GIEM+qrdEmjMPGCG20J80OQXFwqSmlMAT/CjY8ohhLQ=="
+  "63f5003c83": "Uve235lksvYzC/Ciza7nNRxiVDrhm6H0WTrJj1/vVzS5B3rhVwOMOxd2uN8Q1zpkhPQc/KodrFo+bm4O/i0Jjl/tKypdY1GTC9TORg/e6eAT4Gb9Q+Vkh6koSATGk9FV2TzoRM7hWfI0emGX4yBc1AKCvZeZamKNrL/VYKvcDSq3vuf9KzPa7TM8bY1F13G4AMx5BDBM6ndnc5KTLJGjTotgAl7WAKmYcwnvDsmJj7jkS/48jmNAPRctGY4V1/lA9sZ0YfTiR44dV8zoJqbfZbJtBOu/7IAicPU43N3eet9GIEM+qrdEmjMPGCG20J80OQXFwqSmlMAT/CjY8ohhLQ==",
+  "53ac993f81": "k9JPRZzP5YvOYMfTLNQ1N+qpzLZOH34XpE1cDgEwr/2uKidk1v2x7vb5sRLptSEMVHMScoc1As48T+EiyTA/k5jECSBx5fddRVUIv+ng+rDeAtwGtRm/sj6m+MJF5TwGTHsuQmd3vEdFFIXRiNi11nCWLC+tgvzBK/JL+9FhG5PN4UtqYEcXmMIbAKuWnNfkC4XYZ/J8Fg6qI3WmAtZ0U6KBMPoo8FsL/Z2Xda90PnaTaTmrSfi87PqAEdZDMrYu8VRaYGqewdSWWx4YQqk/QpaULX7d/zdF+vhHSVzx/VBdwAWbGG/e3/IPVpGpnOb1ay4/PMLM6c95cEPwcPS7zw=="
  },
  "bilder": {
   "b-vitamin-c-liposomal-583": {
@@ -21,15 +22,6 @@
    "name": "Omni Lactis® GLP-1 Companion",
    "hersteller": "Biogena",
    "bytes": 15417
-  },
-  "b-fell-haut-leckerlis-fuer-hunde-mit-biotin-zink-576": {
-   "f": "b-fell-haut-leckerlis-fuer-hunde-mit-biotin-zink-576.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_PETS_Leckerlis_Fell_Haut_Standbeutel_frontal_2608-1790775053.png",
-   "name": "Fell & Haut Leckerlis für Hunde – mit Biotin & Zink",
-   "hersteller": "Biogena",
-   "bytes": 20322
   },
   "b-the-clear-one-glas-trinkflasche-575": {
    "f": "b-the-clear-one-glas-trinkflasche-575.bin",
@@ -192,15 +184,6 @@
    "name": "Pro Peptide Protein Isolate",
    "hersteller": "Biogena",
    "bytes": 21941
-  },
-  "b-dog-check-dna-health-plus-dna-test-hund-444": {
-   "f": "b-dog-check-dna-health-plus-dna-test-hund-444.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_PETS_DogCheck_DNA_Health_FS_Right_2605-1778572587.png",
-   "name": "DOG CHECK - DNA Health+",
-   "hersteller": "Biogena",
-   "bytes": 26896
   },
   "b-biogena-sports-omega-3-oel-vegan-443": {
    "f": "b-biogena-sports-omega-3-oel-vegan-443.bin",
@@ -499,15 +482,6 @@
    "hersteller": "Biogena",
    "bytes": 25448
   },
-  "b-gelenk-leckerlis-360": {
-   "f": "b-gelenk-leckerlis-360.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_gelenk_leckerlis-1769259837.png",
-   "name": "Gelenk Leckerlis",
-   "hersteller": "Biogena",
-   "bytes": 20283
-  },
   "b-wellbeing-check-ultimate-360-bluttest-359": {
    "f": "b-wellbeing-check-ultimate-360-bluttest-359.bin",
    "kid": "63f5003c83",
@@ -516,51 +490,6 @@
    "name": "Wellbeing Check Ultimate 360° Bluttest",
    "hersteller": "Biogena",
    "bytes": 25843
-  },
-  "b-gutschein-happy-wuffday-355": {
-   "f": "b-gutschein-happy-wuffday-355.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_birthday_cover-1769259859.png",
-   "name": "Gutschein “Happy Wuffday”",
-   "hersteller": "Biogena",
-   "bytes": 29179
-  },
-  "b-gutschein-fuer-die-beste-fellnase-der-welt-353": {
-   "f": "b-gutschein-fuer-die-beste-fellnase-der-welt-353.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_neutral_cover-1769259932.png",
-   "name": "Gutschein “Für die beste Fellnase der Welt”",
-   "hersteller": "Biogena",
-   "bytes": 30094
-  },
-  "b-gutschein-besser-als-kekse-351": {
-   "f": "b-gutschein-besser-als-kekse-351.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_christmas_cover-1769259887.png",
-   "name": "Gutschein “Besser als Kekse”",
-   "hersteller": "Biogena",
-   "bytes": 24497
-  },
-  "b-gutschein-willkommen-im-rudel-350": {
-   "f": "b-gutschein-willkommen-im-rudel-350.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_new_member_cover-1769259959.png",
-   "name": "Gutschein “Willkommen im Rudel”",
-   "hersteller": "Biogena",
-   "bytes": 26208
-  },
-  "b-gutschein-tapfere-pfoten-345": {
-   "f": "b-gutschein-tapfere-pfoten-345.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_pets_pdp_giftcard_get_well_cover-1769259912.png",
-   "name": "Gutschein “Tapfere Pfoten”",
-   "hersteller": "Biogena",
-   "bytes": 23934
   },
   "b-basogena-5-basenpulver-343": {
    "f": "b-basogena-5-basenpulver-343.bin",
@@ -571,15 +500,6 @@
    "hersteller": "Biogena",
    "bytes": 12392
   },
-  "b-biogena-one-signature-bottle-342": {
-   "f": "b-biogena-one-signature-bottle-342.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/BiogenaOne_SignatureBottle__img_product_108931-1769260303.png",
-   "name": "Signature Bottle",
-   "hersteller": "Biogena",
-   "bytes": 9163
-  },
   "b-biogena-aesthetics-signature-bottle-341": {
    "f": "b-biogena-aesthetics-signature-bottle-341.bin",
    "kid": "63f5003c83",
@@ -588,15 +508,6 @@
    "name": "Signature Bottle",
    "hersteller": "Biogena",
    "bytes": 7107
-  },
-  "b-add-one-cholesterin-support-340": {
-   "f": "b-add-one-cholesterin-support-340.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ADD_ONE_Cholesterol_FS_Stick_2505_1-1769151740.png",
-   "name": "ADD+ ONE CHOLESTEROL SUPPORT",
-   "hersteller": "Biogena",
-   "bytes": 30284
   },
   "b-safrodia-superior-339": {
    "f": "b-safrodia-superior-339.bin",
@@ -688,15 +599,6 @@
    "hersteller": "Biogena",
    "bytes": 11056
   },
-  "b-add-one-omega-3-support-323": {
-   "f": "b-add-one-omega-3-support-323.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ADD_ONE_Omega3__Support_150ml_2504-1779867641.png",
-   "name": "ADD+ ONE OMEGA-3 SUPPORT ",
-   "hersteller": "Biogena",
-   "bytes": 19885
-  },
   "b-darm-care-bundle-322": {
    "f": "b-darm-care-bundle-322.bin",
    "kid": "63f5003c83",
@@ -714,15 +616,6 @@
    "name": "Muscle Bundle - BCAA, Creatin und Protein",
    "hersteller": "Biogena",
    "bytes": 13139
-  },
-  "b-biogena-one-starter-bundle-319": {
-   "f": "b-biogena-one-starter-bundle-319.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/biogena_one_starter_bundle_productshot_de_1_-1793719065.png",
-   "name": "Starter Bundle",
-   "hersteller": "Biogena",
-   "bytes": 20953
   },
   "b-gutschein-318": {
    "f": "b-gutschein-318.bin",
@@ -768,15 +661,6 @@
    "name": "BIOGENA moments - beauty bites",
    "hersteller": "Biogena",
    "bytes": 37497
-  },
-  "b-biogena-one-probe-312": {
-   "f": "b-biogena-one-probe-312.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Produktkarte_closed_2602-1773059272.png",
-   "name": "Probe",
-   "hersteller": "Biogena",
-   "bytes": 15924
   },
   "b-vitamin-b12-tropfen-311": {
    "f": "b-vitamin-b12-tropfen-311.bin",
@@ -2002,15 +1886,6 @@
    "hersteller": "Biogena",
    "bytes": 13396
   },
-  "b-biogena-minis-fit-at-work-premium-gold-163": {
-   "f": "b-biogena-minis-fit-at-work-premium-gold-163.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_MINI_fit_work_PREMiUM_Biogena_10Kps_50cc_2312-1769250731.png",
-   "name": "BIOGENA minis - fit@work® Premium Gold",
-   "hersteller": "Biogena",
-   "bytes": 10039
-  },
   "b-biogena-sports-immunity-162": {
    "f": "b-biogena-sports-immunity-162.bin",
    "kid": "63f5003c83",
@@ -2056,15 +1931,6 @@
    "hersteller": "Biogena",
    "bytes": 12025
   },
-  "b-biogena-minis-ashwagandha-formula-155": {
-   "f": "b-biogena-minis-ashwagandha-formula-155.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_MINI_AshwagandhaFormula_Biogena_18Kps_50cc_2312-1769250706.png",
-   "name": "Biogena Minis - Ashwagandha Formula",
-   "hersteller": "Biogena",
-   "bytes": 9757
-  },
   "b-opc-resveratrol-formula-154": {
    "f": "b-opc-resveratrol-formula-154.bin",
    "kid": "63f5003c83",
@@ -2082,15 +1948,6 @@
    "name": "Magnesium Sport ",
    "hersteller": "Biogena",
    "bytes": 16803
-  },
-  "b-biogena-one-nachfuell-box-152": {
-   "f": "b-biogena-one-nachfuell-box-152.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_ONE_Faltschachtel_2x15er_2601-1773059342.png",
-   "name": "Nachfüll-Box",
-   "hersteller": "Biogena",
-   "bytes": 22621
   },
   "b-lecithin-b-komplex-151": {
    "f": "b-lecithin-b-komplex-151.bin",
@@ -2362,15 +2219,6 @@
    "hersteller": "Biogena",
    "bytes": 15301
   },
-  "b-biogena-minis-siebensalz-magnesium-115": {
-   "f": "b-biogena-minis-siebensalz-magnesium-115.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_MINI_SiebensalzMagnesium_Biogena_18Kps_50cc_2312-1769250864.png",
-   "name": "BIOGENA minis - Siebensalz® Magnesium",
-   "hersteller": "Biogena",
-   "bytes": 10017
-  },
   "b-biogena-sports-active-coq10-200-mg-ubiquinol-113": {
    "f": "b-biogena-sports-active-coq10-200-mg-ubiquinol-113.bin",
    "kid": "63f5003c83",
@@ -2388,15 +2236,6 @@
    "name": "DiaPhyt® Formula",
    "hersteller": "Biogena",
    "bytes": 13245
-  },
-  "b-biogena-minis-antistress-formula-111": {
-   "f": "b-biogena-minis-antistress-formula-111.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_EXCEPT_MINI_AntistressFormula_Biogena_14Kps_50cc_2312-1769250690.png",
-   "name": "BIOGENA minis - Antistress Formula®",
-   "hersteller": "Biogena",
-   "bytes": 9692
   },
   "b-l-glutathion-reduziert-110": {
    "f": "b-l-glutathion-reduziert-110.bin",
@@ -2578,15 +2417,6 @@
    "hersteller": "Biogena",
    "bytes": 14641
   },
-  "b-senior-tropfen-89": {
-   "f": "b-senior-tropfen-89.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_PETS_Senior_Tropfen_25011-1769251303.png",
-   "name": "Senior Tropfen",
-   "hersteller": "Biogena",
-   "bytes": 21093
-  },
   "b-coralicea-87": {
    "f": "b-coralicea-87.bin",
    "kid": "63f5003c83",
@@ -2686,15 +2516,6 @@
    "hersteller": "Biogena",
    "bytes": 14417
   },
-  "b-gelenk-tropfen-71": {
-   "f": "b-gelenk-tropfen-71.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Gelenk_Product-1769262979.png",
-   "name": "Gelenk Tropfen",
-   "hersteller": "Biogena",
-   "bytes": 21020
-  },
   "b-marines-omega-3-liquid-70": {
    "f": "b-marines-omega-3-liquid-70.bin",
    "kid": "63f5003c83",
@@ -2776,15 +2597,6 @@
    "hersteller": "Biogena",
    "bytes": 13222
   },
-  "b-multivitamin-tropfen-58": {
-   "f": "b-multivitamin-tropfen-58.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Multivitamin_Product-1769263040.png",
-   "name": "Multivitamin Tropfen",
-   "hersteller": "Biogena",
-   "bytes": 21764
-  },
   "b-blutdruck-formula-gold-56": {
    "f": "b-blutdruck-formula-gold-56.bin",
    "kid": "63f5003c83",
@@ -2811,24 +2623,6 @@
    "name": "Omega Tropfen",
    "hersteller": "Biogena",
    "bytes": 20909
-  },
-  "b-relax-tropfen-52": {
-   "f": "b-relax-tropfen-52.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Relax_Product-1769263095.png",
-   "name": "Relax Tropfen",
-   "hersteller": "Biogena",
-   "bytes": 21026
-  },
-  "b-bauch-tropfen-50": {
-   "f": "b-bauch-tropfen-50.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/B_PETS_Bauch_Tropfen_2501-1769251196.png",
-   "name": "Bauch Tropfen",
-   "hersteller": "Biogena",
-   "bytes": 20986
   },
   "b-algenoel-omega-3-liquid-vegan-superior-49": {
    "f": "b-algenoel-omega-3-liquid-vegan-superior-49.bin",
@@ -2874,15 +2668,6 @@
    "name": "Multispektrum 24/7® Aktiv Saft",
    "hersteller": "Biogena",
    "bytes": 21905
-  },
-  "b-fell-haut-tropfen-7": {
-   "f": "b-fell-haut-tropfen-7.bin",
-   "kid": "63f5003c83",
-   "typ": "image/jpeg",
-   "url": "https://assets.biogena.com/products/f=png,w=1200,h=630,background=%23f9f9f9/Tropfen_Fell_Haut_Product-1769262925.png",
-   "name": "Fell & Haut Tropfen",
-   "hersteller": "Biogena",
-   "bytes": 21495
   },
   "b-coenzym-q10-active-gold-60-mg-4": {
    "f": "b-coenzym-q10-active-gold-60-mg-4.bin",
@@ -3846,14 +3631,955 @@
    "name": "QNIGHT (Relaxation & Recovery Support)",
    "hersteller": "MoleQlar",
    "bytes": 47910
+  },
+  "n-omega-3-vegan-epa-kapseln": {
+   "f": "n-omega-3-vegan-epa-kapseln.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/08/DE_202600810_VeganEPA_Kapseln_Stoerer-Kopie.webp",
+   "name": "OMEGA-3 VEGAN EPA KAPSELN",
+   "hersteller": "Norsan",
+   "bytes": 176820
+  },
+  "n-omega-3-vegan-epa-set": {
+   "f": "n-omega-3-vegan-epa-set.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/08/DE_20250521_VeganEPA_Flasche_Kapseln_Box.png",
+   "name": "OMEGA-3 VEGAN EPA SET",
+   "hersteller": "Norsan",
+   "bytes": 677484
+  },
+  "n-power-trio-vegan-kapseln": {
+   "f": "n-power-trio-vegan-kapseln.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/01/DE_20251218_1080x1080px_NORSANxN80DARRA2.webp",
+   "name": "Power Trio – Vegan Kapseln",
+   "hersteller": "Norsan",
+   "bytes": 140146
+  },
+  "n-power-trio-vegan": {
+   "f": "n-power-trio-vegan.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/01/DE_20251218_1080x1080px_NORSANxN80DARRA.webp",
+   "name": "Power Trio – Vegan",
+   "hersteller": "Norsan",
+   "bytes": 133808
+  },
+  "n-power-trio-total-kapseln": {
+   "f": "n-power-trio-total-kapseln.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/01/DE_20251218_1080x1080px_NORSANxN80DARRA4.webp",
+   "name": "Power Trio – Total Kapseln",
+   "hersteller": "Norsan",
+   "bytes": 148200
+  },
+  "n-power-trio-total": {
+   "f": "n-power-trio-total.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/01/DE_20251218_1080x1080px_NORSANxN80DARRA3.webp",
+   "name": "Power Trio – Total",
+   "hersteller": "Norsan",
+   "bytes": 138392
+  },
+  "n-omega-3-kapseln": {
+   "f": "n-omega-3-kapseln.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/11/DE_20241128_Kapseln.webp",
+   "name": "Omega-3 Kapseln",
+   "hersteller": "Norsan",
+   "bytes": 139476
+  },
+  "n-omega-3-total-oel-zitrone": {
+   "f": "n-omega-3-total-oel-zitrone.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/12/DE_20241128_Total_Z_FlascheBox_Supplemento-1.png",
+   "name": "Omega-3 Total Öl (Zitrone)",
+   "hersteller": "Norsan",
+   "bytes": 422562
+  },
+  "n-omega-3-total-oel-naturell": {
+   "f": "n-omega-3-total-oel-naturell.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/12/DE_20241128_Total_Z_FlascheBox_Supplemento-1.png",
+   "name": "Omega-3 Total Öl (Naturell)",
+   "hersteller": "Norsan",
+   "bytes": 422562
+  },
+  "n-omega-3-vegan-epa": {
+   "f": "n-omega-3-vegan-epa.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/12/DE_20250117_Vegan_EPA_FlascheBox_Supplemento.png",
+   "name": "Omega-3 VEGAN EPA",
+   "hersteller": "Norsan",
+   "bytes": 339422
+  },
+  "n-vitamin-d-1-000-vegan": {
+   "f": "n-vitamin-d-1-000-vegan.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/06/VitaminD_Vegan_krople_15ml_mockup_single_trans.png",
+   "name": "NÀDARRA Vitamin D 1.000 Vegan",
+   "hersteller": "Norsan",
+   "bytes": 26644
+  },
+  "n-vitamin-d-1-000-tropfen": {
+   "f": "n-vitamin-d-1-000-tropfen.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/06/VitaminD_krople_15ml_mockup_single_trans-1.png",
+   "name": "NÀDARRA Vitamin D 1.000",
+   "hersteller": "Norsan",
+   "bytes": 25250
+  },
+  "n-vitamin-d-5000-mit-k2": {
+   "f": "n-vitamin-d-5000-mit-k2.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/06/VitaminD5000K2_krople_30ml_mockup_single_trans-1.png",
+   "name": "NÀDARRA Vitamin D 5.000 mit K2",
+   "hersteller": "Norsan",
+   "bytes": 26660
+  },
+  "n-omega-3-alga-jelly-vegan-120er-packung": {
+   "f": "n-omega-3-alga-jelly-vegan-120er-packung.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20251016_Alga_jelly_120.webp",
+   "name": "Omega-3 ALGA Jelly Vegan 120er Packung",
+   "hersteller": "Norsan",
+   "bytes": 204288
+  },
+  "n-omega-3-alga-jelly-vegan-45er-packung": {
+   "f": "n-omega-3-alga-jelly-vegan-45er-packung.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20251006_Alga_jelly_45.webp",
+   "name": "Omega-3 ALGA Jelly Vegan 45er Packung",
+   "hersteller": "Norsan",
+   "bytes": 202188
+  },
+  "n-omega-3-fisk-jelly-120er-packung": {
+   "f": "n-omega-3-fisk-jelly-120er-packung.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20251016_Fisk_jelly_120.webp",
+   "name": "Omega-3 FISK Jelly 120er Packung",
+   "hersteller": "Norsan",
+   "bytes": 197708
+  },
+  "n-omega-3-fisk-jelly-45er-packung": {
+   "f": "n-omega-3-fisk-jelly-45er-packung.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20251006_Fisk_jelly_45.webp",
+   "name": "Omega-3 FISK Jelly 45er Packung",
+   "hersteller": "Norsan",
+   "bytes": 239478
+  },
+  "n-omega-3-alga-kids-vegan-set": {
+   "f": "n-omega-3-alga-kids-vegan-set.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2022/07/DE_20250123_Alga_FlascheBoxJelly.webp",
+   "name": "Omega-3 ALGA Set",
+   "hersteller": "Norsan",
+   "bytes": 225674
+  },
+  "n-omega-3-total-check-up-set": {
+   "f": "n-omega-3-total-check-up-set.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/01/DE_20250307_Total_Z_Check-Up-Set-scaled.webp",
+   "name": "Omega-3 Total Check-up Set",
+   "hersteller": "Norsan",
+   "bytes": 219364
+  },
+  "n-omega-3-vegan-check-up-set": {
+   "f": "n-omega-3-vegan-check-up-set.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/01/DE_20250606_Vegan_Check-Up-Set-scaled.webp",
+   "name": "Omega-3 Vegan Check-up Set",
+   "hersteller": "Norsan",
+   "bytes": 217646
+  },
+  "n-omega-3-alga-kids-vegan": {
+   "f": "n-omega-3-alga-kids-vegan.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2022/10/DE_20250123_Alga_FlascheBox_Stoerer_2.webp",
+   "name": "Omega-3 ALGA",
+   "hersteller": "Norsan",
+   "bytes": 312622
+  },
+  "n-olivenoel": {
+   "f": "n-olivenoel.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/desierto_olio_coupage-513x1024-1.png",
+   "name": "SPANISCHES OLIVENÖL – ORO DEL DESIERTO BIO COUPAGE",
+   "hersteller": "Norsan",
+   "bytes": 132954
+  },
+  "n-norsan-fettsaeure-analyse": {
+   "f": "n-norsan-fettsaeure-analyse.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2022/06/DE_20250401_FSAnalyse.webp",
+   "name": "NORSAN Fettsäure-Analyse",
+   "hersteller": "Norsan",
+   "bytes": 224498
+  },
+  "n-omega-3-arktis-mit-vitamin-d3": {
+   "f": "n-omega-3-arktis-mit-vitamin-d3.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/12/DE_20241128_Arktis_FlascheBox_Supplemento.png",
+   "name": "Omega-3 Arktis (mit Vitamin D3)",
+   "hersteller": "Norsan",
+   "bytes": 409858
+  },
+  "n-omega-3-arktis-ohne-vitamin-d3": {
+   "f": "n-omega-3-arktis-ohne-vitamin-d3.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/12/DE_20241128_Arktis_FlascheBox_Supplemento.png",
+   "name": "Omega-3 Arktis (ohne Vitamin D3)",
+   "hersteller": "Norsan",
+   "bytes": 409858
+  },
+  "n-omega-3-fisk-set": {
+   "f": "n-omega-3-fisk-set.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2022/07/DE_20250127_Fisk_FlascheBoxJelly.webp",
+   "name": "Omega-3 FISK Set",
+   "hersteller": "Norsan",
+   "bytes": 213518
+  },
+  "n-omega-3-total-set": {
+   "f": "n-omega-3-total-set.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2022/07/DE_20250127_TotalZ_FlascheKalpselnBox.webp",
+   "name": "Omega-3 Total Set",
+   "hersteller": "Norsan",
+   "bytes": 177526
+  },
+  "n-omega-3-vegan-set": {
+   "f": "n-omega-3-vegan-set.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2022/07/DE_20250127_Vegan_FlascheKapselnBox.webp",
+   "name": "Omega-3 Vegan Set",
+   "hersteller": "Norsan",
+   "bytes": 163120
+  },
+  "n-omega-3-arktis-set": {
+   "f": "n-omega-3-arktis-set.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2022/07/DE_20252701_Arktis_FlascheKapselnFlasche.webp",
+   "name": "Omega-3 Arktis Set",
+   "hersteller": "Norsan",
+   "bytes": 142466
+  },
+  "n-omega-3-vegan": {
+   "f": "n-omega-3-vegan.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/12/DE_20250523_Vegan_FlascheBox_Supplemento.png",
+   "name": "Omega-3 Vegan",
+   "hersteller": "Norsan",
+   "bytes": 349324
+  },
+  "n-omega-3-fisk": {
+   "f": "n-omega-3-fisk.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/11/DE_20251006_Fisk_FlascheBox_Siegel.webp",
+   "name": "Omega-3 FISK Öl",
+   "hersteller": "Norsan",
+   "bytes": 247016
+  },
+  "n-omega-3-vegan-kapseln": {
+   "f": "n-omega-3-vegan-kapseln.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/11/DE_20241128_Vegan_Kapseln.webp",
+   "name": "Omega-3 Vegan Kapseln",
+   "hersteller": "Norsan",
+   "bytes": 128284
+  },
+  "n-omega-3-arktis-kapseln": {
+   "f": "n-omega-3-arktis-kapseln.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/11/DE_20241128_Arktis_Kapseln.webp",
+   "name": "Omega-3 Arktis Kapseln",
+   "hersteller": "Norsan",
+   "bytes": 153248
+  },
+  "d-vitamin-d3-k2-tropfen": {
+   "f": "d-vitamin-d3-k2-tropfen.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VitD3K2-01_72d1f9a9-1778-4d15-a60f-1242904b1638.webp?v=1783486190",
+   "name": "Vitamin D3 & K2 Tropfen",
+   "hersteller": "edubily",
+   "bytes": 35022
+  },
+  "d-whey-isolat": {
+   "f": "d-whey-isolat.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/EDU-B-057-WPI-Vanille-750g-01.webp?v=1792668352",
+   "name": "Weide Whey Protein Isolat",
+   "hersteller": "edubily",
+   "bytes": 63614
+  },
+  "d-tryptophan": {
+   "f": "d-tryptophan.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/L-Tryptophan-01.webp?v=1762159178",
+   "name": "L-Tryptophan Kapseln",
+   "hersteller": "edubily",
+   "bytes": 51218
+  },
+  "d-kollagen-hydrolysat": {
+   "f": "d-kollagen-hydrolysat.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Kollagen-01_6cab4cf7-cf07-4ae2-9a89-c57cdf8fd3ee.webp?v=1789452636",
+   "name": "Kollagen-Hydrolysat Pulver",
+   "hersteller": "edubily",
+   "bytes": 78432
+  },
+  "d-omega-3-kapseln": {
+   "f": "d-omega-3-kapseln.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Omega3_Beutel_01_c80a85ec-1d66-4421-b56f-4d2a212f6832.webp?v=1779492010",
+   "name": "Omega-3 Kapseln",
+   "hersteller": "edubily",
+   "bytes": 78022
+  },
+  "d-vitamin-d3": {
+   "f": "d-vitamin-d3.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Vitamin-D-Tropfen-01.webp?v=1792054806",
+   "name": "Vitamin D Öl",
+   "hersteller": "edubily",
+   "bytes": 42994
+  },
+  "d-vitamin-b-komplex": {
+   "f": "d-vitamin-b-komplex.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VitaminBKomplex-01_55a73014-6463-46f7-9215-ff48172f6fb0.webp?v=1773878801",
+   "name": "Vitamin B-Komplex",
+   "hersteller": "edubily",
+   "bytes": 48108
+  },
+  "d-veganes-protein": {
+   "f": "d-veganes-protein.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VeganesProtein-Schoko-01_f35ac19f-2203-43b8-b2b1-bb02c20abfbb.webp?v=1794232874",
+   "name": "Veganes Proteinpulver",
+   "hersteller": "edubily",
+   "bytes": 69302
+  },
+  "d-ei-protein": {
+   "f": "d-ei-protein.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Ei-Protein-Mousse-au-Chocolat-01_8198d275-5ba0-4fa8-b03c-5b0fe3791da5.webp?v=1773446084",
+   "name": "Ei-Protein Pulver aus Freilandhaltung",
+   "hersteller": "edubily",
+   "bytes": 53470
+  },
+  "d-magnesium-pulver": {
+   "f": "d-magnesium-pulver.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Magnesium-Heidelbeer-01_2b52d08f-b245-42dd-8ff2-bc5232ed1710.webp?v=1787308312",
+   "name": "Magnesium Pulver",
+   "hersteller": "edubily",
+   "bytes": 82476
+  },
+  "d-vitamin-a-retinol-kapseln": {
+   "f": "d-vitamin-a-retinol-kapseln.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VitaminA-01_6a0571a7-3d11-4ffc-bb32-72aa0fa1c6a1.webp?v=1762417691",
+   "name": "Vitamin A als reines Retinol (Kapseln)",
+   "hersteller": "edubily",
+   "bytes": 52516
+  },
+  "d-vitamin-a-retinol-tropfen": {
+   "f": "d-vitamin-a-retinol-tropfen.bin",
+   "kid": "53ac993f81",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VitaminA-01_6a0571a7-3d11-4ffc-bb32-72aa0fa1c6a1.webp?v=1762417691",
+   "name": "Vitamin A als reines Retinol (Tropfen)",
+   "hersteller": "edubily",
+   "bytes": 52516
   }
  },
- "stand": "2026-11-13T20:06:15.638Z",
+ "stand": "2026-11-14T06:04:47.352Z",
  "bericht": {
-  "produkte_mit_bildadresse": 427,
-  "gespeichert": 427,
-  "neu": 427,
-  "unveraendert": 0,
-  "fehler": []
+  "produkte_mit_bildadresse": 555,
+  "gespeichert": 448,
+  "neu": 45,
+  "unveraendert": 403,
+  "fehler": [
+   {
+    "id": "d-piperin-kapseln-restbestand",
+    "name": "Piperin Kapseln Restbestand",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-kreatin-mit-crea500",
+    "name": "Kreatin mit CREA500®",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-whey-isolat-pulver-neutral",
+    "name": "Whey-Isolat Pulver - Neutral",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-blu100-full-routine",
+    "name": "BLU100 Full Routine",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-blu100-glow-sleep-routine",
+    "name": "GLOW & SLEEP Routine",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-blu100-life-glow-routine",
+    "name": "LIFE & GLOW Routine",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-blu100-life-sleep-routine",
+    "name": "LIFE & SLEEP Routine",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-blu100-sleep",
+    "name": "SLEEP",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-blu100-life",
+    "name": "LIFE",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-blu100-glow",
+    "name": "GLOW",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-whey-protein-isolat",
+    "name": "Whey Protein Isolat",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-elektrolyte-pulver",
+    "name": "Elektrolyte Pulver",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitasauri-kids-magnesium",
+    "name": "Vitasauri® Kids Magnesium",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitasauri-kids-vitamin-d3-mit-k2",
+    "name": "Vitasauri® – Kids Vitamin D3 mit K2",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitasauri-kids-kogni-getrankepulver",
+    "name": "Vitasauri® Kids Kogni Getränkepulver",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-eduone",
+    "name": "eduone",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-kollagen-bar-dark-chocolate-almond",
+    "name": "KollagenBar dunkle Schokolade mit Mandel",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-whey-isolat-pulver-aus-weidemilch-limited-edition",
+    "name": "Whey-Isolat Pulver aus Weidemilch",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-wheynachtspunsch-clear-whey",
+    "name": "Wheynachtspunsch - Clear Whey",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitasauri-kids-flor",
+    "name": "Vitasauri® - Kids Flor",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitamin-d-tropfen-baby",
+    "name": "Vitasauri® Kids D3",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-veganbar-schokoladenkuchen",
+    "name": "VeganBar Schokoladenkuchen",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-mama-multi",
+    "name": "Mama Multi",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-veganes-protein-pro",
+    "name": "Veganes Protein Pro",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitamin-d3-mit-k2-kapseln",
+    "name": "Vitamin D3 mit K2 Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-magnesium-pulver-pur",
+    "name": "Magnesium Pulver pur",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitasauri-kids-eisen",
+    "name": "Vitasauri® Kids Eisen",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-grunder-bundle-chris",
+    "name": "Gründer-Bundle Chris",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-grunder-bundle-phil",
+    "name": "Gründer-Bundle Phil",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-chunky-protein-bar-chocolate-brownie",
+    "name": "Chunky Protein Bar Chocolate Brownie",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-edelstahl-shaker",
+    "name": "Edelstahl Shaker",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-essential-bundle",
+    "name": "Essential Bundle",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-schlaf-bundle",
+    "name": "Schlaf-Bundle",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-beef-sticks-teriyaki",
+    "name": "Beef Sticks Teriyaki",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-beef-bar-cranberry",
+    "name": "Beef Bar Cranberry",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitamin-d-kapseln",
+    "name": "Vitamin D Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-proteinwasser",
+    "name": "Proteinwasser",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitasauri-r-kids-mix",
+    "name": "Vitasauri® Kids Mix",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-cluster-dextrin-neu",
+    "name": "Cluster Dextrin®",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-beta-alanin",
+    "name": "Beta-Alanin",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-darm-bundle",
+    "name": "Darm-Bundle",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-testosteron-bundle",
+    "name": "Testosteron-Bundle",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-casein-protein-vanille",
+    "name": "Casein Protein Vanille",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-inositol-komplex",
+    "name": "Inositol Komplex",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-bio-schwarzkummelol-kapseln",
+    "name": "Bio-Schwarzkümmelöl Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-meno-balance",
+    "name": "Meno Balance",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-clear-vegan",
+    "name": "Clear Vegan",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-protein-bar-chocolate-vanilla",
+    "name": "Protein Bar Chocolate Vanilla",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-eduone-vorratsdose",
+    "name": "eduone® Nachfülldose",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-kids-mix-multivitamin-pulver-fur-kinder",
+    "name": "Kids Mix – Multivitamin-Pulver für Kinder",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-astaxanthin",
+    "name": "Astaxanthin Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-magnesiumkapseln",
+    "name": "Magnesium Komplex Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-granatapfel-extrakt-pro",
+    "name": "Granatapfel-Extrakt Pro",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-curcumin-kapseln-longvida-r-optimised-curcumin-r",
+    "name": "Curcumin Kapseln – Longvida® Optimised Curcumin®",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-hyaluronsaure-kapseln",
+    "name": "Hyaluronsäure Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-kollagen-shine",
+    "name": "Kollagen Shine",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-frauen-multi-plus",
+    "name": "Frauen Multi Plus",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-lysin-komplex",
+    "name": "Lysin Komplex",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-aminopeptide",
+    "name": "Aminopeptide",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitasauri-r-kids-omega-3",
+    "name": "Vitasauri® - Kids Omega-3",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-veganes-omega-3-ol",
+    "name": "Veganes Omega-3 Öl",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-whey-protein-konzentrat",
+    "name": "Whey Protein Konzentrat",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-bio-whey-protein-konzentrat",
+    "name": "Bio Whey Protein Konzentrat",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-calcium-kapseln",
+    "name": "Calcium Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-lactoferrin",
+    "name": "Lactoferrin",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-l-theanin",
+    "name": "L-Theanin",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-darmbakterien-kapseln",
+    "name": "Darmbakterien Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-pure-msm-kapseln",
+    "name": "MSM Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-pure-selen-kapseln",
+    "name": "Selen Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-marines-kollagen",
+    "name": "Marines Kollagenhydrolysat",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-l-carnosin",
+    "name": "L-Carnosin Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-lite-shaker",
+    "name": "Protein Shaker",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-pillenbox",
+    "name": "Pillenbox",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-vitamin-c-kapsel",
+    "name": "Vitamin C Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-eaa-pulver",
+    "name": "EAA Pulver – Essenzielle Aminosäuren",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-clear-whey-pulver-aus-whey-isolat",
+    "name": "Clear Whey - Pulver aus Whey-Isolat",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-whey-isolat-aus-weidemilch",
+    "name": "Whey-Isolat Pulver aus Weidemilch - Neutral",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-l-carnitin",
+    "name": "L-Carnitin Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-inositol-pulver",
+    "name": "Inositol Pulver",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-pure-glutamin-kapseln",
+    "name": "L-Glutamin Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-lp7-eaa-aminosaeuren-kapseln",
+    "name": "LP7 Aminosäuren Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-pure-citrullin-malat-kapseln",
+    "name": "Citrullin-Malat Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-pure-cholin-als-cdp-cholin",
+    "name": "Cholin Kapseln – als CDP-Cholin",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-ubiquinol-reduziertes-q10",
+    "name": "Ubiquinol Kapseln – Reduziertes Q10 von Kaneka®",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-l-tyrosin",
+    "name": "L-Tyrosin Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-chrompicolinat",
+    "name": "Chrompicolinat Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-propionsaure",
+    "name": "Propionsäure Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-emaille-tasse",
+    "name": "Emaille-Tasse",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-edu-basic",
+    "name": "edu basic",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-n-acetyl-l-cystein",
+    "name": "N-Acetyl-L-Cystein (NAC)",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-opc-komplex",
+    "name": "OPC-Komplex Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-gruntee-extrakt",
+    "name": "Grüntee-Extrakt Kapseln mit 50 % EGCG",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-iod-kapseln",
+    "name": "Iod Kapseln – aus reinstem Bio-Kelp",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-ashwagandha-kapseln-ksm-66",
+    "name": "Ashwagandha Kapseln KSM-66®",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-darmflora-komplex",
+    "name": "Darmflora-Komplex",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-zink-kapseln",
+    "name": "Zink-Komplex Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-citrullin-plus",
+    "name": "Citrullin plus",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-resistentes-dextrin",
+    "name": "Resistentes Dextrin Pulver",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-olivenblatt-extrakt",
+    "name": "Olivenblatt-Extrakt Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-glycin-pulver",
+    "name": "Glycin-Pulver",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-creatin-pulver",
+    "name": "Kreatin Pulver Creavitalis®",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-l-glutamin-pulver",
+    "name": "L-Glutamin Pulver",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-taurin",
+    "name": "Taurin Kapseln",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-das-multi-mit-iod",
+    "name": "Das Multi – Premium-Multivitamin-Kapseln (Mit Iod)",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-das-multi-ohne-iod",
+    "name": "Das Multi – Premium-Multivitamin-Kapseln (Ohne Iod)",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-eisen-mit-lactoferrin",
+    "name": "Eisen Kapseln mit Lactoferrin",
+    "grund": "HTTP 403"
+   },
+   {
+    "id": "d-calcium-plus",
+    "name": "Calcium Pulver",
+    "grund": "HTTP 403"
+   }
+  ]
  }
 }

@@ -1,7 +1,7 @@
 {
- "geprueft": "2026-11-13T19:54:59.832Z",
+ "geprueft": "2026-11-14T05:52:51.924Z",
  "definitionen": {
-  "gefunden": "alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",
+  "gefunden": "alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar und edubily: Shop-Produktliste; Norsan: Shop-Schnittstelle), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",
   "nem": "davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",
   "vollstaendig": "Nahrungsergänzung mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße",
   "teilweise": "mindestens eine dieser vier Angaben wurde nicht gefunden; fehlende Werte werden weder geschätzt noch ergänzt",
@@ -9,38 +9,39 @@
  },
  "hersteller": {
   "Biogena": {
-   "gefunden": 323,
-   "nem": 262,
-   "vollstaendig": 262,
+   "gefunden": 299,
+   "nem": 254,
+   "vollstaendig": 254,
    "teilweise": [],
    "nicht_abrufbar": [],
    "typen": {
-    "Nahrungsergänzungsmittel": 262,
-    "Zubehör/Sonstiges": 36,
-    "Set/Bundle": 5,
+    "Nahrungsergänzungsmittel": 254,
+    "Zubehör/Sonstiges": 22,
+    "Set/Bundle": 4,
     "Lebensmittel": 13,
-    "Test/Analyse": 5,
+    "Test/Analyse": 4,
     "Medizinprodukt": 2
    },
    "quelle": "https://biogena.com/sitemap/sitemap-de-at.xml",
    "offen_oder_nicht_abrufbar": 0,
-   "mit_produktbild": 323,
+   "mit_produktbild": 299,
    "produktbilder": "nicht geprüft",
    "status": {
-    "alle_gefundenen_produkte": 323,
-    "nahrungsergaenzungen": 262,
-    "davon_vollstaendig": 262,
+    "alle_gefundenen_produkte": 299,
+    "nahrungsergaenzungen": 254,
+    "davon_vollstaendig": 254,
     "davon_teilweise": 0,
-    "andere_produktarten": 61,
+    "andere_produktarten": 45,
     "andere_nach_art": {
-     "Zubehör/Sonstiges": 36,
-     "Set/Bundle": 5,
+     "Zubehör/Sonstiges": 22,
+     "Set/Bundle": 4,
      "Lebensmittel": 13,
-     "Test/Analyse": 5,
+     "Test/Analyse": 4,
      "Medizinprodukt": 2
     },
     "nicht_abrufbar": 0,
-    "text": "Biogena: 323 Produkte gefunden, davon 262 Nahrungsergänzungen (262 vollständig, 0 teilweise erfasst) und 61 andere Produktarten."
+    "nicht_aufgenommen": 0,
+    "text": "Biogena: 299 Einträge gefunden, davon 254 Nahrungsergänzungen (254 vollständig, 0 teilweise erfasst) und 45 andere Produktarten."
    }
   },
   "MoleQlar": {
@@ -149,12 +150,1351 @@
      "Test/Analyse": 4
     },
     "nicht_abrufbar": 0,
-    "text": "MoleQlar: 104 Produkte gefunden, davon 74 Nahrungsergänzungen (64 vollständig, 10 teilweise erfasst) und 30 andere Produktarten."
+    "nicht_aufgenommen": 0,
+    "text": "MoleQlar: 104 Einträge gefunden, davon 74 Nahrungsergänzungen (64 vollständig, 10 teilweise erfasst) und 30 andere Produktarten."
+   }
+  },
+  "Norsan": {
+   "gefunden": 117,
+   "nem": 19,
+   "vollstaendig": 0,
+   "teilweise": [
+    {
+     "name": "OMEGA-3 VEGAN EPA KAPSELN",
+     "url": "https://norsan.de/shop/omega-3-vegan-epa-kapseln/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 Kapseln",
+     "url": "https://norsan.de/shop/omega-3-kapseln/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Packungsgröße": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Omega-3 Total Öl (Zitrone)",
+     "url": "https://norsan.de/shop/omega-3-total-oel/?attribute_geschmack=Zitrone",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 Total Öl (Naturell)",
+     "url": "https://norsan.de/shop/omega-3-total-oel/?attribute_geschmack=Naturell",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 VEGAN EPA",
+     "url": "https://norsan.de/shop/omega-3-vegan-epa/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "NÀDARRA Vitamin D 1.000 Vegan",
+     "url": "https://norsan.de/shop/vitamin-d-1-000-vegan/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "NÀDARRA Vitamin D 1.000",
+     "url": "https://norsan.de/shop/vitamin-d-1-000-tropfen/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "NÀDARRA Vitamin D 5.000 mit K2",
+     "url": "https://norsan.de/shop/vitamin-d-5000-mit-k2/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 ALGA Jelly Vegan 120er Packung",
+     "url": "https://norsan.de/shop/omega-3-alga-jelly-vegan-120er-packung/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 ALGA Jelly Vegan 45er Packung",
+     "url": "https://norsan.de/shop/omega-3-alga-jelly-vegan-45er-packung/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 FISK Jelly 120er Packung",
+     "url": "https://norsan.de/shop/omega-3-fisk-jelly-120er-packung/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 FISK Jelly 45er Packung",
+     "url": "https://norsan.de/shop/omega-3-fisk-jelly-45er-packung/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 ALGA",
+     "url": "https://norsan.de/shop/omega-3-alga-kids-vegan/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Packungsgröße": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Omega-3 Arktis (mit Vitamin D3)",
+     "url": "https://norsan.de/shop/omega-3-arktis/?attribute_variante=mit%20Vitamin%20D3",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 Arktis (ohne Vitamin D3)",
+     "url": "https://norsan.de/shop/omega-3-arktis/?attribute_variante=ohne%20Vitamin%20D3",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 Vegan",
+     "url": "https://norsan.de/shop/omega-3-vegan/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 FISK Öl",
+     "url": "https://norsan.de/shop/omega-3-fisk/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Packungsgröße": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Omega-3 Vegan Kapseln",
+     "url": "https://norsan.de/shop/omega-3-vegan-kapseln/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 Arktis Kapseln",
+     "url": "https://norsan.de/shop/omega-3-arktis-kapseln/",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Packungsgröße": "nicht als Text auf der Produktseite"
+     }
+    }
+   ],
+   "nicht_abrufbar": [],
+   "ausgelassen": [
+    {
+     "name": "OMEGA-3 VEGAN EPA KAPSELN ABO",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Klappkarte antientzündliche Ernährung",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "NORSAN Segelschein – Ihre Online-Ausbildung zum Omega-3 Spezialisten",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Broschüre: Omega-3 Vegan EPA",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Omega-3 VEGAN EPA KAPSELN 3er PACK",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Total Öl Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Olivenöl Sonderabfüllung 200ml",
+     "grund": "im Shop nicht bestellbar, keine Produktangaben"
+    },
+    {
+     "name": "Buch: Omega-3 – Gesünder leben mit den essenziellen Fettsäuren",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Buch: Neustart Wechseljahre",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Buch: Nährstoff-Guide",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Buch: Jung bleiben mit gesunden Gefäßen",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Omega-3 ALGA Jelly Vegan 45er Packung Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 ALGA Jelly Vegan 120er Packung Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 FISK Jelly 120er Packung Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 FISK Jelly 45er Packung Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Vegan Kapseln Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Arktis Kapseln Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Kapseln Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 ALGA Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 FISK Öl Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Vegan Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 VEGAN EPA Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Arktis Abo",
+     "grund": "Abo-Variante eines vorhandenen Produkts"
+    },
+    {
+     "name": "Herbst26 3+1",
+     "grund": "im Shop nicht bestellbar, keine Produktangaben"
+    },
+    {
+     "name": "Fachartikel: Omega-3-Fettsäuren als ursächlicher Therapieansatz bei Parodontitis",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Omega-3 VEGAN EPA 3er Pack",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "NORSAN Freundebuch",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Cholesterin – Niels Schulz-Ruhtenberg",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Omega-3 Journal: 4. Ausgabe",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Gelenkerkrankungen und Arthrosen",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "NORSAN Flyer: Vitamin D & Omega-3",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Nächster Halt – Wechseljahre",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "NÀDARRA Magnesium (Kapseln)",
+     "grund": "im Shop nicht bestellbar, keine Produktangaben"
+    },
+    {
+     "name": "NORSAN Info-Karte: Sport und Omega-3",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel Sonderdruck: Omega-3 und Herzgesundheit",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Rezeptkarte: Saisonal",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Rezeptkarte: No-Bake Powerriegel",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Rezeptkarte: Avocado Frischkäse",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Rezeptkarte: Rote Bete Suppe (empfohlen von Johannes Thingnes Bø)",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Rezeptkarte: Goldene Milch",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Sonderdruck – Alternative zu NSAR/ Schmerzmittel",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Lipide – Dr. med. Elke Lorenz",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Omega-3 FISK Öl 3er Pack",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Buch: Die Bø-Brüder",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Omega-3-Fettsäuren in der Therapie von Depressionen",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Omega-3 ALGA 3er Pack",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Buch: Kinder in Bewegung",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Buch: Die Algenölrevolution – Lebenswichtiges Omega-3 – Das pflanzliche Lebenselixier aus dem Meer",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Buch: Omega-3 – Öl des Lebens",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Omega-3 Total 3’er Pack, Naturell",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Total Kapseln 3’er Pack",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Total 3’er Pack, Zitrone",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Arktis Öl 3’er Pack",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Vegan Öl 3er Pack",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Vegan Kapseln 3’er Pack",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Omega-3 Arktis Kapseln 3’er Pack",
+     "grund": "Mehrfachpackung eines vorhandenen Produkts"
+    },
+    {
+     "name": "Plakat A1: NORSAN Fettsäure-Analyse",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "NORSAN KIDS Stundenplan",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Herz-Kreislauf-Erkrankungen",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachbroschüre: Verwirrung um die Wirkung von Omega-3-Fettsäuren",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Plakat A1: NORSAN FISK",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Koronare Herzkrankheit – Zusammenhang mit Ernährung",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Anwendungsbeobachtung",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Darmgesundheit und Omega-3-Fettsäuren",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Grüner Rezeptblock",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Rheuma",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Studienzusammenfassung: Asthma",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Studienzusammenfassung: Demenz",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Broschüre: Omega-3 FISK Öl & Jelly",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Omega-3 Journal: Display",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Broschüre: Omega-3 in der Schwangerschaft",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Broschüre: Omega-3 Arktis",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "NORSAN Patientenflyer: Omega-3 Vegan",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "NORSAN Patientenflyer",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Bestellkarte: NORSAN Omega-3 Kids (Für Patienten)",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Naturheilkundlicher Fachnewsletter: AD(H)S",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "NORSAN Flyer: Infografik – Warum reicht Leinöl allein nicht aus?",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Spiegel rauf im Leistungssport",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Leseprobe: Algenöl",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Hauterkrankungen",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Dosierbecher (Bio-Kunststoff)",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Fachartikel: Mehr gesunde Fette!",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Studienzusammenfassung: Allergieprävention",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Broschüre: Omega-3 Total",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Broschüre: Omega-3 Vegan",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    },
+    {
+     "name": "Plakat A1: Verkostungsaktion",
+     "grund": "kein Produkt zum Einnehmen (Info-/Fachmaterial, Buch, Kurs)"
+    }
+   ],
+   "typen": {
+    "Nahrungsergänzungsmittel": 19,
+    "Set/Bundle": 12,
+    "Lebensmittel": 1,
+    "Test/Analyse": 1
+   },
+   "quelle": "https://norsan.de/wp-json/wc/store/v1/products (offizieller Shop, Preise Deutschland)",
+   "hinweis": "Zutaten, Einnahme und Hinweise als Text von der Produktseite. Mengen pro Portion stehen dort nur in einer Bild-Tabelle: übernommen werden nur ausdrücklich im Text genannte Mengen (z. B. „Tagesdosis enthält …“).",
+   "offen_oder_nicht_abrufbar": 0,
+   "mit_produktbild": 33,
+   "produktbilder": "nicht geprüft",
+   "status": {
+    "alle_gefundenen_produkte": 117,
+    "nahrungsergaenzungen": 19,
+    "davon_vollstaendig": 0,
+    "davon_teilweise": 19,
+    "andere_produktarten": 12,
+    "andere_nach_art": {
+     "Set/Bundle": 12,
+     "Lebensmittel": 1,
+     "Test/Analyse": 1
+    },
+    "nicht_abrufbar": 0,
+    "nicht_aufgenommen": 86,
+    "text": "Norsan: 117 Einträge gefunden, davon 19 Nahrungsergänzungen (0 vollständig, 19 teilweise erfasst) und 12 andere Produktarten; 86 nicht aufgenommen (Abos, Mehrfachpackungen, Proben, Info-/Digitalmaterial)."
+   }
+  },
+  "edubily": {
+   "gefunden": 133,
+   "nem": 68,
+   "vollstaendig": 0,
+   "teilweise": [
+    {
+     "name": "Piperin Kapseln Restbestand",
+     "url": "https://edubily.de/products/piperin-kapseln-restbestand",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Kreatin mit CREA500®",
+     "url": "https://edubily.de/products/kreatin-mit-crea500",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "SLEEP",
+     "url": "https://edubily.de/products/blu100-sleep",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "LIFE",
+     "url": "https://edubily.de/products/blu100-life",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "GLOW",
+     "url": "https://edubily.de/products/blu100-glow",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Elektrolyte Pulver",
+     "url": "https://edubily.de/products/elektrolyte-pulver",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitasauri® – Kids Vitamin D3 mit K2",
+     "url": "https://edubily.de/products/vitasauri®-kids-vitamin-d3-mit-k2",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Vitasauri® Kids Kogni Getränkepulver",
+     "url": "https://edubily.de/products/vitasauri®-kids-kogni-getrankepulver",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "eduone",
+     "url": "https://edubily.de/products/eduone",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitasauri® - Kids Flor",
+     "url": "https://edubily.de/products/vitasauri®-kids-flor",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Mama Multi",
+     "url": "https://edubily.de/products/mama-multi",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitamin D3 mit K2 Kapseln",
+     "url": "https://edubily.de/products/vitamin-d3-mit-k2-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Magnesium Pulver pur",
+     "url": "https://edubily.de/products/magnesium-pulver-pur",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitamin D Kapseln",
+     "url": "https://edubily.de/products/vitamin-d-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitasauri® Kids Mix",
+     "url": "https://edubily.de/products/vitasauri-r-kids-mix",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Cluster Dextrin®",
+     "url": "https://edubily.de/products/cluster-dextrin-neu",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Beta-Alanin",
+     "url": "https://edubily.de/products/beta-alanin",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Inositol Komplex",
+     "url": "https://edubily.de/products/inositol-komplex",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Bio-Schwarzkümmelöl Kapseln",
+     "url": "https://edubily.de/products/bio-schwarzkummelol-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Meno Balance",
+     "url": "https://edubily.de/products/meno-balance",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Clear Vegan",
+     "url": "https://edubily.de/products/clear-vegan",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Kids Mix – Multivitamin-Pulver für Kinder",
+     "url": "https://edubily.de/products/kids-mix-multivitamin-pulver-fur-kinder",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Astaxanthin Kapseln",
+     "url": "https://edubily.de/products/astaxanthin",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Curcumin Kapseln – Longvida® Optimised Curcumin®",
+     "url": "https://edubily.de/products/curcumin-kapseln-longvida-r-optimised-curcumin-r",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Hyaluronsäure Kapseln",
+     "url": "https://edubily.de/products/hyaluronsaure-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Kollagen Shine",
+     "url": "https://edubily.de/products/kollagen-shine",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Frauen Multi Plus",
+     "url": "https://edubily.de/products/frauen-multi-plus",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Lysin Komplex",
+     "url": "https://edubily.de/products/lysin-komplex",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Aminopeptide",
+     "url": "https://edubily.de/products/aminopeptide",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitasauri® - Kids Omega-3",
+     "url": "https://edubily.de/products/vitasauri-r-kids-omega-3",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Veganes Omega-3 Öl",
+     "url": "https://edubily.de/products/veganes-omega-3-ol",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "L-Theanin",
+     "url": "https://edubily.de/products/l-theanin",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Darmbakterien Kapseln",
+     "url": "https://edubily.de/products/darmbakterien-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "MSM Kapseln",
+     "url": "https://edubily.de/products/pure-msm-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Selen Kapseln",
+     "url": "https://edubily.de/products/pure-selen-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "L-Carnosin Kapseln",
+     "url": "https://edubily.de/products/l-carnosin",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitamin C Kapseln",
+     "url": "https://edubily.de/products/vitamin-c-kapsel",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "EAA Pulver – Essenzielle Aminosäuren",
+     "url": "https://edubily.de/products/eaa-pulver",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "L-Carnitin Kapseln",
+     "url": "https://edubily.de/products/l-carnitin",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Inositol Pulver",
+     "url": "https://edubily.de/products/inositol-pulver",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Citrullin-Malat Kapseln",
+     "url": "https://edubily.de/products/pure-citrullin-malat-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Chrompicolinat Kapseln",
+     "url": "https://edubily.de/products/chrompicolinat",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Propionsäure Kapseln",
+     "url": "https://edubily.de/products/propionsaure",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "edu basic",
+     "url": "https://edubily.de/products/edu-basic",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "N-Acetyl-L-Cystein (NAC)",
+     "url": "https://edubily.de/products/n-acetyl-l-cystein",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "OPC-Komplex Kapseln",
+     "url": "https://edubily.de/products/opc-komplex",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Grüntee-Extrakt Kapseln mit 50 % EGCG",
+     "url": "https://edubily.de/products/gruntee-extrakt",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Iod Kapseln – aus reinstem Bio-Kelp",
+     "url": "https://edubily.de/products/iod-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Ashwagandha Kapseln KSM-66®",
+     "url": "https://edubily.de/products/ashwagandha-kapseln-ksm-66",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Darmflora-Komplex",
+     "url": "https://edubily.de/products/darmflora-komplex",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Zink-Komplex Kapseln",
+     "url": "https://edubily.de/products/zink-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Citrullin plus",
+     "url": "https://edubily.de/products/citrullin-plus",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Olivenblatt-Extrakt Kapseln",
+     "url": "https://edubily.de/products/olivenblatt-extrakt",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Glycin-Pulver",
+     "url": "https://edubily.de/products/glycin-pulver",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Kreatin Pulver Creavitalis®",
+     "url": "https://edubily.de/products/creatin-pulver",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "L-Glutamin Pulver",
+     "url": "https://edubily.de/products/l-glutamin-pulver",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Das Multi – Premium-Multivitamin-Kapseln (Mit Iod)",
+     "url": "https://edubily.de/products/das-multi?variant=44433509941513",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Das Multi – Premium-Multivitamin-Kapseln (Ohne Iod)",
+     "url": "https://edubily.de/products/das-multi?variant=44433449353481",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Eisen Kapseln mit Lactoferrin",
+     "url": "https://edubily.de/products/eisen-mit-lactoferrin",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Calcium Pulver",
+     "url": "https://edubily.de/products/calcium-plus",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
+     }
+    },
+    {
+     "name": "Vitamin D3 & K2 Tropfen",
+     "url": "https://edubily.de/products/vitamin-d3-k2-tropfen",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "L-Tryptophan Kapseln",
+     "url": "https://edubily.de/products/tryptophan",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Kollagen-Hydrolysat Pulver",
+     "url": "https://edubily.de/products/kollagen-hydrolysat",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Omega-3 Kapseln",
+     "url": "https://edubily.de/products/omega-3-kapseln",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitamin D Öl",
+     "url": "https://edubily.de/products/vitamin-d3",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Magnesium Pulver",
+     "url": "https://edubily.de/products/magnesium-pulver",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+     }
+    },
+    {
+     "name": "Vitamin A als reines Retinol (Kapseln)",
+     "url": "https://edubily.de/products/vitamin-a-retinol?variant=43783598506249",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Packungsgröße": "nicht im Shop angegeben"
+     }
+    },
+    {
+     "name": "Vitamin A als reines Retinol (Tropfen)",
+     "url": "https://edubily.de/products/vitamin-a-retinol?variant=43783598473481",
+     "fehlende_angaben": {
+      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Packungsgröße": "nicht im Shop angegeben"
+     }
+    }
+   ],
+   "nicht_abrufbar": [],
+   "ausgelassen": [
+    {
+     "name": "Whey-Protein-Isolat-Probierpaket",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "Clear Whey Proben",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "Whey Protein Konzentrat Proben",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "edurec Day Pack",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "eduin Day Pack",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "eduone® Probe",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "Clear Whey Proben",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "Zyklus optimieren & Fruchtbarkeit erhöhen (Ebook)",
+     "grund": "kein physisches Produkt (E-Book, Kurs, Gutschein)"
+    },
+    {
+     "name": "Kollagen-Hydrolysat Pulver Probe",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "Whey-Protein-Isolat mit Geschmack Proben",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "eduBasics – Einstieg in die Biochemie",
+     "grund": "kein physisches Produkt (E-Book, Kurs, Gutschein)"
+    },
+    {
+     "name": "Veganes Protein Proben",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "Ei-Protein Proben",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "Whey Isolat Neutral Probe",
+     "grund": "Probiergröße eines vorhandenen Produkts"
+    },
+    {
+     "name": "Wissensdatenbank",
+     "grund": "kein physisches Produkt (E-Book, Kurs, Gutschein)"
+    },
+    {
+     "name": "Geschenk-Gutschein",
+     "grund": "kein physisches Produkt (E-Book, Kurs, Gutschein)"
+    }
+   ],
+   "typen": {
+    "Nahrungsergänzungsmittel": 68,
+    "Lebensmittel": 21,
+    "Set/Bundle": 10,
+    "Produktart nicht angegeben": 15,
+    "Zubehör/Sonstiges": 5
+   },
+   "quelle": "https://edubily.de/products.json (offizieller Shop) + Produktseiten",
+   "hinweis": "Einnahme und Hinweise aus den Fragen & Antworten der Produktseite; Mengen nur, wo sie im Text stehen. Zutaten und Nährwerttabelle zeigt edubily nur als Bild – daher als fehlend markiert.",
+   "offen_oder_nicht_abrufbar": 0,
+   "mit_produktbild": 119,
+   "produktbilder": "nicht geprüft",
+   "status": {
+    "alle_gefundenen_produkte": 133,
+    "nahrungsergaenzungen": 68,
+    "davon_vollstaendig": 0,
+    "davon_teilweise": 68,
+    "andere_produktarten": 49,
+    "andere_nach_art": {
+     "Lebensmittel": 21,
+     "Set/Bundle": 10,
+     "Produktart nicht angegeben": 15,
+     "Zubehör/Sonstiges": 5
+    },
+    "nicht_abrufbar": 0,
+    "nicht_aufgenommen": 16,
+    "text": "edubily: 133 Einträge gefunden, davon 68 Nahrungsergänzungen (0 vollständig, 68 teilweise erfasst) und 49 andere Produktarten; 16 nicht aufgenommen (Abos, Mehrfachpackungen, Proben, Info-/Digitalmaterial)."
    }
   }
  },
  "aenderungen": {
   "neu": [
+   "OMEGA-3 VEGAN EPA KAPSELN",
+   "OMEGA-3 VEGAN EPA SET",
+   "Power Trio – Vegan Kapseln",
+   "Power Trio – Vegan",
+   "Power Trio – Total Kapseln",
+   "Power Trio – Total",
+   "Omega-3 Kapseln",
+   "Omega-3 Total Öl (Zitrone)",
+   "Omega-3 Total Öl (Naturell)",
+   "Omega-3 VEGAN EPA",
+   "NÀDARRA Vitamin D 1.000 Vegan",
+   "NÀDARRA Vitamin D 1.000",
+   "NÀDARRA Vitamin D 5.000 mit K2",
+   "Omega-3 ALGA Jelly Vegan 120er Packung",
+   "Omega-3 ALGA Jelly Vegan 45er Packung",
+   "Omega-3 FISK Jelly 120er Packung",
+   "Omega-3 FISK Jelly 45er Packung",
+   "Omega-3 ALGA Set",
+   "Omega-3 Total Check-up Set",
+   "Omega-3 Vegan Check-up Set",
+   "Omega-3 ALGA",
+   "SPANISCHES OLIVENÖL – ORO DEL DESIERTO BIO COUPAGE",
+   "NORSAN Fettsäure-Analyse",
+   "Omega-3 Arktis (mit Vitamin D3)",
+   "Omega-3 Arktis (ohne Vitamin D3)",
+   "Omega-3 FISK Set",
+   "Omega-3 Total Set",
+   "Omega-3 Vegan Set",
+   "Omega-3 Arktis Set",
+   "Omega-3 Vegan",
+   "Omega-3 FISK Öl",
+   "Omega-3 Vegan Kapseln",
+   "Omega-3 Arktis Kapseln",
+   "Piperin Kapseln Restbestand",
+   "Kreatin mit CREA500®",
+   "Whey-Isolat Pulver - Neutral",
+   "BLU100 Full Routine",
+   "GLOW & SLEEP Routine",
+   "LIFE & GLOW Routine",
+   "LIFE & SLEEP Routine",
+   "SLEEP",
+   "LIFE",
+   "GLOW",
+   "Whey Protein Isolat",
+   "Elektrolyte Pulver",
+   "Vitasauri® Kids Magnesium",
+   "Vitasauri® – Kids Vitamin D3 mit K2",
+   "Vitasauri® Kids Kogni Getränkepulver",
+   "eduone",
+   "KollagenBar dunkle Schokolade mit Mandel",
+   "Whey-Isolat Pulver aus Weidemilch",
+   "Wheynachtspunsch - Clear Whey",
+   "Vitasauri® - Kids Flor",
+   "Vitasauri® Kids D3",
+   "VeganBar Schokoladenkuchen",
+   "Mama Multi",
+   "Veganes Protein Pro",
+   "Vitamin D3 mit K2 Kapseln",
+   "Magnesium Pulver pur",
+   "Vitasauri® Kids Eisen",
+   "Gründer-Bundle Chris",
+   "Gründer-Bundle Phil",
+   "Chunky Protein Bar Chocolate Brownie",
+   "Edelstahl Shaker",
+   "Essential Bundle",
+   "Schlaf-Bundle",
+   "Beef Sticks Teriyaki",
+   "Beef Bar Cranberry",
+   "Vitamin D Kapseln",
+   "Proteinwasser",
+   "Vitasauri® Kids Mix",
+   "Cluster Dextrin®",
+   "Beta-Alanin",
+   "Darm-Bundle",
+   "Testosteron-Bundle",
+   "Casein Protein Vanille",
+   "Inositol Komplex",
+   "Bio-Schwarzkümmelöl Kapseln",
+   "Meno Balance",
+   "Clear Vegan",
+   "Protein Bar Chocolate Vanilla",
+   "eduone® Nachfülldose",
+   "Kids Mix – Multivitamin-Pulver für Kinder",
+   "Astaxanthin Kapseln",
+   "Magnesium Komplex Kapseln",
+   "Granatapfel-Extrakt Pro",
+   "Curcumin Kapseln – Longvida® Optimised Curcumin®",
+   "Hyaluronsäure Kapseln",
+   "Kollagen Shine",
+   "Frauen Multi Plus",
+   "Lysin Komplex",
+   "Aminopeptide",
+   "Vitasauri® - Kids Omega-3",
+   "Veganes Omega-3 Öl",
+   "Whey Protein Konzentrat",
+   "Bio Whey Protein Konzentrat",
+   "Calcium Kapseln",
+   "Lactoferrin",
+   "L-Theanin",
+   "Darmbakterien Kapseln",
+   "MSM Kapseln",
+   "Selen Kapseln",
+   "Marines Kollagenhydrolysat",
+   "L-Carnosin Kapseln",
+   "Protein Shaker",
+   "Pillenbox",
+   "Vitamin C Kapseln",
+   "EAA Pulver – Essenzielle Aminosäuren",
+   "Clear Whey - Pulver aus Whey-Isolat",
+   "Whey-Isolat Pulver aus Weidemilch - Neutral",
+   "L-Carnitin Kapseln",
+   "Inositol Pulver",
+   "L-Glutamin Kapseln",
+   "LP7 Aminosäuren Kapseln",
+   "Citrullin-Malat Kapseln",
+   "Cholin Kapseln – als CDP-Cholin",
+   "Ubiquinol Kapseln – Reduziertes Q10 von Kaneka®",
+   "L-Tyrosin Kapseln",
+   "Chrompicolinat Kapseln",
+   "Propionsäure Kapseln",
+   "Emaille-Tasse",
+   "edu basic",
+   "N-Acetyl-L-Cystein (NAC)",
+   "OPC-Komplex Kapseln",
+   "Grüntee-Extrakt Kapseln mit 50 % EGCG",
+   "Iod Kapseln – aus reinstem Bio-Kelp",
+   "Ashwagandha Kapseln KSM-66®",
+   "Darmflora-Komplex",
+   "Zink-Komplex Kapseln",
+   "Citrullin plus",
+   "Resistentes Dextrin Pulver",
+   "Olivenblatt-Extrakt Kapseln",
+   "Glycin-Pulver",
+   "Kreatin Pulver Creavitalis®",
+   "L-Glutamin Pulver",
+   "Taurin Kapseln",
+   "Das Multi – Premium-Multivitamin-Kapseln (Mit Iod)",
+   "Das Multi – Premium-Multivitamin-Kapseln (Ohne Iod)",
+   "Eisen Kapseln mit Lactoferrin",
+   "Calcium Pulver",
+   "Vitamin D3 & K2 Tropfen",
+   "Weide Whey Protein Isolat",
+   "L-Tryptophan Kapseln",
+   "Kollagen-Hydrolysat Pulver",
+   "Omega-3 Kapseln",
+   "Vitamin D Öl",
+   "Vitamin B-Komplex",
+   "Veganes Proteinpulver",
+   "Ei-Protein Pulver aus Freilandhaltung",
+   "Magnesium Pulver",
+   "Vitamin A als reines Retinol (Kapseln)",
+   "Vitamin A als reines Retinol (Tropfen)"
+  ],
+  "geaendert": [
+   "Persönlicher BIOGENA Gutschein",
+   "Danke Gutschein zum Dankeschön sagen"
+  ],
+  "entfernt": [
    "Fell & Haut Leckerlis für Hunde – mit Biotin & Zink",
    "DOG CHECK - DNA Health+",
    "Gelenk Leckerlis",
@@ -179,14 +1519,7 @@
    "Relax Tropfen",
    "Bauch Tropfen",
    "Fell & Haut Tropfen"
-  ],
-  "geaendert": [
-   "Geburtstagsgutschein",
-   "Danke Gutschein",
-   "Coenzym Q10 active Gold 30 mg",
-   "Kreatin Pulver (Creavitalis®)"
-  ],
-  "entfernt": []
+  ]
  },
  "unvollstaendig": true
 }
