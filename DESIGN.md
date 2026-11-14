@@ -32,3 +32,5 @@ Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwe
 - Kleine Karte (Bild/Platzhalter, Name, Herkunft), nur während Atlas über ein konkretes Supplement spricht.
 - Quer: links neben der Kugel, vertikal zentriert, Breite passt sich dem freien Platz an. Hochkant/Handy: oben mittig, kompakt. Nie über Kugel, Ring oder Knöpfen.
 - Bilder: feste Zuordnung `produktbilder/zuordnung.json` (exakte Schlüssel) oder das Hauptbild genau des Katalogprodukts, über das Atlas spricht; sonst neutrale Kapsel-Grafik. Nie geraten.
+- Mehrere Produkte (z. B. Auswahl über mehrere Marken): dieselbe Karte zeigt eine kurze Liste mit höchstens 4 Zeilen (kleines Bild, Name, Marke). Gleiche Position, gleicher Stil.
+- Antippen: die Karte (bzw. eine Zeile der Liste) öffnet die Detailkarte genau dieses Katalogeintrags (über die Produkt-ID). Dunkles, mittig liegendes Feld im Stil der Karte: Bild, Name, Marke, gespeicherte Angaben; fehlende Angaben als „unbekannt – Grund“. Knopf „Zur Bestellseite“ nur mit gültigem Link und Internet. Schließen mit ✕, Tippen daneben oder Escape. Kugel und Ring bleiben unverändert dahinter.
