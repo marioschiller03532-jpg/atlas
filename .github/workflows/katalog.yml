@@ -1,6 +1,10 @@
 name: Supplement-Katalog
 on:
   workflow_dispatch:
+    inputs:
+      modus:
+        description: "run = Katalog + Bilder, bilder = nur Bilder"
+        default: run
   push:
     paths: ["tools/katalog-*.mjs", "tools/bilder-sync.mjs", ".github/workflows/katalog.yml", "tools/katalog-run.txt"]
 permissions:
@@ -9,13 +13,14 @@ concurrency: katalog
 jobs:
   katalog:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: sudo apt-get install -y -q poppler-utils >/dev/null || true
-      - run: node tools/katalog-$(cat tools/katalog-run.txt 2>/dev/null || echo probe).mjs
+      - run: |
+          if [ "${{ github.event.inputs.modus }}" != bilder ]; then node tools/katalog-$(cat tools/katalog-run.txt 2>/dev/null || echo probe).mjs; fi
       - run: |
           if [ "$(cat tools/katalog-run.txt)" = run ]; then node tools/bilder-sync.mjs; fi
       - run: |

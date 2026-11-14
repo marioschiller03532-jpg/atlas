@@ -14,7 +14,8 @@ const wrapped=crypto.publicEncrypt({key:pub,padding:crypto.constants.RSA_PKCS1_O
 let neu=0,fehler=[],gleich=0;const ids=new Set();
 const todo=kat.produkte.filter(p=>p.bild);
 for(const p of todo){const id=katId(p);ids.add(id);const old=idx.bilder[id];if(old&&old.url===p.bild&&fs.existsSync(DIR+"/"+old.f)){gleich++;continue}
-  try{const r=await fetch(p.bild,{headers:{"user-agent":UA,"accept":"image/avif,image/webp,image/png,image/jpeg,image/*"}});await sleep(250);
+  try{let r;for(let t=0;t<4;t++){r=await fetch(p.bild,{headers:{"user-agent":UA,"accept":"image/avif,image/webp,image/png,image/jpeg,image/*"}});await sleep(/cdn\.shopify\.com/.test(p.bild)?1200:250);
+      if(r.status!==403&&r.status!==429)break;await sleep([15000,45000,90000][t]||90000)}   // Shopify-CDN drosselt: warten und erneut versuchen
     if(!r.ok)throw new Error("HTTP "+r.status);const typ=(r.headers.get("content-type")||"image/jpeg").split(";")[0];if(!/^image\//.test(typ))throw new Error("kein Bild: "+typ);
     const buf=Buffer.from(await r.arrayBuffer());if(buf.length<500||buf.length>3e6)throw new Error("Größe "+buf.length);
     const iv=crypto.randomBytes(12),c=crypto.createCipheriv("aes-256-gcm",dataKey,iv),ct=Buffer.concat([c.update(buf),c.final(),c.getAuthTag()]);
