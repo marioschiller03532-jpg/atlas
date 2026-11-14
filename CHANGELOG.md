@@ -1,5 +1,9 @@
 # Atlas – Änderungen
 
+## 2.23.1 (14.11.2026) – dein Omega-3 fest verknüpft
+- Listeneintrag Omega-3 ist jetzt fest mit dem Katalogprodukt Norsan Omega-3 Vegan EPA Kapseln verknüpft (verschlüsselte Wissensbibliothek). Die Karte zeigt dazu Bild, Name und Marke; Antippen öffnet die Detailkarte.
+- Wissensbibliothek nennt die Herstellerangabe (4 Kapseln = 1.700 mg Omega-3, davon 920 mg EPA, 628 mg DHA). Deine gespeicherte Routine/Einnahme bleibt unverändert. Rückfall: /alt/2.23/.
+
 ## 2.23 (14.11.2026) – Norsan und edubily im Katalog, Produktauswahl über alle Marken, Detailkarte
 - Katalog um Norsan (inkl. NÀDARRA-Vitamin-D über den Norsan-Shop) und edubily erweitert, gleiches Datenformat. Quellen: norsan.de Shop-Schnittstelle (wc/store/v1), edubily.de products.json + Produktseiten (Fragen & Antworten). Neu: tools/katalog-marken.mjs.
 - Stand des Laufs: Biogena 299 (254 Nahrungsergänzungen, alle vollständig), MoleQlar 104 (74 Nahrungsergänzungen, 64 vollständig, 10 teilweise), Norsan 117 Einträge → 33 aufgenommen (19 Nahrungsergänzungen, alle teilweise erfasst), edubily 133 → 119 aufgenommen (68 Nahrungsergänzungen, alle teilweise erfasst). Biogena: 24 Produkte nicht mehr im Shop-Verzeichnis (Hunde-Produkte, Minis, Gutscheine) und daher entfernt.

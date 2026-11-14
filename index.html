@@ -895,6 +895,8 @@ function prodPlan(marks,textLen){prodTimers.forEach(clearTimeout);prodTimers=[];
   for(const mk of marks||[])prodTimers.push(setTimeout(()=>applyMark(mk.id),mk.pos*ms))}
 let kbTurn={at:0,e:null};
 function listCard(e){const mine=(main()&&main().supps||[]).filter(x=>(kbFind(coreOf(x))[0]||{}).id===e.id);
+  // fest verknüpftes Katalogprodukt (z. B. Omega-3 → Norsan Vegan EPA Kapseln): Bild, Marke und Detailkarte aus dem Katalog
+  const kp=e.katalog&&katById(e.katalog);if(kp)return {id:e.katalog,key:"kat:"+kp.u,title:kp.n,sub:kp.h+" · aus deiner Liste",img:kp.im};
   return {key:"kb:"+e.id,title:mine.length===1?coreOf(mine[0]):e.name.split(" (")[0],sub:mine.length===1?"aus deiner Liste":"aus deiner Wissensbibliothek",img:null}}
 function applyMark(id){if(id==="ende"){hideCard(300,true);return}if(id.includes(",")){showCardList(id.split(","));return}const pid=id;
   if(id.startsWith("l-")){const e=kbList().find(x=>x.id===id.slice(2));if(!e){diag("karte: unbekannte id");return}diag("karte: "+id);showCard(listCard(e));return}
@@ -1134,7 +1136,7 @@ function kbFind(text){const U=tk(text),hits=[];if(!U.length)return hits;
   for(const x of termIndex()){if(!x.e||hits.includes(x.e))continue;const C=x.a;for(let i=0;i<U.length;i++){const w=U.slice(i,i+C.length);if(w.length===C.length&&w.every((u,k)=>u===C[k]||(C[k].length>=7&&near(u,C[k])))){hits.push(x.e);break}}}
   return hits}
 function kbLookup(q){const n=tk(q).join(" ");if(!n)return null;return kbList().find(e=>[e.name,...(e.aliases||[])].some(a=>tk(a).join(" ")===n))||kbFind(q)[0]||null}
-const kbCompact=e=>({name:e.name,inhalt:e.inhalt,wofuer:e.wofuer,evidenz:e.evidenz+": "+e.evidenz_text,risiken:e.risiken,art:e.art,stand:e.stand,quellen:(e.quellen||[]).map(q=>q.t+" ("+q.datum+")")});
+const kbCompact=e=>({name:e.name,katalog_id:e.katalog||undefined,inhalt:e.inhalt,wofuer:e.wofuer,evidenz:e.evidenz+": "+e.evidenz_text,risiken:e.risiken,art:e.art,stand:e.stand,quellen:(e.quellen||[]).map(q=>q.t+" ("+q.datum+")")});
 // Spracherkennung: bekannte Fehlhörungen sicher korrigieren, Ähnliches nur als Rückfrage-Hinweis
 function speechTerms(t){const U=tk(t),unsure=[];if(!U.length)return {text:t,unsure};let out=t;
   for(const x of termIndex()){const C=x.a,name=x.e?x.e.name.replace(/\s*\(.*\)$/,""):x.name;if(C.length<2)continue;
@@ -2046,7 +2048,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261114-0706",ATLAS_REL="2.23";
+const APP_VERSION="20261114-2113",ATLAS_REL="2.23.1";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setTimeout(()=>{syncBilder()},9000);setInterval(()=>{if(bildSync.ok<bildSync.gesamt||!bildSync.gesamt)syncBilder()},10*60000);addEventListener("online",()=>setTimeout(syncBilder,3000));setInterval(checkUpdate,10*60000);
