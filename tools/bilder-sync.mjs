@@ -4,7 +4,7 @@
 import fs from "node:fs";import crypto from "node:crypto";
 const UA="Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const katId=p=>(p.hersteller==="Biogena"?"b-":p.hersteller==="MoleQlar"?"m-":"x-")+String(p.url||"").replace(/[?#].*$/,"").replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]/g,"");
+const katId=p=>p.id||(p.hersteller==="Biogena"?"b-":p.hersteller==="MoleQlar"?"m-":"x-")+String(p.url||"").replace(/[?#].*$/,"").replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]/g,"");
 const kat=JSON.parse(fs.readFileSync("katalog/supplement_catalog.json","utf8"));
 const DIR="katalog/bilder",IDX=DIR+"/index.json";fs.mkdirSync(DIR,{recursive:true});
 const idx=fs.existsSync(IDX)?JSON.parse(fs.readFileSync(IDX,"utf8")):{v:1,keys:{},bilder:{}};

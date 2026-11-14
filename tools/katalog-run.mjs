@@ -1,4 +1,4 @@
-// Atlas Supplement-Katalog: Biogena + MoleQlar aus den offiziellen Shops (robots.txt beachtet, 1 Anfrage/Sekunde).
+// Atlas Supplement-Katalog: Biogena, MoleQlar, Norsan und edubily aus den offiziellen Shops (robots.txt beachtet, 1 Anfrage/Sekunde).
 // Speichert nur strukturierte Daten und kurze sachliche Angaben, keine Werbetexte.
 import fs from "node:fs";import crypto from "node:crypto";
 const UA="AtlasKatalog/1.0 (privater Produktkatalog; 1 Anfrage pro Sekunde)";
@@ -8,6 +8,7 @@ const strip=h=>String(h||"").replace(/<br\s*\/?>/gi,"\n").replace(/<\/(p|li)>/gi
 const list=h=>strip(h).split("\n").map(x=>x.trim()).filter(Boolean);
 fs.mkdirSync("katalog",{recursive:true});
 import {execFileSync} from "node:child_process";
+import {norsan,edubily} from "./katalog-marken.mjs";
 const tables=html=>[...String(html).matchAll(/<table.*?<\/table>/gs)].map(t=>{const rows=[...t[0].matchAll(/<tr.*?<\/tr>/gs)].map(x=>[...x[0].matchAll(/<t[hd][^>]*>(.*?)<\/t[hd]>/gs)].map(c=>strip(c[1])));return rows.length>1?{kopf:rows[0],zeilen:rows.slice(1)}:null}).filter(Boolean);
 // Beipackzettel/Etikett-PDF als Text (nur, um fehlende Felder zu prüfen)
 async function pdfText(u){try{const r=await fetch(u,{headers:{"user-agent":UA}});await sleep(1000);if(!r.ok)return "";const f="/tmp/k.pdf";fs.writeFileSync(f,Buffer.from(await r.arrayBuffer()));return execFileSync("pdftotext",["-layout",f,"-"],{encoding:"utf8"})}catch{return ""}}
@@ -20,7 +21,7 @@ function typOf(name,text,hasNutrTable){const t=String(text);if(/\bBundle\b|\bSet
 const prev=(()=>{try{return JSON.parse(fs.readFileSync("katalog/supplement_catalog.json","utf8"))}catch{return null}})();
 const prevMap=new Map((prev?.produkte||[]).map(p=>[p.url,p]));
 const hash=p=>crypto.createHash("sha1").update(JSON.stringify([p.name,p.inhaltsstoffe,p.zutaten,p.verzehrempfehlung,p.packung,p.preis?.betrag,p.hinweise])).digest("hex").slice(0,12);
-const report={geprueft:NOW,definitionen:{gefunden:"alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar: Shop-Produktliste), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",nem:"davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",vollstaendig:"Nahrungsergänzung mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße",teilweise:"mindestens eine dieser vier Angaben wurde nicht gefunden; fehlende Werte werden weder geschätzt noch ergänzt",produktbilder:"nicht geprüft – aus Produktbildern werden keine Werte übernommen"},hersteller:{}},produkte=[];
+const report={geprueft:NOW,definitionen:{gefunden:"alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar und edubily: Shop-Produktliste; Norsan: Shop-Schnittstelle), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",nem:"davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",vollstaendig:"Nahrungsergänzung mit Mengen pro Portion (Tabelle), Zutaten, Verzehrempfehlung und Packungsgröße",teilweise:"mindestens eine dieser vier Angaben wurde nicht gefunden; fehlende Werte werden weder geschätzt noch ergänzt",produktbilder:"nicht geprüft – aus Produktbildern werden keine Werte übernommen"},hersteller:{}},produkte=[];
 const FELD={inhaltsstoffe:"Mengen pro Portion (Nährstofftabelle)",zutaten:"Zutaten",verzehrempfehlung:"Verzehr-/Einnahmeempfehlung",packung:"Packungsgröße"};
 const GRUND={biogena:Object.fromEntries(Object.keys(FELD).map(k=>[k,"nicht auf Produktseite und Etikett-PDF gefunden"])),moleqlar:Object.fromEntries(Object.keys(FELD).map(k=>[k,"nicht auf der Produktseite gefunden"]))};
 const offen=(miss,h)=>Object.fromEntries(miss.map(k=>[FELD[k],GRUND[h][k]]));
@@ -102,13 +103,21 @@ let probeLeft=0;const tm0=s=>/<table/.test(s);
   if(!r.ok)R.nicht_abrufbar.push({url,status:r.status})}
  R.hinweis="Mengen pro Portion aus der Nährstofftabelle der Produktseite (Text)."}
 
+// ---------- Norsan + edubily (eigenes Modul, gleiches Format) ----------
+for(const [name,fn] of [["Norsan",norsan],["edubily",edubily]]){try{const r=await fn(get,NOW);report.hersteller[name]=r.report;produkte.push(...r.produkte)}
+  catch(e){report.hersteller[name]={gefunden:0,nem:0,vollstaendig:0,teilweise:[],nicht_abrufbar:[{url:"Abruf",status:String(e.message||e).slice(0,120)}],typen:{}}}}
+// feste Produkt-ID (b-/m-/n-/d- + Adresse der Produktseite) – Bilder, Produktkarte und Detailansicht hängen daran
+{const kid=p=>(p.hersteller==="Biogena"?"b-":p.hersteller==="MoleQlar"?"m-":"x-")+String(p.url||"").replace(/[?#].*$/,"").replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]/g,"");
+ const seen=new Set();for(const p of produkte){if(!p.id)p.id=kid(p);if(!p.fehlend_grund)p.fehlend_grund=Object.fromEntries((p.fehlend||[]).map(k=>[k,GRUND[p.hersteller==="Biogena"?"biogena":"moleqlar"][k]]));
+  if(seen.has(p.id))report.doppelte_ids=(report.doppelte_ids||[]).concat(p.id);seen.add(p.id)}}
+
 // ---------- Änderungen gegenüber dem letzten Lauf ----------
 const changes={neu:[],geaendert:[],entfernt:[]};for(const p of produkte){p.hash=hash(p);const o=prevMap.get(p.url);if(!o)changes.neu.push(p.name);else if(o.hash!==p.hash)changes.geaendert.push(p.name)}
 const now=new Set(produkte.map(p=>p.url));for(const o of prevMap.values())if(!now.has(o.url))changes.entfernt.push(o.name);
 report.aenderungen=prev?changes:{erstimport:true};
 for(const [h,R] of Object.entries(report.hersteller)){R.offen_oder_nicht_abrufbar=R.nicht_abrufbar.length;R.mit_produktbild=produkte.filter(x=>x.hersteller===h&&x.bild).length;R.produktbilder="nicht geprüft";
-  const andere=R.gefunden-R.nem;R.status={alle_gefundenen_produkte:R.gefunden,nahrungsergaenzungen:R.nem,davon_vollstaendig:R.vollstaendig,davon_teilweise:R.teilweise.length,andere_produktarten:andere,andere_nach_art:Object.fromEntries(Object.entries(R.typen).filter(([t])=>t!=="Nahrungsergänzungsmittel")),nicht_abrufbar:R.nicht_abrufbar.length,
-    text:`${h}: ${R.gefunden} Produkte gefunden, davon ${R.nem} Nahrungsergänzungen (${R.vollstaendig} vollständig, ${R.teilweise.length} teilweise erfasst) und ${andere} andere Produktarten.`}}
+  const ausg=(R.ausgelassen||[]).length,andere=R.gefunden-R.nem-ausg;R.status={alle_gefundenen_produkte:R.gefunden,nahrungsergaenzungen:R.nem,davon_vollstaendig:R.vollstaendig,davon_teilweise:R.teilweise.length,andere_produktarten:andere,andere_nach_art:Object.fromEntries(Object.entries(R.typen).filter(([t])=>t!=="Nahrungsergänzungsmittel")),nicht_abrufbar:R.nicht_abrufbar.length,
+    nicht_aufgenommen:ausg,text:`${h}: ${R.gefunden} Einträge gefunden, davon ${R.nem} Nahrungsergänzungen (${R.vollstaendig} vollständig, ${R.teilweise.length} teilweise erfasst) und ${andere} andere Produktarten`+(ausg?`; ${ausg} nicht aufgenommen (Abos, Mehrfachpackungen, Proben, Info-/Digitalmaterial)`:"")+"."}}
 for(const p of produkte)p.produktbilder="nicht geprüft";report.unvollstaendig=Object.values(report.hersteller).some(h=>h.teilweise.length||h.nicht_abrufbar.length);
 fs.writeFileSync("katalog/supplement_catalog.json",JSON.stringify({stand:NOW,hinweis:"Herstellerangaben aus den offiziellen Shops; keine Wirksamkeitsbelege. Fehlende Angaben sind leer, nicht geschätzt.",produkte},null,0));
 fs.writeFileSync("katalog/report.json",JSON.stringify(report,null,1));
