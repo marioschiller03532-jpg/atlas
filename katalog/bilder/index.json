@@ -3,7 +3,8 @@
  "keys": {
   "63f5003c83": "Uve235lksvYzC/Ciza7nNRxiVDrhm6H0WTrJj1/vVzS5B3rhVwOMOxd2uN8Q1zpkhPQc/KodrFo+bm4O/i0Jjl/tKypdY1GTC9TORg/e6eAT4Gb9Q+Vkh6koSATGk9FV2TzoRM7hWfI0emGX4yBc1AKCvZeZamKNrL/VYKvcDSq3vuf9KzPa7TM8bY1F13G4AMx5BDBM6ndnc5KTLJGjTotgAl7WAKmYcwnvDsmJj7jkS/48jmNAPRctGY4V1/lA9sZ0YfTiR44dV8zoJqbfZbJtBOu/7IAicPU43N3eet9GIEM+qrdEmjMPGCG20J80OQXFwqSmlMAT/CjY8ohhLQ==",
   "53ac993f81": "k9JPRZzP5YvOYMfTLNQ1N+qpzLZOH34XpE1cDgEwr/2uKidk1v2x7vb5sRLptSEMVHMScoc1As48T+EiyTA/k5jECSBx5fddRVUIv+ng+rDeAtwGtRm/sj6m+MJF5TwGTHsuQmd3vEdFFIXRiNi11nCWLC+tgvzBK/JL+9FhG5PN4UtqYEcXmMIbAKuWnNfkC4XYZ/J8Fg6qI3WmAtZ0U6KBMPoo8FsL/Z2Xda90PnaTaTmrSfi87PqAEdZDMrYu8VRaYGqewdSWWx4YQqk/QpaULX7d/zdF+vhHSVzx/VBdwAWbGG/e3/IPVpGpnOb1ay4/PMLM6c95cEPwcPS7zw==",
-  "3e2356cbd9": "eU1pERjTjB+P1ntiGfN26aqrOZVBRquCUJbKylHXjXBM0x4nCOYMojqTmP1fvAPYIX/82IC8Tsf49yNXwOoK7ZxM25Z1Q85QO6+ddy/UOFJK60naC1+FEGmFLtbaxXN94GJ/46mAfzFavHzdxz2u7wDNGIK9aw2KNguw3TC2k17YmuFQMEgBVhrPhjpKDtBFODwBY0aSi3u5JVLBMIJ3PLi1I4r+uVwtsQ6oMCmme0kyWX5pQ7Y8NRjHEmZK06jdmYIHyVIU4+BazNGAPoDNC+uNY55q50y1PW0HdpWanlMb8sZZFgFe6wQsX1LnE3o8Jnzfcxr8Pyukc1Ns/rKSGA=="
+  "3e2356cbd9": "eU1pERjTjB+P1ntiGfN26aqrOZVBRquCUJbKylHXjXBM0x4nCOYMojqTmP1fvAPYIX/82IC8Tsf49yNXwOoK7ZxM25Z1Q85QO6+ddy/UOFJK60naC1+FEGmFLtbaxXN94GJ/46mAfzFavHzdxz2u7wDNGIK9aw2KNguw3TC2k17YmuFQMEgBVhrPhjpKDtBFODwBY0aSi3u5JVLBMIJ3PLi1I4r+uVwtsQ6oMCmme0kyWX5pQ7Y8NRjHEmZK06jdmYIHyVIU4+BazNGAPoDNC+uNY55q50y1PW0HdpWanlMb8sZZFgFe6wQsX1LnE3o8Jnzfcxr8Pyukc1Ns/rKSGA==",
+  "4ed939a181": "idxRKNNCktoxSRg3kD/yxezH3wCkSgbEqwNDpj7BIYvKPszH4eIifJH3mRUTHs+xuHMzDIiGuoht3whOOQga+UDvEehrpBwayuUiF3BpArW6lXTk/BIUn92QkkX1UKZagVOE5OBXKPA4NZf71xk1OxBJUVA9VghqPi9QZudazOznD0hWvXyIa3PXvwZlURzDI96u6UU2XvPNAOGFeGH/r49Nhx5hMoD5NBURmNHo4uTJ48RMpeEpz+gzn21F/vnYEF+aYsOMzC4Kc8e1GXWk1mQK5104Yo88m0/tQgedNXfX0xiAS0uAEWmodinpHvU9EW+cc45YNfIbHHA+IdaOBw=="
  },
  "bilder": {
   "b-vitamin-c-liposomal-583": {
@@ -5000,14 +5001,1375 @@
    "name": "Calcium Pulver",
    "hersteller": "edubily",
    "bytes": 81668
+  },
+  "n-omega-3-vegan-epa-kapseln--tabelle": {
+   "f": "n-omega-3-vegan-epa-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/08/DE_20250103_Naehrwerte_Omega-3_Vegan_EPA_Kapseln-07aug26.png",
+   "name": "OMEGA-3 VEGAN EPA KAPSELN – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 14128,
+   "art": "tabelle"
+  },
+  "n-omega-3-vegan-epa-set--tabelle": {
+   "f": "n-omega-3-vegan-epa-set--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/08/Naehrwerte-Omega-3-Vegan-EPA.png",
+   "name": "OMEGA-3 VEGAN EPA SET – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 20184,
+   "art": "tabelle"
+  },
+  "n-omega-3-kapseln--tabelle": {
+   "f": "n-omega-3-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_NORSAN_72dpi_Naehrwerttabellen_web_Kapseln-1.png",
+   "name": "Omega-3 Kapseln – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 11832,
+   "art": "tabelle"
+  },
+  "n-omega-3-total-oel-zitrone--tabelle": {
+   "f": "n-omega-3-total-oel-zitrone--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_NORSAN_72dpi_Naehrwerttabellen_web_TOTAL_Z-1.png",
+   "name": "Omega-3 Total Öl (Zitrone) – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 16296,
+   "art": "tabelle"
+  },
+  "n-omega-3-total-oel-naturell--tabelle": {
+   "f": "n-omega-3-total-oel-naturell--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2022/07/DE_NORSAN_72dpi_Naehrwerttabellen_web_TOTAL_N.png",
+   "name": "Omega-3 Total Öl (Naturell) – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 16484,
+   "art": "tabelle"
+  },
+  "n-omega-3-vegan-epa--tabelle": {
+   "f": "n-omega-3-vegan-epa--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/03/Naehrwerte-Omega-3-Vegan-EPA.png",
+   "name": "Omega-3 VEGAN EPA – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 20184,
+   "art": "tabelle"
+  },
+  "n-vitamin-d-1-000-vegan--tabelle": {
+   "f": "n-vitamin-d-1-000-vegan--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/06/VitaminD1000_Naehrwert.png",
+   "name": "NÀDARRA Vitamin D 1.000 Vegan – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 7958,
+   "art": "tabelle"
+  },
+  "n-vitamin-d-1-000-tropfen--tabelle": {
+   "f": "n-vitamin-d-1-000-tropfen--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/06/VitaminD1000_Naehrwert.png",
+   "name": "NÀDARRA Vitamin D 1.000 – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 7958,
+   "art": "tabelle"
+  },
+  "n-vitamin-d-5000-mit-k2--tabelle": {
+   "f": "n-vitamin-d-5000-mit-k2--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2025/06/VitaminD5000k2_Naehrwert.png",
+   "name": "NÀDARRA Vitamin D 5.000 mit K2 – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 8806,
+   "art": "tabelle"
+  },
+  "n-omega-3-alga-jelly-vegan-120er-packung--tabelle": {
+   "f": "n-omega-3-alga-jelly-vegan-120er-packung--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20240112_NORSAN_72dpi_Naehrwerttabellen_ALGA_Jelly_web.png",
+   "name": "Omega-3 ALGA Jelly Vegan 120er Packung – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 13978,
+   "art": "tabelle"
+  },
+  "n-omega-3-alga-jelly-vegan-45er-packung--tabelle": {
+   "f": "n-omega-3-alga-jelly-vegan-45er-packung--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20240112_NORSAN_72dpi_Naehrwerttabellen_ALGA_Jelly_web.png",
+   "name": "Omega-3 ALGA Jelly Vegan 45er Packung – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 13978,
+   "art": "tabelle"
+  },
+  "n-omega-3-fisk-jelly-120er-packung--tabelle": {
+   "f": "n-omega-3-fisk-jelly-120er-packung--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20240112_NORSAN_72dpi_Naehrwerttabellen_FISK_Jelly_web.png",
+   "name": "Omega-3 FISK Jelly 120er Packung – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 13960,
+   "art": "tabelle"
+  },
+  "n-omega-3-fisk-jelly-45er-packung--tabelle": {
+   "f": "n-omega-3-fisk-jelly-45er-packung--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20240112_NORSAN_72dpi_Naehrwerttabellen_FISK_Jelly_web.png",
+   "name": "Omega-3 FISK Jelly 45er Packung – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 13960,
+   "art": "tabelle"
+  },
+  "n-omega-3-alga-kids-vegan-set--tabelle": {
+   "f": "n-omega-3-alga-kids-vegan-set--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_20250103_Naehrwerte-Omega-3-ALGA-neu.png",
+   "name": "Omega-3 ALGA Set – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 15998,
+   "art": "tabelle"
+  },
+  "n-omega-3-total-check-up-set--tabelle": {
+   "f": "n-omega-3-total-check-up-set--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_NORSAN_72dpi_Naehrwerttabellen_web_TOTAL_Z-1.png",
+   "name": "Omega-3 Total Check-up Set – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 16296,
+   "art": "tabelle"
+  },
+  "n-omega-3-vegan-check-up-set--tabelle": {
+   "f": "n-omega-3-vegan-check-up-set--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_NORSAN_72dpi_Naehrwerttabellen_Vegan-1.png",
+   "name": "Omega-3 Vegan Check-up Set – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 15094,
+   "art": "tabelle"
+  },
+  "n-omega-3-alga-kids-vegan--tabelle": {
+   "f": "n-omega-3-alga-kids-vegan--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_20250103_Naehrwerte-Omega-3-ALGA-neu.png",
+   "name": "Omega-3 ALGA – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 15998,
+   "art": "tabelle"
+  },
+  "n-omega-3-arktis-mit-vitamin-d3--tabelle": {
+   "f": "n-omega-3-arktis-mit-vitamin-d3--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2026/02/DE_NORSAN_72dpi_Naehrwerttabellen_web_ARKTIS_mitVD-1-1-1.png",
+   "name": "Omega-3 Arktis (mit Vitamin D3) – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 17762,
+   "art": "tabelle"
+  },
+  "n-omega-3-fisk-set--tabelle": {
+   "f": "n-omega-3-fisk-set--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2023/09/DE_20240112_NORSAN_72dpi_Naehrwerttabellen_FISK_Jelly_web.png",
+   "name": "Omega-3 FISK Set – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 13960,
+   "art": "tabelle"
+  },
+  "n-omega-3-total-set--tabelle": {
+   "f": "n-omega-3-total-set--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_NORSAN_72dpi_Naehrwerttabellen_web_TOTAL_Z-1.png",
+   "name": "Omega-3 Total Set – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 16296,
+   "art": "tabelle"
+  },
+  "n-omega-3-vegan-set--tabelle": {
+   "f": "n-omega-3-vegan-set--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_NORSAN_72dpi_Naehrwerttabellen_Vegan-1.png",
+   "name": "Omega-3 Vegan Set – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 15094,
+   "art": "tabelle"
+  },
+  "n-omega-3-arktis-set--tabelle": {
+   "f": "n-omega-3-arktis-set--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/12/DE_NORSAN_72dpi_Naehrwerttabellen_web_ARKTIS_mitVD-1-1.png",
+   "name": "Omega-3 Arktis Set – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 17130,
+   "art": "tabelle"
+  },
+  "n-omega-3-vegan--tabelle": {
+   "f": "n-omega-3-vegan--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2024/09/DE_NORSAN_72dpi_Naehrwerttabellen_Vegan-1.png",
+   "name": "Omega-3 Vegan – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 15094,
+   "art": "tabelle"
+  },
+  "n-omega-3-fisk--tabelle": {
+   "f": "n-omega-3-fisk--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/11/DE_20250103_Naehrwerte-Omega-3-FISK-3.png",
+   "name": "Omega-3 FISK Öl – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 19568,
+   "art": "tabelle"
+  },
+  "n-omega-3-vegan-kapseln--tabelle": {
+   "f": "n-omega-3-vegan-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://norsan.de/wp-content/uploads/2021/11/DE_NORSAN_72dpi_Naehrwerttabellen_Vegan_Kapseln-2.png",
+   "name": "Omega-3 Vegan Kapseln – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 11642,
+   "art": "tabelle"
+  },
+  "n-omega-3-arktis-kapseln--tabelle": {
+   "f": "n-omega-3-arktis-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/jpeg",
+   "url": "https://norsan.de/wp-content/uploads/2022/07/NORSAN_Naehrwerte_Omega-3_Arktis_Kapseln_PZN_15638286_600x800px_300dpi_CMYK.jpg",
+   "name": "Omega-3 Arktis Kapseln – Nährwerttabelle",
+   "hersteller": "Norsan",
+   "bytes": 56236,
+   "art": "tabelle"
+  },
+  "d-piperin-kapseln-restbestand--tabelle": {
+   "f": "d-piperin-kapseln-restbestand--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-162-46x46x87-Piperin-F-Tabelle.webp?v=1759145250&width=1200",
+   "name": "Piperin Kapseln Restbestand – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 44654,
+   "art": "tabelle"
+  },
+  "d-kreatin-mit-crea500--tabelle": {
+   "f": "d-kreatin-mit-crea500--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-370-XLShort-Kreatin-B-Tabelle.png?v=1793229128&width=1200",
+   "name": "Kreatin mit CREA500® – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 20434,
+   "art": "tabelle"
+  },
+  "d-whey-isolat-pulver-neutral--tabelle": {
+   "f": "d-whey-isolat-pulver-neutral--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-024-XXL-Whey-Neutral-B-Tabelle.webp?v=1759146076&width=1200",
+   "name": "Whey-Isolat Pulver - Neutral – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 43848,
+   "art": "tabelle"
+  },
+  "d-blu100-full-routine--tabelle": {
+   "f": "d-blu100-full-routine--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BLU-003-M-BLU100-LIFE-B-Tabelle.png?v=1790597430&width=1200",
+   "name": "BLU100 Full Routine – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 179920,
+   "art": "tabelle"
+  },
+  "d-blu100-glow-sleep-routine--tabelle": {
+   "f": "d-blu100-glow-sleep-routine--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BLU-001-M-BLU100-GLOW-B-Tabelle.png?v=1790597430&width=1200",
+   "name": "GLOW & SLEEP Routine – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 174598,
+   "art": "tabelle"
+  },
+  "d-blu100-life-glow-routine--tabelle": {
+   "f": "d-blu100-life-glow-routine--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BLU-003-M-BLU100-LIFE-B-Tabelle.png?v=1790597430&width=1200",
+   "name": "LIFE & GLOW Routine – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 179920,
+   "art": "tabelle"
+  },
+  "d-blu100-life-sleep-routine--tabelle": {
+   "f": "d-blu100-life-sleep-routine--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BLU-003-M-BLU100-LIFE-B-Tabelle.png?v=1790597430&width=1200",
+   "name": "LIFE & SLEEP Routine – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 179920,
+   "art": "tabelle"
+  },
+  "d-blu100-sleep--tabelle": {
+   "f": "d-blu100-sleep--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BLU-004-M-BLU100-SLEEP-B-Tabelle.png?v=1790597430&width=1200",
+   "name": "SLEEP – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 190438,
+   "art": "tabelle"
+  },
+  "d-blu100-life--tabelle": {
+   "f": "d-blu100-life--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BLU-003-M-BLU100-LIFE-B-Tabelle.png?v=1790597430&width=1200",
+   "name": "LIFE – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 179920,
+   "art": "tabelle"
+  },
+  "d-blu100-glow--tabelle": {
+   "f": "d-blu100-glow--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BLU-001-M-BLU100-GLOW-B-Tabelle.png?v=1790597430&width=1200",
+   "name": "GLOW – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 174598,
+   "art": "tabelle"
+  },
+  "d-whey-protein-isolat--tabelle": {
+   "f": "d-whey-protein-isolat--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-363-380x160-Whey-Konv-Vanille-Tabelle.png?v=1792625190&width=1200",
+   "name": "Whey Protein Isolat – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 70134,
+   "art": "tabelle"
+  },
+  "d-elektrolyte-pulver--tabelle": {
+   "f": "d-elektrolyte-pulver--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-347-XLShort-Elektrolytepulver-Himbeer-B-Tabelle.png?v=1792622993&width=1200",
+   "name": "Elektrolyte Pulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 120730,
+   "art": "tabelle"
+  },
+  "d-vitasauri-kids-magnesium--tabelle": {
+   "f": "d-vitasauri-kids-magnesium--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/Vitasauri-Kids-Magnesium-Kinder-Faltschachtel-Neue-Barcode-49x49x94mm-L2_Tabelle.webp?v=1759152812&width=1200",
+   "name": "Vitasauri® Kids Magnesium – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 60940,
+   "art": "tabelle"
+  },
+  "d-vitasauri-kids-vitamin-d3-mit-k2--tabelle": {
+   "f": "d-vitasauri-kids-vitamin-d3-mit-k2--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/vitasauri-d3k2-F-Tabelle_61060702-64d8-4a1b-ae23-77f21f40adb1.webp?v=1760955198&width=1200",
+   "name": "Vitasauri® – Kids Vitamin D3 mit K2 – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 73908,
+   "art": "tabelle"
+  },
+  "d-vitasauri-kids-kogni-getrankepulver--tabelle": {
+   "f": "d-vitasauri-kids-kogni-getrankepulver--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/vitasauri_kids_kogni_kakao_L1_Tabelle.webp?v=1759152669&width=1200",
+   "name": "Vitasauri® Kids Kogni Getränkepulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 134062,
+   "art": "tabelle"
+  },
+  "d-eduone--tabelle": {
+   "f": "d-eduone--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-325-320x83-eduone-Mango-E-ohne-pqq_2.jpg?v=1792150893&width=1200",
+   "name": "eduone – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 219724,
+   "art": "tabelle"
+  },
+  "d-kollagen-bar-dark-chocolate-almond--tabelle": {
+   "f": "d-kollagen-bar-dark-chocolate-almond--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/KollagenBar-Schoko-Tabelle-50g.png?v=1792141570&width=1200",
+   "name": "KollagenBar dunkle Schokolade mit Mandel – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 198692,
+   "art": "tabelle"
+  },
+  "d-whey-isolat-pulver-aus-weidemilch-limited-edition--tabelle": {
+   "f": "d-whey-isolat-pulver-aus-weidemilch-limited-edition--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-040-XXL-Whey-Bratapfel-B-Tabelle.webp?v=1761225933&width=1200",
+   "name": "Whey-Isolat Pulver aus Weidemilch – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 57822,
+   "art": "tabelle"
+  },
+  "d-wheynachtspunsch-clear-whey--tabelle": {
+   "f": "d-wheynachtspunsch-clear-whey--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-138-XL-clear-whey-isolat-Wheynachtspunsch-B-Tabelle_c60ea941-0496-49dc-89b7-4b284fdbc3f6.webp?v=1762531188&width=1200",
+   "name": "Wheynachtspunsch - Clear Whey – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 68672,
+   "art": "tabelle"
+  },
+  "d-vitasauri-kids-flor--tabelle": {
+   "f": "d-vitasauri-kids-flor--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/Vitasauri-Probiotikum-Kinder-Verpackung-62x62x112mm-designyourpackaging-Pantone-L4-mit-Dino_Tabelle.webp?v=1759152998&width=1200",
+   "name": "Vitasauri® - Kids Flor – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 140970,
+   "art": "tabelle"
+  },
+  "d-vitamin-d-tropfen-baby--tabelle": {
+   "f": "d-vitamin-d-tropfen-baby--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/Vitasauri-Tropfen-Vitamin-D-Baby-Verpackung-neue-Stanze-Patone-L6_designyourpackaging_Tabelle.webp?v=1759153027&width=1200",
+   "name": "Vitasauri® Kids D3 – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 62112,
+   "art": "tabelle"
+  },
+  "d-veganbar-schokoladenkuchen--tabelle": {
+   "f": "d-veganbar-schokoladenkuchen--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-290-Protein-Bar-VEGAN-Tabelle.png?v=1788455669&width=1200",
+   "name": "VeganBar Schokoladenkuchen – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 117974,
+   "art": "tabelle"
+  },
+  "d-mama-multi--tabelle": {
+   "f": "d-mama-multi--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-052-50x50x96-Mama-Multi-F-Tabelle.webp?v=1759138951&width=1200",
+   "name": "Mama Multi – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 247330,
+   "art": "tabelle"
+  },
+  "d-veganes-protein-pro--tabelle": {
+   "f": "d-veganes-protein-pro--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-316-XXLSlim-Veganes-Protein-Pro-gesalzenes-Karamell-B-Tabelle.png?v=1787599778&width=1200",
+   "name": "Veganes Protein Pro – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 66942,
+   "art": "tabelle"
+  },
+  "d-vitamin-d3-mit-k2-kapseln--tabelle": {
+   "f": "d-vitamin-d3-mit-k2-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-338-50x50x96-Vitamin-D3-K2-Kapseln-F-Tabelle.png?v=1785770880&width=1200",
+   "name": "Vitamin D3 mit K2 Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 72820,
+   "art": "tabelle"
+  },
+  "d-magnesium-pulver-pur--tabelle": {
+   "f": "d-magnesium-pulver-pur--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-337-L-Magnesium-B-Tabelle.png?v=1790235132&width=1200",
+   "name": "Magnesium Pulver pur – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 34796,
+   "art": "tabelle"
+  },
+  "d-vitasauri-kids-eisen--tabelle": {
+   "f": "d-vitasauri-kids-eisen--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/vitasauri-Kids-Eisen-Kinder-Faltschachtel-59x59x110mm-L4-mit-Dino_Tabelle.webp?v=1759152759&width=1200",
+   "name": "Vitasauri® Kids Eisen – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 75384,
+   "art": "tabelle"
+  },
+  "d-grunder-bundle-chris--tabelle": {
+   "f": "d-grunder-bundle-chris--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-118-50x50x96-Das-Multi-F-Tabelle.webp?v=1759144803&width=1200",
+   "name": "Gründer-Bundle Chris – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 221010,
+   "art": "tabelle"
+  },
+  "d-grunder-bundle-phil--tabelle": {
+   "f": "d-grunder-bundle-phil--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-069-XL-clear-whey-isolat-Kirsche-B-Tabelle.webp?v=1759147901&width=1200",
+   "name": "Gründer-Bundle Phil – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 56594,
+   "art": "tabelle"
+  },
+  "d-chunky-protein-bar-chocolate-brownie--tabelle": {
+   "f": "d-chunky-protein-bar-chocolate-brownie--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-228-Deluxe-Riegel-140x160_34mm-weiss-L5_Tabelle.webp?v=1759307099&width=1200",
+   "name": "Chunky Protein Bar Chocolate Brownie – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 111824,
+   "art": "tabelle"
+  },
+  "d-essential-bundle--tabelle": {
+   "f": "d-essential-bundle--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-249-65x65x125-Magnesium-120Kps-F-Tabelle.webp?v=1761482307&width=1200",
+   "name": "Essential Bundle – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 49790,
+   "art": "tabelle"
+  },
+  "d-schlaf-bundle--tabelle": {
+   "f": "d-schlaf-bundle--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-249-65x65x125-Magnesium-120Kps-F-Tabelle_6b64203b-c9d9-4698-a45a-1446b9e41e5c.webp?v=1761484008&width=1200",
+   "name": "Schlaf-Bundle – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 49790,
+   "art": "tabelle"
+  },
+  "d-beef-sticks-teriyaki--tabelle": {
+   "f": "d-beef-sticks-teriyaki--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BIO-510-80x150-Beef-Sticks-Teriyaki-B-L1.jpg?v=1776756204&width=1200",
+   "name": "Beef Sticks Teriyaki – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 97864,
+   "art": "tabelle"
+  },
+  "d-beef-bar-cranberry--tabelle": {
+   "f": "d-beef-bar-cranberry--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BIO-512-80x150-Beef-Bar-Cranberry-B-L2_2.png?v=1776756236&width=1200",
+   "name": "Beef Bar Cranberry – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 70514,
+   "art": "tabelle"
+  },
+  "d-vitamin-d-kapseln--tabelle": {
+   "f": "d-vitamin-d-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-061-L-Vitamin-D3-B-Tabelle.webp?v=1759147512&width=1200",
+   "name": "Vitamin D Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 29386,
+   "art": "tabelle"
+  },
+  "d-proteinwasser--tabelle": {
+   "f": "d-proteinwasser--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-331-XL-Proteinwasser-B-Tabelle.png?v=1779961458&width=1200",
+   "name": "Proteinwasser – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 58360,
+   "art": "tabelle"
+  },
+  "d-vitasauri-r-kids-mix--tabelle": {
+   "f": "d-vitasauri-r-kids-mix--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/Vitasauri-Kids-Mix-Tabelle.png?v=1778283188&width=1200",
+   "name": "Vitasauri® Kids Mix – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 208054,
+   "art": "tabelle"
+  },
+  "d-cluster-dextrin-neu--tabelle": {
+   "f": "d-cluster-dextrin-neu--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-323-320x83-Cluster-Dextrin-E-Tabelle.png?v=1776154026&width=1200",
+   "name": "Cluster Dextrin® – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 50390,
+   "art": "tabelle"
+  },
+  "d-beta-alanin--tabelle": {
+   "f": "d-beta-alanin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-140-M-Beta-Alanin-B-Tabelle.png?v=1775722057&width=1200",
+   "name": "Beta-Alanin – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 15130,
+   "art": "tabelle"
+  },
+  "d-darm-bundle--tabelle": {
+   "f": "d-darm-bundle--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-169-50x50x96-Darmbakterien-F-Tabelle.webp?v=1759145298&width=1200",
+   "name": "Darm-Bundle – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 92708,
+   "art": "tabelle"
+  },
+  "d-testosteron-bundle--tabelle": {
+   "f": "d-testosteron-bundle--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-006-50x50x96-Zink-F-Tabelle.webp?v=1759135432&width=1200",
+   "name": "Testosteron-Bundle – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 96406,
+   "art": "tabelle"
+  },
+  "d-casein-protein-vanille--tabelle": {
+   "f": "d-casein-protein-vanille--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-307-XXLSlim-Casein-Protein-Vanille-B-L2.png?v=1773253922&width=1200",
+   "name": "Casein Protein Vanille – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 58734,
+   "art": "tabelle"
+  },
+  "d-inositol-komplex--tabelle": {
+   "f": "d-inositol-komplex--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-282-L-Inositol-Komplex-B-Tabelle.png?v=1771844029&width=1200",
+   "name": "Inositol Komplex – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 45288,
+   "art": "tabelle"
+  },
+  "d-bio-schwarzkummelol-kapseln--tabelle": {
+   "f": "d-bio-schwarzkummelol-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-BIO-508-65x65x125-Schwarzkuemmeloel-F-Tabelle_a7d0a18e-61f4-47f1-9870-0cb4fcb3dd61.webp?v=1771560023&width=1200",
+   "name": "Bio-Schwarzkümmelöl Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 39532,
+   "art": "tabelle"
+  },
+  "d-meno-balance--tabelle": {
+   "f": "d-meno-balance--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-253-63x63x114-Meno-Balance-F-Tabelle.webp?v=1770639543&width=1200",
+   "name": "Meno Balance – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 98104,
+   "art": "tabelle"
+  },
+  "d-clear-vegan--tabelle": {
+   "f": "d-clear-vegan--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-309-XL-clear-vegan-Mojito-B-Tabelle.png?v=1777880391&width=1200",
+   "name": "Clear Vegan – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 73332,
+   "art": "tabelle"
+  },
+  "d-protein-bar-chocolate-vanilla--tabelle": {
+   "f": "d-protein-bar-chocolate-vanilla--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-232-Basic-Riegel-160x132mm-weiss-L4_Tabelle.webp?v=1759307278&width=1200",
+   "name": "Protein Bar Chocolate Vanilla – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 110808,
+   "art": "tabelle"
+  },
+  "d-kids-mix-multivitamin-pulver-fur-kinder--tabelle": {
+   "f": "d-kids-mix-multivitamin-pulver-fur-kinder--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/Vitasauri-Kids-Mix-Pulver-Neutral-Faltschachtel-59x59x110mm-L1_Tabelle.webp?v=1759152931&width=1200",
+   "name": "Kids Mix – Multivitamin-Pulver für Kinder – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 109442,
+   "art": "tabelle"
+  },
+  "d-astaxanthin--tabelle": {
+   "f": "d-astaxanthin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-259-50x50x96-Astaxanthin-F-Tabelle.webp?v=1759236708&width=1200",
+   "name": "Astaxanthin Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 41442,
+   "art": "tabelle"
+  },
+  "d-magnesiumkapseln--tabelle": {
+   "f": "d-magnesiumkapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-249-65x65x125-Magnesium-120Kps-F-Tabelle_6b64203b-c9d9-4698-a45a-1446b9e41e5c.webp?v=1761484008&width=1200",
+   "name": "Magnesium Komplex Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 49790,
+   "art": "tabelle"
+  },
+  "d-granatapfel-extrakt-pro--tabelle": {
+   "f": "d-granatapfel-extrakt-pro--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-260-63x63x114-Granatapfel-Extrakt-F-Tabelle.webp?v=1761479435&width=1200",
+   "name": "Granatapfel-Extrakt Pro – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 73010,
+   "art": "tabelle"
+  },
+  "d-curcumin-kapseln-longvida-r-optimised-curcumin-r--tabelle": {
+   "f": "d-curcumin-kapseln-longvida-r-optimised-curcumin-r--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-256-50x50x96-Curcumin-F-Tabelle.webp?v=1760693373&width=1200",
+   "name": "Curcumin Kapseln – Longvida® Optimised Curcumin® – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 54622,
+   "art": "tabelle"
+  },
+  "d-hyaluronsaure-kapseln--tabelle": {
+   "f": "d-hyaluronsaure-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-250-50x50x96-Hyaluronsaeure-F-Tabelle.webp?v=1760601680&width=1200",
+   "name": "Hyaluronsäure Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 21652,
+   "art": "tabelle"
+  },
+  "d-kollagen-shine--tabelle": {
+   "f": "d-kollagen-shine--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-165-XLshort-Kollagen-Shine-Himbeere-B-Tabelle.webp?v=1760616261&width=1200",
+   "name": "Kollagen Shine – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 134646,
+   "art": "tabelle"
+  },
+  "d-frauen-multi-plus--tabelle": {
+   "f": "d-frauen-multi-plus--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-156-L-Frauenmulti-Plus-Maracuja-B-Tabelle.webp?v=1760616493&width=1200",
+   "name": "Frauen Multi Plus – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 254000,
+   "art": "tabelle"
+  },
+  "d-lysin-komplex--tabelle": {
+   "f": "d-lysin-komplex--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-248-63x63x114-Lysin-Komplex-F-Tabelle.webp?v=1759145385&width=1200",
+   "name": "Lysin Komplex – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 51880,
+   "art": "tabelle"
+  },
+  "d-aminopeptide--tabelle": {
+   "f": "d-aminopeptide--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-157-XLshort-Aminopeptide-Kirsche-B-Tabelle.webp?v=1759149572&width=1200",
+   "name": "Aminopeptide – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 54762,
+   "art": "tabelle"
+  },
+  "d-vitasauri-r-kids-omega-3--tabelle": {
+   "f": "d-vitasauri-r-kids-omega-3--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/Vitasauri-Omega-3-Faltschachtel-328_5x187mm-MitMHD-L2_Tabelle.webp?v=1759152969&width=1200",
+   "name": "Vitasauri® - Kids Omega-3 – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 99966,
+   "art": "tabelle"
+  },
+  "d-veganes-omega-3-ol--tabelle": {
+   "f": "d-veganes-omega-3-ol--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-226-51x51x137-Veganes-Omega-3-F-Tabelle.webp?v=1759145342&width=1200",
+   "name": "Veganes Omega-3 Öl – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 70508,
+   "art": "tabelle"
+  },
+  "d-whey-protein-konzentrat--tabelle": {
+   "f": "d-whey-protein-konzentrat--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-106-XXLSlim-Whey-Konzentrat-Vanille-B-Tabelle.webp?v=1759148486&width=1200",
+   "name": "Whey Protein Konzentrat – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 46984,
+   "art": "tabelle"
+  },
+  "d-bio-whey-protein-konzentrat--tabelle": {
+   "f": "d-bio-whey-protein-konzentrat--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-107-XXLSlim-Whey-Konzentrat-Neutral-B-Tabelle.webp?v=1759148731&width=1200",
+   "name": "Bio Whey Protein Konzentrat – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 40450,
+   "art": "tabelle"
+  },
+  "d-calcium-kapseln--tabelle": {
+   "f": "d-calcium-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/edubily-Calcium_Kapseln-Verpackung-62x62x112mm-designyourpackaging-L1_Tabelle.webp?v=1759307182&width=1200",
+   "name": "Calcium Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 30444,
+   "art": "tabelle"
+  },
+  "d-lactoferrin--tabelle": {
+   "f": "d-lactoferrin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-161-50x50x96-Lactoferrin-F-Tabelle.webp?v=1759145183&width=1200",
+   "name": "Lactoferrin – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 27638,
+   "art": "tabelle"
+  },
+  "d-l-theanin--tabelle": {
+   "f": "d-l-theanin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-159-46x46x87-L-Theanin-F-Tabelle.webp?v=1759145141&width=1200",
+   "name": "L-Theanin – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 29088,
+   "art": "tabelle"
+  },
+  "d-darmbakterien-kapseln--tabelle": {
+   "f": "d-darmbakterien-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-169-50x50x96-Darmbakterien-F-Tabelle.webp?v=1759145298&width=1200",
+   "name": "Darmbakterien Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 92708,
+   "art": "tabelle"
+  },
+  "d-pure-msm-kapseln--tabelle": {
+   "f": "d-pure-msm-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-156-63x63x114-MSM-F-Tabelle.webp?v=1759145046&width=1200",
+   "name": "MSM Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 27460,
+   "art": "tabelle"
+  },
+  "d-pure-selen-kapseln--tabelle": {
+   "f": "d-pure-selen-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-157-50x50x96-Selen-F-Tabelle-neu.png?v=1772634863&width=1200",
+   "name": "Selen Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 65084,
+   "art": "tabelle"
+  },
+  "d-marines-kollagen--tabelle": {
+   "f": "d-marines-kollagen--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-098-XL-Marines-Kollagen-Hydrolysat-B-Tabelle.webp?v=1759148380&width=1200",
+   "name": "Marines Kollagenhydrolysat – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 38478,
+   "art": "tabelle"
+  },
+  "d-l-carnosin--tabelle": {
+   "f": "d-l-carnosin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-150-50x50x96-L-Carnosin-F-Tabelle.webp?v=1759144994&width=1200",
+   "name": "L-Carnosin Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 19210,
+   "art": "tabelle"
+  },
+  "d-vitamin-c-kapsel--tabelle": {
+   "f": "d-vitamin-c-kapsel--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-070-L-Vitamin-C-B-Tabelle.webp?v=1759147958&width=1200",
+   "name": "Vitamin C Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 35304,
+   "art": "tabelle"
+  },
+  "d-eaa-pulver--tabelle": {
+   "f": "d-eaa-pulver--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-079-L-EAA-Zitrone-B-Tabelle.webp?v=1759148305&width=1200",
+   "name": "EAA Pulver – Essenzielle Aminosäuren – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 94460,
+   "art": "tabelle"
+  },
+  "d-clear-whey-pulver-aus-whey-isolat--tabelle": {
+   "f": "d-clear-whey-pulver-aus-whey-isolat--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-069-XL-clear-whey-isolat-Kirsche-B-Tabelle-25g.png?v=1791527613&width=1200",
+   "name": "Clear Whey - Pulver aus Whey-Isolat – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 76576,
+   "art": "tabelle"
+  },
+  "d-whey-isolat-aus-weidemilch--tabelle": {
+   "f": "d-whey-isolat-aus-weidemilch--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-024-XXL-Whey-Neutral-B-Tabelle.webp?v=1759146076&width=1200",
+   "name": "Whey-Isolat Pulver aus Weidemilch - Neutral – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 43848,
+   "art": "tabelle"
+  },
+  "d-l-carnitin--tabelle": {
+   "f": "d-l-carnitin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-071-50x50x96-L-Carnitin-F-Tabelle.webp?v=1759139217&width=1200",
+   "name": "L-Carnitin Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 28224,
+   "art": "tabelle"
+  },
+  "d-inositol-pulver--tabelle": {
+   "f": "d-inositol-pulver--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-062-L-Inositol-B-Tabelle.webp?v=1759147579&width=1200",
+   "name": "Inositol Pulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 11210,
+   "art": "tabelle"
+  },
+  "d-pure-glutamin-kapseln--tabelle": {
+   "f": "d-pure-glutamin-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-114-L-L-Glutamin-Kapseln-B-Tabelle.webp?v=1759148838&width=1200",
+   "name": "L-Glutamin Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 18402,
+   "art": "tabelle"
+  },
+  "d-lp7-eaa-aminosaeuren-kapseln--tabelle": {
+   "f": "d-lp7-eaa-aminosaeuren-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-116-L-LP7-Aminosaeuren-B-Tabelle.webp?v=1759144750&width=1200",
+   "name": "LP7 Aminosäuren Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 53218,
+   "art": "tabelle"
+  },
+  "d-pure-citrullin-malat-kapseln--tabelle": {
+   "f": "d-pure-citrullin-malat-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-115-L-Citrullin-Malat-B-Tabelle.webp?v=1759148872&width=1200",
+   "name": "Citrullin-Malat Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 25254,
+   "art": "tabelle"
+  },
+  "d-pure-cholin-als-cdp-cholin--tabelle": {
+   "f": "d-pure-cholin-als-cdp-cholin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-113-50x50x96-Cholin-F-Tabelle.webp?v=1759144707&width=1200",
+   "name": "Cholin Kapseln – als CDP-Cholin – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 23726,
+   "art": "tabelle"
+  },
+  "d-ubiquinol-reduziertes-q10--tabelle": {
+   "f": "d-ubiquinol-reduziertes-q10--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-112-50x50x96-Ubiquinol-Q10-F-Tabelle.webp?v=1759144649&width=1200",
+   "name": "Ubiquinol Kapseln – Reduziertes Q10 von Kaneka® – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 33754,
+   "art": "tabelle"
+  },
+  "d-l-tyrosin--tabelle": {
+   "f": "d-l-tyrosin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-107-50x50x96-L-Tyrosin-F-Tabelle.webp?v=1759140594&width=1200",
+   "name": "L-Tyrosin Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 18828,
+   "art": "tabelle"
+  },
+  "d-chrompicolinat--tabelle": {
+   "f": "d-chrompicolinat--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-109-50x50x96-Chrompicolinat-F-Tabelle.webp?v=1759144435&width=1200",
+   "name": "Chrompicolinat Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 29324,
+   "art": "tabelle"
+  },
+  "d-propionsaure--tabelle": {
+   "f": "d-propionsaure--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-108-63x63x114-Propionsaeure-F-Tabelle.webp?v=1759144382&width=1200",
+   "name": "Propionsäure Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 19180,
+   "art": "tabelle"
+  },
+  "d-edu-basic--tabelle": {
+   "f": "d-edu-basic--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/edu_basic_Tabelle.webp?v=1759306978&width=1200",
+   "name": "edu basic – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 66238,
+   "art": "tabelle"
+  },
+  "d-n-acetyl-l-cystein--tabelle": {
+   "f": "d-n-acetyl-l-cystein--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-099-50x50x96-N-Acetyl-L-Cystein-F-Tabelle.webp?v=1759140489&width=1200",
+   "name": "N-Acetyl-L-Cystein (NAC) – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 21390,
+   "art": "tabelle"
+  },
+  "d-opc-komplex--tabelle": {
+   "f": "d-opc-komplex--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-101-50x50x96-OPC-Komplex-F-Tabelle.webp?v=1759140540&width=1200",
+   "name": "OPC-Komplex Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 78572,
+   "art": "tabelle"
+  },
+  "d-gruntee-extrakt--tabelle": {
+   "f": "d-gruntee-extrakt--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-096-50x50x96-Gruentee-Extrakt-F-Tabelle.webp?v=1759139452&width=1200",
+   "name": "Grüntee-Extrakt Kapseln mit 50 % EGCG – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 30620,
+   "art": "tabelle"
+  },
+  "d-iod-kapseln--tabelle": {
+   "f": "d-iod-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-098-50x50x96-Iod-F-Tabelle.webp?v=1759140166&width=1200",
+   "name": "Iod Kapseln – aus reinstem Bio-Kelp – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 43382,
+   "art": "tabelle"
+  },
+  "d-ashwagandha-kapseln-ksm-66--tabelle": {
+   "f": "d-ashwagandha-kapseln-ksm-66--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-097-50x50x96-Ashwagandha-F-Tabelle.webp?v=1759139505&width=1200",
+   "name": "Ashwagandha Kapseln KSM-66® – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 28092,
+   "art": "tabelle"
+  },
+  "d-darmflora-komplex--tabelle": {
+   "f": "d-darmflora-komplex--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-005-L-Darmflora-Komplex-B-Tabelle.webp?v=1759145803&width=1200",
+   "name": "Darmflora-Komplex – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 95552,
+   "art": "tabelle"
+  },
+  "d-zink-kapseln--tabelle": {
+   "f": "d-zink-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-066-L-Zink-B-Tabelle.webp?v=1759147756&width=1200",
+   "name": "Zink-Komplex Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 75332,
+   "art": "tabelle"
+  },
+  "d-citrullin-plus--tabelle": {
+   "f": "d-citrullin-plus--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-004-M-Citrullin-Plus-B-Tabelle.webp?v=1759145742&width=1200",
+   "name": "Citrullin plus – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 89668,
+   "art": "tabelle"
+  },
+  "d-resistentes-dextrin--tabelle": {
+   "f": "d-resistentes-dextrin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-011-L-Resistentes-Dextrin-B-Tabelle.webp?v=1759145887&width=1200",
+   "name": "Resistentes Dextrin Pulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 35190,
+   "art": "tabelle"
+  },
+  "d-olivenblatt-extrakt--tabelle": {
+   "f": "d-olivenblatt-extrakt--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-048-63x63x114-Olivenblatt-Extrakt-F-Tabelle.webp?v=1759136130&width=1200",
+   "name": "Olivenblatt-Extrakt Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 47796,
+   "art": "tabelle"
+  },
+  "d-glycin-pulver--tabelle": {
+   "f": "d-glycin-pulver--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-026-M-Glycin-B-Tabelle.webp?v=1759146208&width=1200",
+   "name": "Glycin-Pulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 9590,
+   "art": "tabelle"
+  },
+  "d-creatin-pulver--tabelle": {
+   "f": "d-creatin-pulver--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-025-XL-Kreatin-B-Tabelle.webp?v=1759146148&width=1200",
+   "name": "Kreatin Pulver Creavitalis® – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 15742,
+   "art": "tabelle"
+  },
+  "d-l-glutamin-pulver--tabelle": {
+   "f": "d-l-glutamin-pulver--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-046-L-L-Glutamin-Pulver-B-Tabelle.webp?v=1759135971&width=1200",
+   "name": "L-Glutamin Pulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 10888,
+   "art": "tabelle"
+  },
+  "d-taurin--tabelle": {
+   "f": "d-taurin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-047-50x50x96-Taurin-F-Tabelle.webp?v=1759136081&width=1200",
+   "name": "Taurin Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 20562,
+   "art": "tabelle"
+  },
+  "d-eisen-mit-lactoferrin--tabelle": {
+   "f": "d-eisen-mit-lactoferrin--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-065-50x50x96-Eisen-F-Tabelle.webp?v=1759139137&width=1200",
+   "name": "Eisen Kapseln mit Lactoferrin – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 57990,
+   "art": "tabelle"
+  },
+  "d-calcium-plus--tabelle": {
+   "f": "d-calcium-plus--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-041-L-Calcium-Plus-B-Tabelle.webp?v=1759146403&width=1200",
+   "name": "Calcium Pulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 48198,
+   "art": "tabelle"
+  },
+  "d-vitamin-d3-k2-tropfen--tabelle": {
+   "f": "d-vitamin-d3-k2-tropfen--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-082-37x37x112-Vitamin-D3-K2-Tropfen-F-Tabelle.webp?v=1759139309&width=1200",
+   "name": "Vitamin D3 & K2 Tropfen – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 53974,
+   "art": "tabelle"
+  },
+  "d-whey-isolat--tabelle": {
+   "f": "d-whey-isolat--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-057-XXL-Whey-Vanille-Stevia-B-Tabelle.webp?v=1759147259&width=1200",
+   "name": "Weide Whey Protein Isolat – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 53352,
+   "art": "tabelle"
+  },
+  "d-tryptophan--tabelle": {
+   "f": "d-tryptophan--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-090-50x50x96-L-Tryptophan-F-Tabelle.webp?v=1759139388&width=1200",
+   "name": "L-Tryptophan Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 19234,
+   "art": "tabelle"
+  },
+  "d-kollagen-hydrolysat--tabelle": {
+   "f": "d-kollagen-hydrolysat--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-037-XXL-Kollagen-Hydrolysat-B-Tabelle.webp?v=1759146300&width=1200",
+   "name": "Kollagen-Hydrolysat Pulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 74414,
+   "art": "tabelle"
+  },
+  "d-omega-3-kapseln--tabelle": {
+   "f": "d-omega-3-kapseln--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-052-L-Omega-3-B-Tabelle.webp?v=1759146669&width=1200",
+   "name": "Omega-3 Kapseln – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 41610,
+   "art": "tabelle"
+  },
+  "d-vitamin-d3--tabelle": {
+   "f": "d-vitamin-d3--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-045-35x35x102-Vitamin-D3-Tropfen-F-Tabelle_2.webp?v=1759135890&width=1200",
+   "name": "Vitamin D Öl – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 45728,
+   "art": "tabelle"
+  },
+  "d-vitamin-b-komplex--tabelle": {
+   "f": "d-vitamin-b-komplex--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-053-50x50x96-Vitamin-B-Komplex-F-Tabelle.webp?v=1759139090&width=1200",
+   "name": "Vitamin B-Komplex – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 115254,
+   "art": "tabelle"
+  },
+  "d-veganes-protein--tabelle": {
+   "f": "d-veganes-protein--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-043-XXL-Veganes-Protein-Schoko-B-Tabelle.webp?v=1759146497&width=1200",
+   "name": "Veganes Proteinpulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 45920,
+   "art": "tabelle"
+  },
+  "d-ei-protein--tabelle": {
+   "f": "d-ei-protein--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-051-XXL-Ei-Protein-Mousse-au-Chocolat-B-Tabelle.webp?v=1759146591&width=1200",
+   "name": "Ei-Protein Pulver aus Freilandhaltung – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 53328,
+   "art": "tabelle"
+  },
+  "d-magnesium-pulver--tabelle": {
+   "f": "d-magnesium-pulver--tabelle.bin",
+   "kid": "4ed939a181",
+   "typ": "image/webp",
+   "url": "https://edubily.de/cdn/shop/files/EDU-B-060-L-Magnesium-Pulver-Heidelbeere-B-Tabelle_f6fa94a0-f9b1-4e68-9559-78f29fb7fadd.webp?v=1767765466&width=1200",
+   "name": "Magnesium Pulver – Nährwerttabelle",
+   "hersteller": "edubily",
+   "bytes": 56436,
+   "art": "tabelle"
   }
  },
- "stand": "2026-11-14T06:23:25.215Z",
+ "stand": "2026-11-14T20:47:54.103Z",
  "bericht": {
   "produkte_mit_bildadresse": 555,
-  "gespeichert": 555,
-  "neu": 107,
-  "unveraendert": 448,
+  "naehrwerttabellen": 136,
+  "gespeichert": 691,
+  "neu": 136,
+  "unveraendert": 555,
   "fehler": []
  }
 }

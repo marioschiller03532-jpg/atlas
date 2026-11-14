@@ -1,5 +1,5 @@
 {
- "geprueft": "2026-11-14T06:06:09.461Z",
+ "geprueft": "2026-11-14T20:34:49.059Z",
  "definitionen": {
   "gefunden": "alle Produktseiten im offiziellen Verzeichnis (Biogena: Sitemap de-at; MoleQlar und edubily: Shop-Produktliste; Norsan: Shop-Schnittstelle), inklusive Zubehör, Sets, Tests, Lebensmittel und Medizinprodukte",
   "nem": "davon als Nahrungsergänzungsmittel gekennzeichnet (Pflichtkennzeichnung bzw. Hinweis auf der Seite)",
@@ -163,14 +163,14 @@
      "name": "OMEGA-3 VEGAN EPA KAPSELN",
      "url": "https://norsan.de/shop/omega-3-vegan-epa-kapseln/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 Kapseln",
      "url": "https://norsan.de/shop/omega-3-kapseln/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Packungsgröße": "nicht als Text auf der Produktseite"
      }
     },
@@ -178,77 +178,77 @@
      "name": "Omega-3 Total Öl (Zitrone)",
      "url": "https://norsan.de/shop/omega-3-total-oel/?attribute_geschmack=Zitrone",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 Total Öl (Naturell)",
      "url": "https://norsan.de/shop/omega-3-total-oel/?attribute_geschmack=Naturell",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 VEGAN EPA",
      "url": "https://norsan.de/shop/omega-3-vegan-epa/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "NÀDARRA Vitamin D 1.000 Vegan",
      "url": "https://norsan.de/shop/vitamin-d-1-000-vegan/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "NÀDARRA Vitamin D 1.000",
      "url": "https://norsan.de/shop/vitamin-d-1-000-tropfen/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "NÀDARRA Vitamin D 5.000 mit K2",
      "url": "https://norsan.de/shop/vitamin-d-5000-mit-k2/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 ALGA Jelly Vegan 120er Packung",
      "url": "https://norsan.de/shop/omega-3-alga-jelly-vegan-120er-packung/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 ALGA Jelly Vegan 45er Packung",
      "url": "https://norsan.de/shop/omega-3-alga-jelly-vegan-45er-packung/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 FISK Jelly 120er Packung",
      "url": "https://norsan.de/shop/omega-3-fisk-jelly-120er-packung/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 FISK Jelly 45er Packung",
      "url": "https://norsan.de/shop/omega-3-fisk-jelly-45er-packung/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 ALGA",
      "url": "https://norsan.de/shop/omega-3-alga-kids-vegan/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Packungsgröße": "nicht als Text auf der Produktseite"
      }
     },
@@ -256,7 +256,7 @@
      "name": "Omega-3 Arktis (mit Vitamin D3)",
      "url": "https://norsan.de/shop/omega-3-arktis/?attribute_variante=mit%20Vitamin%20D3",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
@@ -270,14 +270,14 @@
      "name": "Omega-3 Vegan",
      "url": "https://norsan.de/shop/omega-3-vegan/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 FISK Öl",
      "url": "https://norsan.de/shop/omega-3-fisk/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Packungsgröße": "nicht als Text auf der Produktseite"
      }
     },
@@ -285,14 +285,14 @@
      "name": "Omega-3 Vegan Kapseln",
      "url": "https://norsan.de/shop/omega-3-vegan-kapseln/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 Arktis Kapseln",
      "url": "https://norsan.de/shop/omega-3-arktis-kapseln/",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Packungsgröße": "nicht als Text auf der Produktseite"
      }
     }
@@ -680,8 +680,8 @@
      "name": "Piperin Kapseln Restbestand",
      "url": "https://edubily.de/products/piperin-kapseln-restbestand",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -689,48 +689,48 @@
      "name": "Kreatin mit CREA500®",
      "url": "https://edubily.de/products/kreatin-mit-crea500",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "SLEEP",
      "url": "https://edubily.de/products/blu100-sleep",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "LIFE",
      "url": "https://edubily.de/products/blu100-life",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "GLOW",
      "url": "https://edubily.de/products/blu100-glow",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Elektrolyte Pulver",
      "url": "https://edubily.de/products/elektrolyte-pulver",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Vitasauri® – Kids Vitamin D3 mit K2",
      "url": "https://edubily.de/products/vitasauri®-kids-vitamin-d3-mit-k2",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -738,71 +738,71 @@
      "name": "Vitasauri® Kids Kogni Getränkepulver",
      "url": "https://edubily.de/products/vitasauri®-kids-kogni-getrankepulver",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "eduone",
      "url": "https://edubily.de/products/eduone",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Vitasauri® - Kids Flor",
      "url": "https://edubily.de/products/vitasauri®-kids-flor",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Mama Multi",
      "url": "https://edubily.de/products/mama-multi",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Vitamin D3 mit K2 Kapseln",
      "url": "https://edubily.de/products/vitamin-d3-mit-k2-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Magnesium Pulver pur",
      "url": "https://edubily.de/products/magnesium-pulver-pur",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Vitamin D Kapseln",
      "url": "https://edubily.de/products/vitamin-d-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Vitasauri® Kids Mix",
      "url": "https://edubily.de/products/vitasauri-r-kids-mix",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Cluster Dextrin®",
      "url": "https://edubily.de/products/cluster-dextrin-neu",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -810,16 +810,16 @@
      "name": "Beta-Alanin",
      "url": "https://edubily.de/products/beta-alanin",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Inositol Komplex",
      "url": "https://edubily.de/products/inositol-komplex",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -827,16 +827,16 @@
      "name": "Bio-Schwarzkümmelöl Kapseln",
      "url": "https://edubily.de/products/bio-schwarzkummelol-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Meno Balance",
      "url": "https://edubily.de/products/meno-balance",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -844,8 +844,8 @@
      "name": "Clear Vegan",
      "url": "https://edubily.de/products/clear-vegan",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -853,8 +853,8 @@
      "name": "Kids Mix – Multivitamin-Pulver für Kinder",
      "url": "https://edubily.de/products/kids-mix-multivitamin-pulver-fur-kinder",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -862,16 +862,16 @@
      "name": "Astaxanthin Kapseln",
      "url": "https://edubily.de/products/astaxanthin",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Curcumin Kapseln – Longvida® Optimised Curcumin®",
      "url": "https://edubily.de/products/curcumin-kapseln-longvida-r-optimised-curcumin-r",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -879,16 +879,16 @@
      "name": "Hyaluronsäure Kapseln",
      "url": "https://edubily.de/products/hyaluronsaure-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Kollagen Shine",
      "url": "https://edubily.de/products/kollagen-shine",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -896,40 +896,40 @@
      "name": "Frauen Multi Plus",
      "url": "https://edubily.de/products/frauen-multi-plus",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Lysin Komplex",
      "url": "https://edubily.de/products/lysin-komplex",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Aminopeptide",
      "url": "https://edubily.de/products/aminopeptide",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Vitasauri® - Kids Omega-3",
      "url": "https://edubily.de/products/vitasauri-r-kids-omega-3",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Veganes Omega-3 Öl",
      "url": "https://edubily.de/products/veganes-omega-3-ol",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -937,8 +937,8 @@
      "name": "L-Theanin",
      "url": "https://edubily.de/products/l-theanin",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -946,40 +946,40 @@
      "name": "Darmbakterien Kapseln",
      "url": "https://edubily.de/products/darmbakterien-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "MSM Kapseln",
      "url": "https://edubily.de/products/pure-msm-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Selen Kapseln",
      "url": "https://edubily.de/products/pure-selen-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "L-Carnosin Kapseln",
      "url": "https://edubily.de/products/l-carnosin",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Vitamin C Kapseln",
      "url": "https://edubily.de/products/vitamin-c-kapsel",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -987,16 +987,16 @@
      "name": "EAA Pulver – Essenzielle Aminosäuren",
      "url": "https://edubily.de/products/eaa-pulver",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "L-Carnitin Kapseln",
      "url": "https://edubily.de/products/l-carnitin",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -1004,24 +1004,24 @@
      "name": "Inositol Pulver",
      "url": "https://edubily.de/products/inositol-pulver",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Citrullin-Malat Kapseln",
      "url": "https://edubily.de/products/pure-citrullin-malat-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Chrompicolinat Kapseln",
      "url": "https://edubily.de/products/chrompicolinat",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -1029,8 +1029,8 @@
      "name": "Propionsäure Kapseln",
      "url": "https://edubily.de/products/propionsaure",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -1038,64 +1038,64 @@
      "name": "edu basic",
      "url": "https://edubily.de/products/edu-basic",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "N-Acetyl-L-Cystein (NAC)",
      "url": "https://edubily.de/products/n-acetyl-l-cystein",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "OPC-Komplex Kapseln",
      "url": "https://edubily.de/products/opc-komplex",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Grüntee-Extrakt Kapseln mit 50 % EGCG",
      "url": "https://edubily.de/products/gruntee-extrakt",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Iod Kapseln – aus reinstem Bio-Kelp",
      "url": "https://edubily.de/products/iod-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Ashwagandha Kapseln KSM-66®",
      "url": "https://edubily.de/products/ashwagandha-kapseln-ksm-66",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Darmflora-Komplex",
      "url": "https://edubily.de/products/darmflora-komplex",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Zink-Komplex Kapseln",
      "url": "https://edubily.de/products/zink-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -1103,16 +1103,16 @@
      "name": "Citrullin plus",
      "url": "https://edubily.de/products/citrullin-plus",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Olivenblatt-Extrakt Kapseln",
      "url": "https://edubily.de/products/olivenblatt-extrakt",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -1120,8 +1120,8 @@
      "name": "Glycin-Pulver",
      "url": "https://edubily.de/products/glycin-pulver",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -1129,16 +1129,16 @@
      "name": "Kreatin Pulver Creavitalis®",
      "url": "https://edubily.de/products/creatin-pulver",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "L-Glutamin Pulver",
      "url": "https://edubily.de/products/l-glutamin-pulver",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
@@ -1161,16 +1161,16 @@
      "name": "Eisen Kapseln mit Lactoferrin",
      "url": "https://edubily.de/products/eisen-mit-lactoferrin",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Calcium Pulver",
      "url": "https://edubily.de/products/calcium-plus",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen",
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
       "Verzehr-/Einnahmeempfehlung": "nicht als Text auf der Produktseite"
      }
     },
@@ -1178,47 +1178,47 @@
      "name": "Vitamin D3 & K2 Tropfen",
      "url": "https://edubily.de/products/vitamin-d3-k2-tropfen",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "L-Tryptophan Kapseln",
      "url": "https://edubily.de/products/tryptophan",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Kollagen-Hydrolysat Pulver",
      "url": "https://edubily.de/products/kollagen-hydrolysat",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Omega-3 Kapseln",
      "url": "https://edubily.de/products/omega-3-kapseln",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Vitamin D Öl",
      "url": "https://edubily.de/products/vitamin-d3",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
      "name": "Magnesium Pulver",
      "url": "https://edubily.de/products/magnesium-pulver",
      "fehlende_angaben": {
-      "Mengen pro Portion (Nährstofftabelle)": "nur als Bild (Nährwerttabelle) auf der Herstellerseite – nicht als Text übernommen",
-      "Zutaten": "nur als Bild (Inhalt & Nährwerte) auf der Herstellerseite – nicht als Text übernommen"
+      "Mengen pro Portion (Nährstofftabelle)": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)",
+      "Zutaten": "beim Hersteller nur als Bild – die Nährwerttabelle ist als Bild offline gespeichert (Detailkarte)"
      }
     },
     {
@@ -1337,10 +1337,7 @@
  },
  "aenderungen": {
   "neu": [],
-  "geaendert": [
-   "Geburtstagsgutschein online kaufen & downloaden",
-   "BIOGENA Gutschein online kaufen: Wertgutschein für jeden Anlass"
-  ],
+  "geaendert": [],
   "entfernt": []
  },
  "unvollstaendig": true
