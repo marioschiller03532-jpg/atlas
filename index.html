@@ -40,6 +40,21 @@ body{background:radial-gradient(ellipse 80% 70% at 50% 46%,var(--tint1,#0c2028) 
 @media not all and (min-aspect-ratio:4/3){#suppCard{top:calc(env(safe-area-inset-top) + 10px);left:50%;transform:translate(-50%,-8px);max-width:min(72vw,420px)}#suppCard.on{transform:translate(-50%,0)}}
 body.listOn #suppCard{display:none}
 @media (prefers-reduced-motion:reduce){#suppCard{transition:opacity .2s}}
+/* 2.23: Karte antippbar (öffnet die lokale Detailkarte); mehrere Produkte als kurze Liste in derselben Karte */
+#suppCard.on{pointer-events:auto;cursor:pointer}
+#scList{display:none}#suppCard.multi .sc-img,#suppCard.multi .sc-one{display:none}#suppCard.multi #scList{display:flex;flex-direction:column;gap:6px;width:100%}
+.scRow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;color:inherit;padding:4px;border-radius:10px;font:inherit;cursor:pointer}
+.scRow:active{background:rgba(255,255,255,.06)}.scRow .ri{width:40px;height:40px;flex:0 0 40px;border-radius:9px;background:rgba(255,255,255,.04);display:grid;place-items:center;overflow:hidden}
+.scRow .ri img{width:100%;height:100%;object-fit:contain}.scRow .ri svg{width:60%;height:60%;color:var(--accent)}.scRow .rt{display:block;font-size:13px;font-weight:600;line-height:1.2}.scRow .rs{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+#prodDet{position:fixed;z-index:16;inset:0;display:grid;place-items:center;background:rgba(2,6,10,.55);padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
+#prodDet[hidden]{display:none}
+#pdBox{text-align:left;width:min(560px,100%);max-height:100%;overflow:auto;background:rgba(8,14,20,.94);border:1px solid var(--line);border-radius:20px;padding:18px 20px;color:var(--fg);box-shadow:0 12px 40px rgba(0,0,0,.45),0 0 0 1px var(--glow) inset;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pdHead{display:flex;gap:14px;align-items:center}.pdImg{width:96px;height:96px;flex:0 0 96px;border-radius:14px;background:rgba(255,255,255,.04);display:grid;place-items:center;overflow:hidden}
+.pdImg img{width:100%;height:100%;object-fit:contain}.pdImg svg{width:55%;height:55%;color:var(--accent)}.pdHead h2{margin:0;font-size:19px;line-height:1.25;text-transform:none;letter-spacing:normal;font-weight:650;font-family:inherit}.pdHead .pdB{font-size:13px;color:var(--muted);margin-top:3px}
+#pdClose{margin-left:auto;align-self:flex-start;background:none;border:1px solid rgba(255,255,255,.25);color:var(--fg);border-radius:999px;width:38px;height:38px;flex:none;font-size:17px}
+#pdBody dl{margin:14px 0 0;display:grid;grid-template-columns:minmax(96px,32%) 1fr;gap:7px 12px;font-size:14px;line-height:1.4}#pdBody dt{color:var(--muted)}#pdBody dd{margin:0;overflow-wrap:anywhere}
+#pdBody .unk{color:var(--muted);font-style:italic}#pdBody ul{margin:0;padding-left:18px}#pdBody table{border-collapse:collapse;font-size:13px}#pdBody td,#pdBody th{padding:2px 8px 2px 0;text-align:left;vertical-align:top}
+.pdFoot{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}#pdShop{display:inline-block;padding:9px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);text-decoration:none;font-size:14px}
 #stLbl{color:var(--lbl,rgba(150,226,224,.55))!important;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:13;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,225,240,.55);pointer-events:none}
 #stLbl.err{color:#ff9a7a;font-weight:600}body.listOn #stLbl{display:none}
 .lvHead{display:flex;align-items:center;justify-content:space-between;gap:12px}.lvHead h2{margin:0;font-size:24px;font-weight:650}
@@ -165,7 +180,8 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
     <div class="said" id="said"></div>
     <div class="heard" id="heard"></div>
     <div class="err" id="err" hidden></div>
-    <div id="suppCard" aria-live="polite" aria-hidden="true"><div class="sc-img" id="scImg"></div><div><div class="sc-t" id="scT"></div><div class="sc-s" id="scS"></div></div></div>
+    <div id="suppCard" aria-live="polite" aria-hidden="true" role="button" aria-label="Produktdetails öffnen"><div class="sc-img" id="scImg"></div><div class="sc-one"><div class="sc-t" id="scT"></div><div class="sc-s" id="scS"></div></div><div id="scList"></div></div>
+    <div id="prodDet" hidden role="dialog" aria-modal="true" aria-labelledby="pdT"><div id="pdBox"><div class="pdHead"><div class="pdImg" id="pdImg"></div><div><h2 id="pdT"></h2><div class="pdB" id="pdB"></div></div><button type="button" id="pdClose" aria-label="Details schließen">✕</button></div><div id="pdBody"></div><div class="pdFoot" id="pdFoot"></div></div></div>
     <div class="awaybar" id="awayBar" hidden>Abwesenheitsmodus · Gesperrt</div>
   </main>
   <div>
@@ -868,28 +884,28 @@ async function syncBilder(){if(bildSync.laeuft||!navigator.onLine||!("caches" in
   let i=0;const worker=async()=>{while(i<L.length){const e=L[i++];try{if(await c.match("katalog/bilder/"+e.f)){bildSync.ok++;continue}if(!navigator.onLine)break;
       const x=await fetch("katalog/bilder/"+e.f,{cache:"no-store"});if(x.ok){await c.put("katalog/bilder/"+e.f,x);bildSync.ok++}else bildSync.fehler++}catch{bildSync.fehler++}await new Promise(r=>setTimeout(r,30))}};
   await Promise.all([worker(),worker(),worker()]);bildSync.laeuft=false;diag(`bilder offline: ${bildSync.ok}/${bildSync.gesamt}`)}
-// Feste Produkt-ID aus der Adresse der Produktseite: b-… (Biogena), m-… (MoleQlar), e-… (eigener Eintrag) – eindeutig je Produkt
-const katId=p=>p.eigen?"e-"+norm(p.n).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""):(p.h==="Biogena"?"b-":p.h==="MoleQlar"?"m-":"x-")+String(p.u||"").replace(/[?#].*$/,"").replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]/g,"");
+// Feste Produkt-ID: b-… (Biogena), m-… (MoleQlar), n-… (Norsan), d-… (edubily) aus der Adresse der Produktseite (Varianten mit Zusatz), e-… (eigener Eintrag) – eindeutig je Produkt
+const katId=p=>p.eigen?"e-"+norm(p.n).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""):p.id?p.id:(p.h==="Biogena"?"b-":p.h==="MoleQlar"?"m-":"x-")+String(p.u||"").replace(/[?#].*$/,"").replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]/g,"");
 function katById(id){if(!KAT_ID||KAT_ID.n!==(KAT?KAT.produkte.length:0)+KAT_EIGEN.length){const M=new Map();for(const p of katAll())M.set(katId(p),p);KAT_ID={n:(KAT?KAT.produkte.length:0)+KAT_EIGEN.length,M}}return KAT_ID.M.get(String(id||"").toLowerCase())||null}
 // Produktmarke im Antworttext: {{b-omega-3-forte-700-73}} = „ab hier geht es um dieses Katalogprodukt“, {{ende}} = Karte weg. Wird nie vorgelesen.
-const PMARK=/\{\{\s*([a-z]-[a-z0-9-]+|ende)\s*\}\}/gi;
-function takeMarks(s){const marks=[];let out="",last=0;String(s).replace(PMARK,(m,id,off)=>{out+=String(s).slice(last,off);marks.push({pos:out.length,id:id.toLowerCase()});last=off+m.length;return m});out+=String(s).slice(last);return {text:out,marks}}
+const PMARK=/\{\{\s*([a-z]-[a-z0-9-]+(?:\s*,\s*[a-z]-[a-z0-9-]+)*|ende)\s*\}\}/gi;
+function takeMarks(s){const marks=[];let out="",last=0;String(s).replace(PMARK,(m,id,off)=>{out+=String(s).slice(last,off);marks.push({pos:out.length,id:id.toLowerCase().replace(/\s+/g,"")});last=off+m.length;return m});out+=String(s).slice(last);return {text:out,marks}}
 let prodTimers=[];
 function prodPlan(marks,textLen){prodTimers.forEach(clearTimeout);prodTimers=[];const ms=62/Math.max(.5,+S.rate||1);
   for(const mk of marks||[])prodTimers.push(setTimeout(()=>applyMark(mk.id),mk.pos*ms))}
 let kbTurn={at:0,e:null};
 function listCard(e){const mine=(main()&&main().supps||[]).filter(x=>(kbFind(coreOf(x))[0]||{}).id===e.id);
   return {key:"kb:"+e.id,title:mine.length===1?coreOf(mine[0]):e.name.split(" (")[0],sub:mine.length===1?"aus deiner Liste":"aus deiner Wissensbibliothek",img:null}}
-function applyMark(id){if(id==="ende"){hideCard(300,true);return}const pid=id;
+function applyMark(id){if(id==="ende"){hideCard(300,true);return}if(id.includes(",")){showCardList(id.split(","));return}const pid=id;
   if(id.startsWith("l-")){const e=kbList().find(x=>x.id===id.slice(2));if(!e){diag("karte: unbekannte id");return}diag("karte: "+id);showCard(listCard(e));return}
   const p=katById(id);if(!p){diag("karte: unbekannte id");return}
-  diag("karte: "+id);showCard({id:pid,key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im||null})}function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katNem(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}for(const x of KAT_EIGEN){const T=tk(x.name);if(T.length>=2)L.push({T,p:{n:x.name,h:x.hersteller||"eigener Eintrag",u:"eigen:"+norm(x.name),im:null}})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
+  diag("karte: "+id);showCard({id:pid,key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im||null})}function katIdx(){if(KAT_IDX&&KAT_IDX.n===(KAT?KAT.produkte.length:0))return KAT_IDX.L;const L=[];for(const p of (KAT?KAT.produkte:[])){if(!katSupp(p))continue;const T=tk(p.n);if(T.length>=2)L.push({T,p})}for(const x of KAT_EIGEN){const T=tk(x.name);if(T.length>=2)L.push({T,p:{n:x.name,h:x.hersteller||"eigener Eintrag",u:"eigen:"+norm(x.name),im:null}})}KAT_IDX={n:KAT?KAT.produkte.length:0,L};return L}
 function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{for(let i=0;i+T.length<=U.length;i++)if(T.every((w,k)=>U[i+k]===w))return true;return false};
   const kat=katIdx().filter(x=>has(x.T));if(kat.length){const best=Math.max(...kat.map(x=>x.T.length)),top=kat.filter(x=>x.T.length===best),ids=new Set(top.map(x=>x.p.u));
     if(ids.size===1){const p=top[0].p;return {key:"kat:"+p.u,title:p.n,sub:p.h,img:p.im}}return null}   // gleich lange Treffer verschiedener Produkte: nicht eindeutig
   const kb=(typeof kbFind==="function"&&KB)?kbFind(text):[];if(kb.length!==1)return null;const e=kb[0];
   const A0=[e.name,...(e.aliases||[])].map(a=>tk(a.split(" (")[0])).filter(x=>x.length);
-  const firm=/\bbiogena\b/i.test(text)?"Biogena":/\bmole[qk]?c?lar\b/i.test(text)?"MoleQlar":null;
+  const firm=/\bbiogena\b/i.test(text)?"Biogena":/\bmole[qk]?c?lar\b/i.test(text)?"MoleQlar":/\bnorsan\b/i.test(text)?"Norsan":/\bedubil+[iy]\b/i.test(text)?"edubily":null;
   if(firm&&KAT){const hit=KAT.produkte.filter(p=>p.h===firm&&katNem(p)&&A0.some(a=>a.every(w=>tk(p.n).includes(w))));
     if(hit.length===1)return {key:"kat:"+hit[0].u,title:hit[0].n,sub:hit[0].h,img:hit[0].im};return null}   // Firma genannt, aber mehrere/kein passendes Produkt: nicht raten
   // Hat Atlas gerade im Herstellerkatalog gesucht, gilt das gefundene Produkt – nie ein anderes (z. B. das eigene Omega-3) einsetzen
@@ -899,7 +915,7 @@ function suppOf(text){const U=tk(text);if(!U.length)return null;const has=T=>{fo
     if(hit.length>1)return null}   // mehrere passende Katalogprodukte: nicht eindeutig -> keine Karte
   const mine=(cur&&cur.supps||[]).filter(x=>(kbFind(coreOf(x))[0]||{}).id===e.id);
   return {key:"kb:"+e.id,title:mine.length===1?coreOf(mine[0]):e.name.split(" (")[0],sub:mine.length===1?"aus deiner Liste":"aus deiner Wissensbibliothek"}}
-function showCard(c){scCur=c;scAt=Date.now();scMiss=0;$("scT").textContent=c.title;$("scS").textContent=c.sub||"";$("scImg").innerHTML=SC_PH;
+function showCard(c){$("suppCard").classList.remove("multi");scCur=c;scAt=Date.now();scMiss=0;$("scT").textContent=c.title;$("scS").textContent=c.sub||"";$("scImg").innerHTML=SC_PH;
   $("suppCard").classList.add("on");$("suppCard").setAttribute("aria-hidden","false");
   const hasLocal=!!(c.id&&BIDX&&BIDX.bilder&&BIDX.bilder[c.id]);
   if(!hasLocal&&!c.img&&!(c.key&&BILD[c.key])){diag("karte: platzhalter (kein Bild hinterlegt)");return}
@@ -921,6 +937,44 @@ function cardForSpeech(text){if(!text)return;const c=suppOf(text);
   clearTimeout(scTimer);const wait=scCur&&$("suppCard").classList.contains("on")?Math.max(0,2500-(Date.now()-scAt)):0;   // mind. 2,5 s stehen lassen, kein Flackern
   scTimer=setTimeout(()=>{if(speaking())showCard(c)},wait)}
 function hideCard(delay=1200,force=false){if(!delay){scPlan.forEach(clearTimeout);scPlan=[];prodTimers.forEach(clearTimeout);prodTimers=[]}clearTimeout(scTimer);clearTimeout(scHide);scHide=setTimeout(()=>{if(!force&&speaking())return;$("suppCard").classList.remove("on");$("suppCard").setAttribute("aria-hidden","true");scCur=null},delay)}
+// ===== 2.23: mehrere Produkte (markenübergreifend) und Detailkarte zum Antippen =====
+// Bildadresse für eine Produkt-ID: zuerst die verschlüsselte Kopie im Gerät, sonst (nur online) das Herstellerbild
+function prodImgUrl(id,key,img){const hasLocal=!!(id&&BIDX&&BIDX.bilder&&BIDX.bilder[id]);if(!hasLocal&&!img&&!(key&&BILD[key]))return Promise.resolve(null);
+  return (hasLocal?localBild(id).then(u=>u||bildUrl(key,img)):bildUrl(key,img)).catch(()=>null)}
+function putImg(el,u,alt,ok){if(!u)return;const im=new Image();im.alt=alt;im.referrerPolicy="no-referrer";im.decoding="async";im.onload=()=>{if(ok()){el.innerHTML="";el.append(im)}};im.src=u}
+// {{n-…,d-…,b-…}}: bis zu 4 Katalogprodukte als kurze Liste (Bild, Name, Marke); jede Zeile öffnet ihre eigene Detailkarte
+function showCardList(ids){const L=[...new Set(ids)].map(id=>({id,p:katById(id)})).filter(x=>x.p&&!x.p.eigen).slice(0,4);
+  if(!L.length){diag("karte: unbekannte id");return}if(L.length===1){applyMark(L[0].id);return}
+  const c={multi:true,ids:L.map(x=>x.id),key:"multi:"+L.map(x=>x.id).join(",")};scCur=c;scAt=Date.now();scMiss=0;clearTimeout(scHide);
+  const box=$("scList");box.innerHTML="";for(const x of L){const b=document.createElement("button");b.type="button";b.className="scRow";b.dataset.id=x.id;b.setAttribute("aria-label",x.p.n+" von "+x.p.h+", Details öffnen");
+    b.innerHTML=`<span class="ri">${SC_PH}</span><span><span class="rt"></span><span class="rs"></span></span>`;b.querySelector(".rt").textContent=x.p.n;b.querySelector(".rs").textContent=x.p.h;box.append(b);
+    prodImgUrl(x.id,"kat:"+x.p.u,x.p.im).then(u=>putImg(b.querySelector(".ri"),u,x.p.n,()=>scCur===c))}
+  $("suppCard").classList.add("multi","on");$("suppCard").setAttribute("aria-hidden","false");diag("karte: liste "+L.length)}
+const PD_FELD={inhaltsstoffe:"Mengen pro Portion (Nährstofftabelle)",zutaten:"Zutaten",verzehrempfehlung:"Verzehrempfehlung",packung:"Packungsgröße"};
+let pdCur=null;
+function openDetail(id){const p=katById(id);if(!p||p.eigen){diag("detail: unbekannte id");return false}pdCur=id;
+  $("pdT").textContent=p.n;$("pdB").textContent=p.h+(p.ty?" · "+p.ty:"");$("pdImg").innerHTML=SC_PH;
+  prodImgUrl(id,"kat:"+p.u,p.im).then(u=>putImg($("pdImg"),u,p.n,()=>pdCur===id&&!$("prodDet").hidden));
+  const fg=p.fg||{},unk=k=>`<span class="unk">unbekannt${fg[k]?" – "+esc(fg[k]):""}</span>`,row=(t,v)=>`<dt>${esc(t)}</dt><dd>${v}</dd>`,txt=v=>esc(v),li=a=>"<ul>"+a.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul>";
+  let h="<dl>";
+  if(p.l||p.k)h+=row("Linie / Kategorie",txt([p.l,p.k].filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).join(" · ")));
+  h+=row("Darreichungsform",p.f?txt(p.f):unk("form"));
+  h+=row("Packung",p.pk?txt(p.pk):unk("packung"));
+  if(p.td)h+=row("Tagesdosis laut Hersteller",txt(p.td));
+  h+=row("Inhaltsstoffe pro Portion",p.t&&p.t.zeilen&&p.t.zeilen.length?`<table>${p.t.kopf&&p.t.kopf.length?"<tr>"+p.t.kopf.map(x=>"<th>"+esc(x)+"</th>").join("")+"</tr>":""}${p.t.zeilen.map(r=>"<tr>"+r.map(x=>"<td>"+esc(x)+"</td>").join("")+"</tr>").join("")}</table>`:unk("inhaltsstoffe"));
+  if(p.m&&p.m.length)h+=row("Mengen im Herstellertext",li(p.m));
+  h+=row("Zutaten",p.z?txt(p.z):unk("zutaten"));
+  h+=row("Verzehrempfehlung",p.v?txt(p.v):unk("verzehrempfehlung"));
+  if(p.hw&&p.hw.length)h+=row("Hinweise",li(p.hw));
+  if(p.al&&p.al.length)h+=row("Allergene",li(p.al));
+  h+=row("Preis",p.pr&&p.pr.betrag!=null?txt(`${String(p.pr.betrag).replace(".",",")} ${p.pr.waehrung||"EUR"}`+(p.pr.hinweis?` (${p.pr.hinweis})`:"")+(p.pr.abgerufen?`, Stand ${String(p.pr.abgerufen).slice(0,10)}`:"")):unk("preis"));
+  if(p.vr&&p.vr.length)h+=row("Varianten",li(p.vr.map(v=>v.variante+(v.preis!=null?" – "+String(v.preis).replace(".",",")+" €":""))));
+  h+=row("Datenstand",txt(String(p.ab||"").slice(0,10)||"unbekannt")+" · Herstellerangaben, keine Wirksamkeitsbelege");
+  $("pdBody").innerHTML=h+"</dl>";pdFoot();$("prodDet").hidden=false;diag("detail: "+id);return true}
+// Bestellseite nur mit gültigem Link UND Internet – sonst nur Hinweis
+function pdFoot(){const p=pdCur&&katById(pdCur);if(!p)return;const ok=/^https:\/\/[^\s]+$/.test(p.u||"");
+  $("pdFoot").innerHTML=ok&&navigator.onLine?`<a id="pdShop" href="${esc(p.u)}" target="_blank" rel="noopener noreferrer">Zur Bestellseite</a><span>öffnet ${esc(new URL(p.u).hostname)}</span>`:`<span>${ok?"Bestellseite nur mit Internet":"Kein Link zur Bestellseite hinterlegt"}</span>`}
+function closeDetail(){$("prodDet").hidden=true;pdCur=null}
 /* Farbschema: färbt Kugel/Ring (über ORB_PALETTES) und die Akzente der Hauptoberfläche – Aufbau und Positionen bleiben gleich */
 function hexRgb(h){const m=String(h||"").match(/^#?([0-9a-f]{6})$/i);if(!m)return [52,214,212];const n=parseInt(m[1],16);return [n>>16&255,n>>8&255,n&255]}
 function setCustomPalette(hex){const a=hexRgb(hex),b=a.map(v=>Math.round(v+(255-v)*0.75)),c=a.map(v=>Math.round(v*0.62));ORB_PALETTES.eigen={name:"Eigene Farbe",a,b,c}}
@@ -1091,32 +1145,40 @@ function speechTerms(t){const U=tk(t),unsure=[];if(!U.length)return {text:t,unsu
   return {text:out,unsure}}
 let speechHint=[];
 
-// ===== Produktkatalog Biogena + MoleQlar: Datei liegt bei der App (katalog/supplement_catalog.json), Kopie im Gerät =====
+// ===== Produktkatalog Biogena, MoleQlar, Norsan, edubily: Datei liegt bei der App (katalog/supplement_catalog.json), Kopie im Gerät =====
 // Allgemeine Herstellerdaten, getrennt von persönlichen Angaben. Keine Websuche im normalen Betrieb.
 let KAT=null,KAT_SRC="";
 // Eigene Katalog-Einträge (von Mario mündlich ergänzt): getrennt von den Herstellerdaten, nur lokal, im Backup enthalten
 let KAT_EIGEN=ls.get("katEigen",[]);const saveEigen=()=>ls.set("katEigen",KAT_EIGEN);
 const eigenAsKat=x=>({h:x.hersteller||"Eigener Eintrag",n:x.name,u:null,k:"Eigener Eintrag (von dir ergänzt)",ty:"Eigener Eintrag",a:[],hw:x.notiz?[x.notiz]:[],ab:x.zeit,eigen:true});
 const katAll=()=>[...(KAT?KAT.produkte:[]),...KAT_EIGEN.map(eigenAsKat)];
-function katCompact(j){return {stand:j.stand,produkte:j.produkte.map(p=>({h:p.hersteller,n:p.name,u:p.url,k:p.kategorie,l:p.linie,kz:p.kurz,a:p.anwendungsbereiche_hersteller,t:p.inhaltsstoffe,m:p.mengen_aus_text,z:p.zutaten,v:p.verzehrempfehlung,pk:p.packung,f:p.form,hw:p.hinweise,al:p.allergene,pr:p.preis,fe:p.fehlend,ab:p.abgerufen,ty:p.typ,im:p.bild||null}))}}
+function katCompact(j){return {stand:j.stand,produkte:j.produkte.map(p=>({h:p.hersteller,n:p.name,u:p.url,k:p.kategorie,l:p.linie,kz:p.kurz,a:p.anwendungsbereiche_hersteller,t:p.inhaltsstoffe,m:p.mengen_aus_text,z:p.zutaten,v:p.verzehrempfehlung,pk:p.packung,f:p.form,hw:p.hinweise,al:p.allergene,pr:p.preis,fe:p.fehlend,ab:p.abgerufen,ty:p.typ,im:p.bild||null,id:p.id||undefined,td:p.tagesdosis||null,vr:p.varianten||null,fg:p.fehlend_grund||null}))}}
 const KFELD={inhaltsstoffe:"Mengen pro Portion (Nährstofftabelle)",zutaten:"Zutaten",verzehrempfehlung:"Verzehr-/Einnahmeempfehlung",packung:"Packungsgröße"};
-const katFehlt=p=>Object.fromEntries((p.fe||[]).map(k=>[KFELD[k]||k,p.h==="Biogena"?"nicht auf Produktseite und Etikett-PDF gefunden":"nicht auf der Produktseite gefunden"]));
+const katFehlt=p=>Object.fromEntries((p.fe||[]).map(k=>[KFELD[k]||k,(p.fg&&p.fg[k])||(p.h==="Biogena"?"nicht auf Produktseite und Etikett-PDF gefunden":"nicht auf der Produktseite gefunden")]));
 function katStat(){const by={};for(const p of KAT.produkte){const h=by[p.h]=by[p.h]||{alle_gefundenen_produkte:0,nahrungsergaenzungen:0,vollstaendig:0,teilweise:0,andere_produktarten:0,andere_nach_art:{},teilweise_erfasst:[]};h.alle_gefundenen_produkte++;
   if(!katNem(p)){h.andere_produktarten++;const t=p.ty||"Zubehör/Sonstiges";h.andere_nach_art[t]=(h.andere_nach_art[t]||0)+1}else{h.nahrungsergaenzungen++;if((p.fe||[]).length){h.teilweise++;h.teilweise_erfasst.push({name:p.n,fehlende_angaben:katFehlt(p)})}else h.vollstaendig++}}
   for(const [n,h] of Object.entries(by))h.status=h.nahrungsergaenzungen?(h.teilweise?`Nahrungsergänzungen: ${h.vollstaendig} vollständig, ${h.teilweise} teilweise erfasst`:`Nahrungsergänzungen: alle ${h.vollstaendig} vollständig erfasst`)+`; andere Produktarten (${h.andere_produktarten}) nur mit Grunddaten`:"keine Nahrungsergänzungen";return by}
 const katNem=p=>p.ty?p.ty==="Nahrungsergänzungsmittel":!/^kein /.test(p.k||"");
+// für Suche/Karte: auch Produkte, deren Art der Hersteller nicht als Text angibt (edubily), nicht abwerten
+const katSupp=p=>katNem(p)||p.ty==="Produktart nicht angegeben";
 async function loadKatalog(){try{const r=await fetch("katalog/supplement_catalog.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&Array.isArray(j.produkte)&&j.produkte.length){KAT=katCompact(j);KAT_SRC="Server";try{localStorage.setItem(P+"katalog",JSON.stringify(KAT))}catch{}return}}}catch{}
   // ohne Netz: gespeicherte Kopie verwenden
   if(!KAT){try{KAT=JSON.parse(localStorage.getItem(P+"katalog")||"null");if(KAT)KAT_SRC="Offline-Kopie im Gerät"}catch{}}}
-function katSearch(q,hersteller,max=6){if(!KAT&&!KAT_EIGEN.length)return [];const T=tk(q).filter(w=>w.length>2&&!/^(fuer|mit|und|der|die|das|ein|eine|was|gibt|welches|welche|produkt|produkte|biogena|moleqlar|molekular|supplement)$/.test(w));if(!T.length)return [];
+function katSearch(q,hersteller,max=6){if(!KAT&&!KAT_EIGEN.length)return [];const T=tk(q).filter(w=>w.length>2&&!/^(fuer|mit|und|der|die|das|ein|eine|was|gibt|welches|welche|produkt|produkte|biogena|moleqlar|molekular|norsan|edubily|supplement|praeparat|praeparate|moechte|brauche|suche)$/.test(w));if(!T.length)return [];const T0=[...T];
   // Schreibweisen angleichen (Kreatin/Creatin, Kollagen/Collagen …) und Synonyme aus der Wissensbibliothek
   const SYN={kreatin:"creatin",creatin:"kreatin",kollagen:"collagen",collagen:"kollagen",zink:"zinc",coenzym:"q10",nachtkerze:"nachtkerzenoel",schlaf:"sleep",ashwagandha:"withania",kurkuma:"curcumin",curcumin:"kurkuma",carnitin:"carnitine",zitrullin:"citrullin"};
   for(const w of [...T]){if(SYN[w])T.push(SYN[w])}{const e=kbLookup(q);if(e)for(const a of e.aliases||[])for(const w of tk(a))if(w.length>3&&!T.includes(w))T.push(w)}
   const sc=p=>{const hay={n:tk(p.n).join(" "),z:tk((p.z||"")+" "+(p.t?p.t.zeilen.map(r=>r[0]).join(" "):"")).join(" "),a:tk((p.a||[]).join(" ")+" "+(p.kz||"")+" "+(p.k||"")).join(" ")};let s=0;
-    for(const w of T){if(hay.n.includes(w))s+=5;if(hay.z.includes(w))s+=3;if(hay.a.includes(w))s+=2}return s};
-  return katAll().filter(p=>!hersteller||norm(p.h).includes(norm(hersteller))).map(p=>({p,s:sc(p)})).filter(x=>x.s>0).map(x=>(!katNem(x.p)&&!x.p.eigen&&(x.s-=2),x.p.eigen&&(x.s+=3),x)).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,max).map(x=>x.p)}
+    for(const w of T){if(hay.n.includes(w))s+=5;if(hay.z.includes(w))s+=3;if(hay.a.includes(w))s+=2}
+    // Produktname enthält alle Suchwörter (+3) bzw. ist genau der Suchbegriff (+6): „Omega-3 Kapseln“ vor „Omega-3 Vegan EPA Kapseln“
+    const N=tk(p.n).filter(w=>w.length>2),Q=T0;if(Q.length&&Q.every(w=>N.includes(w))){s+=3;if(N.length===Q.length)s+=6}return s};
+  const R=katAll().filter(p=>!hersteller||norm(p.h).includes(norm(hersteller))).map(p=>({p,s:sc(p)})).filter(x=>x.s>0).map(x=>(!katSupp(x.p)&&!x.p.eigen&&(x.s-=2),x.p.eigen&&(x.s+=3),x)).filter(x=>x.s>0).sort((a,b)=>b.s-a.s);
+  if(hersteller||!R.length)return R.slice(0,max).map(x=>x.p);
+  // ohne Herstellerwunsch: die besten Treffer JEDER Marke zuerst (je bis zu 2), dann nach Punkten auffüllen – keine Marke wird bevorzugt
+  const out=[],per={};for(const x of R){const h=x.p.h;if((per[h]||0)<2&&x.s>=Math.min(5,R[0].s*0.4)){out.push(x);per[h]=(per[h]||0)+1}}
+  for(const x of R){if(out.length>=max)break;if(!out.includes(x))out.push(x)}return out.slice(0,Math.max(max,out.length)).sort((a,b)=>b.s-a.s).map(x=>x.p)}
 const katOut=p=>p.eigen?{id:katId(p),eigener_eintrag:true,name:p.n,hersteller:p.h,notiz:p.hw[0]||null,erfasst:String(p.ab).slice(0,10),hinweis:"von Mario ergänzt, keine Herstellerdaten"}:({id:katId(p),hersteller:p.h,name:p.n,produkttyp:p.ty||null,link:p.u,linie:p.l,kategorie:p.k,anwendung_laut_hersteller:p.a,inhaltsstoffe_pro_portion:p.t?{kopf:p.t.kopf,zeilen:p.t.zeilen.slice(0,10)}:(p.m&&p.m.length?{aus_text:p.m}:null),
-  zutaten:p.z,verzehrempfehlung:p.v,packung:p.pk,form:p.f,hinweise:p.hw,allergene:p.al,preis:p.pr?`${p.pr.betrag} ${p.pr.waehrung} (abgerufen ${String(p.pr.abgerufen).slice(0,10)})`:null,fehlende_angaben:(p.fe||[]).length?katFehlt(p):null,produktbilder:"nicht geprüft – keine Werte daraus übernommen",abgerufen:String(p.ab).slice(0,10)});
+  zutaten:p.z,verzehrempfehlung:p.v,packung:p.pk,form:p.f,tagesdosis_laut_hersteller:p.td||null,varianten:p.vr||null,hinweise:p.hw,allergene:p.al,preis:p.pr?`${p.pr.betrag} ${p.pr.waehrung}${p.pr.hinweis?" – "+p.pr.hinweis:""} (abgerufen ${String(p.pr.abgerufen).slice(0,10)})`:null,fehlende_angaben:(p.fe||[]).length?katFehlt(p):null,produktbilder:"nicht geprüft – keine Werte daraus übernommen",abgerufen:String(p.ab).slice(0,10)});
 
 // ===== Supplement-Tagebuch: drei Zustände je Supplement (genommen / nicht genommen / offen), nur eindeutige Aussagen zählen =====
 const tk=s=>toks(String(s).replace(/[-–\/]/g," "));
@@ -1251,7 +1313,7 @@ function whoFrom(t){const m=String(t).trim().match(WHO_RE);if(!m)return null;con
 const HEARFIX=[[/\bmagnesium[\s-]*b[iy]e?s{1,2}[\s-]*gl[iyü][czs]{0,2}[iy]?nat\b/gi,"Magnesium-Bisglycinat"],[/\bb[iy]s{1,2}[\s-]+gl[iyü][czs]{1,2}[iy]?nat\b/gi,"Bisglycinat"],[/\bgl[iyü]z[iy]nat\b/gi,"Glycinat"],
   [/\b(el|l)[\s-]+(t?h?eanin|thianin)\b/gi,"L-Theanin"],[/\b(el|l)[\s-]+[ck]arnitin\b/gi,"L-Carnitin"],[/\b(el|l)[\s-]+th?yrosin\b/gi,"L-Tyrosin"],[/\b(el|l)[\s-]+th?reonat\b/gi,"L-Threonat"],
   [/\b(en em en|n m n|enemen)\b/gi,"NMN"],[/\b(en a de|n a d|enade)\b/gi,"NAD"],[/\bomega[\s-]*(drei|3)\b/gi,"Omega-3"],[/\bvitamin[\s-]*d[\s-]*(drei|3)\b/gi,"Vitamin D3"],[/\b(d3|d drei)[\s-]*(und[\s-]*)?k[\s-]*(zwei|2)\b/gi,"D3 K2"],
-  [/\bkreatin[\s-]+mono[\s-]*hydrat\b/gi,"Kreatin-Monohydrat"],[/\bash?wa[\s-]*gan?dh?a\b/gi,"Ashwagandha"],[/\bbio[\s-]+regulator/gi,"Bioregulator"],[/\bepi[\s-]+talon\b/gi,"Epitalon"],[/\bpine?[\s-]+alon\b/gi,"Pinealon"],[/\bmole?[ck]ular\b/gi,"MoleQlar"],[/\bbio[\s-]?gena\b/gi,"Biogena"]];
+  [/\bkreatin[\s-]+mono[\s-]*hydrat\b/gi,"Kreatin-Monohydrat"],[/\bash?wa[\s-]*gan?dh?a\b/gi,"Ashwagandha"],[/\bbio[\s-]+regulator/gi,"Bioregulator"],[/\bepi[\s-]+talon\b/gi,"Epitalon"],[/\bpine?[\s-]+alon\b/gi,"Pinealon"],[/\bmole?[ck]ular\b/gi,"MoleQlar"],[/\bbio[\s-]?gena\b/gi,"Biogena"],[/\bnor[\s-]?san\b/gi,"Norsan"],[/\bedu[\s-]?bil+[iey]e?\b/gi,"edubily"]];
 const hearFix=t=>HEARFIX.reduce((x,[a,b])=>x.replace(a,b),String(t));
 function cardSelfTest(){const p=katById("b-omega-3-forte-700-73");diag("karte: selbsttest");
   if(!KAT){speak("Selbsttest Produktkarte: Der Hersteller-Katalog ist auf diesem Gerät nicht geladen. Deshalb kann ich keine Produktkarte zeigen. Bitte einmal mit Internet öffnen.");return}
@@ -1309,7 +1371,7 @@ const T={
  runde_abhaken:{name:"runde_abhaken",description:"Hakt eine GANZE Runde von heute ab: alle aktiven Supplements dieser Tageszeit aus seiner gespeicherten Liste (nur offene oder später geplante; bewusst ausgelassene bleiben so) und optional die Routine-Schritte. Für 'Morgenroutine erledigt', 'alles drin', 'Morgenrunde ist durch' oder ein klares Ja auf deine Frage nach dieser Runde. Ändert nur den Tagesstatus, nie die gespeicherte Routine.",input_schema:{type:"object",properties:{tageszeit:{type:"string",enum:["morgens","mittags","abends"]},ausser:{type:"array",items:{type:"string"},description:"was er ausdrücklich NICHT genommen hat"},routine_schritte:{type:"boolean",description:"true, wenn sich seine Aussage auf die ganze Routine bezieht (inkl. Schritte wie Eisbad, Rotlicht); false, wenn es nur um Supplements ging"},bestaetigt:{type:"boolean"}},required:["tageszeit"]}},
  supplement_status:{name:"supplement_status",description:"Supplement-Tagebuch von heute: setzt für JEDES genannte Supplement einzeln den Status genommen, nicht_genommen oder offen. Nur Supplements eintragen, zu denen er eine eindeutige Aussage gemacht hat; nie pauschal mehrere. 'Alles außer X' heißt nur die Supplements, nach denen du gerade gefragt hast, jedes einzeln aufgeführt. Korrekturen genauso. Mehrdeutige Namen (z. B. nur 'Magnesium') werden abgelehnt: dann nachfragen.",input_schema:{type:"object",properties:{bestaetigt:{type:"boolean",description:"nur im Listenmodus: true erst nach seinem Ja zur genau wiederholten Änderung"},eintraege:{type:"array",items:{type:"object",properties:{name:{type:"string"},status:{type:"string",enum:["genommen","nicht_genommen","spaeter","offen"],description:"genommen = eingenommen, nicht_genommen = ausgelassen, spaeter = später geplant, offen = noch unbekannt"},grund:{type:"string",description:"optional, z. B. bewusst ausgelassen, vergessen"}},required:["name","status"]}}},required:["eintraege"]}},
  katalog_eintragen:{name:"katalog_eintragen",description:"Trägt ein Supplement als EIGENEN Katalog-Eintrag ein (aktion hinzufuegen), ändert oder entfernt einen eigenen Eintrag. Herstellerdaten werden nie geändert. Nur auf ausdrücklichen Auftrag und mit sicher erkanntem Namen. Nicht für seine Einnahmeliste (dafür liste_aendern).",input_schema:{type:"object",properties:{aktion:{type:"string",enum:["hinzufuegen","aendern","entfernen"]},name:{type:"string"},hersteller:{type:"string"},notiz:{type:"string",description:"z. B. Dosis pro Portion laut Packung, nur wenn er sie nennt"},neuer_name:{type:"string"}},required:["aktion","name"]}},
- katalog_suchen:{name:"katalog_suchen",description:"Durchsucht den lokal gespeicherten Produktkatalog von Biogena und MoleQlar (Herstellerangaben: Inhaltsstoffe pro Portion, Zutaten, Verzehrempfehlung, Hinweise, Preis mit Abrufdatum, Link). Ohne Internet. Für Fragen nach Produkten, z. B. für ein Ziel oder einen Wirkstoff. Jeder Treffer hat eine id für die Produktkarte ({{id}} im Antworttext).",input_schema:{type:"object",properties:{suchbegriff:{type:"string",description:"Wirkstoff, Produktname oder Ziel, z. B. Magnesium Threonat, Schlaf, Omega-3"},hersteller:{type:"string",enum:["Biogena","MoleQlar"]}},required:["suchbegriff"]}},
+ katalog_suchen:{name:"katalog_suchen",description:"Durchsucht den lokal gespeicherten Produktkatalog von Biogena, MoleQlar, Norsan und edubily (Herstellerangaben: Inhaltsstoffe pro Portion, Zutaten, Verzehrempfehlung, Hinweise, Preis mit Abrufdatum, Link). Ohne Internet. Für Fragen nach Produkten, z. B. für ein Ziel oder einen Wirkstoff. Ohne hersteller kommen die besten Treffer jeder Marke. Jeder Treffer hat eine id für die Produktkarte ({{id}} bzw. {{id1,id2,id3}} im Antworttext).",input_schema:{type:"object",properties:{suchbegriff:{type:"string",description:"Wirkstoff, Produktname oder Ziel, z. B. Magnesium Threonat, Schlaf, Omega-3"},hersteller:{type:"string",enum:["Biogena","MoleQlar","Norsan","edubily"]}},required:["suchbegriff"]}},
  katalog_status:{name:"katalog_status",description:"Stand des Produktkatalogs: Prüfdatum, Zahlen je Hersteller und Produktgruppe (alle Produkte, Nahrungsergänzungen vollständig/teilweise, andere Produktarten) und offene Angaben je Produkt.",input_schema:{type:"object",properties:{}}},
  wissen_nachschlagen:{name:"wissen_nachschlagen",description:"Schlägt ein Supplement, Peptid oder einen Bioregulator in der lokalen Wissensbibliothek nach (Inhaltsstoffe, Einsatz, Evidenz, Risiken, Quellen mit Datum). Ohne Internet.",input_schema:{type:"object",properties:{begriff:{type:"string"}},required:["begriff"]}},
  studien_abrufen:{name:"studien_abrufen",description:"Gibt frühere gespeicherte Studien-Updates mit Datum zurück, optional nach Stichwort gefiltert.",input_schema:{type:"object",properties:{stichwort:{type:"string"}}}},
@@ -1460,8 +1522,9 @@ function mainParts(mode,memBlock,others){const M=main();
 Du sprichst mit ${M.name}, deinem Hauptnutzer.${M.info?" Über ihn: "+M.info:""}${S.nick?` Er nennt dich auch ${S.nick}; reagier auf beide Namen.`:""}
 ${(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,M.name)}
 KATALOG-AUFTRÄGE: Sagt er, ein Supplement soll in den Katalog („füg … zum Katalog hinzu“, „trag … im Katalog ein“, „ändere/lösch meinen Katalog-Eintrag …“), ist das ein Auftrag: Steht der Name nicht eindeutig fest (unsichere Erkennung, unbekannter oder halber Name), frag einmal kurz nur nach dem Namen. Dann katalog_eintragen aufrufen und in einem Satz bestätigen, was genau eingetragen wurde. Meint er seine Einnahmeliste („nimm ich ab morgen“, „in meine Routine“), gilt NEUES SUPPLEMENT. Ist unklar, ob Katalog oder Einnahmeliste, frag kurz. Herstellerdaten nie ändern, nichts ohne Auftrag löschen.
-PRODUKTKARTE: Erklärst oder empfiehlst du ein konkretes Produkt aus dem Katalog oder ein Supplement aus seiner Liste/Wissensbibliothek (id aus wissen_nachschlagen, beginnt mit l-), schreib direkt vor den Satz, in dem du es zum ersten Mal nennst, seine id aus katalog_suchen in doppelten geschweiften Klammern, z. B. {{b-omega-3-forte-700-73}}. Dann zeigt der Bildschirm genau dieses Produkt; die Klammer wird nicht vorgelesen. Wechselst du zu einem anderen Produkt, setz dessen id. Verlässt du das Produktthema, schreib {{ende}}. Nur ids aus katalog_suchen verwenden, nie erfinden; um ein bestimmtes Katalogprodukt zu erklären, such es vorher mit katalog_suchen.
-PRODUKTKATALOG: Fragt er nach Produkten von Biogena oder MoleQlar oder nach einem Produkt für ein Ziel, such zuerst mit katalog_suchen im lokalen Katalog (kein Internet). Nenne passende Produkte mit Hersteller, relevanten Inhaltsstoffen pro Portion und dem Link (Link nur nennen, nicht vorlesen; sag „Link steht im Katalog“). Trenne klar: Herstellerangabe (Katalog), unabhängige Studienlage (Wissensbibliothek), seine persönlichen Erfahrungen und Hinweise aus dem Profil (z. B. Unverträglichkeiten). Nenne erkennbare Risiken und Wechselwirkungen mit seinen aktuellen Mitteln, doppelte Wirkstoffe (z. B. zweimal Magnesium) und sag dazu, wann der Katalog geprüft wurde. Fehlen Angaben, sag das; keine Dosierungen erfinden, nichts als notwendig oder wirksam hinstellen, wenn die Daten das nicht tragen. Websuche nur, wenn er ausdrücklich aktuelle Angaben will.
+PRODUKTKARTE: Erklärst oder empfiehlst du ein konkretes Produkt aus dem Katalog oder ein Supplement aus seiner Liste/Wissensbibliothek (id aus wissen_nachschlagen, beginnt mit l-), schreib direkt vor den Satz, in dem du es zum ersten Mal nennst, seine id aus katalog_suchen in doppelten geschweiften Klammern, z. B. {{b-omega-3-forte-700-73}}. Dann zeigt der Bildschirm genau dieses Produkt; die Klammer wird nicht vorgelesen. Wechselst du zu einem anderen Produkt, setz dessen id. Verlässt du das Produktthema, schreib {{ende}}. Stellst du MEHRERE Produkte zur Auswahl (z. B. „ich möchte ein Omega-3-Präparat“), schreib ganz an den Anfang EINE Marke mit allen ids, durch Komma getrennt, in deiner Reihenfolge, höchstens 4, z. B. {{n-omega-3-vegan-kapseln,b-omega-3-forte-700-73,d-omega-3-kapseln}} – dann zeigt der Bildschirm sie als Liste mit Bild, Name und Marke; jede Zeile lässt sich antippen und öffnet die Detailkarte. Nur ids aus katalog_suchen verwenden, nie erfinden; um ein bestimmtes Katalogprodukt zu erklären, such es vorher mit katalog_suchen.
+PRODUKTAUSWAHL: Bei einer Produkt- oder Kategoriefrage ohne Markenwunsch zeig passende Produkte aller Marken im Katalog (Biogena, MoleQlar, Norsan, edubily). Ordne sie kurz nach Eignung für SEINE Frage und nenn die wichtigsten Unterschiede – nur aus den gespeicherten Daten: Inhaltsstoffe bzw. Menge pro Tagesdosis, Darreichungsform, Zusatzstoffe/Zutaten, Packung und Preis (mit Stand). Vergleich nur Gleiches (z. B. mg EPA+DHA pro Tagesdosis, Preis pro Packung mit Packungsgröße). Fehlt eine Angabe (z. B. Nährwerttabelle nur als Bild beim Hersteller), sag das ausdrücklich und ordne dieses Produkt nicht nach einem Wert ein, den du nicht hast. Nie behaupten, eine Marke oder ein Produkt sei grundsätzlich das beste; formuliere „für deine Frage passt nach den gespeicherten Angaben am ehesten …, weil …“. Kurz halten: höchstens 3–4 Produkte, je ein Satz.
+PRODUKTKATALOG: Fragt er nach Produkten von Biogena, MoleQlar, Norsan oder edubily oder nach einem Produkt für ein Ziel, such zuerst mit katalog_suchen im lokalen Katalog (kein Internet). Nenne passende Produkte mit Hersteller, relevanten Inhaltsstoffen pro Portion und dem Link (Link nur nennen, nicht vorlesen; sag „Link steht im Katalog“). Trenne klar: Herstellerangabe (Katalog), unabhängige Studienlage (Wissensbibliothek), seine persönlichen Erfahrungen und Hinweise aus dem Profil (z. B. Unverträglichkeiten). Nenne erkennbare Risiken und Wechselwirkungen mit seinen aktuellen Mitteln, doppelte Wirkstoffe (z. B. zweimal Magnesium) und sag dazu, wann der Katalog geprüft wurde. Fehlen Angaben, sag das; keine Dosierungen erfinden, nichts als notwendig oder wirksam hinstellen, wenn die Daten das nicht tragen. Websuche nur, wenn er ausdrücklich aktuelle Angaben will.
 WISSEN: Für Präparate aus seinen Listen nutzt du zuerst die lokale Wissensbibliothek (wird dir bei Bedarf mitgegeben, sonst wissen_nachschlagen). Trenne beim Erklären klar: allgemeines Wissen, Studienergebnis (mit Evidenzstärke), Herstellerangabe, persönliche Angabe aus seinem Profil. Keine persönliche Empfehlung als Tatsache. Websuche nur für neue Studien oder wenn er es ausdrücklich will. Frühere Studien-Updates findest du mit studien_abrufen.
 DISKRETION: Intime Themen (Sexualität, Partnerschaft, Gesundheitsdetails, private Projekte) sprichst du nur an, wenn er selbst damit anfängt. Klingt es so, als wäre jemand anderes dabei, vor allem ein Kind, wechsle unauffällig das Thema und frag nach, wer da ist.
 GESPRÄCH WIE EIN MENSCH: Erkenne, ob er reden, eine Lösung finden oder einfach entspannen will, und richte dich danach; im Zweifel kurz fragen, was er gerade braucht. Erzählt er etwas Persönliches („Heute war ein stressiger Tag“), geh darauf ein und frag gezielt nach, was los war, statt sofort Tipps zu geben oder das Thema zu wechseln. Bleib beim Thema, bis er es wechselt, und knüpf an das an, was er gerade gesagt hat. Frag nicht nach jeder Antwort nach; manchmal reicht eine echte Reaktion. Formuliere jedes Mal anders, keine Standardsätze, wiederhol nicht deine eigenen Formulierungen von vorhin. Humor und Wärme ja, aber nicht in jeder Antwort. Kurze Fragen kurz, komplexe fundiert, nie ein Vortrag ohne Anlass.
@@ -1726,6 +1789,9 @@ $("vis").onclick=()=>{unlockAudio();touch();
   if(ttsBlocked){ttsBlocked=false;const la=[...log].reverse().find(m=>m.rolle==="assistent");if(la&&Date.now()-Date.parse(la.zeit)<5*60e3&&!busy){hush();speak(la.text,()=>setTimeout(listen,300));return}}if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now();if(!away&&!busy&&!convo){wokeAt=lastGreet=Date.now();diag("aufgewacht (antippen)");greet(true);return}}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("lvClose").onclick=e=>{e.stopPropagation();closeList()};
+$("suppCard").addEventListener("click",e=>{e.stopPropagation();const r=e.target.closest(".scRow"),id=r?r.dataset.id:(scCur&&scCur.id);if(id&&!/^l-/.test(id))openDetail(id);else diag("detail: kein Katalogeintrag")});
+$("pdClose").onclick=e=>{e.stopPropagation();closeDetail()};$("prodDet").addEventListener("click",e=>{if(e.target===$("prodDet"))closeDetail()});
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("prodDet").hidden)closeDetail()});addEventListener("online",()=>{if(pdCur)pdFoot()});addEventListener("offline",()=>{if(pdCur)pdFoot()});
 $("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
 $("roomBtn").onclick=()=>stream?stopRoom():startRoom();
 $("stopBtn").onclick=stopAll;
@@ -1980,7 +2046,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261113-2055",ATLAS_REL="2.22";
+const APP_VERSION="20261114-0706",ATLAS_REL="2.23";
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 setTimeout(checkUpdate,1500);setTimeout(loadKB,2500);setTimeout(loadKatalog,3500);setTimeout(()=>{syncBilder()},9000);setInterval(()=>{if(bildSync.ok<bildSync.gesamt||!bildSync.gesamt)syncBilder()},10*60000);addEventListener("online",()=>setTimeout(syncBilder,3000));setInterval(checkUpdate,10*60000);

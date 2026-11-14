@@ -1,5 +1,16 @@
 # Atlas – Änderungen
 
+## 2.23 (14.11.2026) – Norsan und edubily im Katalog, Produktauswahl über alle Marken, Detailkarte
+- Katalog um Norsan (inkl. NÀDARRA-Vitamin-D über den Norsan-Shop) und edubily erweitert, gleiches Datenformat. Quellen: norsan.de Shop-Schnittstelle (wc/store/v1), edubily.de products.json + Produktseiten (Fragen & Antworten). Neu: tools/katalog-marken.mjs.
+- Stand des Laufs: Biogena 299 (254 Nahrungsergänzungen, alle vollständig), MoleQlar 104 (74 Nahrungsergänzungen, 64 vollständig, 10 teilweise), Norsan 117 Einträge → 33 aufgenommen (19 Nahrungsergänzungen, alle teilweise erfasst), edubily 133 → 119 aufgenommen (68 Nahrungsergänzungen, alle teilweise erfasst). Biogena: 24 Produkte nicht mehr im Shop-Verzeichnis (Hunde-Produkte, Minis, Gutscheine) und daher entfernt.
+- Nicht aufgenommen (keine Doppelten): Norsan-Abos, 3er-Packs, Info-/Fachmaterial, Bücher, Kurs, Gratisartikel; edubily-Proben, E-Books/Kurse, Gutscheine.
+- Varianten mit anderer Zusammensetzung als eigene Produkte: Norsan Omega-3 Arktis mit/ohne Vitamin D3, Omega-3 Total Öl Zitrone/Naturell, edubily Das Multi mit/ohne Iod, Vitamin A Kapseln/Tropfen. Packungsgrößen/Geschmäcker bleiben ein Produkt (Varianten mit Preis aufgelistet).
+- Nichts geschätzt: Die Nährwerttabelle steht bei Norsan und edubily nur als Bild – Feld bleibt „unbekannt“ mit Grund. edubily zeigt auch die Zutaten nur als Bild. Mengen nur, wo sie wörtlich im Text stehen (z. B. „Eine Tagesdosis enthält 1.700 mg Omega-3 …“).
+- Jedes Produkt hat eine feste ID im Katalog (b-/m-/n-/d-); Bilder der neuen Marken verschlüsselt offline wie bisher.
+- Produktauswahl: Ohne Markenwunsch liefert die Suche die besten Treffer jeder Marke; Atlas ordnet nach Eignung für die Frage anhand der gespeicherten Daten (Menge pro Tagesdosis, Form, Zutaten, Packung, Preis), nennt fehlende Angaben und behauptet nie „die beste Marke“.
+- Mehrere Produkte erscheinen als Liste in der bestehenden Karte (Bild, Name, Marke; max. 4). Karte bzw. Zeile antippen → Detailkarte des lokalen Katalogeintrags (Bild, Name, Marke, alle gespeicherten Angaben, „unbekannt – Grund“), auch offline. „Zur Bestellseite“ nur mit gültigem Link und Internet.
+- Spracherkennung: „Nor San“ → Norsan, „Edu Billy“ → edubily. Sonst unverändert (Oberfläche, Ring, Farben, Sprachausgabe, Bewegungserkennung). Rückfall: /alt/2.22/.
+
 ## 2.21 / 2.22 (13.11.2026) – Produktbilder offline, Selbsttest, eigene Liste
 - Produktbilder offline: GitHub lädt das Hauptbild jedes Katalogprodukts (derzeit 427/427, 9,5 MB) und legt es verschlüsselt unter katalog/bilder/ ab (AES-256-GCM, Schlüssel mit RSA-OAEP verpackt; öffentlicher Teil tools/bilder-public.pem). Der private Schlüssel steckt in der verschlüsselten Wissensbibliothek (kb.enc) – kein neuer Einrichtungscode nötig. Läuft bei jedem Katalog-Lauf mit (nur neue/geänderte Bilder).
 - Atlas holt alle Bilder einmal (mit Internet) in den Gerätespeicher und zeigt sie danach ohne Netz; Hersteller-Server werden dafür nicht mehr gebraucht. Einstellungen: „Produktbilder offline gespeichert: X von Y“.
