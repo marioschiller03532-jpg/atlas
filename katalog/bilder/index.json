@@ -2,7 +2,8 @@
  "v": 1,
  "keys": {
   "63f5003c83": "Uve235lksvYzC/Ciza7nNRxiVDrhm6H0WTrJj1/vVzS5B3rhVwOMOxd2uN8Q1zpkhPQc/KodrFo+bm4O/i0Jjl/tKypdY1GTC9TORg/e6eAT4Gb9Q+Vkh6koSATGk9FV2TzoRM7hWfI0emGX4yBc1AKCvZeZamKNrL/VYKvcDSq3vuf9KzPa7TM8bY1F13G4AMx5BDBM6ndnc5KTLJGjTotgAl7WAKmYcwnvDsmJj7jkS/48jmNAPRctGY4V1/lA9sZ0YfTiR44dV8zoJqbfZbJtBOu/7IAicPU43N3eet9GIEM+qrdEmjMPGCG20J80OQXFwqSmlMAT/CjY8ohhLQ==",
-  "53ac993f81": "k9JPRZzP5YvOYMfTLNQ1N+qpzLZOH34XpE1cDgEwr/2uKidk1v2x7vb5sRLptSEMVHMScoc1As48T+EiyTA/k5jECSBx5fddRVUIv+ng+rDeAtwGtRm/sj6m+MJF5TwGTHsuQmd3vEdFFIXRiNi11nCWLC+tgvzBK/JL+9FhG5PN4UtqYEcXmMIbAKuWnNfkC4XYZ/J8Fg6qI3WmAtZ0U6KBMPoo8FsL/Z2Xda90PnaTaTmrSfi87PqAEdZDMrYu8VRaYGqewdSWWx4YQqk/QpaULX7d/zdF+vhHSVzx/VBdwAWbGG/e3/IPVpGpnOb1ay4/PMLM6c95cEPwcPS7zw=="
+  "53ac993f81": "k9JPRZzP5YvOYMfTLNQ1N+qpzLZOH34XpE1cDgEwr/2uKidk1v2x7vb5sRLptSEMVHMScoc1As48T+EiyTA/k5jECSBx5fddRVUIv+ng+rDeAtwGtRm/sj6m+MJF5TwGTHsuQmd3vEdFFIXRiNi11nCWLC+tgvzBK/JL+9FhG5PN4UtqYEcXmMIbAKuWnNfkC4XYZ/J8Fg6qI3WmAtZ0U6KBMPoo8FsL/Z2Xda90PnaTaTmrSfi87PqAEdZDMrYu8VRaYGqewdSWWx4YQqk/QpaULX7d/zdF+vhHSVzx/VBdwAWbGG/e3/IPVpGpnOb1ay4/PMLM6c95cEPwcPS7zw==",
+  "3e2356cbd9": "eU1pERjTjB+P1ntiGfN26aqrOZVBRquCUJbKylHXjXBM0x4nCOYMojqTmP1fvAPYIX/82IC8Tsf49yNXwOoK7ZxM25Z1Q85QO6+ddy/UOFJK60naC1+FEGmFLtbaxXN94GJ/46mAfzFavHzdxz2u7wDNGIK9aw2KNguw3TC2k17YmuFQMEgBVhrPhjpKDtBFODwBY0aSi3u5JVLBMIJ3PLi1I4r+uVwtsQ6oMCmme0kyWX5pQ7Y8NRjHEmZK06jdmYIHyVIU4+BazNGAPoDNC+uNY55q50y1PW0HdpWanlMb8sZZFgFe6wQsX1LnE3o8Jnzfcxr8Pyukc1Ns/rKSGA=="
  },
  "bilder": {
   "b-vitamin-c-liposomal-583": {
@@ -4036,550 +4037,977 @@
    "name": "Vitamin A als reines Retinol (Tropfen)",
    "hersteller": "edubily",
    "bytes": 52516
+  },
+  "d-piperin-kapseln-restbestand": {
+   "f": "d-piperin-kapseln-restbestand.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Piperin-01.webp?v=1760608711",
+   "name": "Piperin Kapseln Restbestand",
+   "hersteller": "edubily",
+   "bytes": 93074
+  },
+  "d-kreatin-mit-crea500": {
+   "f": "d-kreatin-mit-crea500.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/EDU-370-Kreatin-Monohydrat-01_6414499c-50f8-43a7-b456-8b07204947b2_Badge.webp?v=1794295935",
+   "name": "Kreatin mit CREA500®",
+   "hersteller": "edubily",
+   "bytes": 73324
+  },
+  "d-whey-isolat-pulver-neutral": {
+   "f": "d-whey-isolat-pulver-neutral.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Whey-Isolat-Neutral-01_b7f15a1f-7f76-45d8-ba38-8d27b85c759c.webp?v=1769776102",
+   "name": "Whey-Isolat Pulver - Neutral",
+   "hersteller": "edubily",
+   "bytes": 68996
+  },
+  "d-blu100-full-routine": {
+   "f": "d-blu100-full-routine.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/blu100-full-routine-fs.png?v=1793212641",
+   "name": "BLU100 Full Routine",
+   "hersteller": "edubily",
+   "bytes": 32312
+  },
+  "d-blu100-glow-sleep-routine": {
+   "f": "d-blu100-glow-sleep-routine.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/blu100-glow-sleep-routine-fs.png?v=1793208464",
+   "name": "GLOW & SLEEP Routine",
+   "hersteller": "edubily",
+   "bytes": 151602
+  },
+  "d-blu100-life-glow-routine": {
+   "f": "d-blu100-life-glow-routine.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/blu100-life-glow-routine-fs.png?v=1793208464",
+   "name": "LIFE & GLOW Routine",
+   "hersteller": "edubily",
+   "bytes": 153496
+  },
+  "d-blu100-life-sleep-routine": {
+   "f": "d-blu100-life-sleep-routine.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/blu100-life-sleep-routine-fs.png?v=1793208464",
+   "name": "LIFE & SLEEP Routine",
+   "hersteller": "edubily",
+   "bytes": 147286
+  },
+  "d-blu100-sleep": {
+   "f": "d-blu100-sleep.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/BLU100_PDP_SLEEP_01.png?v=1792997282",
+   "name": "SLEEP",
+   "hersteller": "edubily",
+   "bytes": 82266
+  },
+  "d-blu100-life": {
+   "f": "d-blu100-life.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/blu100-life-01.png?v=1792658156",
+   "name": "LIFE",
+   "hersteller": "edubily",
+   "bytes": 86250
+  },
+  "d-blu100-glow": {
+   "f": "d-blu100-glow.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/BLU100_PDP_GLOW_01.png?v=1792997284",
+   "name": "GLOW",
+   "hersteller": "edubily",
+   "bytes": 96906
+  },
+  "d-whey-protein-isolat": {
+   "f": "d-whey-protein-isolat.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/EDU-349-WPI-Vanille-Konv-01_c70fede3-94f7-4c92-b7a3-90a87150cc19.webp?v=1792624839",
+   "name": "Whey Protein Isolat",
+   "hersteller": "edubily",
+   "bytes": 41526
+  },
+  "d-elektrolyte-pulver": {
+   "f": "d-elektrolyte-pulver.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Elektrolyt-01.webp?v=1794410616",
+   "name": "Elektrolyte Pulver",
+   "hersteller": "edubily",
+   "bytes": 121630
+  },
+  "d-vitasauri-kids-magnesium": {
+   "f": "d-vitasauri-kids-magnesium.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Vitasauri-Magnesium-01.webp?v=1792262350",
+   "name": "Vitasauri® Kids Magnesium",
+   "hersteller": "edubily",
+   "bytes": 76298
+  },
+  "d-vitasauri-kids-vitamin-d3-mit-k2": {
+   "f": "d-vitasauri-kids-vitamin-d3-mit-k2.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Kids-Vitamin-D3_K2-01_d1d18442-8a70-408d-a39f-ba29b05eb432.webp?v=1792265837",
+   "name": "Vitasauri® – Kids Vitamin D3 mit K2",
+   "hersteller": "edubily",
+   "bytes": 45256
+  },
+  "d-vitasauri-kids-kogni-getrankepulver": {
+   "f": "d-vitasauri-kids-kogni-getrankepulver.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Kids-Kogni-Kakao_01-neu_2cf08327-14fa-415f-ac76-e41d09d8a1fa.webp?v=1792262092",
+   "name": "Vitasauri® Kids Kogni Getränkepulver",
+   "hersteller": "edubily",
+   "bytes": 71622
+  },
+  "d-eduone": {
+   "f": "d-eduone.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/eduone-Dose-Mango-01_521929b2-0ea2-4daa-acad-4912b6ce8eec.webp?v=1792151314",
+   "name": "eduone",
+   "hersteller": "edubily",
+   "bytes": 61446
+  },
+  "d-kollagen-bar-dark-chocolate-almond": {
+   "f": "d-kollagen-bar-dark-chocolate-almond.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/KollagenBar-01-Box.webp?v=1792146600",
+   "name": "KollagenBar dunkle Schokolade mit Mandel",
+   "hersteller": "edubily",
+   "bytes": 207034
+  },
+  "d-whey-isolat-pulver-aus-weidemilch-limited-edition": {
+   "f": "d-whey-isolat-pulver-aus-weidemilch-limited-edition.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/EDU-B-040-WPI-Bratapfel-750g-01.webp?v=1792669735",
+   "name": "Whey-Isolat Pulver aus Weidemilch",
+   "hersteller": "edubily",
+   "bytes": 76640
+  },
+  "d-wheynachtspunsch-clear-whey": {
+   "f": "d-wheynachtspunsch-clear-whey.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/ClearWhey-Wheynachtspunsch-01.webp?v=1761660838",
+   "name": "Wheynachtspunsch - Clear Whey",
+   "hersteller": "edubily",
+   "bytes": 75796
+  },
+  "d-vitasauri-kids-flor": {
+   "f": "d-vitasauri-kids-flor.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Vitasauri_Kids-Flor_01.webp?v=1790719279",
+   "name": "Vitasauri® - Kids Flor",
+   "hersteller": "edubily",
+   "bytes": 122794
+  },
+  "d-vitamin-d-tropfen-baby": {
+   "f": "d-vitamin-d-tropfen-baby.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Vitasauri-Kids-D3-01.webp?v=1790718856",
+   "name": "Vitasauri® Kids D3",
+   "hersteller": "edubily",
+   "bytes": 43216
+  },
+  "d-veganbar-schokoladenkuchen": {
+   "f": "d-veganbar-schokoladenkuchen.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Vegan-Bar-Schokokuchen-00.webp?v=1788444230",
+   "name": "VeganBar Schokoladenkuchen",
+   "hersteller": "edubily",
+   "bytes": 195966
+  },
+  "d-mama-multi": {
+   "f": "d-mama-multi.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Mama-Multi-01_1.webp?v=1783487311",
+   "name": "Mama Multi",
+   "hersteller": "edubily",
+   "bytes": 72654
+  },
+  "d-veganes-protein-pro": {
+   "f": "d-veganes-protein-pro.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VeganesProteinPro-SaltedCaramel-01.webp?v=1783486979",
+   "name": "Veganes Protein Pro",
+   "hersteller": "edubily",
+   "bytes": 86692
+  },
+  "d-vitamin-d3-mit-k2-kapseln": {
+   "f": "d-vitamin-d3-mit-k2-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VitD3K2-Kapseln-01.webp?v=1785768945",
+   "name": "Vitamin D3 mit K2 Kapseln",
+   "hersteller": "edubily",
+   "bytes": 61532
+  },
+  "d-magnesium-pulver-pur": {
+   "f": "d-magnesium-pulver-pur.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Magnesium-01_bbcb65ec-4eee-4c8b-9a9e-f5db48b5ecfe.webp?v=1784843697",
+   "name": "Magnesium Pulver pur",
+   "hersteller": "edubily",
+   "bytes": 74300
+  },
+  "d-vitasauri-kids-eisen": {
+   "f": "d-vitasauri-kids-eisen.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Vitasauri-Kids-Eisen-01.webp?v=1784327362",
+   "name": "Vitasauri® Kids Eisen",
+   "hersteller": "edubily",
+   "bytes": 74696
+  },
+  "d-grunder-bundle-chris": {
+   "f": "d-grunder-bundle-chris.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Chris-Bundle-Ei-Protein-01-Chris.webp?v=1794494739",
+   "name": "Gründer-Bundle Chris",
+   "hersteller": "edubily",
+   "bytes": 182774
+  },
+  "d-grunder-bundle-phil": {
+   "f": "d-grunder-bundle-phil.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Phil-Bundle-Clear-Whey-01-Phil.webp?v=1794494780",
+   "name": "Gründer-Bundle Phil",
+   "hersteller": "edubily",
+   "bytes": 174548
+  },
+  "d-chunky-protein-bar-chocolate-brownie": {
+   "f": "d-chunky-protein-bar-chocolate-brownie.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/chunky-bar-12er-01.png?v=1768985116",
+   "name": "Chunky Protein Bar Chocolate Brownie",
+   "hersteller": "edubily",
+   "bytes": 151226
+  },
+  "d-edelstahl-shaker": {
+   "f": "d-edelstahl-shaker.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Shaker-schwarz.webp?v=1760608764",
+   "name": "Edelstahl Shaker",
+   "hersteller": "edubily",
+   "bytes": 44490
+  },
+  "d-essential-bundle": {
+   "f": "d-essential-bundle.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Essential-Bundle-01_6dee9029-14ae-4e97-8f66-ed26aa81faa8.webp?v=1794493071",
+   "name": "Essential Bundle",
+   "hersteller": "edubily",
+   "bytes": 149756
+  },
+  "d-schlaf-bundle": {
+   "f": "d-schlaf-bundle.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Schlaf-Bundle-00.webp?v=1794494855",
+   "name": "Schlaf-Bundle",
+   "hersteller": "edubily",
+   "bytes": 159602
+  },
+  "d-beef-sticks-teriyaki": {
+   "f": "d-beef-sticks-teriyaki.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Beef-Sticks-01-12er.webp?v=1776755095",
+   "name": "Beef Sticks Teriyaki",
+   "hersteller": "edubily",
+   "bytes": 299502
+  },
+  "d-beef-bar-cranberry": {
+   "f": "d-beef-bar-cranberry.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Beef-Bar-01-12er.webp?v=1776755104",
+   "name": "Beef Bar Cranberry",
+   "hersteller": "edubily",
+   "bytes": 294166
+  },
+  "d-vitamin-d-kapseln": {
+   "f": "d-vitamin-d-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VitaminD3-01.webp?v=1769078416",
+   "name": "Vitamin D Kapseln",
+   "hersteller": "edubily",
+   "bytes": 77244
+  },
+  "d-proteinwasser": {
+   "f": "d-proteinwasser.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/ClearWhey-Proteinwasser-01.webp?v=1779924784",
+   "name": "Proteinwasser",
+   "hersteller": "edubily",
+   "bytes": 56450
+  },
+  "d-vitasauri-r-kids-mix": {
+   "f": "d-vitasauri-r-kids-mix.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Vitasauri-Kids-Mix-01.webp?v=1777881946",
+   "name": "Vitasauri® Kids Mix",
+   "hersteller": "edubily",
+   "bytes": 158678
+  },
+  "d-cluster-dextrin-neu": {
+   "f": "d-cluster-dextrin-neu.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Cluster-Dextrin-Dose-01_ba2b75a1-2759-484d-8252-bc9c999d69cc.webp?v=1775867206",
+   "name": "Cluster Dextrin®",
+   "hersteller": "edubily",
+   "bytes": 50018
+  },
+  "d-beta-alanin": {
+   "f": "d-beta-alanin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Beta-Alanin-Schwarz-01.webp?v=1785277945",
+   "name": "Beta-Alanin",
+   "hersteller": "edubily",
+   "bytes": 82810
+  },
+  "d-darm-bundle": {
+   "f": "d-darm-bundle.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Darm-Bundle-01_921111d2-39e0-48e8-b2a6-eff1a0f6ca46.webp?v=1794493391",
+   "name": "Darm-Bundle",
+   "hersteller": "edubily",
+   "bytes": 124594
+  },
+  "d-testosteron-bundle": {
+   "f": "d-testosteron-bundle.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/3er-Bundle-01.webp?v=1773704516",
+   "name": "Testosteron-Bundle",
+   "hersteller": "edubily",
+   "bytes": 97360
+  },
+  "d-casein-protein-vanille": {
+   "f": "d-casein-protein-vanille.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Casein-Protein-Vanille-01.webp?v=1773253864",
+   "name": "Casein Protein Vanille",
+   "hersteller": "edubily",
+   "bytes": 49078
+  },
+  "d-inositol-komplex": {
+   "f": "d-inositol-komplex.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Inositol-Komplex-01_09a2dbec-cbac-43e0-a6d4-5bec6183166c.webp?v=1771830159",
+   "name": "Inositol Komplex",
+   "hersteller": "edubily",
+   "bytes": 64454
+  },
+  "d-bio-schwarzkummelol-kapseln": {
+   "f": "d-bio-schwarzkummelol-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Schwarzkuemmeloel-01_1.webp?v=1771927471",
+   "name": "Bio-Schwarzkümmelöl Kapseln",
+   "hersteller": "edubily",
+   "bytes": 39074
+  },
+  "d-meno-balance": {
+   "f": "d-meno-balance.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/MenoBalance-01.webp?v=1770635912",
+   "name": "Meno Balance",
+   "hersteller": "edubily",
+   "bytes": 36146
+  },
+  "d-clear-vegan": {
+   "f": "d-clear-vegan.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/learVegan-Mojito-01-Limited-Edition.webp?v=1792490419",
+   "name": "Clear Vegan",
+   "hersteller": "edubily",
+   "bytes": 64566
+  },
+  "d-protein-bar-chocolate-vanilla": {
+   "f": "d-protein-bar-chocolate-vanilla.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Protein-bar-12er-01.png?v=1768984401",
+   "name": "Protein Bar Chocolate Vanilla",
+   "hersteller": "edubily",
+   "bytes": 139916
+  },
+  "d-eduone-vorratsdose": {
+   "f": "d-eduone-vorratsdose.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/eduone-nachfuelldose.webp?v=1778831348",
+   "name": "eduone® Nachfülldose",
+   "hersteller": "edubily",
+   "bytes": 8102
+  },
+  "d-kids-mix-multivitamin-pulver-fur-kinder": {
+   "f": "d-kids-mix-multivitamin-pulver-fur-kinder.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Kids-Mix_Pulver-01_26f919c0-2ec5-4f3e-b8ab-aa9e56dda1e3.webp?v=1765351312",
+   "name": "Kids Mix – Multivitamin-Pulver für Kinder",
+   "hersteller": "edubily",
+   "bytes": 86680
+  },
+  "d-astaxanthin": {
+   "f": "d-astaxanthin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Astaxanthin-01_12711196-2c32-43ac-bb41-e7216c3e87f7.webp?v=1761580589",
+   "name": "Astaxanthin Kapseln",
+   "hersteller": "edubily",
+   "bytes": 52254
+  },
+  "d-magnesiumkapseln": {
+   "f": "d-magnesiumkapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Magnesium-Komplex-250-01-ohne-badge.webp?v=1769690599",
+   "name": "Magnesium Komplex Kapseln",
+   "hersteller": "edubily",
+   "bytes": 75582
+  },
+  "d-granatapfel-extrakt-pro": {
+   "f": "d-granatapfel-extrakt-pro.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Granatapfel-01_13d5364b-8164-45e2-9dba-71d814d70786.webp?v=1794219452",
+   "name": "Granatapfel-Extrakt Pro",
+   "hersteller": "edubily",
+   "bytes": 59924
+  },
+  "d-curcumin-kapseln-longvida-r-optimised-curcumin-r": {
+   "f": "d-curcumin-kapseln-longvida-r-optimised-curcumin-r.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Curcumin-01_f9535fa3-2145-4a89-833d-2864e6cdeefb.webp?v=1760692999",
+   "name": "Curcumin Kapseln – Longvida® Optimised Curcumin®",
+   "hersteller": "edubily",
+   "bytes": 53226
+  },
+  "d-hyaluronsaure-kapseln": {
+   "f": "d-hyaluronsaure-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Hyaluron-01.webp?v=1760607702",
+   "name": "Hyaluronsäure Kapseln",
+   "hersteller": "edubily",
+   "bytes": 51684
+  },
+  "d-kollagen-shine": {
+   "f": "d-kollagen-shine.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Kollagen-Shine-Himbeer-01.webp?v=1760609606",
+   "name": "Kollagen Shine",
+   "hersteller": "edubily",
+   "bytes": 76140
+  },
+  "d-frauen-multi-plus": {
+   "f": "d-frauen-multi-plus.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Frauen_Mulit_Plus-Maracuja-01.webp?v=1761224118",
+   "name": "Frauen Multi Plus",
+   "hersteller": "edubily",
+   "bytes": 77386
+  },
+  "d-lysin-komplex": {
+   "f": "d-lysin-komplex.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Lysin-Komplex-01.webp?v=1760608282",
+   "name": "Lysin Komplex",
+   "hersteller": "edubily",
+   "bytes": 55282
+  },
+  "d-aminopeptide": {
+   "f": "d-aminopeptide.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Aminopeptide_Kirsch-01.webp?v=1760603787",
+   "name": "Aminopeptide",
+   "hersteller": "edubily",
+   "bytes": 84270
+  },
+  "d-vitasauri-r-kids-omega-3": {
+   "f": "d-vitasauri-r-kids-omega-3.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Kids-Omega-3-01_9f4eb614-b9a2-4bba-bf85-b74a99278ce1.webp?v=1770712653",
+   "name": "Vitasauri® - Kids Omega-3",
+   "hersteller": "edubily",
+   "bytes": 155866
+  },
+  "d-veganes-omega-3-ol": {
+   "f": "d-veganes-omega-3-ol.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Veganes-O3-01.webp?v=1773739243",
+   "name": "Veganes Omega-3 Öl",
+   "hersteller": "edubily",
+   "bytes": 51318
+  },
+  "d-whey-protein-konzentrat": {
+   "f": "d-whey-protein-konzentrat.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/WPC-Vanille-01_0f5b2c33-1275-4477-906d-b1c7369c88d0.webp?v=1779835310",
+   "name": "Whey Protein Konzentrat",
+   "hersteller": "edubily",
+   "bytes": 50218
+  },
+  "d-bio-whey-protein-konzentrat": {
+   "f": "d-bio-whey-protein-konzentrat.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/WPC-Neutral-01.webp?v=1776673448",
+   "name": "Bio Whey Protein Konzentrat",
+   "hersteller": "edubily",
+   "bytes": 47838
+  },
+  "d-calcium-kapseln": {
+   "f": "d-calcium-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Calcium-01_dfc67fe2-f078-4e54-8052-3aad6719fdb4.webp?v=1783067338",
+   "name": "Calcium Kapseln",
+   "hersteller": "edubily",
+   "bytes": 65994
+  },
+  "d-lactoferrin": {
+   "f": "d-lactoferrin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Lactoferrin-01_02e133c4-37f3-41d2-953c-bc3e37ca85ad.webp?v=1773877336",
+   "name": "Lactoferrin",
+   "hersteller": "edubily",
+   "bytes": 48004
+  },
+  "d-l-theanin": {
+   "f": "d-l-theanin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/L-Theanin-01_26492a5e-3f3a-447c-a986-80488dc3aa85.webp?v=1791535113",
+   "name": "L-Theanin",
+   "hersteller": "edubily",
+   "bytes": 59868
+  },
+  "d-darmbakterien-kapseln": {
+   "f": "d-darmbakterien-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Darmbakterien-01_656b5fc2-4606-4089-88ab-29e573bf7d84.webp?v=1761122337",
+   "name": "Darmbakterien Kapseln",
+   "hersteller": "edubily",
+   "bytes": 52568
+  },
+  "d-pure-msm-kapseln": {
+   "f": "d-pure-msm-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/MSM-01_1a603378-c770-415e-afe4-37be2e4ea364.webp?v=1762418003",
+   "name": "MSM Kapseln",
+   "hersteller": "edubily",
+   "bytes": 54476
+  },
+  "d-pure-selen-kapseln": {
+   "f": "d-pure-selen-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Selen-01_bf751243-bddc-4f84-9509-4f62cf857957.webp?v=1773658541",
+   "name": "Selen Kapseln",
+   "hersteller": "edubily",
+   "bytes": 75304
+  },
+  "d-marines-kollagen": {
+   "f": "d-marines-kollagen.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Marines_Kollagen-01.webp?v=1760611180",
+   "name": "Marines Kollagenhydrolysat",
+   "hersteller": "edubily",
+   "bytes": 78606
+  },
+  "d-l-carnosin": {
+   "f": "d-l-carnosin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/L-Carnosin-01.webp?v=1773739079",
+   "name": "L-Carnosin Kapseln",
+   "hersteller": "edubily",
+   "bytes": 48080
+  },
+  "d-lite-shaker": {
+   "f": "d-lite-shaker.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Shaker-transparent.webp?v=1760608755",
+   "name": "Protein Shaker",
+   "hersteller": "edubily",
+   "bytes": 43928
+  },
+  "d-pillenbox": {
+   "f": "d-pillenbox.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/pillenbox.png?v=1710231200",
+   "name": "Pillenbox",
+   "hersteller": "edubily",
+   "bytes": 53626
+  },
+  "d-vitamin-c-kapsel": {
+   "f": "d-vitamin-c-kapsel.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/VitaminC-01.webp?v=1763948195",
+   "name": "Vitamin C Kapseln",
+   "hersteller": "edubily",
+   "bytes": 63842
+  },
+  "d-eaa-pulver": {
+   "f": "d-eaa-pulver.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/EAA-Zitrone-01.webp?v=1764317579",
+   "name": "EAA Pulver – Essenzielle Aminosäuren",
+   "hersteller": "edubily",
+   "bytes": 65032
+  },
+  "d-clear-whey-pulver-aus-whey-isolat": {
+   "f": "d-clear-whey-pulver-aus-whey-isolat.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/ClearWhey-Kirsch-01.webp?v=1773739417",
+   "name": "Clear Whey - Pulver aus Whey-Isolat",
+   "hersteller": "edubily",
+   "bytes": 50910
+  },
+  "d-whey-isolat-aus-weidemilch": {
+   "f": "d-whey-isolat-aus-weidemilch.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/EDU-B-024-WPI-Neutral-750g-01.webp?v=1792669939",
+   "name": "Whey-Isolat Pulver aus Weidemilch - Neutral",
+   "hersteller": "edubily",
+   "bytes": 61422
+  },
+  "d-l-carnitin": {
+   "f": "d-l-carnitin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/L-Carnitin-02_b9a4b2eb-bb58-4529-8b72-f4171c560688.webp?v=1773878002",
+   "name": "L-Carnitin Kapseln",
+   "hersteller": "edubily",
+   "bytes": 50312
+  },
+  "d-inositol-pulver": {
+   "f": "d-inositol-pulver.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Inositol-01.webp?v=1765193401",
+   "name": "Inositol Pulver",
+   "hersteller": "edubily",
+   "bytes": 75040
+  },
+  "d-pure-glutamin-kapseln": {
+   "f": "d-pure-glutamin-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/L-Gutamin-Kapseln-01.webp?v=1762264080",
+   "name": "L-Glutamin Kapseln",
+   "hersteller": "edubily",
+   "bytes": 70490
+  },
+  "d-lp7-eaa-aminosaeuren-kapseln": {
+   "f": "d-lp7-eaa-aminosaeuren-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/LP7-01.webp?v=1760610939",
+   "name": "LP7 Aminosäuren Kapseln",
+   "hersteller": "edubily",
+   "bytes": 78492
+  },
+  "d-pure-citrullin-malat-kapseln": {
+   "f": "d-pure-citrullin-malat-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Citrullin-01.webp?v=1791535572",
+   "name": "Citrullin-Malat Kapseln",
+   "hersteller": "edubily",
+   "bytes": 76352
+  },
+  "d-pure-cholin-als-cdp-cholin": {
+   "f": "d-pure-cholin-als-cdp-cholin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Cholin-01.webp?v=1763949072",
+   "name": "Cholin Kapseln – als CDP-Cholin",
+   "hersteller": "edubily",
+   "bytes": 49288
+  },
+  "d-ubiquinol-reduziertes-q10": {
+   "f": "d-ubiquinol-reduziertes-q10.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Ubiquinol-Q10-01.webp?v=1760609151",
+   "name": "Ubiquinol Kapseln – Reduziertes Q10 von Kaneka®",
+   "hersteller": "edubily",
+   "bytes": 50008
+  },
+  "d-l-tyrosin": {
+   "f": "d-l-tyrosin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/L-Tyrosin-01_9516f733-051b-40e4-8adf-c9bf854de612.webp?v=1762159506",
+   "name": "L-Tyrosin Kapseln",
+   "hersteller": "edubily",
+   "bytes": 52218
+  },
+  "d-chrompicolinat": {
+   "f": "d-chrompicolinat.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Chrompicolinat-01.webp?v=1791535918",
+   "name": "Chrompicolinat Kapseln",
+   "hersteller": "edubily",
+   "bytes": 55874
+  },
+  "d-propionsaure": {
+   "f": "d-propionsaure.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Propionsaeure-01.webp?v=1760608733",
+   "name": "Propionsäure Kapseln",
+   "hersteller": "edubily",
+   "bytes": 102130
+  },
+  "d-emaille-tasse": {
+   "f": "d-emaille-tasse.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/emaille-tasse.webp?v=1759820002",
+   "name": "Emaille-Tasse",
+   "hersteller": "edubily",
+   "bytes": 62080
+  },
+  "d-edu-basic": {
+   "f": "d-edu-basic.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/edu-basic-01.webp?v=1759831934",
+   "name": "edu basic",
+   "hersteller": "edubily",
+   "bytes": 92970
+  },
+  "d-n-acetyl-l-cystein": {
+   "f": "d-n-acetyl-l-cystein.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/N-Acetyl-01_3544659a-acea-4c25-88ed-4f17407d8857.webp?v=1762507145",
+   "name": "N-Acetyl-L-Cystein (NAC)",
+   "hersteller": "edubily",
+   "bytes": 51008
+  },
+  "d-opc-komplex": {
+   "f": "d-opc-komplex.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/OPC-01_e6d5fcf5-4a4a-4b64-9cf6-900ac8c87aec.webp?v=1794218843",
+   "name": "OPC-Komplex Kapseln",
+   "hersteller": "edubily",
+   "bytes": 54850
+  },
+  "d-gruntee-extrakt": {
+   "f": "d-gruntee-extrakt.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Gruentee-01.webp?v=1794220212",
+   "name": "Grüntee-Extrakt Kapseln mit 50 % EGCG",
+   "hersteller": "edubily",
+   "bytes": 55514
+  },
+  "d-iod-kapseln": {
+   "f": "d-iod-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Iod-01_77831992-a621-47b3-aefe-1cdb9566fd79.webp?v=1762418669",
+   "name": "Iod Kapseln – aus reinstem Bio-Kelp",
+   "hersteller": "edubily",
+   "bytes": 50178
+  },
+  "d-ashwagandha-kapseln-ksm-66": {
+   "f": "d-ashwagandha-kapseln-ksm-66.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Ashwagandha-01_1d47692d-fbbf-4bfa-82fc-82ade3139417.webp?v=1763948818",
+   "name": "Ashwagandha Kapseln KSM-66®",
+   "hersteller": "edubily",
+   "bytes": 53458
+  },
+  "d-darmflora-komplex": {
+   "f": "d-darmflora-komplex.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/DarmfloraKomplex-01.webp?v=1763948458",
+   "name": "Darmflora-Komplex",
+   "hersteller": "edubily",
+   "bytes": 71358
+  },
+  "d-zink-kapseln": {
+   "f": "d-zink-kapseln.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Zink-Beutel-01_95fc1084-406e-4713-81d3-fe228b01dd03.webp?v=1773877807",
+   "name": "Zink-Komplex Kapseln",
+   "hersteller": "edubily",
+   "bytes": 49130
+  },
+  "d-citrullin-plus": {
+   "f": "d-citrullin-plus.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/CitrullinPlus-01.webp?v=1765598560",
+   "name": "Citrullin plus",
+   "hersteller": "edubily",
+   "bytes": 67052
+  },
+  "d-resistentes-dextrin": {
+   "f": "d-resistentes-dextrin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Resistentes-Dextrin-01.webp?v=1762418443",
+   "name": "Resistentes Dextrin Pulver",
+   "hersteller": "edubily",
+   "bytes": 68666
+  },
+  "d-olivenblatt-extrakt": {
+   "f": "d-olivenblatt-extrakt.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Olivenblatt-extrakt-01_56958bc1-88ba-4402-973d-60205c47dbf9.webp?v=1794218328",
+   "name": "Olivenblatt-Extrakt Kapseln",
+   "hersteller": "edubily",
+   "bytes": 60802
+  },
+  "d-glycin-pulver": {
+   "f": "d-glycin-pulver.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Glycin-01.webp?v=1761127059",
+   "name": "Glycin-Pulver",
+   "hersteller": "edubily",
+   "bytes": 68720
+  },
+  "d-creatin-pulver": {
+   "f": "d-creatin-pulver.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Kreatin-01_fb8513ad-f737-440d-ab79-92325c4c4aad.webp?v=1774528218",
+   "name": "Kreatin Pulver Creavitalis®",
+   "hersteller": "edubily",
+   "bytes": 55642
+  },
+  "d-l-glutamin-pulver": {
+   "f": "d-l-glutamin-pulver.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/L_Glutamin-01.webp?v=1761232134",
+   "name": "L-Glutamin Pulver",
+   "hersteller": "edubily",
+   "bytes": 71234
+  },
+  "d-taurin": {
+   "f": "d-taurin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Taurin-01_5432ae1d-3c3c-4b9f-9bb5-d671c0a2480b.webp?v=1762507362",
+   "name": "Taurin Kapseln",
+   "hersteller": "edubily",
+   "bytes": 50630
+  },
+  "d-das-multi-mit-iod": {
+   "f": "d-das-multi-mit-iod.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Das_Multi_Iod-01.webp?v=1767875943",
+   "name": "Das Multi – Premium-Multivitamin-Kapseln (Mit Iod)",
+   "hersteller": "edubily",
+   "bytes": 54868
+  },
+  "d-das-multi-ohne-iod": {
+   "f": "d-das-multi-ohne-iod.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Das_Multi_Iod-01.webp?v=1767875943",
+   "name": "Das Multi – Premium-Multivitamin-Kapseln (Ohne Iod)",
+   "hersteller": "edubily",
+   "bytes": 54868
+  },
+  "d-eisen-mit-lactoferrin": {
+   "f": "d-eisen-mit-lactoferrin.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Eisen-01_660dca32-8843-4b5a-b571-9d351963fb64.webp?v=1773877915",
+   "name": "Eisen Kapseln mit Lactoferrin",
+   "hersteller": "edubily",
+   "bytes": 49634
+  },
+  "d-calcium-plus": {
+   "f": "d-calcium-plus.bin",
+   "kid": "3e2356cbd9",
+   "typ": "image/webp",
+   "url": "https://cdn.shopify.com/s/files/1/0008/7415/1991/files/Calcium-Plus-01.webp?v=1767876183",
+   "name": "Calcium Pulver",
+   "hersteller": "edubily",
+   "bytes": 81668
   }
  },
- "stand": "2026-11-14T06:04:47.352Z",
+ "stand": "2026-11-14T06:23:25.215Z",
  "bericht": {
   "produkte_mit_bildadresse": 555,
-  "gespeichert": 448,
-  "neu": 45,
-  "unveraendert": 403,
-  "fehler": [
-   {
-    "id": "d-piperin-kapseln-restbestand",
-    "name": "Piperin Kapseln Restbestand",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-kreatin-mit-crea500",
-    "name": "Kreatin mit CREA500®",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-whey-isolat-pulver-neutral",
-    "name": "Whey-Isolat Pulver - Neutral",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-blu100-full-routine",
-    "name": "BLU100 Full Routine",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-blu100-glow-sleep-routine",
-    "name": "GLOW & SLEEP Routine",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-blu100-life-glow-routine",
-    "name": "LIFE & GLOW Routine",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-blu100-life-sleep-routine",
-    "name": "LIFE & SLEEP Routine",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-blu100-sleep",
-    "name": "SLEEP",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-blu100-life",
-    "name": "LIFE",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-blu100-glow",
-    "name": "GLOW",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-whey-protein-isolat",
-    "name": "Whey Protein Isolat",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-elektrolyte-pulver",
-    "name": "Elektrolyte Pulver",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitasauri-kids-magnesium",
-    "name": "Vitasauri® Kids Magnesium",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitasauri-kids-vitamin-d3-mit-k2",
-    "name": "Vitasauri® – Kids Vitamin D3 mit K2",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitasauri-kids-kogni-getrankepulver",
-    "name": "Vitasauri® Kids Kogni Getränkepulver",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-eduone",
-    "name": "eduone",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-kollagen-bar-dark-chocolate-almond",
-    "name": "KollagenBar dunkle Schokolade mit Mandel",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-whey-isolat-pulver-aus-weidemilch-limited-edition",
-    "name": "Whey-Isolat Pulver aus Weidemilch",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-wheynachtspunsch-clear-whey",
-    "name": "Wheynachtspunsch - Clear Whey",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitasauri-kids-flor",
-    "name": "Vitasauri® - Kids Flor",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitamin-d-tropfen-baby",
-    "name": "Vitasauri® Kids D3",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-veganbar-schokoladenkuchen",
-    "name": "VeganBar Schokoladenkuchen",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-mama-multi",
-    "name": "Mama Multi",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-veganes-protein-pro",
-    "name": "Veganes Protein Pro",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitamin-d3-mit-k2-kapseln",
-    "name": "Vitamin D3 mit K2 Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-magnesium-pulver-pur",
-    "name": "Magnesium Pulver pur",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitasauri-kids-eisen",
-    "name": "Vitasauri® Kids Eisen",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-grunder-bundle-chris",
-    "name": "Gründer-Bundle Chris",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-grunder-bundle-phil",
-    "name": "Gründer-Bundle Phil",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-chunky-protein-bar-chocolate-brownie",
-    "name": "Chunky Protein Bar Chocolate Brownie",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-edelstahl-shaker",
-    "name": "Edelstahl Shaker",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-essential-bundle",
-    "name": "Essential Bundle",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-schlaf-bundle",
-    "name": "Schlaf-Bundle",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-beef-sticks-teriyaki",
-    "name": "Beef Sticks Teriyaki",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-beef-bar-cranberry",
-    "name": "Beef Bar Cranberry",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitamin-d-kapseln",
-    "name": "Vitamin D Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-proteinwasser",
-    "name": "Proteinwasser",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitasauri-r-kids-mix",
-    "name": "Vitasauri® Kids Mix",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-cluster-dextrin-neu",
-    "name": "Cluster Dextrin®",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-beta-alanin",
-    "name": "Beta-Alanin",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-darm-bundle",
-    "name": "Darm-Bundle",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-testosteron-bundle",
-    "name": "Testosteron-Bundle",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-casein-protein-vanille",
-    "name": "Casein Protein Vanille",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-inositol-komplex",
-    "name": "Inositol Komplex",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-bio-schwarzkummelol-kapseln",
-    "name": "Bio-Schwarzkümmelöl Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-meno-balance",
-    "name": "Meno Balance",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-clear-vegan",
-    "name": "Clear Vegan",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-protein-bar-chocolate-vanilla",
-    "name": "Protein Bar Chocolate Vanilla",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-eduone-vorratsdose",
-    "name": "eduone® Nachfülldose",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-kids-mix-multivitamin-pulver-fur-kinder",
-    "name": "Kids Mix – Multivitamin-Pulver für Kinder",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-astaxanthin",
-    "name": "Astaxanthin Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-magnesiumkapseln",
-    "name": "Magnesium Komplex Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-granatapfel-extrakt-pro",
-    "name": "Granatapfel-Extrakt Pro",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-curcumin-kapseln-longvida-r-optimised-curcumin-r",
-    "name": "Curcumin Kapseln – Longvida® Optimised Curcumin®",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-hyaluronsaure-kapseln",
-    "name": "Hyaluronsäure Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-kollagen-shine",
-    "name": "Kollagen Shine",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-frauen-multi-plus",
-    "name": "Frauen Multi Plus",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-lysin-komplex",
-    "name": "Lysin Komplex",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-aminopeptide",
-    "name": "Aminopeptide",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitasauri-r-kids-omega-3",
-    "name": "Vitasauri® - Kids Omega-3",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-veganes-omega-3-ol",
-    "name": "Veganes Omega-3 Öl",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-whey-protein-konzentrat",
-    "name": "Whey Protein Konzentrat",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-bio-whey-protein-konzentrat",
-    "name": "Bio Whey Protein Konzentrat",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-calcium-kapseln",
-    "name": "Calcium Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-lactoferrin",
-    "name": "Lactoferrin",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-l-theanin",
-    "name": "L-Theanin",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-darmbakterien-kapseln",
-    "name": "Darmbakterien Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-pure-msm-kapseln",
-    "name": "MSM Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-pure-selen-kapseln",
-    "name": "Selen Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-marines-kollagen",
-    "name": "Marines Kollagenhydrolysat",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-l-carnosin",
-    "name": "L-Carnosin Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-lite-shaker",
-    "name": "Protein Shaker",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-pillenbox",
-    "name": "Pillenbox",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-vitamin-c-kapsel",
-    "name": "Vitamin C Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-eaa-pulver",
-    "name": "EAA Pulver – Essenzielle Aminosäuren",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-clear-whey-pulver-aus-whey-isolat",
-    "name": "Clear Whey - Pulver aus Whey-Isolat",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-whey-isolat-aus-weidemilch",
-    "name": "Whey-Isolat Pulver aus Weidemilch - Neutral",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-l-carnitin",
-    "name": "L-Carnitin Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-inositol-pulver",
-    "name": "Inositol Pulver",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-pure-glutamin-kapseln",
-    "name": "L-Glutamin Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-lp7-eaa-aminosaeuren-kapseln",
-    "name": "LP7 Aminosäuren Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-pure-citrullin-malat-kapseln",
-    "name": "Citrullin-Malat Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-pure-cholin-als-cdp-cholin",
-    "name": "Cholin Kapseln – als CDP-Cholin",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-ubiquinol-reduziertes-q10",
-    "name": "Ubiquinol Kapseln – Reduziertes Q10 von Kaneka®",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-l-tyrosin",
-    "name": "L-Tyrosin Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-chrompicolinat",
-    "name": "Chrompicolinat Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-propionsaure",
-    "name": "Propionsäure Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-emaille-tasse",
-    "name": "Emaille-Tasse",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-edu-basic",
-    "name": "edu basic",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-n-acetyl-l-cystein",
-    "name": "N-Acetyl-L-Cystein (NAC)",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-opc-komplex",
-    "name": "OPC-Komplex Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-gruntee-extrakt",
-    "name": "Grüntee-Extrakt Kapseln mit 50 % EGCG",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-iod-kapseln",
-    "name": "Iod Kapseln – aus reinstem Bio-Kelp",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-ashwagandha-kapseln-ksm-66",
-    "name": "Ashwagandha Kapseln KSM-66®",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-darmflora-komplex",
-    "name": "Darmflora-Komplex",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-zink-kapseln",
-    "name": "Zink-Komplex Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-citrullin-plus",
-    "name": "Citrullin plus",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-resistentes-dextrin",
-    "name": "Resistentes Dextrin Pulver",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-olivenblatt-extrakt",
-    "name": "Olivenblatt-Extrakt Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-glycin-pulver",
-    "name": "Glycin-Pulver",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-creatin-pulver",
-    "name": "Kreatin Pulver Creavitalis®",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-l-glutamin-pulver",
-    "name": "L-Glutamin Pulver",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-taurin",
-    "name": "Taurin Kapseln",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-das-multi-mit-iod",
-    "name": "Das Multi – Premium-Multivitamin-Kapseln (Mit Iod)",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-das-multi-ohne-iod",
-    "name": "Das Multi – Premium-Multivitamin-Kapseln (Ohne Iod)",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-eisen-mit-lactoferrin",
-    "name": "Eisen Kapseln mit Lactoferrin",
-    "grund": "HTTP 403"
-   },
-   {
-    "id": "d-calcium-plus",
-    "name": "Calcium Pulver",
-    "grund": "HTTP 403"
-   }
-  ]
+  "gespeichert": 555,
+  "neu": 107,
+  "unveraendert": 448,
+  "fehler": []
  }
 }
