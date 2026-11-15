@@ -15,7 +15,7 @@ const THEMEN={"Schlaf":/schlaf|insomn|melatonin|nachtruhe|einschlaf|durchschlaf/
 const STUDIE=/pubmed|ncbi\.nlm|doi\.org|sciencedirect|nature\.com|thelancet|jamanetwork|bmj\.com|frontiersin|mdpi\.com|springer|wiley|cell\.com|nejm|plos/i;
 const out={};for(const q of QUELLEN){const r=await fetch(q.feed,{headers:{"user-agent":UA}});if(!r.ok){console.log(q.id,"HTTP",r.status);continue}const xml=await r.text();
   const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(m=>m[1]);const roh=[];
-  for(const it of items){const titel=txt(tag(it,"title")),beschr=txt(tag(it,"description")||tag(it,"itunes:summary")||tag(it,"content:encoded"));
+  for(const it of items){const titel=txt(tag(it,"title")),beschr=txt(tag(it,"description")||tag(it,"itunes:summary")||tag(it,"content:encoded")).split(/Rabatte unserer Partner|Werbung:|Anzeige:/i)[0].trim();
     const nr=+(txt(tag(it,"itunes:episode"))||(titel.match(/^#?\s*0*(\d{1,4})\b/)||[])[1]||0)||null;
     const links=[...new Set([...ent(tag(it,"description")+" "+tag(it,"content:encoded")).matchAll(/https?:\/\/[^\s"'<>)]+/g)].map(m=>m[0].replace(/[.,;:]+$/,"")))];
     roh.push({nr,titel:titel.replace(/^#?\s*0*\d{1,4}\s*[:.\-–]\s*/,""),datum:new Date(txt(tag(it,"pubDate"))).toISOString().slice(0,10),link:txt(tag(it,"link"))||null,guid:txt(tag(it,"guid")),
@@ -23,11 +23,14 @@ const out={};for(const q of QUELLEN){const r=await fetch(q.feed,{headers:{"user-
       themen:Object.entries(THEMEN).filter(([k,re])=>re.test(titel+" "+beschr)).map(([k])=>k),studien:links.filter(u=>STUDIE.test(u))})}
   out[q.id]=roh;console.log(q.id,"Folgen:",roh.length,"mit Transkript:",roh.filter(x=>x.transkript).length)}
 if(process.argv[2]==="roh"){fs.mkdirSync("wissen/_roh",{recursive:true});for(const [id,r] of Object.entries(out))fs.writeFileSync(`wissen/_roh/${id}.json`,JSON.stringify(r,null,1));process.exit(0)}
-// Aktualisieren: neue Folgen ergänzen (als „nur Shownotes – noch nicht aufbereitet“), Bestehende behalten
+// Aktualisieren: NEUE Folgen ergänzen – nur Kurzauszug aus den Shownotes, als „noch nicht aufbereitet“ markiert.
+// Bereits aufbereitete Folgen (eigene Kurzfassung) bleiben unverändert; nur ein fehlender Transkript-Link wird nachgetragen.
 for(const q of QUELLEN){const roh=out[q.id];if(!roh)continue;const f=`wissen/${q.id}.json`;const D=fs.existsSync(f)?JSON.parse(fs.readFileSync(f,"utf8")):{quelle:q.id,folgen:[]};
-  const have=new Set(D.folgen.map(x=>x.guid||x.link));let neu=0;
-  for(const r of roh){if(have.has(r.guid)||have.has(r.link))continue;neu++;const kurz=r.beschreibung.replace(/\s+/g," ").slice(0,240).replace(/\s\S*$/,"")+(r.beschreibung.length>240?" …":"");
-    D.folgen.push({id:`w-${q.kurz}-${r.nr||r.guid.replace(/[^a-z0-9]/gi,"").slice(-8).toLowerCase()}`,nr:r.nr,titel:r.titel,datum:r.datum,link:r.link,guid:r.guid,themen:r.themen,
-      zusammenfassung:null,auszug_shownotes:kurz,aussagen:[],unsicherheiten:[],studien:r.studien.map(u=>({url:u})),grundlage:r.transkript?"Shownotes (Transkript verfügbar, nicht ausgewertet)":"nur Shownotes",vollstaendig:false,aufbereitet:false})}
+  const idx=new Map();for(const x of D.folgen){if(x.guid)idx.set(x.guid,x);if(x.link)idx.set(x.link,x)}let neu=0;
+  for(const r of roh){const alt=idx.get(r.guid)||idx.get(r.link);if(alt){if(!alt.transkript_link&&r.transkript)alt.transkript_link=r.transkript;continue}
+    neu++;const kurz=r.beschreibung.replace(/\s+/g," ").slice(0,240).replace(/\s\S*$/,"")+(r.beschreibung.length>240?" …":"");
+    D.folgen.push({id:`w-${q.kurz}-${r.nr??r.guid.replace(/[^a-z0-9]/gi,"").slice(-8).toLowerCase()}`,nr:r.nr,titel:r.titel,datum:r.datum,link:r.link,guid:r.guid,format:null,themen:r.themen,
+      zusammenfassung:null,auszug_shownotes:kurz,aussagen:[],unsicherheiten:["Noch nicht aufbereitet – nur automatischer Auszug aus der Folgenbeschreibung."],kommerziell:null,
+      studien:r.studien.map(u=>({url:u})),transkript_link:r.transkript||null,grundlage:"nur Shownotes-Auszug (automatisch, nicht aufbereitet)",vollstaendig:false,aufbereitet:false})}
   D.folgen.sort((a,b)=>(b.datum||"").localeCompare(a.datum||""));D.stand=new Date().toISOString().slice(0,10);D.anzahl=D.folgen.length;
   fs.writeFileSync(f,JSON.stringify(D));console.log(q.id,"neu:",neu,"gesamt:",D.folgen.length)}

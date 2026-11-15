@@ -15,6 +15,7 @@ Getestet im Browser mit nachgestelltem iPad/iPhone – nicht auf echter iOS-Hard
 | Raum-Sitzungen + Tagesprotokoll (ab 2.27) | lokal | verschlüsselter Gerätespeicher: Datum, Eintritt, Austritt, Dauer, Modus, Name nur bei eingewilligter Person – keine Bilder, kein Ton; Löschfrist 7/30/90 Tage |
 | Kamera-Bewegungserkennung | lokal | 48×36 Graustufen-Pixel pro Bild im Arbeitsspeicher, nichts wird gespeichert oder gesendet |
 | Sprachausgabe | lokal (iOS-Stimme) | – (Status zeigt, ob die gewählte Stimme lokal ist) |
+| Wissensquellen (ab 2.28): Podcast „Die Biohacking-Praxis“ – 276 Folgen mit eigener Kurzfassung aus den öffentlichen Shownotes, Themenindex | lokal | Cache „atlas-daten-v1“ (`wissen/quellen.json`, `wissen/biohacking-praxis.json`), unverschlüsselt (öffentliche Daten, nichts Persönliches) |
 | Produktkarten, Detailkarten, „Inhaltsstoffe erklärt“, Offline-Antworten mit Katalogtreffern | lokal | – |
 
 ## 2. Was das iPad verlässt (vollständige Liste aus dem Code)
@@ -25,9 +26,12 @@ Getestet im Browser mit nachgestelltem iPad/iPhone – nicht auf echter iOS-Hard
 | Spracherkennung (Safari Web Speech) | Sprache als Ton | Apple (Siri/Diktat) – lokal nur, wenn iOS ein Sprachpaket anbietet (Atlas nutzt dann `processLocally`) | laut Apple ohne „Siri & Diktat verbessern“ keine Audio-Speicherung; Anfrageverlauf bis 2 Jahre mit wechselnder Zufallskennung | Mikrofon aus |
 | Kalender/Mails (Briefing) | Geheimwort hin, Termine/Mails zurück | Google (Marios Apps-Script) | in Marios Google-Konto | gesperrt |
 | Benachrichtigung (Abwesenheit) | Meldetext | Google (Marios Apps-Script → Mail) | in Marios Google-Konto | gesperrt |
-| App-Dateien, Katalog, Bilder, Update-Prüfung | nur Dateiabruf (IP-Adresse), keine persönlichen Inhalte | GitHub Pages (Microsoft) | Server-Protokolle | gesperrt (nur iOS prüft beim Öffnen evtl. die Datei `sw.js`) |
+| App-Dateien, Katalog, Podcast-Wissen, Bilder, Update-Prüfung | nur Dateiabruf (IP-Adresse), keine persönlichen Inhalte | GitHub Pages (Microsoft) | Server-Protokolle | gesperrt (nur iOS prüft beim Öffnen evtl. die Datei `sw.js`) |
+| Podcastfolge, Transkript oder Studienlink öffnen (ab 2.28) | nur wenn du in der Folgenkarte darauf tippst: Seitenaufruf (IP-Adresse) | Betreiber der Seite (biohacking-praxis.de, audiorella/Spreaker, Studienseiten) | Server-Protokolle | gesperrt (Links werden nicht angezeigt) |
 | Herstellerbild als Ersatz (nur wenn nicht im Gerät) | Bildabruf | Biogena, MoleQlar, Norsan, edubily | Server-Protokolle | gesperrt |
 | Schriften | **entfällt ab 2.26** (vorher Google Fonts bei jedem Start) | – | – | – |
+
+Wissensquellen werden wöchentlich auf GitHub aktualisiert (Workflow `wissen`, liest nur den öffentlichen RSS-Feed); das iPad holt die Datei wie den Katalog – ohne persönliche Daten, ohne Suchanfragen. Was du Atlas zu Beschwerden erzählst, geht wie jede Frage nur an Claude (wenn Cloud-KI an).
 
 Kamera-, Bild-, Personen- und Protokolldaten verlassen das Gerät nie (Test 2.27: keine Verbindung nach außen während Sitzungen, Urlaubsmodus und Protokoll). Einzige Ausnahme auf Wunsch: Export des Protokolls als Textdatei, die du selbst speicherst.
 

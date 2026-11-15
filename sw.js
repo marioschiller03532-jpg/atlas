@@ -1,11 +1,13 @@
 // Atlas Service Worker – Offline-Start. Version wird beim Bauen eingesetzt; jede neue App-Version = neuer Service Worker.
 // Sicher aktualisieren: Die neue App-Oberfläche wird erst komplett geladen und geprüft, dann wird umgeschaltet.
 // Schlägt der Download fehl, bleibt die alte, funktionierende Offline-Version unangetastet.
-const VERSION="20261115-1127";
+const VERSION="20261115-1942";
 const SHELL="atlas-app-"+VERSION;   // App-Oberfläche dieser Version (index.html enthält alles: Code, Stil, Symbol)
-const DATEN="atlas-daten-v1";       // Katalog, Bild-Verzeichnis, Wissensbibliothek (verschlüsselt), Bild-Zuordnung – je 1 Kopie
+const DATEN="atlas-daten-v1";       // Katalog, Bild-Verzeichnis, Wissensbibliothek (verschlüsselt), Bild-Zuordnung, Wissensquellen – je 1 Kopie
 // Produktbilder/Nährwerttabellen verwaltet Atlas selbst im Speicher „atlas-bilder-v1“ (verschlüsselt, mit Schlüssel-Kennung).
-const DATA=["kb.enc","katalog/supplement_catalog.json","katalog/bilder/index.json","produktbilder/zuordnung.json"];
+const DATA=["kb.enc","katalog/supplement_catalog.json","katalog/bilder/index.json","produktbilder/zuordnung.json","wissen/quellen.json","wissen/biohacking-praxis.json"];
+// Wissensquellen (wissen/*.json) werden wie die anderen Daten behandelt – auch später ergänzte Quellen
+const isData=rel=>DATA.includes(rel)||/^wissen\/[a-z0-9-]+\.json$/.test(rel);
 const base=()=>new URL(self.registration.scope);
 
 // Eine Datei gilt nur als gültig, wenn sie vollständig und lesbar ist – sonst wird die alte Kopie behalten.
@@ -13,6 +15,8 @@ async function valid(rel,res){try{if(!res||!res.ok)return false;
   if(rel==="kb.enc"){const t=(await res.text()).trim();return t.length>1000&&/^[A-Za-z0-9+/=]+$/.test(t)}
   const j=await res.json();
   if(rel==="katalog/supplement_catalog.json")return Array.isArray(j.produkte)&&j.produkte.length>0;
+  if(rel==="wissen/quellen.json")return Array.isArray(j.quellen)&&j.quellen.length>0;
+  if(rel.startsWith("wissen/"))return Array.isArray(j.folgen)&&j.folgen.length>0;
   if(rel==="katalog/bilder/index.json")return !!(j.bilder&&j.keys&&Object.keys(j.bilder).length);
   return typeof j==="object"&&j!==null}catch{return false}}
 
@@ -41,7 +45,7 @@ self.addEventListener("message",e=>{if(e.data==="version")e.source&&e.source.pos
 self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.origin!==location.origin)return;
   const b=base();if(!u.pathname.startsWith(b.pathname))return;const rel=u.pathname.slice(b.pathname.length);
   if(r.mode==="navigate"){if(rel===""||rel==="index.html")e.respondWith(nav(r));return}   // Rückfall-Versionen (alt/…) normal laden
-  if(DATA.includes(rel))e.respondWith(daten(r,rel));
+  if(isData(rel))e.respondWith(daten(r,rel));
   // alles andere (version.json, Bilder, Claude, Hersteller) geht unverändert ans Netz bzw. an Atlas' eigenen Speicher
 });
 

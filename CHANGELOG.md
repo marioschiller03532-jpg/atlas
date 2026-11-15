@@ -1,5 +1,14 @@
 # Atlas – Änderungen
 
+## 2.28 (15.11.2026) – Wissensquellen: Podcast „Die Biohacking-Praxis“
+- Neue lokale, durchsuchbare Wissenssammlung, modular aufgebaut (`wissen/quellen.json` + je Quelle eine Datei; weitere Quellen ohne Code-Änderung ergänzbar).
+- Erste Quelle: Podcast „Die Biohacking-Praxis“ (Andreas Breitfeld, Stefan Wagner; Red Bull Media House). 276 Folgen (#000–#275), je Folge: Nummer, Titel, Datum, Format, Themen, eigene Kurzfassung, wichtige Aussagen, Unsicherheiten, kommerzieller Bezug, Studienlinks, Link, ggf. Transkript-Link. Grundlage nur die öffentlichen Folgenbeschreibungen → alle als „unvollständig“ markiert; kein Audio, keine Transkripte ausgewertet.
+- Themenindex: Schlaf, Müdigkeit/Energie, NAD+, Infusionen, Supplements, Training, Ernährung, Fokus, Stress, Hormone, Regeneration (+ Licht, Kälte/Wärme, Langlebigkeit, Messen/Tracking).
+- Werkzeug `wissensquellen_suchen` für Claude; Regel WISSENSQUELLEN: vage Aussagen erst nachfragen, max. 1–2 Folgen, Podcast/Studie/Erfahrung trennen, Kommerzielles kennzeichnen, keine Behandlungsempfehlung wegen des Podcasts, Warnzeichen zuerst ärztlich, „keine passende Folge“ offen sagen.
+- Folgenkarte ({{w-bhp-NNN}}) mit Mikrofon-Symbol, antippbar: Detail mit Kurzfassung, Aussagen, Unsicherheiten, kommerziellem Bezug, Studienhinweisen, Grundlage. Links nur mit Internet und nie im Privatmodus.
+- Offline/Cloud aus/Privatmodus: Atlas zeigt passende Folgen aus dem lokalen Index.
+- Service Worker speichert `wissen/*.json` geprüft im Offline-Speicher. Wöchentliche Aktualisierung über GitHub-Workflow `wissen` (neue Folgen als „noch nicht aufbereitet“). Sonst nichts verändert. Rückfall: /alt/2.27.3/.
+
 ## 2.27.3 (15.11.2026) – schwarzer Hintergrund zurück
 - Hintergrund wieder exakt wie bis 2.27 (dunkler Verlauf, Browser-Leiste #050c12). Weißer Hintergrund verworfen; Statusleiste bleibt ausgeblendet. Rückfall: /alt/2.27.2/.
 
