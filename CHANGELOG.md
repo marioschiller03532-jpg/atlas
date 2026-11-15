@@ -1,5 +1,8 @@
 # Atlas – Änderungen
 
+## 2.27.2 (15.11.2026) – Statusleiste ausgeblendet
+- Die Pillen Kamera/Mikrofon/Internet/Cloud-KI/Privatmodus sind auf dem Hauptbildschirm unsichtbar; Logik, Schalter (🛡 Datenschutzstatus, Einstellungen) und Datenschutzverhalten unverändert. Rückfall: /alt/2.27.1/.
+
 ## 2.27.1 (15.11.2026) – Hintergrund weiß
 - Nur die Hintergrundfarbe der Oberfläche von Schwarz auf Weiß (Seitenhintergrund und Browser-Leistenfarbe). Sonst unverändert. Rückfall: /alt/2.27/.
 

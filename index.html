@@ -171,7 +171,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .rpLog{font-size:14px;line-height:1.5;max-height:320px;overflow:auto;margin:6px 0 10px}.rpLog b{display:block;margin-top:8px}.rpLog .run{color:var(--accent)}
 #urlaubBar{margin-bottom:8px}
 /* 2.26 Datenschutz: Schalterleiste + Status */
-#privStrip{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:0 0 8px}
+#privStrip{display:none}   /* 2.27.2: Statusleiste auf dem Hauptbildschirm ausgeblendet – Schalter und Status laufen weiter (🛡 Datenschutzstatus) */
 .pv{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;line-height:1.2;cursor:pointer}
 .pv i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);flex:none}.pv b{font-weight:600}
 .pv.on i{background:var(--accent)}.pv.live i{background:#ff4d4d;box-shadow:0 0 0 3px rgba(255,77,77,.25);animation:pvPulse 1.4s ease-in-out infinite}.pv.live{border-color:rgba(255,77,77,.6)}
@@ -2273,7 +2273,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261115-1122",ATLAS_REL="2.27.1";
+const APP_VERSION="20261115-1124",ATLAS_REL="2.27.2";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
