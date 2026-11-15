@@ -1,0 +1,19 @@
+name: fonts
+on:
+  push:
+    paths: ["tools/fonts-holen.mjs"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fonts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
+      - run: node tools/fonts-holen.mjs
+      - run: |
+          git config user.name atlas-katalog-bot
+          git config user.email atlas-katalog-bot@users.noreply.github.com
+          git add fonts && git commit -m "Schriften selbst gehostet" && git pull --rebase && git push || echo "nichts zu tun"
