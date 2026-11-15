@@ -43,3 +43,6 @@ Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwe
 - Unter dem Kopf eine Reihe kleiner Pillen (Rahmen wie Chips, 12 px): Kamera · Mikrofon · Internet · Cloud-KI · Privatmodus. Punkt türkis = an, grau = aus, rot pulsierend = Kamera/Mikrofon gerade aktiv.
 - 🛡 im Kopf öffnet den „Datenschutzstatus“ (Feld im Stil der Detailkarte, Schalter als Pillen „An/Aus“).
 
+## Urlaubsmodus-Hinweis (ab 2.27)
+- Leiste im Stil der Einrichtungs-Leiste über der Kugel: „Urlaubsmodus aktiv · Atlas spricht nicht, Mikrofon aus, stilles Anwesenheitsprotokoll“ (abschaltbar).
+

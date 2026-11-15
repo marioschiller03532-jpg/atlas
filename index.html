@@ -165,6 +165,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .said{max-width:52ch;min-height:1.5em;font-size:17px;padding-inline:8px}
 .heard{max-width:52ch;min-height:1.3em;color:var(--muted);font-size:14.5px}
 .err{color:var(--accent);font-size:14px;max-width:52ch}
+/* 2.27 Raum & Protokoll */
+.rpSw{display:flex;flex-direction:column;gap:2px;margin:8px 0}.rpSw label{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px}
+.rpSw label small{display:block;color:var(--muted);font-size:12px}.rpSw input{width:22px;height:22px;flex:none}
+.rpLog{font-size:14px;line-height:1.5;max-height:320px;overflow:auto;margin:6px 0 10px}.rpLog b{display:block;margin-top:8px}.rpLog .run{color:var(--accent)}
+#urlaubBar{margin-bottom:8px}
 /* 2.26 Datenschutz: Schalterleiste + Status */
 #privStrip{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:0 0 8px}
 .pv{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;line-height:1.2;cursor:pointer}
@@ -273,6 +278,7 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
     <div id="prodDet" hidden role="dialog" aria-modal="true" aria-labelledby="pdT"><div id="pdBox"><div class="pdHead"><div class="pdImg" id="pdImg"></div><div><h2 id="pdT"></h2><div class="pdB" id="pdB"></div></div><button type="button" id="pdClose" aria-label="Details schließen">✕</button></div><div id="pdBody"></div><div class="pdFoot" id="pdFoot"></div></div></div>
     <div id="privDet" hidden role="dialog" aria-modal="true" aria-labelledby="pvT"><div id="pvBox"><div class="pdHead"><h2 id="pvT">Datenschutzstatus</h2><button type="button" id="pvClose" aria-label="Schließen">✕</button></div><div id="pvBody"></div></div></div>
     <div class="awaybar" id="awayBar" hidden>Abwesenheitsmodus · Gesperrt</div>
+    <div class="setupbar" id="urlaubBar" hidden role="status">Urlaubsmodus aktiv · Atlas spricht nicht, Mikrofon aus, stilles Anwesenheitsprotokoll</div>
   </main>
   <div>
     <form id="typeForm" hidden><input type="text" id="typeIn" placeholder="Schreib Atlas etwas…" autocomplete="off"><button class="btn primary">Senden</button></form>
@@ -775,7 +781,7 @@ const isUnknown=()=>cur&&cur.id==="_unbekannt";
 const isMain=()=>cur.typ==="haupt";
 function setUnknown(){if(cur.typ==="haupt"&&!S.quick&&privKey)lockVault();cur=UNKNOWN;renderPerson();if(typeof listOpen!=="undefined"&&listOpen&&typeof closeList==="function")closeList()}
 function setPerson(name){
-  const p=findProfile(name);const prev=cur;if(p)identAt=Date.now();
+  const p=findProfile(name);const prev=cur;if(p){identAt=Date.now();if(typeof roomPerson==="function")roomPerson(p)}
   cur=p||{id:"gast-"+norm(name).replace(/ /g,"-"),name:String(name||"Gast").trim()||"Gast",typ:"gast",info:"",routine:[],supps:[],notes:[]};
   if(!S.quick&&prev.typ==="haupt"&&cur.typ!=="haupt"&&privKey)lockVault();
   renderPerson();if(!$("sheet").hidden)renderPane();return cur}
@@ -936,7 +942,7 @@ const clean=s=>String(s).replace(/https?:\/\/\S+/g,"").replace(/\[[^\]]*\]\([^)]
 const spokenRecent=[];function noteSpoken(t){spokenRecent.push({t,at:Date.now()});while(spokenRecent.length>12)spokenRecent.shift()}
 function isEcho(t){const T=typeof toks==="function"?toks(t):[];if(T.length<2)return false;const now=Date.now();
   return spokenRecent.some(x=>now-x.at<15000&&(sim(T,toks(x.t))>=.6||toks(x.t).join(" ").includes(T.join(" "))))}
-function speak(text,then){text=clean(text);const shown=text.replace(PMARK,"").replace(/\s+/g," ").trim();noteSpoken(shown);touch();$("said").textContent=shown;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
+function speak(text,then){if(S.urlaub){diag("urlaub: stumm");if(then)setTimeout(then,0);return}text=clean(text);const shown=text.replace(PMARK,"").replace(/\s+/g," ").trim();noteSpoken(shown);touch();$("said").textContent=shown;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
   const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
   const finish0=()=>{if(my!==gen||pending<0)return;pending=0;hideCard(CARD_KEEP);setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;resumeRecAfterSpeech();f&&f()};
   const finish=()=>{if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)){whenAudioIdle(my,finish0);return}finish0()};
@@ -1820,6 +1826,7 @@ function perfDone(){if(!perf.end||!perf.audio)return;const r=x=>x?Math.round(x-p
 function whenIdle(fn){const tick=()=>{if(!busy&&!speaking()&&!listening)fn();else setTimeout(tick,300)};setTimeout(tick,200)}
 async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"}={}){turnStart=Date.now();turnMarked=false;
   if(away)return;
+  if(S.urlaub){diag("urlaub: keine antwort");$("said").textContent="Urlaubsmodus aktiv – Atlas antwortet nicht. Ausschalten: Mehr → Einstellungen → Raum & Protokoll.";return}
   if(!navigator.onLine||!netAllowed("claude")){if(!internal)offlineReply(text);else diag("cloud aus: interne anfrage übersprungen");return}
   if(!S.key){openSheet("setup");showErr("Bitte zuerst den API-Schlüssel eintragen.");return}
   if(busy)return;busy=true;touch();showErr("");
@@ -1924,7 +1931,7 @@ const CAM_WHY="Atlas braucht die Kamera nur, um zu merken, wenn jemand den Raum 
 const CAM_HOW=/iPad|iPhone|Macintosh/.test(navigator.userAgent)&&"ontouchend" in document
   ?"Freigeben am iPad: Einstellungen → Apps → Safari → Kamera → „Erlauben“ (oder „Fragen“). Danach Atlas schließen, neu öffnen und einmal auf die Kugel tippen."
   :"Freigeben am Laptop: links neben der Adresse auf das Schloss- bzw. Regler-Symbol klicken → Kamera → „Zulassen“, dann die Seite neu laden.";
-async function startRoom(){if(!camAllowed()){setStatus(S.privat?"Privatmodus: Kamera bleibt aus":"Kamera ist ausgeschaltet (oben „Kamera“ antippen)",true);privPaint();return}unlockAudio();if(S.wakeListen)ensureRec();
+async function startRoom(){if(!S.motionOn&&!away){setStatus("Bewegungserkennung ist aus (Einstellungen → Raum & Protokoll)",true);return}if(!camAllowed()){setStatus(S.privat?"Privatmodus: Kamera bleibt aus":"Kamera ist ausgeschaltet (oben „Kamera“ antippen)",true);privPaint();return}unlockAudio();if(S.wakeListen)ensureRec();
   if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){diag("kamera: nicht verfügbar");showErr("Kamera ist in diesem Browser nicht verfügbar (Atlas muss über https geöffnet sein). Atlas funktioniert trotzdem: Kugel antippen.");return}
   if(await camState()==="prompt")setStatus("Gleich fragt das Gerät nach der Kamera. "+CAM_WHY);
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play();ls.del("roomOff")}
@@ -1935,14 +1942,15 @@ async function startRoom(){if(!camAllowed()){setStatus(S.privat?"Privatmodus: Ka
       :"Die Kamera ließ sich nicht starten. Atlas funktioniert trotzdem: Kugel antippen oder „Atlas“ sagen.";
     if(away)$("awayBar").textContent="Abwesenheitsmodus · Kugel antippen, um die Bewegungserkennung zu starten";else{showErr(msg);setMode(sleeping?"sleep":"idle",sleeping?"Schläft · Kugel antippen":"Bereit · Kugel antippen")}return}
   try{wake=await navigator.wakeLock?.request("screen")}catch{}
-  $("roomBtn").textContent="Raum-Modus an";$("roomBtn").classList.add("on");$("roomBtn").classList.remove("primary");lastMotion=Date.now();lastGreet=0;sleeping=false;prevFrame=null;hits=0;
-  setMode("idle",idleLabel());motionTimer=setInterval(checkMotion,500)}
-function stopRoom(keepPref){if(!keepPref)ls.set("roomOff",true);clearInterval(motionTimer);motionTimer=null;sleeping=false;prevFrame=null;stream?.getTracks().forEach(t=>t.stop());stream=null;try{wake?.release()}catch{}
+  $("roomBtn").textContent="Raum-Modus an";$("roomBtn").classList.add("on");$("roomBtn").classList.remove("primary");lastMotion=Date.now();lastGreet=ls.get("lastGreet",0);sleeping=false;prevFrame=null;hits=0;
+  setMode("idle",idleLabel());WAKE_HITS=Math.max(2,Math.round(1500/motionMs()));motionTimer=setInterval(checkMotion,motionMs())}
+function stopRoom(keepPref){if(!keepPref)ls.set("roomOff",true);if(typeof roomEnd==="function")roomEnd("Kamera aus");clearInterval(motionTimer);motionTimer=null;sleeping=false;prevFrame=null;stream?.getTracks().forEach(t=>t.stop());stream=null;try{wake?.release()}catch{}
   $("roomBtn").textContent="Raum-Modus";$("roomBtn").classList.remove("on");$("roomBtn").classList.add("primary");setMode("idle",idleLabel())}
 /* Bewegung statt Licht: Die App sieht nur Kamerabilder (keinen Lichtsensor, keine Personenerkennung).
    Darum: Helligkeit jedes Bildes ausgleichen, Lichtsprünge und Ganzbild-Änderungen verwerfen, Bewegung erst nach 2 Treffern in Folge zählen. */
 let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false,wokeAt=0;
-const WAKE_HITS=3,WAKE_LOCK=120000,ARRIVE_MS=180000;   // Ankunft = nach mind. 3 min ohne Bewegung und ohne Aktivität wieder deutliche, anhaltende Bewegung
+const WAKE_LOCK=120000,ARRIVE_MS=180000;let WAKE_HITS=3;
+const motionMs=()=>[500,1000,2000].includes(+S.motionMs)?+S.motionMs:500;   // Ankunft = nach mind. 3 min ohne Bewegung und ohne Aktivität wieder deutliche, anhaltende Bewegung
 let arriving=false;   // schlafend: ca. 1,5 s anhaltende Bewegung nötig; nach dem Aufwachen 2 min keine neue Begrüßung durch Bewegung
 // Aktivität = Bewegung ODER Sprache, Zuhören, Denken, Sprechen, Antippen (vorher zählte nur Kamera-Bewegung)
 let lastActivity=Date.now();function touch(){lastActivity=Date.now()}
@@ -1958,7 +1966,7 @@ function leaveRest(greetNow){resting=false;ls.del("restUntil");sleeping=false;la
 const sleepMs=()=>Math.max(1,+S.sleepMin||20)*60000;
 function goSleep(){if(sleeping)return;sleeping=true;if(convo)endConvo();setMode("sleep",stream?"Schläft":"Schläft · Kugel antippen")}
 function wakeUp(){if(!sleeping)return false;sleeping=false;setMode("idle",idleLabel());return true}
-function checkMotion(){if(!stream)return;
+function checkMotion(){if(!stream||document.hidden||!S.motionOn)return;roomTick();
   sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,n=48*36,g=new Float32Array(n);let m=0;for(let i=0;i<n;i++){g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;m+=g[i]}m/=n;
   const now=Date.now(),idleFor=now-lastMotion;
   if(resting&&Date.now()>ls.get("restUntil",0)){resting=false;ls.del("restUntil")}
@@ -1979,13 +1987,16 @@ function checkMotion(){if(!stream)return;
   if(f>0.6){hits=0;lightHold=now+1500;return}                 // fast alles auf einmal = Licht/Wackeln
   if(f>0.05-S.sens*0.005){hits++;if(hits===2)arriving=now-lastMotion>ARRIVE_MS&&now-lastActivity>ARRIVE_MS;if(hits<2)return}else{hits=0;return}
   if(resting)return;   // Ruhemodus nach "Gute Nacht": Bewegung weckt nicht (nur "Atlas" oder Antippen)
-  lastMotion=now;if(hits<WAKE_HITS)return;   // Begrüßung erst nach ca. 1,5 s anhaltender Bewegung
+  lastMotion=now;roomPresence(now,hits>=WAKE_HITS);if(hits<WAKE_HITS)return;   // Sitzung beginnt erst nach ca. 1,5 s anhaltender Bewegung
   // Gespräch läuft, Atlas hört zu, denkt oder spricht: Bewegung zählt nur als Anwesenheit, keine Begrüßung
-  if(convo||busy||listening||finishing||speaking()||sessText)return;
+  if(convo||busy||listening||finishing||speaking()||sessText){roomNew=false;return}
+  if(S.urlaub){if(sleeping)wakeUp();roomNew=false;return}   // Urlaubsmodus: still, nur Protokoll
   if(away){if(now-lastGreet>60000){lastGreet=now;wakeUp();awayVisitor()}return}
-  const woke=sleeping&&now-wokeAt>WAKE_LOCK?wakeUp():false;
-  // Gespräch von selbst beginnen: beim Aufwachen, bei der ersten Bewegung oder wenn jemand nach einer ruhigen Phase den Raum betritt
-  if((woke||!lastGreet||arriving)&&now-lastGreet>WAKE_LOCK){const why=woke?"aufgewacht (bewegung)":arriving?"jemand kommt (bewegung)":"erste bewegung";arriving=false;wokeAt=now;lastGreet=now;diag(why);greet(woke||why.startsWith("jemand"))}}
+  if(sleeping)wakeUp();arriving=false;
+  // 2.27: Nur zu Beginn einer NEUEN Raum-Sitzung begrüßen – und nur, wenn die Begrüßungs-Pause vorbei ist. Weitere Bewegung = gleiche Sitzung, kein Sprechen.
+  if(!roomNew)return;roomNew=false;
+  if(now-lastGreet<S.cool*60000){diag("neue sitzung, begrüßungs-pause läuft");return}
+  wokeAt=now;lastGreet=now;ls.set("lastGreet",now);diag("neue raum-sitzung: begrüßung");greet(true)}
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
 
 /* ================= Bedienung ================= */
@@ -2136,10 +2147,19 @@ function renderSetup(){
     <div class="note">Natürlicher klingt eine Premium-Stimme: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch → z. B. „Anna (Premium)“ laden.</div>
     <div class="field"><label for="sPause">Sprechpause, nach der Atlas antwortet: <b id="sPauseV"></b></label><input type="range" id="sPause" min="2" max="3.5" step="0.1"><div class="note">Länger = Atlas lässt dich in Ruhe ausreden. Mit „Fertig ✓“ oder Antippen der Kugel geht's sofort.</div></div>
     <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
-  <section class="card"><h2>Raum-Modus</h2>
-    <div class="grid2"><div class="field"><label for="sCool">Neu begrüßen, wenn der Raum so lange leer war (Minuten)</label><input type="number" id="sCool" min="1" max="240"></div>
-    <div class="field"><label for="sSleep">Schlafmodus nach so vielen Minuten ohne Bewegung</label><input type="number" id="sSleep" min="1" max="240"></div>
-    <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div></div>
+  <section class="card" id="raumCard"><h2>Raum & Protokoll</h2>
+    <div class="note">Alles läuft auf dem iPad. Die Kamera vergleicht nur winzige Graustufenbilder (48×36 Punkte) auf Bewegung – keine Fotos, keine Videos, keine Gesichtserkennung, nichts wird gesendet.</div>
+    <div class="rpSw" id="rpSw"></div>
+    <div class="grid2"><div class="field"><label for="sCool">Begrüßungs-Pause</label><select id="sCool"><option value="10">10 Minuten</option><option value="20">20 Minuten</option><option value="30">30 Minuten</option><option value="60">60 Minuten</option></select></div>
+    <div class="field"><label for="rpSess">Sitzung endet nach … ohne Bewegung</label><select id="rpSess"><option value="10">10 Minuten</option><option value="20">20 Minuten</option><option value="30">30 Minuten</option></select></div>
+    <div class="field"><label for="rpInt">Erkennungsintervall</label><select id="rpInt"><option value="500">0,5 s (schnell)</option><option value="1000">1 s (sparsam)</option><option value="2000">2 s (sehr sparsam)</option></select></div>
+    <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div>
+    <div class="field"><label for="sSleep">Bildschirm-Schlaf nach so vielen Minuten ohne Bewegung</label><input type="number" id="sSleep" min="1" max="240"></div>
+    <div class="field"><label for="rpDays">Protokoll aufbewahren</label><select id="rpDays"><option value="7">7 Tage</option><option value="30">30 Tage</option><option value="90">90 Tage</option></select></div></div>
+    <h3>Namentlich protokollieren (nur mit Einwilligung)</h3><div class="note">Nur bewusst angelegte Personen, die sich im Gespräch selbst nennen. Alle anderen erscheinen nur als „Unbekannte Anwesenheit“.</div><div class="rpSw" id="rpPers"></div>
+    <h3>Tagesprotokoll</h3><div id="rpLog" class="rpLog"></div>
+    <div class="row"><button class="btn small" type="button" id="rpExp">Exportieren (Textdatei)</button><button class="btn small" type="button" id="rpDel">Alle Protokolldaten löschen</button></div></section>
+  <section class="card"><h2>Sperre</h2>
     <label class="row" for="sQuick" style="gap:10px"><input type="checkbox" id="sQuick" style="width:22px;height:22px"> Zu Hause ohne Code (Code nur nach Sperren oder im Abwesenheitsmodus)</label>
     <div class="field"><label for="sLock">Sonst automatisch sperren nach (Stunden)</label><input type="number" id="sLock" min="1" max="48"></div></section>
   <section class="card"><h2>Speicher</h2>
@@ -2164,7 +2184,7 @@ function renderSetup(){
   $("appVer").textContent="Atlas "+ATLAS_REL+" · Build "+APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sAskWho").checked=S.askWho!==false;$("sAskWho").onchange=()=>{S.askWho=$("sAskWho").checked;saveSettings()};$("sPersInfo").textContent=S.persona&&S.persona.trim()?`Geladen: deine eigene Persönlichkeit (${S.persona.length.toLocaleString("de-AT")} Zeichen).`:"Geladen: Standard-Persönlichkeit.";
   $("sPersDef").onclick=()=>confirmBox("Persönlichkeit zurücksetzen?","Dein eigener Text wird durch den Standard ersetzt. Eine Sicherung bleibt erhalten.",()=>{S.persona="";if(!settingsBroken)ls.set("settings",S);renderPane()});$("sNick").value=S.nick||"";$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
     $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}
-    {const D=ls.get("diag",[]);if(D.length)$("sPerf").textContent+="\nDiagnose (nur Ereignisse, keine Gesprächsinhalte): "+D.slice(-12).map(x=>x.z+" "+x.e).join(" · ")}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sColor").value=S.color||"#34d6d4";$("sRate").value=S.rate;$("sCool").value=S.cool;$("sSens").value=S.sens;$("sLock").value=S.lockHours;
+    {const D=ls.get("diag",[]);if(D.length)$("sPerf").textContent+="\nDiagnose (nur Ereignisse, keine Gesprächsinhalte): "+D.slice(-12).map(x=>x.z+" "+x.e).join(" · ")}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sColor").value=S.color||"#34d6d4";$("sRate").value=S.rate;$("sCool").value=String(S.cool);if(typeof renderRaum==="function")renderRaum();$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
     $("bTest").onclick=async()=>{$("bRes").textContent="Teste…";try{const u=$("bUrl").value.trim(),t=$("bTok").value;const r=await fetch(u+(u.includes("?")?"&":"?")+"t="+encodeURIComponent(t));const j=await r.json();$("bRes").textContent=j.error?"Geheimwort stimmt nicht.":`Klappt: ${j.termine?.length||0} Termine, ${j.mails?.length||0} Mails.`}catch{$("bRes").textContent="Keine Verbindung. Adresse prüfen."}}}
@@ -2253,17 +2273,56 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261115-0625",ATLAS_REL="2.26";
+const APP_VERSION="20261115-0837",ATLAS_REL="2.27";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
 
 
+
+// ===== 2.27: Raum-Sitzungen, Tagesprotokoll (lokal, verschlüsselt), Urlaubsmodus =====
+// Sitzung = zusammenhängende Anwesenheit. Beginnt bei anhaltender Bewegung, endet nach S.sessMin Minuten ohne Bewegung.
+// Gespeichert werden nur: Datum, Eintritt, Austritt, Dauer, ggf. Name einer eingewilligten Person, Modus. Keine Bilder, kein Ton.
+if(![10,20,30,60].includes(+S.cool))S.cool=[10,20,30,60].reduce((a,b)=>Math.abs(b-(+S.cool||20))<Math.abs(a-(+S.cool||20))?b:a,20);
+let room=ls.get("raumSess",null),roomNew=false,roomSaveT=0;
+const sessMs=()=>Math.max(10,+S.sessMin||20)*60000;
+function roomSave(force){if(force||Date.now()-roomSaveT>30000){roomSaveT=Date.now();ls.set("raumSess",room)}}
+function roomPresence(now,start){if(room&&now-room.last>sessMs())roomEnd("Zeitablauf");
+  if(!room){if(!start)return;room={von:now,last:now,personen:[],modus:S.urlaub?"Urlaubsmodus":"Normalbetrieb"};roomNew=true;diag("raum: sitzung beginnt");roomSave(true);privPaint&&privPaint();return}
+  room.last=now;if(S.urlaub)room.modus="Urlaubsmodus";roomSave()}
+function roomTick(){if(room&&Date.now()-room.last>sessMs())roomEnd("Zeitablauf")}
+function roomPerson(p){if(!room||!p)return;const ok=p.typ==="haupt"?p.protokoll!==false:p.protokoll===true;if(ok&&!room.personen.includes(p.name)){room.personen.push(p.name);roomSave(true)}}
+function roomEnd(why){if(!room)return;const e=room;room=null;ls.del("raumSess");roomNew=false;
+  if(S.raumLog){const L=ls.get("raumlog",[]);L.push({von:e.von,bis:Math.max(e.last,e.von+60000),personen:e.personen,modus:e.modus});ls.set("raumlog",roomPurge(L))}
+  diag("raum: sitzung endet ("+why+")")}
+function roomPurge(L){const lim=Date.now()-Math.max(1,+S.logDays||30)*864e5;return L.filter(x=>x.bis>=lim)}
+setInterval(roomTick,30000);
+{const L=ls.get("raumlog",[]),P2=roomPurge(L);if(P2.length!==L.length)ls.set("raumlog",P2);if(room&&Date.now()-room.last>sessMs())roomEnd("beim Start abgelaufen")}
+const fmtD=t=>new Date(t).toLocaleDateString("de-AT",{day:"2-digit",month:"2-digit",year:"numeric"}),fmtT=t=>hhmm(new Date(t));
+function roomLines(){const L=ls.get("raumlog",[]).slice();if(room)L.push({von:room.von,bis:room.last,personen:room.personen,modus:room.modus,laeuft:true});
+  const by={};for(const e of L.sort((a,b)=>b.von-a.von)){const d=fmtD(e.von);(by[d]=by[d]||[]).push(e)}
+  return Object.entries(by).map(([d,es])=>({d,zeilen:es.map(e=>`${e.personen.length?e.personen.join(", "):"Unbekannte Anwesenheit"}: ${fmtT(e.von)} bis ${e.laeuft?"jetzt":fmtT(e.bis)}, ${(m=>m+(m===1?" Minute":" Minuten"))(Math.max(1,Math.round((e.bis-e.von)/60000)))}, ${e.modus}${e.laeuft?" (läuft)":""}`)}))}
+function roomText(){return "Atlas – Tagesprotokoll (lokal, ohne Bilder und Ton)\n\n"+roomLines().map(g=>g.d+"\n"+g.zeilen.map(z=>"- "+z).join("\n")).join("\n\n")+"\n"}
+function urlaubPaint(){const b=$("urlaubBar");if(b)b.hidden=!(S.urlaub&&S.urlaubHinweis)}
+function setUrlaub(on){S.urlaub=on;saveSettings();if(on){try{hush()}catch{}micOff();if(room)room.modus="Urlaubsmodus";if(camAllowed()&&S.motionOn&&!stream)startRoom()}
+  diag("urlaubsmodus: "+(on?"an":"aus"));urlaubPaint();privPaint()}
+function renderRaum(){if(!$("raumCard"))return;const sw=(k,t,sub)=>`<label><span>${t}${sub?`<small>${sub}</small>`:""}</span><input type="checkbox" data-k="${k}"${S[k]?" checked":""}></label>`;
+  $("rpSw").innerHTML=sw("motionOn","Bewegungserkennung","nur mit Kamera; erkennt, ob jemand im Raum ist")+sw("camOn","Kamera","Hauptschalter – aus = keine Kamera, keine Erkennung")+sw("raumLog","Tagesprotokoll","Raum-Sitzungen lokal und verschlüsselt mitschreiben")+sw("urlaub","Urlaubsmodus","Atlas begrüßt nicht, spricht nicht, Mikrofon aus – nur stilles Protokoll")+sw("urlaubHinweis","Hinweis „Urlaubsmodus aktiv“ anzeigen","");
+  $("rpSw").querySelectorAll("input").forEach(x=>x.onchange=()=>{const k=x.dataset.k;if(k==="urlaub")return setUrlaub(x.checked);if(k==="camOn")return setPriv("camOn",x.checked);
+    S[k]=x.checked;saveSettings();if(k==="motionOn"&&!x.checked)roomEnd("Erkennung aus");if(k==="motionOn"&&x.checked&&!stream&&camAllowed())startRoom();urlaubPaint();renderRaum()});
+  $("rpPers").innerHTML=profiles.map((p,i)=>`<label><span>${esc(p.name)}<small>${p.typ==="haupt"?"Hauptperson":p.typ==="kind"?"Kind":"Person"}</small></span><input type="checkbox" data-i="${i}"${(p.typ==="haupt"?p.protokoll!==false:p.protokoll===true)?" checked":""}></label>`).join("");
+  $("rpPers").querySelectorAll("input").forEach(x=>x.onchange=()=>{profiles[+x.dataset.i].protokoll=x.checked;saveProfiles()});
+  for(const [id,k] of [["rpSess","sessMin"],["rpInt","motionMs"],["rpDays","logDays"]]){$(id).value=String(S[k]);$(id).onchange=()=>{S[k]=+$(id).value;saveSettings();if(k==="logDays")ls.set("raumlog",roomPurge(ls.get("raumlog",[])));if(k==="motionMs"&&stream){clearInterval(motionTimer);WAKE_HITS=Math.max(2,Math.round(1500/motionMs()));motionTimer=setInterval(checkMotion,motionMs())}renderRaum()}}
+  $("sCool").value=String(S.cool);
+  const G=roomLines();$("rpLog").innerHTML=G.length?G.map(g=>`<b>${esc(g.d)}</b>`+g.zeilen.map(z=>`<div${/läuft/.test(z)?' class="run"':""}>– ${esc(z)}</div>`).join("")).join(""):'<span class="note">Noch keine Einträge.</span>';
+  $("rpExp").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([roomText()],{type:"text/plain;charset=utf-8"}));a.download="Atlas-Tagesprotokoll-"+dayKey()+".txt";document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)};
+  $("rpDel").onclick=()=>confirmBox("Alle Protokolldaten löschen?","Das Tagesprotokoll wird auf diesem iPad vollständig gelöscht. Das lässt sich nicht rückgängig machen.",()=>{ls.del("raumlog");room=null;ls.del("raumSess");roomNew=false;diag("protokoll gelöscht");renderRaum()})}
+urlaubPaint();
 // ===== 2.26: Datenschutz – Kamera/Mikrofon/Cloud-Schalter, Privatmodus, Datenfluss-Übersicht, alles löschen =====
 // Jede Netzverbindung von Atlas läuft über netAllowed(); im Privatmodus verlässt nichts das Gerät.
-const PRIV_DEF={camOn:true,micOn:true,cloudOn:true,privat:false,wakeListen:false,sttLocalOnly:false,updConfirm:false,privStart:true};
+const PRIV_DEF={motionOn:true,raumLog:true,urlaub:false,urlaubHinweis:true,sessMin:20,logDays:30,motionMs:500,camOn:true,micOn:true,cloudOn:true,privat:false,wakeListen:false,sttLocalOnly:false,updConfirm:false,privStart:true};
 for(const k in PRIV_DEF)if(S[k]===undefined)S[k]=PRIV_DEF[k];
-const camAllowed=()=>S.camOn&&!S.privat,micAllowed=()=>S.micOn&&!S.privat,cloudAllowed=()=>S.cloudOn&&!S.privat;
+const camAllowed=()=>S.camOn&&!S.privat,micAllowed=()=>S.micOn&&!S.privat&&!S.urlaub,cloudAllowed=()=>S.cloudOn&&!S.privat;
 function netAllowed(kind){if(S.privat)return false;if((kind==="claude"||kind==="bridge"||kind==="notify")&&!S.cloudOn)return false;return true}
 let sttMode="wird geprüft",ttsLocal=null;
 (async()=>{try{if(SR&&typeof SR.available==="function"){const r=await SR.available({langs:["de-DE"],processLocally:true});sttMode=r==="available"?"lokal":r==="downloadable"||r==="downloading"?"lokal möglich (Sprachpaket fehlt)":"Apple-Server (kein lokales Sprachpaket)"}
@@ -2321,7 +2380,7 @@ function privRender(){const b=$("pvBody");if(!b)return;const on=x=>x?"an":"aus",
    ["Herstellerbild als Ersatz","nur wenn ein Bild nicht im Gerät liegt: Abruf beim Hersteller","Biogena, MoleQlar, Norsan, edubily","Server-Protokolle der Hersteller",!S.privat]];
   for(const r of rows)h+=`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td class="${r[4]?"warn":"ok"}">${r[4]?"aktiv":"aus"}</td></tr>`;
   h+=`</table>`;
-  h+=`<h3>Auf dem iPad gespeichert</h3><p>Einstellungen, Personen, Routinen, Supplements, Tagesstatus, Wissensbibliothek und Gesprächsverlauf: <b class="${window.__LSSTATE==="verschlüsselt"?"ok":"warn"}">${window.__LSSTATE==="verschlüsselt"?"verschlüsselt (AES-256, Geräteschlüssel nicht auslesbar)":"NICHT verschlüsselt – "+esc(window.__LSERR||"Speicher nicht verfügbar")}</b>. Gesprächsprotokolle, Notizen und die Kalender-Verbindung liegen zusätzlich im Tresor (nur mit deinem Code lesbar). Produktbilder und Nährwerttabellen: verschlüsselt. Produktkatalog: öffentliche Herstellerdaten, unverschlüsselt.</p>`;
+  h+=`<h3>Auf dem iPad gespeichert</h3><p>Einstellungen, Personen, Routinen, Supplements, Tagesstatus, Wissensbibliothek, Gesprächsverlauf und Raum-Tagesprotokoll (nur Zeiten, Dauer, Modus, ggf. eingewilligter Name – keine Bilder, kein Ton): <b class="${window.__LSSTATE==="verschlüsselt"?"ok":"warn"}">${window.__LSSTATE==="verschlüsselt"?"verschlüsselt (AES-256, Geräteschlüssel nicht auslesbar)":"NICHT verschlüsselt – "+esc(window.__LSERR||"Speicher nicht verfügbar")}</b>. Gesprächsprotokolle, Notizen und die Kalender-Verbindung liegen zusätzlich im Tresor (nur mit deinem Code lesbar). Produktbilder und Nährwerttabellen: verschlüsselt. Produktkatalog: öffentliche Herstellerdaten, unverschlüsselt.</p>`;
   h+=`<p>Kein Tracker, keine Werbung, keine Analyse-Werkzeuge, kein Fernzugriff, keine offenen Netzwerkdienste: Atlas ist eine Webseite ohne eigenen Server und baut nur die oben genannten Verbindungen selbst auf. Rohes Audio und Kamerabilder werden nie gespeichert.</p>`;
   h+=`<h3>Alle Daten löschen</h3><p>Löscht auf diesem iPad alles von Atlas: Einstellungen, API-Schlüssel, Personen, Tresor, Verlauf, Offline-Kopien, Bilder, Geräteschlüssel. Andere Apps bleiben unberührt.</p><button type="button" class="pvDanger${wipeArm>Date.now()?" arm":""}" id="pvWipe">${wipeArm>Date.now()?"Wirklich alles löschen? Nochmal tippen":"Alle Atlas-Daten löschen"}</button>`;
   h+=`<p style="margin-top:14px">Quellen: <a href="https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data" target="_blank" rel="noopener noreferrer">Anthropic – Speicherdauer API</a> · <a href="https://www.apple.com/legal/privacy/data/en/ask-siri-dictation/" target="_blank" rel="noopener noreferrer">Apple – Siri, Diktat & Datenschutz</a></p>`;

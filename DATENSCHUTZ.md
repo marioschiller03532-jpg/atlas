@@ -1,4 +1,4 @@
-# Atlas – Sicherheit & Datenschutz (Stand 2.26, 15.11.2026)
+# Atlas – Sicherheit & Datenschutz (Stand 2.27, 15.11.2026)
 
 Ermittelt aus dem Programmcode (jede Netzverbindung, jeder Speicherort) und mit einem automatischen Test, der jede Verbindung mitschreibt.
 Getestet im Browser mit nachgestelltem iPad/iPhone – nicht auf echter iOS-Hardware.
@@ -12,6 +12,7 @@ Getestet im Browser mit nachgestelltem iPad/iPhone – nicht auf echter iOS-Hard
 | Wissensbibliothek | lokal | `kb.enc` (verschlüsselt) + entschlüsselte Kopie im verschlüsselten Gerätespeicher |
 | Einstellungen, API-Schlüssel, Personen, Routinen, Supplements, Tagesstatus, Verlauf, Diagnose | lokal | localStorage, **AES-256-GCM verschlüsselt** (ab 2.26), Schlüssel nicht exportierbar in IndexedDB „atlas-schutz“ |
 | Gesprächsprotokolle, Notizen, Kalender-Verbindung | lokal | zusätzlich im **Tresor** (RSA/AES, nur mit Mario's Code lesbar) |
+| Raum-Sitzungen + Tagesprotokoll (ab 2.27) | lokal | verschlüsselter Gerätespeicher: Datum, Eintritt, Austritt, Dauer, Modus, Name nur bei eingewilligter Person – keine Bilder, kein Ton; Löschfrist 7/30/90 Tage |
 | Kamera-Bewegungserkennung | lokal | 48×36 Graustufen-Pixel pro Bild im Arbeitsspeicher, nichts wird gespeichert oder gesendet |
 | Sprachausgabe | lokal (iOS-Stimme) | – (Status zeigt, ob die gewählte Stimme lokal ist) |
 | Produktkarten, Detailkarten, „Inhaltsstoffe erklärt“, Offline-Antworten mit Katalogtreffern | lokal | – |
@@ -27,6 +28,8 @@ Getestet im Browser mit nachgestelltem iPad/iPhone – nicht auf echter iOS-Hard
 | App-Dateien, Katalog, Bilder, Update-Prüfung | nur Dateiabruf (IP-Adresse), keine persönlichen Inhalte | GitHub Pages (Microsoft) | Server-Protokolle | gesperrt (nur iOS prüft beim Öffnen evtl. die Datei `sw.js`) |
 | Herstellerbild als Ersatz (nur wenn nicht im Gerät) | Bildabruf | Biogena, MoleQlar, Norsan, edubily | Server-Protokolle | gesperrt |
 | Schriften | **entfällt ab 2.26** (vorher Google Fonts bei jedem Start) | – | – | – |
+
+Kamera-, Bild-, Personen- und Protokolldaten verlassen das Gerät nie (Test 2.27: keine Verbindung nach außen während Sitzungen, Urlaubsmodus und Protokoll). Einzige Ausnahme auf Wunsch: Export des Protokolls als Textdatei, die du selbst speicherst.
 
 Nicht vorhanden (im Code geprüft): Tracker, Werbung, Analyse-Werkzeuge, Fernzugriff, eigener Server, offene Netzwerkdienste, Audio-Aufnahme (kein MediaRecorder), Video-/Bildaufnahme, Versand von Kamerabildern.
 

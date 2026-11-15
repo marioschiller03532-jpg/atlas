@@ -1,5 +1,11 @@
 # Atlas – Änderungen
 
+## 2.27 (15.11.2026) – Raum-Sitzungen, Tagesprotokoll, Urlaubsmodus
+- Ursache wiederholter Begrüßungen: Bisher begrüßte Atlas nach jeder Ruhephase von 3 Minuten („jemand kommt“) und nach jedem Aufwachen aus dem Bildschirm-Schlaf neu. Jetzt gibt es Raum-Sitzungen: Beginn bei anhaltender Bewegung, Ende erst nach 10/20/30 Minuten ohne Bewegung (einstellbar). Begrüßt wird nur zu Beginn einer neuen Sitzung und nur, wenn die Begrüßungs-Pause (10/20/30/60 Minuten, gespeichert über Neustarts) vorbei ist. Weitere Bewegung, Aufwachen aus dem Schlaf oder kurzes Hinausgehen lösen nichts aus; laufende Sprache wird nie durch Bewegung unterbrochen.
+- Tagesprotokoll (lokal, verschlüsselt): je Sitzung Datum, Eintritt, Austritt, Dauer, Modus und – nur bei eingewilligten, angelegten Personen, die sich selbst nennen – der Name; sonst „Unbekannte Anwesenheit“. Ansehen, als Textdatei exportieren, vollständig löschen; Löschfrist 7/30/90 Tage.
+- Urlaubsmodus: keine Begrüßung, keine Sprache, Mikrofon aus, keine Antworten, keine Benachrichtigung; nur stilles Protokoll; Hinweis „Urlaubsmodus aktiv“ (abschaltbar).
+- Einstellungen „Raum & Protokoll“: Bewegungserkennung, Kamera, Begrüßungs-Pause, Sitzungsende, Erkennungsintervall (0,5/1/2 s), Empfindlichkeit, Bildschirm-Schlaf, Tagesprotokoll, Urlaubsmodus, Aufbewahrung, Einwilligung je Person, Protokoll löschen. Erkennung pausiert, wenn Atlas nicht im Vordergrund ist. Rückfall: /alt/2.26/.
+
 ## 2.26 (15.11.2026) – Sicherheit & Datenschutz
 - Persönliche Daten im Gerät verschlüsselt (AES-256-GCM, nicht exportierbarer Geräteschlüssel in IndexedDB); bestehende Klartextdaten werden beim ersten Start umgestellt. Öffentliche Katalogdaten bleiben unverschlüsselt.
 - Schalterleiste oben: Kamera · Mikrofon · Internet · Cloud-KI · Privatmodus; rot pulsierend, wenn Kamera/Mikrofon gerade aktiv. 🛡 „Datenschutzstatus“ beim Start (abschaltbar) mit Datenfluss-Tabelle (Daten, Anbieter, Speicherung) aus dem laufenden Zustand.
