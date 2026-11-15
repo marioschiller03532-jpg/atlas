@@ -1,5 +1,8 @@
 # Atlas – Änderungen
 
+## 2.27.3 (15.11.2026) – schwarzer Hintergrund zurück
+- Hintergrund wieder exakt wie bis 2.27 (dunkler Verlauf, Browser-Leiste #050c12). Weißer Hintergrund verworfen; Statusleiste bleibt ausgeblendet. Rückfall: /alt/2.27.2/.
+
 ## 2.27.2 (15.11.2026) – Statusleiste ausgeblendet
 - Die Pillen Kamera/Mikrofon/Internet/Cloud-KI/Privatmodus sind auf dem Hauptbildschirm unsichtbar; Logik, Schalter (🛡 Datenschutzstatus, Einstellungen) und Datenschutzverhalten unverändert. Rückfall: /alt/2.27.1/.
 
