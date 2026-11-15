@@ -1,0 +1,22 @@
+name: wissen
+on:
+  push:
+    paths: ["tools/wissen-holen.mjs","wissen/quellen.json","tools/wissen-run.txt"]
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: katalog
+jobs:
+  wissen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
+      - run: node tools/wissen-holen.mjs $(cat tools/wissen-run.txt 2>/dev/null || echo update)
+      - run: |
+          git config user.name atlas-katalog-bot
+          git config user.email atlas-katalog-bot@users.noreply.github.com
+          git add wissen && git commit -m "Wissensquellen aktualisiert" && git pull --rebase && git push || echo "nichts zu tun"
