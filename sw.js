@@ -1,7 +1,7 @@
 // Atlas Service Worker – Offline-Start. Version wird beim Bauen eingesetzt; jede neue App-Version = neuer Service Worker.
 // Sicher aktualisieren: Die neue App-Oberfläche wird erst komplett geladen und geprüft, dann wird umgeschaltet.
 // Schlägt der Download fehl, bleibt die alte, funktionierende Offline-Version unangetastet.
-const VERSION="20261114-2230";
+const VERSION="20261115-0625";
 const SHELL="atlas-app-"+VERSION;   // App-Oberfläche dieser Version (index.html enthält alles: Code, Stil, Symbol)
 const DATEN="atlas-daten-v1";       // Katalog, Bild-Verzeichnis, Wissensbibliothek (verschlüsselt), Bild-Zuordnung – je 1 Kopie
 // Produktbilder/Nährwerttabellen verwaltet Atlas selbst im Speicher „atlas-bilder-v1“ (verschlüsselt, mit Schlüssel-Kennung).
@@ -32,7 +32,11 @@ self.addEventListener("activate",e=>{e.waitUntil((async()=>{
   for(const k of await caches.keys())if(k.startsWith("atlas-app-")&&k!==SHELL)await caches.delete(k);
   await self.clients.claim()})())});
 
-self.addEventListener("message",e=>{if(e.data==="version")e.source&&e.source.postMessage({sw:VERSION})});
+// Privatmodus: Atlas meldet ihn hierher; dann wird nichts mehr aus dem Netz geholt, alles kommt aus dem Gerätespeicher
+let PRIVAT=null;const privKey=()=>new URL("__privat",base());
+async function privat(){if(PRIVAT===null){try{const r=await (await caches.open(DATEN)).match(privKey());PRIVAT=r?(await r.text())==="1":false}catch{PRIVAT=false}}return PRIVAT}
+self.addEventListener("message",e=>{if(e.data==="version")e.source&&e.source.postMessage({sw:VERSION});
+  if(e.data&&typeof e.data.privat==="boolean"){PRIVAT=e.data.privat;e.waitUntil(caches.open(DATEN).then(c=>c.put(privKey(),new Response(PRIVAT?"1":"0"))))}});
 
 self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.origin!==location.origin)return;
   const b=base();if(!u.pathname.startsWith(b.pathname))return;const rel=u.pathname.slice(b.pathname.length);
@@ -42,12 +46,13 @@ self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;c
 });
 
 // App öffnen: mit Internet die aktuelle Seite (max. 4 s warten), sonst die gespeicherte Offline-Version
-async function nav(r){try{const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),4000);const x=await fetch(r,{signal:ctl.signal});clearTimeout(t);if(x.ok)return x;throw 0}
+async function nav(r){try{if(await privat())throw 0;const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),4000);const x=await fetch(r,{signal:ctl.signal});clearTimeout(t);if(x.ok)return x;throw 0}
   catch{const c=await caches.open(SHELL);let m=await c.match(new URL("./",base()));
     if(!m)for(const k of await caches.keys())if(k.startsWith("atlas-app-")){m=await (await caches.open(k)).match(new URL("./",base()));if(m)break}
     return m||new Response('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><body style="background:#05080b;color:#cfe;font:17px system-ui;padding:40px;text-align:center"><h2>Atlas ist offline</h2><p>Die Offline-Version ist auf diesem Gerät noch nicht gespeichert. Bitte Atlas einmal mit Internet öffnen.</p>',{headers:{"content-type":"text/html; charset=utf-8"}})}}
 
 // Daten: mit Internet frisch holen und nur gültige Dateien speichern; ohne Internet die gespeicherte Kopie
 async function daten(r,rel){const d=await caches.open(DATEN),key=new URL(rel,base());
+  if(await privat()){const m=await d.match(key);return m||new Response("",{status:504,statusText:"privatmodus"})}
   try{const x=await fetch(r);if(x.ok&&await valid(rel,x.clone())){await d.put(key,x.clone());return x}const m=await d.match(key);if(m)return m;return x}
   catch{const m=await d.match(key);return m||new Response("",{status:504,statusText:"offline"})}}

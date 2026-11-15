@@ -1,5 +1,14 @@
 # Atlas – Änderungen
 
+## 2.26 (15.11.2026) – Sicherheit & Datenschutz
+- Persönliche Daten im Gerät verschlüsselt (AES-256-GCM, nicht exportierbarer Geräteschlüssel in IndexedDB); bestehende Klartextdaten werden beim ersten Start umgestellt. Öffentliche Katalogdaten bleiben unverschlüsselt.
+- Schalterleiste oben: Kamera · Mikrofon · Internet · Cloud-KI · Privatmodus; rot pulsierend, wenn Kamera/Mikrofon gerade aktiv. 🛡 „Datenschutzstatus“ beim Start (abschaltbar) mit Datenfluss-Tabelle (Daten, Anbieter, Speicherung) aus dem laufenden Zustand.
+- Privatmodus: Kamera aus, Mikrofon aus, keine Verbindung nach außen (Claude, Websuche, Google-Apps-Script, Updates, Downloads, Herstellerbilder); Service Worker liefert dann nur aus dem Gerätespeicher. Offline-/Privat-Antworten mit Katalogtreffern.
+- Mikrofon nur noch während aktivem Zuhören. Bisher lief die Spracherkennung im Raum-Modus dauerhaft (für den Zuruf „Atlas“) – das ist jetzt ein eigener Schalter, Standard aus. Spracherkennung nutzt „lokal auf dem Gerät“, wenn iOS das anbietet; optional „nur lokal“.
+- Schriften selbst eingebettet: keine Verbindung mehr zu Google Fonts beim Start.
+- „Updates nur nach Bestätigung“ (optional). „Alle Atlas-Daten löschen“ (zweimal tippen) – löscht nur Atlas, andere Apps auf derselben Adresse bleiben.
+- Neue Doku DATENSCHUTZ.md. Rückfall: /alt/2.25/.
+
 ## 2.25 (14.11.2026) – Offline-Start
 - Neu: Service Worker (sw.js). Nach einem vollständigen ersten Laden mit Internet startet Atlas auch im Flugmodus. Offline verfügbar: App-Oberfläche, Produktkatalog, Wissensbibliothek (verschlüsselt), Produktbilder und Nährwerttabellen (691, verschlüsselt), Produkt- und Detailkarten, „Inhaltsstoffe erklärt“.
 - Speicher: „atlas-app-<Version>“ (nur die App-Datei der aktuellen Version), „atlas-daten-v1“ (je eine Kopie von Katalog, Bild-Verzeichnis, Wissensbibliothek, Bild-Zuordnung), „atlas-bilder-v1“ (Bilder mit Schlüssel-Kennung). Die bisherige zweite Katalogkopie im Gerätespeicher (localStorage) entfällt, wenn der Service Worker aktiv ist.

@@ -39,3 +39,7 @@ Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwe
 - Schmale Leiste oben im Stil der Einrichtungs-Leiste (gleiche Form/Farbe), über Kugel und Ring; im Offline-Fall mit dezentem grauem Rand.
 - Inhalte: „Online · Offline-Daten vollständig“ (blendet nach 4 s aus), Fortschritt beim Laden mit schmalem Balken, „Offline-Daten vollständig ✓“, „Offline · …“ (bleibt stehen, solange offline), Hinweis bei fehlenden/freigegebenen Daten mit Knopf „Neu laden“.
 
+## Datenschutz-Leiste (ab 2.26)
+- Unter dem Kopf eine Reihe kleiner Pillen (Rahmen wie Chips, 12 px): Kamera · Mikrofon · Internet · Cloud-KI · Privatmodus. Punkt türkis = an, grau = aus, rot pulsierend = Kamera/Mikrofon gerade aktiv.
+- 🛡 im Kopf öffnet den „Datenschutzstatus“ (Feld im Stil der Detailkarte, Schalter als Pillen „An/Aus“).
+
