@@ -1,5 +1,14 @@
 # Atlas – Änderungen
 
+## 2.29 (16.11.2026) – Gesprächsende-Erkennung
+- Ursache des langen Zuhörens: Nach einer Antwort blieb das Mikrofon bis zu 90 s offen; jedes Ergebnis der Spracherkennung – auch wiederholt gemeldeter gleicher Text oder Geräusche – setzte die Pausen-Uhr zurück; beim Gesprächsende wurde die Erkennung nicht aktiv geschlossen.
+- Stille-Erkennung auf Wortebene: Als Sprache zählen nur neue echte Wörter. Rauschen, „äh/hm“ und Wiederholungen verlängern nichts. Spätestens nach der eingestellten Stille (Standard 5,5 s, 4–8 s) endet die Aufnahme: mit Text antwortet Atlas, ohne Text endet das Zuhören sichtbar und das Mikrofon geht zu.
+- Bisherige Sprechpause (deine Einstellung 2,2 s) bleibt; sie kann durch „unfertige“ Satzenden nie mehr über die Stille-Grenze hinaus verlängert werden.
+- Höchstdauer pro Eingabe (Standard 1 Minute, 30 s–2 min); 10 s vorher „Noch 10 Sekunden“ und Countdown unter der Kugel.
+- Sprachbefehle: „Stopp“ unterbricht die Antwort sofort (wie bisher); neu „Atlas, hör zu“ – während einer Antwort: abbrechen und zuhören; beim Zuhören: neu anfangen; mit „Auf Zuruf hören“: Zuhören öffnen.
+- Atlas wechselt erst in „Hört zu“, wenn die Sprachausgabe wirklich fertig ist.
+- Einstellungen → Stimme: zwei neue Regler (Stille, Längste Eingabe). Sonst nichts verändert. Rückfall: /alt/2.28/.
+
 ## 2.28 (15.11.2026) – Wissensquellen: Podcast „Die Biohacking-Praxis“
 - Neue lokale, durchsuchbare Wissenssammlung, modular aufgebaut (`wissen/quellen.json` + je Quelle eine Datei; weitere Quellen ohne Code-Änderung ergänzbar).
 - Erste Quelle: Podcast „Die Biohacking-Praxis“ (Andreas Breitfeld, Stefan Wagner; Red Bull Media House). 276 Folgen (#000–#275), je Folge: Nummer, Titel, Datum, Format, Themen, eigene Kurzfassung, wichtige Aussagen, Unsicherheiten, kommerzieller Bezug, Studienlinks, Link, ggf. Transkript-Link. Grundlage nur die öffentlichen Folgenbeschreibungen → alle als „unvollständig“ markiert; kein Audio, keine Transkripte ausgewertet.
