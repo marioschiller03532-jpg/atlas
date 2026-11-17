@@ -949,7 +949,7 @@ function speak(text,then){if(S.urlaub){diag("urlaub: stumm");if(then)setTimeout(
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
     for(const p of parts){const u=mkUtt(p);
-      u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+      u.onstart=()=>{if(my!==gen)return;slAnswer();if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
       u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled")diag("tts:"+lastTTSerr);
         // nicht von Atlas abgebrochen (z. B. Gerät hat die Audioausgabe kurz unterbrochen): diesen Satz einmal neu sprechen statt abzubrechen
@@ -1219,11 +1219,35 @@ const maxListenMs=()=>1000*Math.min(180,Math.max(20,+S.maxListen||60));
 const VAD_FILL=/^(äh|ähm|aeh|aehm|hm|hmm|mhm|öh|oeh|eh|ah|oh|uh|m|mm)$/i;
 // Kennzahl des Gehörten: nur echte Wörter (ohne Füllgeräusche, ohne Satzzeichen)
 const voiceWords=t=>norm(t).split(/\s+/).filter(w=>w.length>1&&!VAD_FILL.test(w));
-function voiceCheck(t){const w=voiceWords(t),sig=w.join(" ");if(sig&&sig!==voiceSig&&!(voiceSig.startsWith(sig)&&sig.length<voiceSig.length)){voiceSig=sig;lastVoice=Date.now();return true}return false}
+/* 2.30: Als weiteres Sprechen zählt nur, wenn MEHR Wörter dazukommen (und mind. 3 Buchstaben mehr).
+   iOS korrigiert erkannte Wörter nachträglich („spät es ist“ → „spät ist es“) – das ist kein Sprechen und verlängert nichts. */
+let voiceN=0,voiceL=0;
+function voiceCheck(t){const w=voiceWords(t),sig=w.join(" "),L=w.join("").length;
+  if(!sig||sig===voiceSig){if(sig)slCount("wiederholt");return false}
+  if(w.length>voiceN&&L>=voiceL+3){voiceSig=sig;voiceN=w.length;voiceL=L;lastVoice=Date.now();slWord(w.length);return true}
+  voiceSig=sig;if(w.length<voiceN||L<voiceL-2){/* iOS hat neu angesetzt (z. B. nach Neustart) */voiceN=Math.min(voiceN,w.length);voiceL=Math.min(voiceL,L)}slCount("korrigiert");return false}
+/* ===== 2.30: Sprachprotokoll – pro Eingabe nur Zeiten und Zähler, KEINE Worte. Verschlüsselt im Gerät, letzte 60 Eingaben ===== */
+let SL=null;const slNow=()=>SL?Date.now()-SL.t0:0;
+function slStart(){slClose("abgelöst durch neue Aufnahme");SL={t0:Date.now(),erstes:null,letztes:null,ende:null,antwort:null,grund:null,woerter:0,korrigiert:0,wiederholt:0,final:0,neustarts:0,nachzuegler:0,fehler:[],online:navigator.onLine,erkennung:sttMode}}
+function slWord(n){if(!SL||SL.ende!=null)return;const t=slNow();if(SL.erstes==null)SL.erstes=t;SL.letztes=t;SL.woerter=n}
+function slCount(k){if(SL&&SL.ende==null)SL[k]++}
+function slEnd(why){if(!SL||SL.ende!=null)return;SL.ende=slNow();SL.grund=why;
+  if(!SL.online&&SL.woerter>=2&&!navigator.onLine){ls.set("sttProof",{datum:new Date().toISOString(),ua:navigator.userAgent});sttMode="lokal";diag("stt lokal bestätigt (ohne Internet erkannt)")}}
+function slSave(){if(!SL)return;if(!SL.woerter&&(SL.ende||0)<1500&&!SL.hinweis){SL=null;return}   // sofort wieder geschlossene Aufnahmen ohne Worte nicht protokollieren
+  const e={...SL,t0:new Date(SL.t0).toISOString()};const L=ls.get("sprachlog",[]);L.push(e);ls.set("sprachlog",L.slice(-60));SL=null}
+function slClose(why){if(!SL)return;slEnd(why);slSave()}
+function slAnswer(){if(SL&&SL.ende!=null&&SL.antwort==null){SL.antwort=slNow();slSave()}}
+function slText(){const L=ls.get("sprachlog",[]),f=x=>x==null?"–":(x/1000).toFixed(1).replace(".",",")+" s";
+  const pr=ls.get("sttProof",null),head=[`Atlas ${ATLAS_REL} · Sprachprotokoll (nur Zeiten, keine Worte) · erstellt ${new Date().toLocaleString("de-AT")}`,
+    `Gerät: ${/iPad/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1)?"iPad":/iPhone/.test(navigator.userAgent)?"iPhone":"anderes"} · ${(navigator.userAgent.match(/OS [\d_]+/)||[""])[0].replace(/_/g,".")}`,
+    `Spracherkennung: ${sttTxt()}${pr?` – Nachweis vom ${new Date(pr.datum).toLocaleDateString("de-AT")}`:" – Nachweis fehlt noch: einmal mit Flugmodus (WLAN aus) mit Atlas sprechen"}`,
+    `Einstellungen: Sprechpause ${String(S.pause||1.6).replace(".",",")} s · Stille-Grenze ${String(S.vadSil||5.5).replace(".",",")} s · längste Eingabe ${S.maxListen||60} s`,
+    `Zeiten ab Aufnahmestart. „Stille“ = letztes Wort bis Aufnahme-Ende. Korrigiert = iOS hat Wörter nachträglich geändert (zählt nicht als Sprechen).`,""];
+  return head.concat(L.slice().reverse().map(e=>`${new Date(e.t0).toLocaleString("de-AT",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"})} | 1. Wort ${f(e.erstes)} | letztes Wort ${f(e.letztes)} | Ende ${f(e.ende)} (${e.grund||"?"}) | Stille ${e.letztes!=null&&e.ende!=null?f(e.ende-e.letztes):"–"} | Antwort ${f(e.antwort)} | ${e.woerter} Wörter | korrigiert ${e.korrigiert} | wiederholt ${e.wiederholt} | iOS-Satzende ${e.final} | Neustarts ${e.neustarts} | Nachzügler ${e.nachzuegler}${e.fehler.length?" | Fehler "+e.fehler.join(","):""} | ${e.online?"online":"offline"}${e.hinweis?" | "+e.hinweis:""}`)).join("\n")}
 const HEAR_RE=/\b(hör|hoer|hör mal|hoer mal) (mir )?zu\b/i;
 const hearOnly=t=>{const n=norm(t).replace(wakeRe(),"").replace(/\b(bitte|mal|jetzt)\b/g,"").trim();return HEAR_RE.test(n)&&n.replace(HEAR_RE,"").trim()===""};
 // Zuhören beenden: sichtbar, Mikrofon zu (außer „Auf Zuruf hören“ ist eingeschaltet – dann nur noch auf den Namen achten)
-function closeListen(label){convo=false;listening=false;resetUtter();voiceSig="";$("heard").textContent="";clearTimeout(listenRetry);
+function closeListen(label,why){slClose(why||"ohne Text beendet");convo=false;listening=false;resetUtter();voiceSig="";$("heard").textContent="";clearTimeout(listenRetry);
   if(recActive&&!(stream&&S.wakeListen)){try{rec.abort()}catch{}}setMode("idle",label||idleLabel());diag("zuhören beendet")}
 let listenRetry=0;
 const listenLbl=()=>{const l=listenStart+maxListenMs()-Date.now();return l<=10000&&voiceWords(heardAll()).length?`Hört zu · noch ${Math.max(0,Math.ceil(l/1000))} s`:"Hört zu"};
@@ -1251,22 +1275,23 @@ function showDone(on){const b=$("doneBtn");if(b)b.hidden=!on}
 // Satz klingt unfertig und die Pause ist lang: kurz nachfragen, Bisheriges behalten, weiter zuhören
 function askMore(){askedMore=true;utterPrev=heardAll();sessText="";showDone(true);try{rec.stop()}catch{}
   speak(pickFresh("more",["Möchtest du noch etwas ergänzen?","Noch was dazu?","Magst du noch was ergänzen?"]),()=>{ignoreUntil=Date.now()+300;lastVoice=Date.now();setMode("listen","Hört zu");ensureRec();
-    clearTimeout(moreTimer);moreTimer=setTimeout(()=>finishUtter(false),4500)})}
-function finishUtter(manual){clearTimeout(moreTimer);if(finishing||flushed)return;const t0=heardAll();if(t0.length<2){if(manual)endConvo();return}
-  finishing=true;showDone(false);setMode("think","Denkt nach");perf.flushAt=performance.now()-(manual?0:pauseMs());
+    clearTimeout(moreTimer);moreTimer=setTimeout(()=>finishUtter(false,"nach Nachfrage"),4500)})}
+function finishUtter(manual,why){clearTimeout(moreTimer);if(finishing||flushed)return;const t0=heardAll();if(t0.length<2){if(manual)closeListen(null,why||"manuell ohne Text");return}
+  finishing=true;slEnd(why||(manual?"manuell":"Sprechpause"));showDone(false);setMode("think","Denkt nach");perf.flushAt=performance.now()-(manual?0:pauseMs());
   try{rec.stop()}catch{}finTimer=setTimeout(sendUtter,manual?250:600)}
 function sendUtter(){if(!finishing)return;clearTimeout(finTimer);const t=heardAll();finishing=false;flushed=true;sessText="";utterPrev="";askedMore=false;
-  if(!t||t.length<2||(t===lastFlush.t&&Date.now()-lastFlush.at<4000)||isEcho(t)){flushed=false;if(convo)listen();return}
+  if(!t||t.length<2||(t===lastFlush.t&&Date.now()-lastFlush.at<4000)||isEcho(t)){if(SL){SL.hinweis=isEcho(t)?"verworfen: Echo von Atlas":"verworfen: doppelt/leer";slSave()}flushed=false;if(convo)listen();return}
   // Schleifenschutz: mehr als 4 Durchgänge in 20 s ohne neue Pause = etwas stimmt nicht -> anhalten
   turnTimes.push(Date.now());while(turnTimes.length&&Date.now()-turnTimes[0]>20000)turnTimes.shift();if(turnTimes.length>4){turnTimes.length=0;endConvo("Kugel antippen zum Weitersprechen");return}
   lastFlush={t,at:Date.now()};handleUtterance(t)}
 function ensureRec(){if(!SR||away||!micAllowed()||(S.sttLocalOnly&&sttMode!=="lokal"))return false;if(recActive)return true;
-  rec=new SR();rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;if(sttMode==="lokal"&&"processLocally" in rec)rec.processLocally=true;   // Spracherkennung auf dem Gerät, wenn iOS das anbietet
-  rec.onstart=()=>{recActive=true;flushed=false;sessText="";baseIdx=0};
-  rec.onresult=e=>{
+  rec=new SR();const me=rec;rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;if(sttMode==="lokal"&&"processLocally" in rec)rec.processLocally=true;   // Spracherkennung auf dem Gerät, wenn iOS das anbietet
+  rec.onstart=()=>{if(me!==rec)return;recActive=true;flushed=false;sessText="";baseIdx=0};
+  rec.onresult=e=>{if(me!==rec)return;   // verspätete Ergebnisse einer alten Aufnahme (z. B. Echo der letzten Antwort) ignorieren
+    const last=e.results[e.results.length-1],iosFinal=!!(last&&last.isFinal);if(iosFinal&&listening&&!finishing)slCount("final");
     // gesamten Text dieser Aufnahme neu zusammensetzen (fertige + vorläufige Teile)
     let full="";for(let i=Math.min(baseIdx,e.results.length);i<e.results.length;i++)full+=" "+e.results[i][0].transcript;full=full.replace(/\s+/g," ").trim();
-    if(finishing){if(full.length>=sessText.length)sessText=full;return}   // letzter Text kommt nach dem Stopp noch nach
+    if(finishing){if(full.length>sessText.length&&voiceWords(full).length>voiceWords(sessText).length&&SL)SL.nachzuegler++;if(full.length>=sessText.length)sessText=full;return}   // letzter Text kommt nach dem Stopp noch nach
     if(resting){if(wakeRe().test(full)&&!speaking()){try{rec.stop()}catch{}leaveRest(true)}return}   // im Ruhemodus nur auf den Namen achten
     if(convo&&(busy||speaking())){
       // seit der letzten Aussage läuft eine frische Aufnahme: alles darin ist Echo oder Hineinreden (auch wenn iOS dasselbe Ergebnis fortschreibt)
@@ -1282,24 +1307,27 @@ function ensureRec(){if(!SR||away||!micAllowed()||(S.sttLocalOnly&&sttMode!=="lo
       if(wakeRe().test(tail)&&HEAR_RE.test(tail)&&!spokenRecent.some(x=>Date.now()-x.at<20000&&HEAR_RE.test(norm(x.t)))){baseIdx=e.results.length;diag("befehl: hör zu");speak(pickFresh("ack-h",["Ich höre.","Ja, ich hör zu."]),()=>{ignoreUntil=Date.now()+350;listen()});return}}
     if(flushed||!convo||Date.now()<ignoreUntil){baseIdx=e.results.length;return}
     clearTimeout(moreTimer);
-    if(askedMore&&/^(nein|ne|nee|nö|noe|passt|das wars|das war's|das war es|fertig|nichts|nix|sonst nichts|nein danke)\b/i.test(full)){sessText="";finishUtter(true);return}
+    if(askedMore&&/^(nein|ne|nee|nö|noe|passt|das wars|das war's|das war es|fertig|nichts|nix|sonst nichts|nein danke)\b/i.test(full)){sessText="";finishUtter(true,"Nachfrage mit Nein beantwortet");return}
     if(!full)return;sessText=full;
     // nur „Atlas, hör zu“ gesagt, während er ohnehin zuhört: nichts senden, einfach weiter zuhören
-    if(hearOnly(heardAll())){sessText="";utterPrev="";baseIdx=e.results.length;voiceSig="";lastVoice=Date.now();$("heard").textContent="…";setStatus("Ich höre");return}
+    if(hearOnly(heardAll())){sessText="";utterPrev="";baseIdx=e.results.length;voiceSig="";voiceN=0;voiceL=0;lastVoice=Date.now();$("heard").textContent="…";setStatus("Ich höre");return}
     // Rauschen/Wiederholung: keine neuen Wörter -> Stille-Uhr läuft weiter
     if(!voiceCheck(heardAll()))return;
     touch();warm();lastHeard=Date.now();$("heard").textContent=heardAll();vis.energy=Math.min(1,vis.energy+.3);
     if(listening&&!busy&&!speaking()){setMode("listen",listenLbl());showDone(true)}
-    recErrs=0;clearTimeout(silTimer);silTimer=setTimeout(()=>finishUtter(false),pauseFor(heardAll()))};   // keine Zwischenfrage mehr: bei Denkpausen einfach länger still zuhören
-  rec.onerror=e=>{if(e.error!=="no-speech"&&e.error!=="aborted"){recErrs++;diag("stt:"+e.error)}if(e.error==="network")setStatus("Spracherkennung ohne Verbindung",true);else if(e.error==="audio-capture")setStatus("Mikrofon nicht verfügbar",true);
+    recErrs=0;clearTimeout(silTimer);silTimer=setTimeout(()=>finishUtter(false,iosFinal?"Sprechpause (iOS-Satzende)":"Sprechpause"),iosFinal&&!OPEN_END.test(heardAll())?Math.max(900,pauseFor(heardAll())-700):pauseFor(heardAll()))};   // keine Zwischenfrage mehr: bei Denkpausen einfach länger still zuhören
+  rec.onerror=e=>{if(me!==rec)return;if(SL&&SL.ende==null&&e.error!=="aborted")SL.fehler.push(e.error);if(e.error!=="no-speech"&&e.error!=="aborted"){recErrs++;diag("stt:"+e.error)}if(e.error==="network")setStatus("Spracherkennung ohne Verbindung",true);else if(e.error==="audio-capture")setStatus("Mikrofon nicht verfügbar",true);
     if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
-  rec.onend=()=>{recActive=false;lastRecEnd=Date.now();const fresh=restartWanted;restartWanted=false;if(fresh){sessText="";utterPrev=carryText||(utterPrev&&!flushed?utterPrev:"");carryText=""}
+  rec.onend=()=>{if(me!==rec)return;recActive=false;lastRecEnd=Date.now();const fresh=restartWanted;restartWanted=false;if(!fresh&&listening&&!finishing)slCount("neustarts");if(fresh){sessText="";utterPrev=carryText||(utterPrev&&!flushed?utterPrev:"");carryText=""}
     if(finishing){sendUtter()}
     // Erkennung hat sich mitten im Satz selbst beendet (iPhone macht das): Bisheriges aufheben, weiter zuhören
     else if(!flushed&&sessText){utterPrev=heardAll();sessText=""}
     // Neustart: normal sofort, nach Fehlern mit wachsender Pause statt Dauerschleife
     const delay=recErrs?Math.min(8000,400*2**Math.min(recErrs,5)):fresh?40:120;if(recErrs>=3)setStatus("Spracherkennung hakt – ich versuche es weiter",true);
-    if((convo||(stream&&S.wakeListen))&&!away&&micAllowed())setTimeout(()=>{if(recActive||away)return;if(speaking()){recDeferred=true;return}try{rec.start();startFails=0}catch(err){startFails++;diag("stt-start:"+(err&&err.name));
+    if((convo||(stream&&S.wakeListen))&&!away&&micAllowed())setTimeout(()=>{if(recActive||away)return;if(speaking()){recDeferred=true;return}
+      // frische Aufnahme für eine neue Eingabe: neuer Erkenner statt Weiterverwendung des alten
+      if(fresh){if(ensureRec())startFails=0;return}
+      try{rec.start();startFails=0}catch(err){startFails++;diag("stt-start:"+(err&&err.name));
       if(startFails<4)setTimeout(()=>{if(!recActive&&convo)ensureRec()},700*startFails);else if(convo){listening=false;convo=false;setMode("idle","Kugel antippen zum Weitersprechen")}}},delay)};
   try{rec.start();return true}catch(err){diag("stt-start:"+(err&&err.name));return false}}
 function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safari (iPad) oder Chrome verwenden.");return}
@@ -1308,12 +1336,12 @@ function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safar
   if(busy)return;clearTimeout(listenRetry);
   // Antwort läuft noch hörbar: warten, bis Atlas wirklich fertig gesprochen hat
   if(speaking()||(TTS&&speechSynthesis.pending)){listenRetry=setTimeout(listen,300);return}
-  convo=true;listening=true;flushed=false;resetUtter();lastHeard=Date.now();listenStart=lastVoice=Date.now();voiceSig="";maxWarned=false;freshRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
+  convo=true;listening=true;flushed=false;resetUtter();lastHeard=Date.now();listenStart=lastVoice=Date.now();voiceSig="";voiceN=0;voiceL=0;maxWarned=false;slStart();freshRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
 function endConvo(label){closeListen(label)}
 // Stille-Wächter (4× pro Sekunde): beendet die Aufnahme verlässlich, auch wenn die Erkennung hängt oder sich ständig neu startet
 setInterval(()=>{if(!convo||!listening||busy||finishing||flushed||speaking()||away||resting)return;const now=Date.now(),txt=voiceWords(heardAll()).length?heardAll():"";   // nur Geräusche/„äh“ = nichts gesagt
-  if(now-lastVoice>=vadSilMs()){if(txt.length>=2){diag("stille: ende nach "+Math.round((now-lastVoice)/100)/10+" s");finishUtter(false)}else closeListen();return}
-  const left=listenStart+maxListenMs()-now;if(left<=0){diag("zuhören: höchstdauer");if(txt.length>=2)finishUtter(false);else closeListen();return}
+  if(now-lastVoice>=vadSilMs()){if(txt.length>=2){diag("stille: ende nach "+Math.round((now-lastVoice)/100)/10+" s");finishUtter(false,"Stille-Grenze")}else closeListen(null,"nichts gesagt (Stille-Grenze)");return}
+  const left=listenStart+maxListenMs()-now;if(left<=0){diag("zuhören: höchstdauer");if(txt.length>=2)finishUtter(false,"Höchstdauer");else closeListen(null,"nichts gesagt (Höchstdauer)");return}
   if(left<=10000&&txt.length>=2){if(vis.mode==="listen")setMode("listen",listenLbl());if(!maxWarned){maxWarned=true;setStatus("Noch 10 Sekunden – dann antworte ich");vis.energy=1}}},250);
 setInterval(()=>{if(speaking()||busy||finishing)touch();
   if(convo&&listening&&!recActive&&!busy&&!finishing&&!speaking()&&!away&&!resting&&Date.now()-lastRecEnd>4000){diag("stt-wächter");lastRecEnd=Date.now();ensureRec()}
@@ -1884,7 +1912,7 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;const pq=prevQ
   // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
   const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
   const say1=s=>{if(my!==gen)return;const tm=takeMarks(s);s=clean(tm.text);const marks=tm.marks;if(pq){const parts=s.split(/(?<=[.!?])\s+/),keep=parts.filter(x=>!isRepeatQ(x,pq));if(keep.length<parts.length){diag("doppelte frage übersprungen");s=keep.join(" ");if(!s.trim())return}}if(!first){const o=s.replace(OPENER,"").trim();if(!o)return;s=o;first=true}if(!s||!TTS){if(marks.length)prodPlan(marks);return}noteSpoken(s);touch();queued++;const u=mkUtt(s);u._marks=marks;
-    u.onstart=()=>{if(my!==gen)return;if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+    u.onstart=()=>{if(my!==gen)return;slAnswer();if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
     const next=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};u.onend=next;
     u.onerror=ev=>{if(my!==gen)return;const er=(ev&&ev.error)||"";if((er==="interrupted"||er==="canceled")&&!u._again){diag("tts: satz wiederholt");const u2=mkUtt(s);u2._again=true;u2.onstart=u.onstart;u2.onboundary=u.onboundary;u2.onend=next;u2.onerror=next;speechSynthesis.speak(u2);return}next()};
     try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
@@ -2084,13 +2112,13 @@ document.addEventListener("visibilitychange",async()=>{if(document.visibilitySta
 /* ================= Bedienung ================= */
 $("vis").onclick=()=>{unlockAudio();touch();
   // Begrüßung lief stumm, weil der Browser Ton erst nach einem Tipp erlaubt: jetzt hörbar nachholen
-  if(ttsBlocked){ttsBlocked=false;const la=[...log].reverse().find(m=>m.rolle==="assistent");if(la&&Date.now()-Date.parse(la.zeit)<5*60e3&&!busy){hush();speak(la.text,()=>setTimeout(listen,300));return}}if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now();if(!away&&!busy&&!convo){wokeAt=lastGreet=Date.now();diag("aufgewacht (antippen)");greet(true);return}}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true);else endConvo();return}if(busy)return;convo=true;
+  if(ttsBlocked){ttsBlocked=false;const la=[...log].reverse().find(m=>m.rolle==="assistent");if(la&&Date.now()-Date.parse(la.zeit)<5*60e3&&!busy){hush();speak(la.text,()=>setTimeout(listen,300));return}}if(resting){leaveRest(true);return}if(wakeUp()){lastMotion=Date.now();if(!away&&!busy&&!convo){wokeAt=lastGreet=Date.now();diag("aufgewacht (antippen)");greet(true);return}}if(!stream&&!away&&S.key&&!roomAsked){roomAsked=true;startRoom()}if(away){if(!stream)startRoom();if(!listening&&!speaking())listenForCode();return}if(speaking()){hush();ignoreUntil=Date.now()+300;listen();return}if(listening){if(heardAll())finishUtter(true,"Kugel angetippt");else closeListen(null,"Kugel angetippt");return}if(busy)return;convo=true;
   if(!log.some(m=>m.rolle==="assistent"))greet();else listen()};
 $("lvClose").onclick=e=>{e.stopPropagation();closeList()};
 $("suppCard").addEventListener("click",e=>{e.stopPropagation();const r=e.target.closest(".scRow"),id=r?r.dataset.id:(scCur&&scCur.id);if(!id)return;if(/^l-/.test(id))openKbDetail(kbList().find(x=>x.id===id.slice(2)));else if(/^w-/.test(id))openWissenDetail(wById(id));else openDetail(id)});
 $("pdClose").onclick=e=>{e.stopPropagation();closeDetail()};$("prodDet").addEventListener("click",e=>{if(e.target===$("prodDet"))closeDetail()});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("prodDet").hidden)closeDetail()});addEventListener("online",()=>{if(pdCur)pdFoot()});addEventListener("offline",()=>{if(pdCur)pdFoot()});
-$("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true)};
+$("doneBtn").onclick=e=>{e.stopPropagation();finishUtter(true,"Fertig-Taste")};
 $("roomBtn").onclick=()=>stream?stopRoom():startRoom();
 $("stopBtn").onclick=stopAll;
 $("briefBtn").onclick=studyUpdate;
@@ -2230,7 +2258,8 @@ function renderSetup(){
     <div class="field"><label for="sPause">Sprechpause, nach der Atlas antwortet: <b id="sPauseV"></b></label><input type="range" id="sPause" min="2" max="3.5" step="0.1"><div class="note">Länger = Atlas lässt dich in Ruhe ausreden. Mit „Fertig ✓“ oder Antippen der Kugel geht's sofort.</div></div>
     <div class="field"><label for="sVad">Stille, nach der die Aufnahme sicher endet: <b id="sVadV"></b></label><input type="range" id="sVad" min="4" max="8" step="0.5"><div class="note">Kommen so lange keine neuen Wörter, hört Atlas auf zuzuhören und antwortet. Rauschen und „äh“ zählen nicht als Sprache. Hast du nichts gesagt, geht das Mikrofon einfach aus.</div></div>
     <div class="field"><label for="sMaxL">Längste Eingabe am Stück</label><select id="sMaxL"><option value="30">30 Sekunden</option><option value="60">1 Minute</option><option value="90">1,5 Minuten</option><option value="120">2 Minuten</option></select><div class="note">10 Sekunden vor Schluss steht oben „Noch 10 Sekunden“.</div></div>
-    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
+    <div class="row"><button class="btn small" id="sTest" type="button">Stimme testen</button></div><div class="note" id="sPerf"></div>
+    <div class="field" id="slBox"><label>Sprachprotokoll</label><div class="note" id="slInfo"></div><div class="row"><button class="btn small" id="slCopy" type="button">Kopieren</button><button class="btn small" id="slShare" type="button">Senden …</button><button class="btn small" id="slDel" type="button">Löschen</button></div><div class="note" id="slMsg"></div></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
   <section class="card" id="raumCard"><h2>Raum & Protokoll</h2>
     <div class="note">Alles läuft auf dem iPad. Die Kamera vergleicht nur winzige Graustufenbilder (48×36 Punkte) auf Bewegung – keine Fotos, keine Videos, keine Gesichtserkennung, nichts wird gesendet.</div>
     <div class="rpSw" id="rpSw"></div>
@@ -2268,6 +2297,10 @@ function renderSetup(){
   $("appVer").textContent="Atlas "+ATLAS_REL+" · Build "+APP_VERSION;$("sQuick").checked=!!S.quick;$("sKey").value=S.key;$("sModel").value=S.model;$("sFast").value=S.fastModel;$("sName").value=S.aname;$("sAskWho").checked=S.askWho!==false;$("sAskWho").onchange=()=>{S.askWho=$("sAskWho").checked;saveSettings()};$("sPersInfo").textContent=S.persona&&S.persona.trim()?`Geladen: deine eigene Persönlichkeit (${S.persona.length.toLocaleString("de-AT")} Zeichen).`:"Geladen: Standard-Persönlichkeit.";
   $("sPersDef").onclick=()=>confirmBox("Persönlichkeit zurücksetzen?","Dein eigener Text wird durch den Standard ersetzt. Eine Sicherung bleibt erhalten.",()=>{S.persona="";if(!settingsBroken)ls.set("settings",S);renderPane()});$("sNick").value=S.nick||"";$("sSleep").value=S.sleepMin||20;$("sPause").value=S.pause||1.6;$("sPauseV").textContent=String(S.pause||1.6).replace(".",",")+" s";$("sPause").oninput=()=>{$("sPauseV").textContent=String($("sPause").value).replace(".",",")+" s"};$("sVad").value=S.vadSil||5.5;const vv=()=>{$("sVadV").textContent=String($("sVad").value).replace(".",",")+" s"};vv();$("sVad").oninput=vv;$("sMaxL").value=String(S.maxListen||60);{const L=ls.get("perf",[]),f=(m,k)=>{const a=L.filter(x=>x.modus===m&&x[k]!=null).slice(-10).map(x=>x[k]);return a.length?(a.reduce((p,c)=>p+c,0)/a.length/1000).toFixed(1).replace(".",",")+" s ("+a.length+"×)":"–"};
     $("sPerf").textContent=L.length?`Antwortzeit vom Ende deiner Frage bis zum ersten Ton: lokal ${f("lokal","bisTon")}, schnell ${f("schnell","bisTon")}, Experte ${f("experte","bisTon")}. Davon bis Claudes erstes Wort: schnell ${f("schnell","bisErstesWort")}.`:"Antwortzeiten werden gemessen, sobald du mit Atlas sprichst."}
+    {const L=ls.get("sprachlog",[]);$("slInfo").textContent=`${L.length} Eingabe${L.length===1?"":"n"} gespeichert (nur Zeiten, keine Worte; verschlüsselt im Gerät, die letzten 60). Spracherkennung: ${sttTxt()}.`;$("slMsg").textContent="";
+     $("slCopy").onclick=async()=>{try{await navigator.clipboard.writeText(slText());$("slMsg").textContent="Kopiert – jetzt im Claude-Chat einfügen."}catch{$("slMsg").textContent="Kopieren ging nicht – bitte „Senden …“ nutzen."}};
+     $("slShare").onclick=async()=>{try{if(navigator.share){await navigator.share({title:"Atlas Sprachprotokoll",text:slText()});$("slMsg").textContent="Übergeben."}else{await navigator.clipboard.writeText(slText());$("slMsg").textContent="Kopiert."}}catch(e){if(e&&e.name!=="AbortError")$("slMsg").textContent="Senden ging nicht – bitte „Kopieren“ nutzen."}};
+     $("slDel").onclick=()=>confirmBox("Sprachprotokoll löschen?","Alle gespeicherten Zeiten der Spracheingaben werden auf diesem Gerät gelöscht.",()=>{ls.del("sprachlog");renderPane()})}
     {const D=ls.get("diag",[]);if(D.length)$("sPerf").textContent+="\nDiagnose (nur Ereignisse, keine Gesprächsinhalte): "+D.slice(-12).map(x=>x.z+" "+x.e).join(" · ")}$("sPersona").value=(S.persona||DEF_PERSONA).replace(/\{NAME\}/g,main().name);$("sOrb").value=S.orb;$("sFx").value=S.fx;$("sPal").value=S.palette;$("sColor").value=S.color||"#34d6d4";$("sRate").value=S.rate;$("sCool").value=String(S.cool);if(typeof renderRaum==="function")renderRaum();$("sSens").value=S.sens;$("sLock").value=S.lockHours;
   const sv=$("sVoice");if(!voices.length)sv.innerHTML="<option value=''>Keine deutsche Stimme gefunden</option>";{const o=document.createElement("option");o.value="system";o.textContent="Systemstimme des Geräts (z. B. Siri)";sv.append(o)}voices.forEach(v=>{const o=document.createElement("option");o.value=vid(v);o.textContent=vlabel(v);sv.append(o)});const cv=voice();sv.value=S.voice==="system"?"system":cv?vid(cv):"";
   if(privKey){$("bUrl").value=bridge?.url||"";$("bTok").value=bridge?.token||"";
@@ -2357,7 +2390,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261116-1951",ATLAS_REL="2.29";
+const APP_VERSION="20261117-0600",ATLAS_REL="2.30";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
@@ -2410,10 +2443,13 @@ const camAllowed=()=>S.camOn&&!S.privat,micAllowed=()=>S.micOn&&!S.privat&&!S.ur
 function netAllowed(kind){if(S.privat)return false;if((kind==="claude"||kind==="bridge"||kind==="notify")&&!S.cloudOn)return false;return true}
 let sttMode="wird geprüft",ttsLocal=null;
 (async()=>{try{if(SR&&typeof SR.available==="function"){const r=await SR.available({langs:["de-DE"],processLocally:true});sttMode=r==="available"?"lokal":r==="downloadable"||r==="downloading"?"lokal möglich (Sprachpaket fehlt)":"Apple-Server (kein lokales Sprachpaket)"}
-  else sttMode=SR?"nicht prüfbar":"nicht vorhanden"}catch{sttMode="nicht prüfbar"}privPaint()})();
+  else sttMode=SR?"nicht prüfbar":"nicht vorhanden"}catch{sttMode="nicht prüfbar"}
+  // Safari meldet nicht, ob lokal erkannt wird. Nachweis: Atlas hat schon einmal OHNE Internet Wörter erkannt (gleiche iOS-Version)
+  {const pr=ls.get("sttProof",null);if(pr&&pr.ua===navigator.userAgent&&sttMode!=="lokal")sttMode="lokal";else if(pr&&pr.ua!==navigator.userAgent){ls.del("sttProof");diag("stt-nachweis verfallen (iOS-Update)")}}
+  privPaint()})();
 function ttsCheck(){try{const v=speechSynthesis.getVoices();const de=v.filter(x=>/^de/i.test(x.lang));const use=(S.voice&&v.find(x=>x.name===S.voice))||de[0];ttsLocal=use?use.localService!==false:null}catch{}}
 try{speechSynthesis.addEventListener&&speechSynthesis.addEventListener("voiceschanged",()=>{ttsCheck();privPaint()})}catch{}
-function sttTxt(){return sttMode==="lokal"?"lokal auf dem iPad":sttMode.startsWith("Apple")?"über Apple-Server":sttMode==="nicht prüfbar"?"Apple (Safari) – ob lokal oder Server, gibt iOS hier nicht preis":sttMode}
+function sttTxt(){return sttMode==="lokal"?(ls.get("sttProof",null)?"lokal auf dem Gerät (ohne Internet nachgewiesen)":"lokal auf dem iPad"):sttMode.startsWith("Apple")?"über Apple-Server":sttMode==="nicht prüfbar"?"Apple (Safari) – ob lokal oder Server, gibt iOS hier nicht preis":sttMode}
 function privPaint(){const st=$("privStrip");if(!st)return;const set=(id,on,val,live,title)=>{const b=$(id);b.classList.toggle("on",!!on);b.classList.toggle("live",!!live);b.setAttribute("aria-pressed",String(!!on));b.querySelector("b").textContent=val;b.title=title||""};
   set("pvCam",camAllowed(),!camAllowed()?"aus":stream?"aktiv":"bereit",!!stream,"Kamera: nur Bewegungserkennung auf dem Gerät, keine Aufnahme");
   set("pvMic",micAllowed(),!micAllowed()?"aus":recActive?"hört zu":"bereit",recActive,"Mikrofon: nur während Atlas zuhört");

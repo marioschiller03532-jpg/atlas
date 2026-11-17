@@ -1,7 +1,7 @@
 // Atlas Service Worker – Offline-Start. Version wird beim Bauen eingesetzt; jede neue App-Version = neuer Service Worker.
 // Sicher aktualisieren: Die neue App-Oberfläche wird erst komplett geladen und geprüft, dann wird umgeschaltet.
 // Schlägt der Download fehl, bleibt die alte, funktionierende Offline-Version unangetastet.
-const VERSION="20261116-1951";
+const VERSION="20261117-0600";
 const SHELL="atlas-app-"+VERSION;   // App-Oberfläche dieser Version (index.html enthält alles: Code, Stil, Symbol)
 const DATEN="atlas-daten-v1";       // Katalog, Bild-Verzeichnis, Wissensbibliothek (verschlüsselt), Bild-Zuordnung, Wissensquellen – je 1 Kopie
 // Produktbilder/Nährwerttabellen verwaltet Atlas selbst im Speicher „atlas-bilder-v1“ (verschlüsselt, mit Schlüssel-Kennung).

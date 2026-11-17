@@ -1,5 +1,13 @@
 # Atlas – Änderungen
 
+## 2.30 (17.11.2026) – Spracheingabe Stufe 1 + Sprachprotokoll
+- Sprachprotokoll pro Eingabe (nur Zeiten/Zähler, keine Worte): Aufnahmestart, erstes und letztes erkanntes Wort, Ende + Grund (Sprechpause, iOS-Satzende, Stille-Grenze, Höchstdauer, Fertig-Taste, Kugel, nichts gesagt …), Antwortbeginn, iOS-Korrekturen, Wiederholungen, Neustarts, Nachzügler, online/offline. Einstellungen → Stimme → „Sprachprotokoll“: Kopieren / Senden … / Löschen.
+- iOS-Korrekturen zählen nicht mehr als Sprechen: nur wenn mehr Wörter dazukommen.
+- Pro Eingabe ein frischer Erkenner; verspätete Ergebnisse alter Aufnahmen (Echo) werden ignoriert.
+- Meldet iOS ein Satzende, antwortet Atlas 0,7 s früher (nie unter 0,9 s; nicht bei unfertigem Satz).
+- Nachweis „Spracherkennung auf dem Gerät“: einmal ohne Internet gesprochen → belegt (bis zum nächsten iOS-Update).
+- Sonst nichts verändert. Rückfall: /alt/2.29/.
+
 ## 2.29 (16.11.2026) – Gesprächsende-Erkennung
 - Ursache des langen Zuhörens: Nach einer Antwort blieb das Mikrofon bis zu 90 s offen; jedes Ergebnis der Spracherkennung – auch wiederholt gemeldeter gleicher Text oder Geräusche – setzte die Pausen-Uhr zurück; beim Gesprächsende wurde die Erkennung nicht aktiv geschlossen.
 - Stille-Erkennung auf Wortebene: Als Sprache zählen nur neue echte Wörter. Rauschen, „äh/hm“ und Wiederholungen verlängern nichts. Spätestens nach der eingestellten Stille (Standard 5,5 s, 4–8 s) endet die Aufnahme: mit Text antwortet Atlas, ohne Text endet das Zuhören sichtbar und das Mikrofon geht zu.
