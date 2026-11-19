@@ -1,5 +1,11 @@
 # Atlas – Änderungen
 
+## 2.31 (19.11.2026) – Paarzeit in der Morgenroutine (lokal)
+- Kleiner lokaler Dialog in der Morgenroutine einer bestimmten Person: höchstens einmal pro Kalendertag, in der ersten Gesprächspause nach ihrer eigenen Aussage zur Routine (4–12 Uhr), nie durch Bewegung oder Begrüßung.
+- Ja → eine Karte aus der lokalen Liste, dann weiter an derselben Stelle der Routine (offene Routinefrage wird wiederholt). Nein/Heute nicht → kurze Quittung, weiter. Stopp → sofort aus. Schweigen oder unklare Antwort → weiter ohne Karte und ohne Nachfrage.
+- Person, Frage und Karten liegen nur verschlüsselt in kb.enc. Im Gerät gemerkt (verschlüsselt): Datum der letzten Frage, zuletzt verwendete Karten. Keine Cloud, kein Internet, nichts im Gesprächsverlauf.
+- Sonst nichts verändert. Rückfall: /alt/2.30/.
+
 ## 2.30 (17.11.2026) – Spracheingabe Stufe 1 + Sprachprotokoll
 - Sprachprotokoll pro Eingabe (nur Zeiten/Zähler, keine Worte): Aufnahmestart, erstes und letztes erkanntes Wort, Ende + Grund (Sprechpause, iOS-Satzende, Stille-Grenze, Höchstdauer, Fertig-Taste, Kugel, nichts gesagt …), Antwortbeginn, iOS-Korrekturen, Wiederholungen, Neustarts, Nachzügler, online/offline. Einstellungen → Stimme → „Sprachprotokoll“: Kopieren / Senden … / Löschen.
 - iOS-Korrekturen zählen nicht mehr als Sprechen: nur wenn mehr Wörter dazukommen.

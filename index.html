@@ -944,7 +944,7 @@ function isEcho(t){const T=typeof toks==="function"?toks(t):[];if(T.length<2)ret
   return spokenRecent.some(x=>now-x.at<15000&&(sim(T,toks(x.t))>=.6||toks(x.t).join(" ").includes(T.join(" "))))}
 function speak(text,then){if(S.urlaub){diag("urlaub: stumm");if(then)setTimeout(then,0);return}text=clean(text);const shown=text.replace(PMARK,"").replace(/\s+/g," ").trim();noteSpoken(shown);touch();$("said").textContent=shown;if(!TTS||!text){setMode("idle",idleLabel());then&&then();return}
   const my=++gen;const wasBusy=speechSynthesis.speaking||speechSynthesis.pending;speechSynthesis.cancel();const parts=chunk(text.match(/[^.!?…]+[.!?…]*\s*/g)||[text]);afterSpeak=then||null;pending=parts.length;let started=false;
-  const finish0=()=>{if(my!==gen||pending<0)return;pending=0;hideCard(CARD_KEEP);setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;resumeRecAfterSpeech();f&&f()};
+  const finish0=()=>{if(my!==gen||pending<0)return;pending=0;hideCard(CARD_KEEP);setMode("idle",idleLabel());const f=afterSpeak;afterSpeak=null;resumeRecAfterSpeech();if(f)f();else if(pzArmed&&!busy){pzArmed=false;if(pzShouldAsk())setTimeout(pzAsk,300)}};
   const finish=()=>{if(my!==gen)return;if(TTS&&(speechSynthesis.speaking||speechSynthesis.pending)){whenAudioIdle(my,finish0);return}finish0()};
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
@@ -1247,7 +1247,7 @@ function slText(){const L=ls.get("sprachlog",[]),f=x=>x==null?"–":(x/1000).toF
 const HEAR_RE=/\b(hör|hoer|hör mal|hoer mal) (mir )?zu\b/i;
 const hearOnly=t=>{const n=norm(t).replace(wakeRe(),"").replace(/\b(bitte|mal|jetzt)\b/g,"").trim();return HEAR_RE.test(n)&&n.replace(HEAR_RE,"").trim()===""};
 // Zuhören beenden: sichtbar, Mikrofon zu (außer „Auf Zuruf hören“ ist eingeschaltet – dann nur noch auf den Namen achten)
-function closeListen(label,why){slClose(why||"ohne Text beendet");convo=false;listening=false;resetUtter();voiceSig="";$("heard").textContent="";clearTimeout(listenRetry);
+function closeListen(label,why){slClose(why||"ohne Text beendet");pzState=null;convo=false;listening=false;resetUtter();voiceSig="";$("heard").textContent="";clearTimeout(listenRetry);
   if(recActive&&!(stream&&S.wakeListen)){try{rec.abort()}catch{}}setMode("idle",label||idleLabel());diag("zuhören beendet")}
 let listenRetry=0;
 const listenLbl=()=>{const l=listenStart+maxListenMs()-Date.now();return l<=10000&&voiceWords(heardAll()).length?`Hört zu · noch ${Math.max(0,Math.ceil(l/1000))} s`:"Hört zu"};
@@ -1262,7 +1262,36 @@ function stopHeard(full){const w=norm(full).split(/\s+/).slice(-5).join(" ");if(
 function ownShare(txt){const T=toks(txt);if(!T.length)return 1;const own=new Set(spokenRecent.filter(x=>Date.now()-x.at<30000).flatMap(x=>toks(x.t)));return T.filter(w=>own.has(w)).length/T.length}
 let carryText="";
 // Unterbrechung: sofort still, kurz bestätigen, dann zuhören
-function interrupt(kind){diag("stopp");gen++;hush();try{abortCtl&&abortCtl.abort()}catch{}busy=false;offerStudy=false;
+/* ===== 2.31: Paarzeit – kleiner lokaler Dialog in der Morgenroutine einer Person (Person, Frage und Karten nur verschlüsselt in kb.enc) =====
+   Nur wenn diese Person sich selbst angemeldet hat und morgens ihre Routine bespricht; höchstens einmal pro Kalendertag; erste Gesprächspause
+   nach ihrer eigenen Aussage. Komplett lokal: keine Cloud, kein Internet, nichts im Gesprächsverlauf, keine Nachfrage, ob die Karte umgesetzt wurde. */
+let pzArmed=false,pzState=null,pzTalking=false,pzQ=null;
+const PZ_ROUT=/supplement|kapsel|tablette|genommen|nehm|routine|vitamin|magnes|omega|einnahme|rotlicht|eisbad|morgenrunde|pulver|tropfen|abhak/i;
+const pzCfg=()=>{const z=KB&&KB.paarzeit;return z&&Array.isArray(z.karten)&&z.karten.length?z:null};
+const pzIsTarget=()=>{const z=pzCfg();if(!z||!cur||cur.typ==="gast"||cur.typ==="kind")return false;const p=findProfile(z.person);return !!p&&p.id===cur.id&&identAt>0};
+function pzShouldAsk(){const z=pzCfg();if(!z||!pzIsTarget()||S.urlaub||away||resting)return false;const h=new Date().getHours();if(h<4||h>=12)return false;
+  if((ls.get("paarzeit",{}).tag)===dayKey())return false;
+  const sup=(cur.supps||[]).map(x=>norm(String(x).split(/\s[–-]\s/)[0])).filter(x=>x.length>3),L=log.slice(-2).map(x=>x.text).join(" "),n=norm(L);
+  return PZ_ROUT.test(L)||sup.some(x=>n.includes(x))}
+function pzAsk(){const z=pzCfg(),st=ls.get("paarzeit",{});ls.set("paarzeit",{...st,tag:dayKey()});   // vor dem Sprechen merken: ein Neustart fragt heute nicht noch einmal
+  const la=[...log].reverse().find(x=>x.rolle==="assistent");pzQ=la?((String(la.text).replace(PMARK,"").match(/[^.!?…]*\?/g)||[]).pop()||"").trim()||null:null;
+  pzState="frage";convo=true;listening=false;diag("paarzeit: frage");
+  speak((z.frage||"Hast du heute schon an eure Paarzeit gedacht?").replace(/\{name\}/g,cur.name),()=>{ignoreUntil=Date.now()+350;listen()})}
+// zurück zur Routine an derselben Stelle: die letzte offene Frage der Routine wiederholen
+function pzResume(){pzState=null;pzTalking=false;$("said").textContent="";const q=pzQ;pzQ=null;if(q)speak(q,()=>{ignoreUntil=Date.now()+350;listen()});else{ignoreUntil=Date.now()+350;listen()}}
+function pzCard(){const z=pzCfg(),st=ls.get("paarzeit",{}),zul=Array.isArray(st.zuletzt)?st.zuletzt:[];const n=z.karten.length,frei=[...Array(n).keys()].filter(i=>!zul.includes(i));
+  const i=pick(frei.length?frei:[...Array(n).keys()].filter(i=>i!==zul[0]));ls.set("paarzeit",{...st,tag:dayKey(),zuletzt:[i,...zul].slice(0,Math.min(12,n-1))});return z.karten[i]}
+// Antwort auf die Frage – nur Ja / Nein / Stopp werden hier behandelt, alles andere läuft normal weiter (ohne Karte, ohne Nachfrage)
+function pzAnswer(t){pzState=null;const n=norm(t).replace(/^atlas\s+/,""),w=n.split(/\s+/).length;
+  if(/^(stopp?|halt|aufhören|aufhoeren|ruhe)\b/.test(n)&&w<=3){diag("paarzeit: stopp");pzResume();return true}
+  if(w<=4&&/^(ja|jo|jaa|jawohl|gerne|gern|bitte|klar|na klar|ja klar|okay|ok|sicher|passt|logisch|her damit|immer)\b/.test(n)&&!/\bnicht\b/.test(n)){diag("paarzeit: karte");pzTalking=true;listening=false;
+    speak(pzCard(),()=>{pzTalking=false;setTimeout(pzResume,250)});
+    // Mikrofon während der Karte offen halten, damit „Stopp“ sie sofort beendet
+    setTimeout(()=>{if(pzTalking&&!recActive){recDeferred=false;ensureRec()}},400);return true}
+  if(w<=5&&/^(nein|nö|noe|nee|na|heute nicht|nicht heute|lieber nicht|jetzt nicht|später|spaeter|danke nein|nein danke|eher nicht|grad nicht|gerade nicht)\b/.test(n)){diag("paarzeit: nein");listening=false;
+    speak(`Alles gut, ${cur.name}.`,()=>setTimeout(pzResume,150));return true}
+  diag("paarzeit: unklar – weiter");return false}
+function interrupt(kind){if(pzTalking){diag("paarzeit: stopp");gen++;hush();pzTalking=false;busy=false;resetUtter();setTimeout(pzResume,150);return}diag("stopp");gen++;hush();try{abortCtl&&abortCtl.abort()}catch{}busy=false;offerStudy=false;
   convo=true;listening=false;flushed=false;resetUtter();lastHeard=Date.now();touch();$("heard").textContent="…";setMode("idle",idleLabel());setStatus("Unterbrochen – ich höre zu");
   const ack=kind==="name"?pickFresh("ack-n",["Ja?","Ja, ich höre.","Bin da."]):kind==="hoer"?pickFresh("ack-h",["Ich höre.","Ja, ich hör zu."]):pickFresh("ack",["Okay, ich hör zu.","Klar, sag.","Gut, ich höre.","Bin ganz Ohr."]);
   setTimeout(()=>speak(ack,()=>{ignoreUntil=Date.now()+350;listen()}),120)}
@@ -1336,11 +1365,12 @@ function listen(){if(!SR){showErr("Spracheingabe gibt es hier nicht. Bitte Safar
   if(busy)return;clearTimeout(listenRetry);
   // Antwort läuft noch hörbar: warten, bis Atlas wirklich fertig gesprochen hat
   if(speaking()||(TTS&&speechSynthesis.pending)){listenRetry=setTimeout(listen,300);return}
+  if(pzArmed){pzArmed=false;if(pzShouldAsk()){pzAsk();return}}
   convo=true;listening=true;flushed=false;resetUtter();lastHeard=Date.now();listenStart=lastVoice=Date.now();voiceSig="";voiceN=0;voiceL=0;maxWarned=false;slStart();freshRec();setMode("listen","Hört zu");if(!$("heard").textContent)$("heard").textContent="…"}
 function endConvo(label){closeListen(label)}
 // Stille-Wächter (4× pro Sekunde): beendet die Aufnahme verlässlich, auch wenn die Erkennung hängt oder sich ständig neu startet
 setInterval(()=>{if(!convo||!listening||busy||finishing||flushed||speaking()||away||resting)return;const now=Date.now(),txt=voiceWords(heardAll()).length?heardAll():"";   // nur Geräusche/„äh“ = nichts gesagt
-  if(now-lastVoice>=vadSilMs()){if(txt.length>=2){diag("stille: ende nach "+Math.round((now-lastVoice)/100)/10+" s");finishUtter(false,"Stille-Grenze")}else closeListen(null,"nichts gesagt (Stille-Grenze)");return}
+  if(now-lastVoice>=vadSilMs()){if(txt.length>=2){diag("stille: ende nach "+Math.round((now-lastVoice)/100)/10+" s");finishUtter(false,"Stille-Grenze")}else if(pzState==="frage"){slClose("nichts gesagt (Paarzeit)");listening=false;resetUtter();diag("paarzeit: schweigen");pzResume()}else closeListen(null,"nichts gesagt (Stille-Grenze)");return}
   const left=listenStart+maxListenMs()-now;if(left<=0){diag("zuhören: höchstdauer");if(txt.length>=2)finishUtter(false,"Höchstdauer");else closeListen(null,"nichts gesagt (Höchstdauer)");return}
   if(left<=10000&&txt.length>=2){if(vis.mode==="listen")setMode("listen",listenLbl());if(!maxWarned){maxWarned=true;setStatus("Noch 10 Sekunden – dann antworte ich");vis.energy=1}}},250);
 setInterval(()=>{if(speaking()||busy||finishing)touch();
@@ -1621,6 +1651,8 @@ function cardSelfTest(){const p=katById("b-omega-3-forte-700-73");diag("karte: s
   if(!p){speak("Selbsttest Produktkarte: Das Testprodukt fehlt im Katalog.");return}
   speak(`{{b-omega-3-forte-700-73}}Selbsttest Produktkarte. Links neben dem Kreis siehst du jetzt das Omega 3 forte 700 von Biogena. Der Katalog hat ${KAT.produkte.length} Produkte, ${KAT.produkte.filter(x=>x.im).length} davon mit Bild. {{m-vegan-omega-3-kapseln}}Und jetzt wechselt die Karte zu den Omega 3 Kapseln Vegan von MoleQlar. Wenn du beide Karten gesehen hast, funktioniert die Anzeige.`,()=>setTimeout(listen,300))}
 function handleUtterance(t){if(typeof scCur!=="undefined"&&scCur&&$("prodDet").hidden)hideCard(4000);t=hearFix(t);{const c=speechTerms(t);t=c.text;speechHint=c.unsure}$("heard").textContent=t;
+  if(pzState==="frage"){$("heard").textContent="";if(pzAnswer(t))return}
+  pzArmed=false;
   if(/produkt\s*karte\b.*\b(test|teste|testen|prüf|pruef)|\b(test|teste|testen|prüf\w*)\b.*produkt\s*karte/i.test(t)){listening=false;addLog("mensch",t);cardSelfTest();return}
   if(awaitingWho){const a=roomAnswer(t);addLog("mensch",t);listening=false;const back=()=>{ignoreUntil=Date.now()+350;if(convo)listen()};
     if(a&&a.known){const P=a.known.slice().sort((x,y)=>(y.typ==="haupt")-(x.typ==="haupt"));awaitingWho=false;setPerson(P[0].name);touch();
@@ -1637,6 +1669,7 @@ function handleUtterance(t){if(typeof scCur!=="undefined"&&scCur&&$("prodDet").h
    if(w){addLog("mensch",t);listening=false;awaitingWho=false;
      if(w.p){setPerson(w.p.name);touch();converse(`(System: Die Person hat sich als ${w.p.name} identifiziert. Begrüß ${w.p.name} kurz und persönlich, ohne lange Einleitung.)`,{internal:true,mode:"schnell"});return}
      setPerson(w.name);const a=`Hallo ${w.name}, schön dich kennenzulernen. Wobei kann ich helfen?`;addLog("assistent",a);speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}}
+  pzArmed=pzIsTarget();   // erst nach Anmeldung/Begrüßung: nur ihre eigenen Aussagen zählen
   if(isMain()&&LIST_CLOSE_RE.test(t)&&listOpen){closeList();addLog("mensch",t);const a=pickFresh("lclose",["Liste ist zu.","Alles klar, Liste geschlossen.","Passt, ich mach sie zu."]);addLog("assistent",a);listening=false;speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}
   if(isMain()&&LIST_OPEN_RE.test(t)){const p=whoseList(t);addLog("mensch",t);listening=false;
     if(!p){const a=/\b[A-ZÄÖÜ][a-zäöüß]+s\b/.test(t)?"Diese Person habe ich noch nicht angelegt. Soll ich sie anlegen?":"Wessen Liste soll ich zeigen, deine oder die von jemand anderem?";addLog("assistent",a);speak(a,()=>{ignoreUntil=Date.now()+350;if(convo)listen()});return}
@@ -2390,7 +2423,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261117-0600",ATLAS_REL="2.30";
+const APP_VERSION="20261119-0648",ATLAS_REL="2.31";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
