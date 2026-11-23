@@ -378,6 +378,7 @@ function makeOrb(cv,opt){
   function core(cx,cy,R,a,b,E,scale){const r=R*(0.14+0.16*E)*(scale||1),g=ctx.createRadialGradient(cx,cy,0,cx,cy,r*2);g.addColorStop(0,"rgba(255,250,240,0.95)");g.addColorStop(.35,`rgba(${b},0.7)`);g.addColorStop(1,`rgba(${a},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,r*2,0,6.283);ctx.fill()}
   function thinkArc(cx,cy,R,b,t,S){if(st.mode!=="think")return;ctx.beginPath();ctx.arc(cx,cy,R*1.5,t*3,t*3+1.4);ctx.strokeStyle=`rgba(${b},0.9)`;ctx.lineWidth=S*0.006;ctx.lineCap="round";ctx.stroke()}
   function frame(now){
+    if(st.variant==="drahtkugel"&&now-last<1000/dkFps()-4){requestAnimationFrame(frame);return}   // Drahtkugel: Bildrate je Zustand begrenzt (Akku)
     const dt=Math.min(.05,(now-last)/1000)*(reduce?0.3:1);last=now;const t=(now-t0)/1000;
     const dpr=Math.min(window.devicePixelRatio||1,2),w=cv.clientWidth,h=cv.clientHeight;
     if(w&&h&&(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr))){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr)}
@@ -388,7 +389,7 @@ function makeOrb(cv,opt){
     ctx.setTransform(1,0,0,1,0,0);ctx.shadowBlur=0;
     if(st.variant==="schwarm"){ctx.globalCompositeOperation="destination-out";ctx.fillStyle="rgba(0,0,0,0.32)";ctx.fillRect(0,0,W,H)}else{ctx.globalCompositeOperation="source-over";ctx.clearRect(0,0,W,H)}
     ctx.globalCompositeOperation="source-over";
-    if(S>0)({ruhe,kern,gitter,schwarm,orbit,atemkern,ringkern}[st.variant]||ringkern)(t,dt,W,H,S,cx,cy);
+    if(S>0)({ruhe,kern,gitter,schwarm,orbit,atemkern,ringkern,drahtkugel}[st.variant]||ringkern)(t,dt,W,H,S,cx,cy);
     requestAnimationFrame(frame)}
   function kern(t,dt,W,H,S,cx,cy){
     const {a,b,c}=colors(t),fx=st.fx||"pur";let E=st.energy;rot+=dt*(st.mode==="think"?1.8:st.mode==="speak"?0.75:0.22);
@@ -713,6 +714,100 @@ function makeOrb(cv,opt){
     ctx.globalCompositeOperation="source-over";
     for(let k=0;k<3;k++){const ph=((t*(0.5+E))+k/3)%1;ctx.beginPath();ctx.arc(cx,cy,R*(0.3+ph*1.4),0,6.283);ctx.strokeStyle=`rgba(${a},${(1-ph)*(0.25+0.4*E)})`;ctx.lineWidth=S*0.003;ctx.stroke()}
     thinkArc(cx,cy,R,b,t,S);core(cx,cy,R,a,b,E,0.8)}
+  // ===== Drahtkugel (ab 2.34): leuchtende 3D-Drahtkugel – geodätisches Netz aus gebogenen Linien und Lichtpunkten, dreht sich räumlich =====
+  // Gesteuert nur über Atlas' echte Zustände (vis.mode): Ruhemodus fast still und dunkel · Bereit langsam · Zuhören langsam + sanfter Puls ·
+  // Denken etwas schneller · Sprechen lebhafter + gleichmäßiger Puls; zusätzlich ein kurzer Lichtimpuls je Wort, NUR wenn die Sprachausgabe Wortgrenzen meldet (vis.beat).
+  // Keine Lautstärke-Messung (die Sprachausgabe gibt keine her) und kein Mikrofon-Zugriff.
+  // Antwortbeginn (Wechsel in „Spricht“ nach mind. 1,5 s Pause): Supernova im Inneren – heller Kern, Lichtstrahlen, wenige Partikel, klingt ab.
+  // Farben aus der gewählten Farbstimmung; „Supernova (bunt)“ ergibt den Verlauf Türkis → Blau → Violett → Magenta → Gold wie im Konzeptbild.
+  // Reduzierte Bewegung: Drehung ca. 35 %, kein Funkeln, kein Wort-Impuls, Supernova nur als weiches Aufleuchten ohne Strahlen/Partikel.
+  const DK=(()=>{const g=(1+Math.sqrt(5))/2,nrm=v=>{const l=Math.hypot(v[0],v[1],v[2]);return [v[0]/l,v[1]/l,v[2]/l]};
+    let V=[[-1,g,0],[1,g,0],[-1,-g,0],[1,-g,0],[0,-1,g],[0,1,g],[0,-1,-g],[0,1,-g],[g,0,-1],[g,0,1],[-g,0,-1],[-g,0,1]].map(nrm);
+    let F=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
+    for(let s=0;s<2;s++){const memo={};const mid=(a,b)=>{const k=a<b?a+"_"+b:b+"_"+a;if(memo[k]===undefined){V.push(nrm([V[a][0]+V[b][0],V[a][1]+V[b][1],V[a][2]+V[b][2]]));memo[k]=V.length-1}return memo[k]};
+      const N=[];for(const [a,b,c] of F){const ab=mid(a,b),bc=mid(b,c),ca=mid(c,a);N.push([a,ab,ca],[b,bc,ab],[c,ca,bc],[ab,bc,ca])}F=N}
+    const seen=new Set(),L=[];for(const f of F)for(let i=0;i<3;i++){const p=f[i],q=f[(i+1)%3],k=p<q?p*4096+q:q*4096+p;if(!seen.has(k)){seen.add(k);L.push([p,q])}}
+    const SEG=4,P=new Float32Array(L.length*(SEG+1)*3);   // jede Kante als kleiner Bogen auf der Kugel (geschwungen, nicht gerade)
+    L.forEach(([p,q],e)=>{for(let k=0;k<=SEG;k++){const u=k/SEG;P.set(nrm([V[p][0]*(1-u)+V[q][0]*u,V[p][1]*(1-u)+V[q][1]*u,V[p][2]*(1-u)+V[q][2]*u]),(e*(SEG+1)+k)*3)}});
+    return {V,L,SEG,P,n:L.length*(SEG+1)}})();   // 162 Lichtpunkte, 480 Linien
+  const dkX=new Float32Array(DK.n),dkY=new Float32Array(DK.n),dkZ=new Float32Array(DK.n);
+  const DKB=[];for(let i=0;i<18;i++)DKB.push([]);
+  const DKM=[[52,214,212],[86,140,255],[156,104,255],[226,96,196],[255,168,88]];
+  let dkYaw=0.6,dkSpd=0.14,dkLum=0.68,dkSl=0,dkT=0,dkPrev="idle",dkSpeakEnd=-9,dkNova=0,dkKick=0,dkBeat=0;const dkRays=[],dkParts=[];
+  const dkFps=()=>dkNova>0||st.mode==="speak"?60:st.mode==="sleep"?12:30;   // Akku: Bild nur so oft neu zeichnen wie nötig
+  function dkGrad(C,u){if(isMulti()){const x=Math.max(0,Math.min(0.9999,u))*(DKM.length-1),i=Math.floor(x),f=x-i;return mixc(DKM[i],DKM[i+1],f*f*(3-2*f))}
+    const top=mixc(C.b,C.a,0.45);return u<0.5?mixc(top,C.a,u*2):mixc(C.a,C.c,(u-0.5)*2)}
+  function drahtkugel(t,dt,W,H,S,cx,cy){
+    const m=st.mode,rdt=reduce?dt/0.3:dt,mo=reduce?0.35:1;   // eigene Zeitbasis: Supernova dauert auch bei reduzierter Bewegung gleich lang
+    dkT+=rdt;
+    const SPD={sleep:reduce?0:0.02,idle:0.14,listen:0.11,think:0.26,speak:0.32}[m];
+    dkSpd+=((SPD===undefined?0.14:SPD)*(m==="sleep"?1:mo)-dkSpd)*Math.min(1,rdt*1.5);dkYaw+=dkSpd*rdt;
+    dkSl+=((m==="sleep"?1:0)-dkSl)*Math.min(1,rdt*1.2);
+    // Antwortbeginn → Supernova
+    if(m==="speak"&&dkPrev!=="speak"&&dkT-dkSpeakEnd>1.5){dkNova=1e-6;dkRays.length=0;dkParts.length=0;
+      for(let i=0;i<9;i++)dkRays.push({a:i/9*6.283+Math.random()*0.5,l:0.6+Math.random()*0.4,w:0.7+Math.random()*0.6,s:Math.random()<0.5?-1:1});
+      for(let i=0;i<18;i++){const z=Math.random()*2-1,ph=Math.random()*6.283,r=Math.sqrt(1-z*z);dkParts.push({x:Math.cos(ph)*r,y:z,z:Math.sin(ph)*r,v:0.55+Math.random()*0.45,s:0.7+Math.random()*0.8})}}
+    if(dkPrev==="speak"&&m!=="speak")dkSpeakEnd=dkT;dkPrev=m;
+    // Puls: Zuhören sanft (~2,4 s) · Sprechen gleichmäßig (~1,6/s) + Wort-Impuls, wenn gemeldet · Bereit atmet kaum merklich
+    if(st.beat!==dkBeat){dkBeat=st.beat;if(m==="speak"&&!reduce)dkKick=1}
+    dkKick*=Math.exp(-rdt*7);
+    const ph=dkT*6.283;let pulse=0;
+    if(m==="listen")pulse=(reduce?0.05:0.14)*(0.5+0.5*Math.sin(ph/2.4));
+    else if(m==="speak")pulse=(reduce?0.05:0.12)*(0.5+0.5*Math.sin(ph*1.6))+0.16*dkKick;
+    else if(m==="idle"&&!reduce)pulse=0.04*(0.5+0.5*Math.sin(ph/7));
+    const LUM={sleep:0.28,idle:0.68,listen:0.8,think:0.78,speak:0.88}[m];
+    dkLum+=((LUM===undefined?0.68:LUM)-dkLum)*Math.min(1,rdt*(m==="speak"?5:1.6));
+    const lum=Math.min(1.15,dkLum+pulse);
+    const C0=rkColors(t),C={a:C0.a,b:C0.b,c:C0.c},dark=[26,40,78];
+    const col=u=>{const c=dkGrad(C,u);return dkSl>0.01?mixc(c,dark,0.55*dkSl):c};
+    // räumliche Drehung: um die Hochachse, leicht gekippt, die Kippung wandert sehr langsam
+    const R=S*0.34*(1+0.025*pulse),cY=Math.cos(dkYaw),sY=Math.sin(dkYaw),tl=0.42+0.07*Math.sin(dkT*0.11)*mo,cT=Math.cos(tl),sT=Math.sin(tl),f=3.4;
+    const P=DK.P;for(let i=0,j=0;i<DK.n;i++,j+=3){const x=P[j],y=P[j+1],z=P[j+2],x1=x*cY+z*sY,z1=-x*sY+z*cY,y1=y*cT-z1*sT,z2=y*sT+z1*cT,pr=f/(f-z2);dkX[i]=cx+x1*R*pr;dkY[i]=cy-y1*R*pr;dkZ[i]=z2}
+    const proj=(x,y,z,k)=>{const x1=x*cY+z*sY,z1=-x*sY+z*cY,y1=y*cT-z1*sT,z2=y*sT+z1*cT,pr=f/(f-z2*k);return [cx+x1*R*k*pr,cy-y1*R*k*pr,z2]};
+    ctx.globalCompositeOperation="lighter";ctx.lineCap="round";ctx.lineJoin="round";
+    // Umgebungslicht und schwaches Innenlicht
+    let gr=ctx.createRadialGradient(cx,cy,R*0.2,cx,cy,R*1.6);const ca=col(0.45);
+    gr.addColorStop(0,`rgba(${rgb(ca)},${0.07*lum})`);gr.addColorStop(0.6,`rgba(${rgb(col(0.7))},${0.035*lum})`);gr.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(cx,cy,R*1.6,0,6.283);ctx.fill();
+    // Linien nach Tiefe (hinten/mitte/vorne) und Farbe bündeln: wenige Zeichenbefehle, schont den Akku
+    for(const b of DKB)b.length=0;const SG=DK.SEG+1,half=DK.SEG>>1;
+    for(let e=0;e<DK.L.length;e++){const mi=e*SG+half,z=dkZ[mi],u=Math.max(0,Math.min(0.999,(dkY[mi]-(cy-R))/(2*R)));DKB[(z<-0.3?0:z<0.35?1:2)*6+Math.floor(u*6)].push(e)}
+    const lw0=Math.max(1,S*0.0022),ALPH=[0.16,0.42,0.85],LWF=[0.7,0.9,1.15];
+    for(let d=0;d<3;d++){
+      if(d===1)dkNovaDraw(cx,cy,R,S,C,rdt,proj);   // Supernova liegt im Inneren: hinter den vorderen Linien
+      for(let c=0;c<6;c++){const B=DKB[d*6+c];if(!B.length)continue;ctx.beginPath();
+        for(const e of B){let i=e*SG;ctx.moveTo(dkX[i],dkY[i]);for(let k=1;k<SG;k++){i++;ctx.lineTo(dkX[i],dkY[i])}}
+        const cc=rgb(col((c+0.5)/6)),a=ALPH[d]*lum,lw=lw0*LWF[d];
+        if(d===2){ctx.strokeStyle=`rgba(${cc},${Math.min(1,a*0.2)})`;ctx.lineWidth=lw*3;ctx.stroke()}   // weicher Schein nur vorne (spart Rechenzeit)
+        ctx.strokeStyle=`rgba(${cc},${Math.min(1,a)})`;ctx.lineWidth=lw;ctx.stroke()}}
+    // Lichtpunkte an den Knoten – ebenfalls nach Tiefe und Farbe gebündelt
+    for(const b of DKB)b.length=0;const V=DK.V,tw=(m==="listen"||m==="speak")&&!reduce;
+    for(let i=0;i<V.length;i++){const v=V[i],x1=v[0]*cY+v[2]*sY,z1=-v[0]*sY+v[2]*cY,y1=v[1]*cT-z1*sT,z2=v[1]*sT+z1*cT,pr=f/(f-z2),x=cx+x1*R*pr,y=cy-y1*R*pr;
+      const u=Math.max(0,Math.min(0.999,(y-(cy-R))/(2*R)));DKB[(z2<-0.3?0:z2<0.35?1:2)*6+Math.floor(u*6)].push(x,y)}
+    const NA=[0.2,0.55,1],NR=[0.45,0.7,1],twk=tw?0.86+0.14*Math.sin(dkT*3.1):1;
+    for(let d=0;d<3;d++)for(let c=0;c<6;c++){const B=DKB[d*6+c];if(!B.length)continue;const cc=col((c+0.5)/6);
+      if(d>0){const r=S*(0.005+0.006*NR[d])*(1+0.5*pulse);ctx.beginPath();for(let k=0;k<B.length;k+=2){ctx.moveTo(B[k]+r,B[k+1]);ctx.arc(B[k],B[k+1],r,0,6.283)}
+        ctx.fillStyle=`rgba(${rgb(cc)},${0.13*lum*NA[d]})`;ctx.fill()}
+      const r2=S*(0.0014+0.0022*NR[d]);ctx.beginPath();for(let k=0;k<B.length;k+=2){ctx.moveTo(B[k]+r2,B[k+1]);ctx.arc(B[k],B[k+1],r2,0,6.283)}
+      ctx.fillStyle=`rgba(${rgb(mixc(cc,[255,255,255],0.55))},${Math.min(1,(0.18+0.82*NA[d])*lum*(d===2?twk:1))})`;ctx.fill()}
+    ctx.globalCompositeOperation="source-over"}
+  function dkNovaDraw(cx,cy,R,S,C,rdt,proj){
+    if(dkNova<=0)return;dkNova+=rdt;const D=reduce?1.3:1.9,p=dkNova/D;if(p>=1){dkNova=0;dkRays.length=0;dkParts.length=0;return}
+    const amp=Math.min(1,dkNova/0.12)*Math.pow(1-p,1.6)*(reduce?0.55:1),B=rgb(C.b),A=rgb(C.a);
+    // heller Kern
+    const cr=R*(0.1+0.16*Math.sin(Math.min(1,p*2.2)*Math.PI/2)),g=ctx.createRadialGradient(cx,cy,0,cx,cy,cr*2.2);
+    g.addColorStop(0,`rgba(255,252,245,${amp})`);g.addColorStop(0.25,`rgba(${B},${0.8*amp})`);g.addColorStop(0.6,`rgba(${A},${0.25*amp})`);g.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,cr*2.2,0,6.283);ctx.fill();
+    if(reduce)return;
+    // sanfte Lichtstrahlen
+    const ease=1-Math.pow(1-Math.min(1,p*1.6),3);
+    for(const r of dkRays){const len=R*r.l*ease,w=R*0.035*r.w*(1-0.5*p);if(len<1)continue;ctx.save();ctx.translate(cx,cy);ctx.rotate(r.a+dkNova*0.15*r.s);
+      const lg=ctx.createLinearGradient(0,0,len,0);lg.addColorStop(0,`rgba(255,250,240,${0.5*amp})`);lg.addColorStop(0.4,`rgba(${B},${0.22*amp})`);lg.addColorStop(1,`rgba(${B},0)`);
+      ctx.fillStyle=lg;ctx.beginPath();ctx.moveTo(0,-w);ctx.lineTo(len,0);ctx.lineTo(0,w);ctx.closePath();ctx.fill();ctx.restore()}
+    // wenige Partikel, die sich räumlich ausbreiten und verblassen
+    const sp=1-Math.pow(1-Math.min(1,p*1.3),2);
+    for(const q of dkParts){const [x,y,z]=proj(q.x,q.y,q.z,q.v*0.95*sp),dz=(z+1)/2;
+      ctx.fillStyle=`rgba(${rgb(mixc(C.b,[255,255,255],0.5))},${amp*(0.35+0.65*dz)})`;ctx.beginPath();ctx.arc(x,y,S*0.0032*q.s*(0.6+0.6*dz),0,6.283);ctx.fill()}}
   requestAnimationFrame(frame);
   return st;
 }
@@ -768,6 +863,8 @@ if(!settingsBroken&&!ls.get("orbitSet",false)){S.orb="orbit";ls.set("orbitSet",t
 if(!settingsBroken&&!ls.get("atemSet",false)){S.orb="atemkern";ls.set("atemSet",true);saveSettings()}
 // Feste Atlas-Grundgestalt ab 2.13: Ringkern in Türkis (einmalig aktiviert; Farbstimmung und andere Kugeln bleiben wählbar)
 if(!settingsBroken&&!ls.get("ringSet",false)){S.orb="ringkern";S.palette="tuerkis";ls.set("ringSet",true);saveSettings()}
+// 2.34: einmalig auf die Drahtkugel 3D umstellen (Marios Wunsch, 23.11.2026); Ringkern und alle anderen Kugeln bleiben unter Einstellungen → Kugel wählbar
+if(!settingsBroken&&!ls.get("drahtSet",false)){S.orb="drahtkugel";ls.set("drahtSet",true);saveSettings()}
 const TYP={haupt:"Hauptnutzer",erwachsen:"Erwachsen",kind:"Kind",gast:"Gast"};
 const DEFAULT_PROFILES=[
   {id:"haupt",name:"Mario",typ:"haupt",info:"",routine:["Elektrolyte","Eisbad","Aufwärmen","Rotlicht","Training"],supps:[],notes:[]}
@@ -953,7 +1050,7 @@ function speak(text,then){if(S.urlaub){diag("urlaub: stumm");if(then)setTimeout(
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
     for(const p of parts){const u=mkUtt(p);
-      u.onstart=()=>{if(my!==gen)return;slAnswer();if(!started&&typeof dpSet==="function")dpSet("stimme","gestartet",shown.slice(0,40));if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+      u.onstart=()=>{if(my!==gen)return;slAnswer();if(!started&&typeof dpSet==="function")dpSet("stimme","gestartet",shown.slice(0,40));if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45);vis.beat=(vis.beat||0)+1};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
       u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled"){diag("tts:"+lastTTSerr);if(typeof dpSet==="function")dpSet("stimme","fehlgeschlagen","Fehler "+lastTTSerr)}
         // nicht von Atlas abgebrochen (z. B. Gerät hat die Audioausgabe kurz unterbrochen): diesen Satz einmal neu sprechen statt abzubrechen
@@ -1951,7 +2048,7 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;const pq=prevQ
   // erster Satz sofort, danach bündeln, solange Atlas noch spricht -> flüssig statt Satz für Satz
   const add=s=>{bundle=bundle?bundle+" "+s.trim():s.trim();if(queued<=0||bundle.length>=200)flush()};
   const say1=s=>{if(my!==gen)return;const tm=takeMarks(s);s=clean(tm.text);const marks=tm.marks;if(pq){const parts=s.split(/(?<=[.!?])\s+/),keep=parts.filter(x=>!isRepeatQ(x,pq));if(keep.length<parts.length){diag("doppelte frage übersprungen");s=keep.join(" ");if(!s.trim())return}}if(!first){const o=s.replace(OPENER,"").trim();if(!o)return;s=o;first=true}if(!s||!TTS){if(marks.length)prodPlan(marks);return}noteSpoken(s);touch();queued++;const u=mkUtt(s);u._marks=marks;
-    u.onstart=()=>{if(my!==gen)return;slAnswer();if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+    u.onstart=()=>{if(my!==gen)return;slAnswer();if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45);vis.beat=(vis.beat||0)+1};
     const next=()=>{if(my!==gen)return;if(--queued<=0){if(bundle)flush();else if(done)finish()}};u.onend=next;
     u.onerror=ev=>{if(my!==gen)return;const er=(ev&&ev.error)||"";if((er==="interrupted"||er==="canceled")&&!u._again){diag("tts: satz wiederholt");const u2=mkUtt(s);u2._again=true;u2.onstart=u.onstart;u2.onboundary=u.onboundary;u2.onend=next;u2.onerror=next;speechSynthesis.speak(u2);return}next()};
     try{speechSynthesis.resume()}catch{}speechSynthesis.speak(u)};
@@ -2329,7 +2426,7 @@ function renderSetup(){
     <label class="row" for="sAskWho" style="gap:10px;margin:6px 0 10px"><input type="checkbox" id="sAskWho" style="width:22px;height:22px"> Beim Aktivieren fragen, wer spricht (wenn mehrere Personen angelegt sind)</label>
     <div class="field"><label for="sNick">Spitzname (weckt sie auch aus dem Ruhemodus)</label><input type="text" id="sNick" placeholder="optional"></div>
     <div class="field"><label for="sPersona">Persönlichkeit (leer = Standard)</label><textarea id="sPersona" rows="8"></textarea><div class="note">So spricht Atlas mit dir. Du kannst den Text jederzeit anpassen. <b id="sPersInfo"></b></div><div class="row"><button class="btn small" type="button" id="sPersDef">Auf Standard zurücksetzen</button></div></div>
-    <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="ringkern">Ringkern (Atlas-Standard)</option><option value="atemkern">Atemkern (Pixel)</option><option value="orbit">Orbit-Glaskugel</option><option value="ruhe">Ruhige Kugel</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
+    <div class="grid2"><div class="field"><label for="sOrb">Kugel</label><select id="sOrb"><option value="drahtkugel">Drahtkugel 3D (Standard ab 2.34)</option><option value="ringkern">Ringkern (bisheriger Standard)</option><option value="atemkern">Atemkern (Pixel)</option><option value="orbit">Orbit-Glaskugel</option><option value="ruhe">Ruhige Kugel</option><option value="kern">Partikel-Kern</option><option value="gitter">Neuro-Gitter</option><option value="schwarm">Orbit-Schwarm</option></select></div>
     <div class="field"><label for="sFx">Effekt beim Sprechen</label><select id="sFx"><option value="supernova">Supernova (ruhige Kugel)</option><option value="urknall">Urknall (ruhige Kugel)</option><option value="pur">Pur (Partikel-Kern)</option><option value="funken">Funken (Partikel-Kern)</option><option value="atmen">Atmen (Partikel-Kern)</option><option value="hud">Jarvis-HUD (Partikel-Kern)</option></select></div></div>
     <div class="grid2"><div class="field"><label for="sPal">Farbstimmung</label><select id="sPal"></select><label for="sColor" style="margin-top:6px">Eigene Farbe <span class="muted">(bei „Eigene Farbe“)</span></label><input type="color" id="sColor" value="#34d6d4"></div>
     <div class="field"><label for="sVoice">Stimme</label><select id="sVoice"></select></div></div>
@@ -2475,7 +2572,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261123-0628",ATLAS_REL="2.33";
+const APP_VERSION="20261123-2045",ATLAS_REL="2.34";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}

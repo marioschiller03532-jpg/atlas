@@ -1,5 +1,15 @@
 # Atlas – Änderungen
 
+## 2.34 (23.11.2026) – Drahtkugel 3D
+- Neue Kugel „Drahtkugel 3D“ (Variante `drahtkugel` in `makeOrb`, Canvas, keine Bibliothek, kein Server): geodätisches Netz aus 480 gebogenen Linien und 162 Lichtpunkten, dreht sich wirklich räumlich (Perspektive, hintere Linien dunkler, vordere mit Schein). Wird einmalig als Kugel eingestellt; Ringkern und alle anderen Kugeln bleiben unter Einstellungen → Kugel wählbar.
+- Gekoppelt an Atlas' echte Zustände (`vis.mode`): Bereit langsam · Zuhören langsam + sanfter Puls (~2,4 s) · Denkt nach etwas schneller · Spricht lebhafter + gleichmäßiger Puls · Ruhemodus fast still, dunkel, nur 12 Bilder/s.
+- Antwortbeginn (Wechsel in „Spricht“ nach mind. 1,5 s Pause): Supernova im Inneren – heller Kern, 9 sanfte Lichtstrahlen, 18 Partikel, klingt nach ~1,9 s ab.
+- Sprachausgabe: keine Lautstärke-Reaktion (die Sprachausgabe liefert keinen Pegel), sondern gleichmäßiger Puls; zusätzlich kurzer Lichtimpuls je Wort nur dann, wenn iOS Wortgrenzen meldet (`vis.beat`, neu in beiden `onboundary`). Kein Mikrofonzugriff.
+- Farben aus der gewählten Farbstimmung; „Supernova (bunt)“ ergibt den Verlauf Türkis → Blau → Violett → Magenta → Gold.
+- Akku: Bildrate begrenzt (30/s, beim Sprechen und während der Supernova 60/s, Ruhemodus 12/s); Linien und Punkte gebündelt gezeichnet.
+- Bewegung reduzieren: Drehung ~35 %, kein Funkeln, kein Wort-Impuls, Supernova nur als weiches Aufleuchten.
+- Sonst nichts verändert. Rückfall: /alt/2.33/.
+
 ## 2.33 (23.11.2026) – Bewegung → Begrüßung: Ursachen behoben + Diagnose
 - Ursache 1 (Kamerabilder): Das Kamera-Video war unsichtbar (2×2 px, Deckkraft 0, verdeckt). iOS/WebKit liefert an ein unsichtbares oder verdecktes Video keine neuen Bilder (WebKit-Bug 206843) – Atlas verglich ein stehendes Bild und sah nie Bewegung. Jetzt: 8×6 px, Deckkraft 0,02, oberste Ebene (praktisch unsichtbar, aber für iOS „sichtbar“); pausiert iOS das Video, läuft es sofort weiter.
 - Ursache 2 (Sprachausgabe): iOS spricht erst nach einem Tipp in der Seite. Begrüßung durch Bewegung ohne vorherigen Tipp blieb stumm, der Hinweis stand in einer ausgeblendeten Zeile. Jetzt: Stimme wird beim ersten Tipp irgendwo freigeschaltet; bleibt sie gesperrt, zeigt die Leiste „bitte einmal auf die Kugel tippen“ und die Frage wird danach nachgeholt.

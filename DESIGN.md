@@ -1,5 +1,7 @@
 # Atlas – feste visuelle Grundlage (seit 2.13, 11.11.2026)
 
+> **Ab 2.34 (23.11.2026), auf Marios ausdrücklichen Wunsch:** Hauptdarstellung ist die **Drahtkugel 3D** (Variante `drahtkugel`, siehe Abschnitt unten). Der Ringkern bleibt unverändert erhalten und unter Einstellungen → Kugel wählbar.
+
 Festgelegt von Mario: Diese Ring-und-Kern-Gestaltung ist Atlas' feste Grundgestalt. Künftige Änderungen verfeinern und erweitern sie, ersetzen sie aber nicht durch ein neues Avatar-Konzept. Nur auf ausdrücklichen Wunsch ändern.
 
 ## Grundform
@@ -52,3 +54,10 @@ Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwe
 ## Hintergrund (festgelegt 15.11.2026)
 - Dauerhaft der dunkle Hintergrund (Verlauf um #050c12). Kein weißer Hintergrund – von Mario so entschieden.
 
+
+## Drahtkugel 3D (ab 2.34)
+- Leuchtende geodätische Drahtkugel (Ikosaeder, 2× unterteilt: 162 Lichtpunkte, 480 gebogene Linien), dreht räumlich um eine leicht gekippte Achse. Vorlage: Konzeptbild „Can you reverse the spin“ (nur Anmutung).
+- Farbverlauf oben → unten aus der Farbstimmung; mit „Supernova (bunt)“ Türkis → Blau → Violett → Magenta → Gold.
+- Zustände: Bereit langsam (~45 s/Runde) · Zuhören langsam + sanfter Puls · Denken etwas schneller · Sprechen lebhafter + gleichmäßiger Puls (+ Wort-Impuls, wenn iOS Wortgrenzen meldet) · Ruhemodus fast still, dunkel.
+- Antwortbeginn: Supernova im Inneren (Kern, Strahlen, wenige Partikel), klingt ab.
+- Reduzierte Bewegung: Drehung ~35 %, keine Strahlen/Partikel, nur weiches Aufleuchten.
