@@ -167,6 +167,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .err{color:var(--accent);font-size:14px;max-width:52ch}
 /* 2.27 Raum & Protokoll */
 .rpStat{display:flex;flex-direction:column;gap:4px;margin:10px 0;padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;font-size:14px;line-height:1.4}.rpStat .ok{color:#7fe0a8}.rpStat .bad{color:#ffb38a}.rpStat small{opacity:.7}
+.rpDiag{margin:8px 0;font-size:13px}.rpDiag summary{cursor:pointer;color:var(--accent)}.rpDiag #rpDiag{display:flex;flex-direction:column;gap:3px;margin-top:6px;padding:8px 10px;border:1px dashed rgba(255,255,255,.18);border-radius:10px}.rpDiag .ok{color:#7fe0a8}.rpDiag .bad{color:#ffb38a}.rpLogD{margin-top:4px;opacity:.75;max-height:160px;overflow:auto}
 .rpBar{display:inline-block;position:relative;width:90px;height:8px;border-radius:4px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 6px;overflow:hidden}.rpBar i{position:absolute;left:0;top:0;bottom:0;background:#7fe0a8}.rpBar em{position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;background:rgba(255,255,255,.7)}
 .rpSw{display:flex;flex-direction:column;gap:2px;margin:8px 0}.rpSw label{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px}
 .rpSw label small{display:block;color:var(--muted);font-size:12px}.rpSw input{width:22px;height:22px;flex:none}
@@ -197,7 +198,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 #typeForm input{flex:1}
 input[type=text],input[type=password],input[type=number],input[type=url],textarea,select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:16px}
 textarea{resize:vertical;min-height:78px}
-#cam{position:fixed;width:2px;height:2px;opacity:0;pointer-events:none;left:0;top:0}
+#cam{position:fixed;right:0;bottom:0;width:8px;height:6px;opacity:.02;pointer-events:none;z-index:2147483647}
 /* Blatt (Mehr) */
 .sheet{position:fixed;inset:0;background:rgba(6,10,11,.97);z-index:20;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 10px) max(14px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 30px) max(14px,env(safe-area-inset-left))}
 .sheet-in{max-width:760px;margin:0 auto;display:grid;gap:14px}
@@ -952,14 +953,14 @@ function speak(text,then){if(S.urlaub){diag("urlaub: stumm");if(then)setTimeout(
   // Chrome verschluckt Sprache direkt nach cancel(): kurz warten, dann sprechen
   setTimeout(()=>{if(my!==gen)return;try{speechSynthesis.resume()}catch{}
     for(const p of parts){const u=mkUtt(p);
-      u.onstart=()=>{if(my!==gen)return;slAnswer();if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
+      u.onstart=()=>{if(my!==gen)return;slAnswer();if(!started&&typeof dpSet==="function")dpSet("stimme","gestartet",shown.slice(0,40));if(!started&&perf.end&&!perf.audio){perf.audio=performance.now();perfDone()}started=true;setMode("speak","Spricht");vis.energy=Math.max(vis.energy,.6);startCards(u)};u.onboundary=()=>{vis.energy=Math.min(1,vis.energy+.45)};
       u.onend=()=>{if(my!==gen)return;if(--pending<=0)finish()};
-      u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled")diag("tts:"+lastTTSerr);
+      u.onerror=ev=>{if(my!==gen)return;lastTTSerr=(ev&&ev.error)||"?";if(lastTTSerr!=="interrupted"&&lastTTSerr!=="canceled"){diag("tts:"+lastTTSerr);if(typeof dpSet==="function")dpSet("stimme","fehlgeschlagen","Fehler "+lastTTSerr)}
         // nicht von Atlas abgebrochen (z. B. Gerät hat die Audioausgabe kurz unterbrochen): diesen Satz einmal neu sprechen statt abzubrechen
         if((lastTTSerr==="interrupted"||lastTTSerr==="canceled")&&!u._again){diag("tts: satz wiederholt");const u2=mkUtt(p);u2._again=true;u2.onstart=u.onstart;u2.onboundary=u.onboundary;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
       speechSynthesis.speak(u)}},wasBusy?150:0);
   // Absicherung: startet die Stimme nicht, geht es trotzdem weiter (Text steht ja da)
-  setTimeout(()=>{if(my===gen&&!started&&pending>0){diag("tts:startet nicht");if(!gestured){ttsBlocked=true;setStatus("Tipp einmal auf die Kugel, dann darf ich sprechen.",true);finish();return}if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
+  setTimeout(()=>{if(my===gen&&!started&&pending>0){diag("tts:startet nicht");if(!gestured){ttsBlocked=true;setStatus("Tipp einmal auf die Kugel, dann darf ich sprechen.",true);if(typeof dpSet==="function")dpSet("stimme","fehlgeschlagen","iOS lässt Atlas erst sprechen, nachdem einmal getippt wurde");if(typeof roomBarPaint==="function")roomBarPaint();finish();return}if(typeof dpSet==="function")dpSet("stimme","fehlgeschlagen","Stimme startet nicht (Lautstärke/Ausgabe prüfen)"+(lastTTSerr?" · "+lastTTSerr:""));if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
   // Notbremse, falls das Ende nie gemeldet wird
   setTimeout(()=>{if(my===gen&&pending>0)whenAudioIdle(my,finish0)},4000+text.length*90/Math.max(.5,S.rate))}
 let soundWarned=false,lastTTSerr="",gestured=false,ttsBlocked=false;
@@ -1178,7 +1179,9 @@ function setCustomPalette(hex){const a=hexRgb(hex),b=a.map(v=>Math.round(v+(255-
 function applyTheme(pal,hex){setCustomPalette(hex||S.color);const P=ORB_PALETTES[pal]||ORB_PALETTES.tuerkis,A=P.a||[79,207,203],B=P.b||[189,243,239],C=P.c||A.map(v=>v*0.6),r=document.documentElement.style,rgbS=x=>x.map(Math.round).join(",");
   r.setProperty("--accent",`rgb(${rgbS(A)})`);r.setProperty("--accent-2",`rgb(${rgbS(B)})`);r.setProperty("--glow",`rgba(${rgbS(A)},.14)`);
   const t1=C.map(v=>Math.round(v*0.16+6)),t2=C.map(v=>Math.round(v*0.1+5));r.setProperty("--tint1",`rgb(${rgbS(t1)})`);r.setProperty("--tint2",`rgb(${rgbS(t2)})`);r.setProperty("--lbl",`rgba(${rgbS(B)},.55)`)}
-addEventListener("pointerdown",()=>{gestured=true},{capture:true,passive:true});
+// iOS gibt die Sprachausgabe nur in einer echten Tipp-Geste frei (touchend/click) – einmal genügt
+let speechUnlocked=false;const unlockOnce=()=>{if(speechUnlocked)return;speechUnlocked=true;try{unlockAudio()}catch{}};addEventListener("touchend",unlockOnce,{capture:true,passive:true});addEventListener("click",unlockOnce,{capture:true,passive:true});
+addEventListener("pointerdown",()=>{if(!gestured){gestured=true;if(typeof dpSet==="function")dpSet("stimme","bereit","durch Antippen freigeschaltet")}},{capture:true,passive:true});
 // Diagnose: nur Ereignisse und Fehlercodes, nie Gesprächsinhalte
 function diag(ev){try{const L=ls.get("diag",[]);L.push({z:new Date().toISOString().slice(5,19).replace("T"," "),e:String(ev).slice(0,60)});ls.set("diag",L.slice(-40))}catch{}}
 // Aussprache: nur fürs Vorlesen (Anzeige und Protokoll bleiben unverändert)
@@ -1318,7 +1321,7 @@ function sendUtter(){if(!finishing)return;clearTimeout(finTimer);const t=heardAl
   lastFlush={t,at:Date.now()};handleUtterance(t)}
 function ensureRec(){if(!SR||away||!micAllowed()||(S.sttLocalOnly&&sttMode!=="lokal"))return false;if(recActive)return true;
   rec=new SR();const me=rec;rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;if(sttMode==="lokal"&&"processLocally" in rec)rec.processLocally=true;   // Spracherkennung auf dem Gerät, wenn iOS das anbietet
-  rec.onstart=()=>{if(me!==rec)return;recActive=true;flushed=false;sessText="";baseIdx=0};
+  rec.onstart=()=>{if(me!==rec)return;recActive=true;flushed=false;sessText="";baseIdx=0;if(listening&&typeof dpSet==="function")dpSet("mikro","hört zu","")};
   rec.onresult=e=>{if(me!==rec)return;   // verspätete Ergebnisse einer alten Aufnahme (z. B. Echo der letzten Antwort) ignorieren
     const last=e.results[e.results.length-1],iosFinal=!!(last&&last.isFinal);if(iosFinal&&listening&&!finishing)slCount("final");
     // gesamten Text dieser Aufnahme neu zusammensetzen (fertige + vorläufige Teile)
@@ -1348,7 +1351,7 @@ function ensureRec(){if(!SR||away||!micAllowed()||(S.sttLocalOnly&&sttMode!=="lo
     touch();warm();lastHeard=Date.now();$("heard").textContent=heardAll();vis.energy=Math.min(1,vis.energy+.3);
     if(listening&&!busy&&!speaking()){setMode("listen",listenLbl());showDone(true)}
     recErrs=0;clearTimeout(silTimer);silTimer=setTimeout(()=>finishUtter(false,iosFinal?"Sprechpause (iOS-Satzende)":"Sprechpause"),iosFinal&&!OPEN_END.test(heardAll())?Math.max(900,pauseFor(heardAll())-700):pauseFor(heardAll()))};   // keine Zwischenfrage mehr: bei Denkpausen einfach länger still zuhören
-  rec.onerror=e=>{if(me!==rec)return;if(SL&&SL.ende==null&&e.error!=="aborted")SL.fehler.push(e.error);if(e.error!=="no-speech"&&e.error!=="aborted"){recErrs++;diag("stt:"+e.error)}if(e.error==="network")setStatus("Spracherkennung ohne Verbindung",true);else if(e.error==="audio-capture")setStatus("Mikrofon nicht verfügbar",true);
+  rec.onerror=e=>{if(me!==rec)return;if(e.error!=="aborted"&&e.error!=="no-speech"&&typeof dpSet==="function")dpSet("mikro","fehlgeschlagen",e.error==="not-allowed"?"Mikrofon/Spracherkennung nicht erlaubt (iOS braucht einmal Antippen bzw. Freigabe)":"Fehler "+e.error);if(SL&&SL.ende==null&&e.error!=="aborted")SL.fehler.push(e.error);if(e.error!=="no-speech"&&e.error!=="aborted"){recErrs++;diag("stt:"+e.error)}if(e.error==="network")setStatus("Spracherkennung ohne Verbindung",true);else if(e.error==="audio-capture")setStatus("Mikrofon nicht verfügbar",true);
     if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr("Mikrofon oder Spracherkennung ist nicht erlaubt. iPhone-Einstellungen → Safari → Mikrofon erlauben, und unter Siri das Diktieren einschalten.")}};
   rec.onend=()=>{if(me!==rec)return;recActive=false;lastRecEnd=Date.now();const fresh=restartWanted;restartWanted=false;if(!fresh&&listening&&!finishing)slCount("neustarts");if(fresh){sessText="";utterPrev=carryText||(utterPrev&&!flushed?utterPrev:"");carryText=""}
     if(finishing){sendUtter()}
@@ -2074,14 +2077,21 @@ let roomAsked=false,stream=null,lastMotion=0,lastGreet=0,prevFrame=null,motionTi
 /* ===== 2.32: Kamera-Zustand, Selbstheilung, Status/Test =====
    iPad/iPhone schalten die Kamera ab, sobald Atlas im Hintergrund ist oder der Bildschirm sperrt. Der Stream blieb bisher „an“,
    lieferte aber nur noch ein stehendes Bild – Bewegung wurde nie mehr erkannt. Jetzt: Ende/Stillstand erkennen, beim Zurückkehren neu starten. */
+/* ===== 2.33: Diagnose der ganzen Kette Kamera → Bild → Bewegung → Begrüßung → Stimme → Mikrofon (nur Zustände, keine Bilder) ===== */
+const DP={kamera:{st:"–",why:""},bild:{st:"–",why:""},bewegung:{st:"–",why:""},begruessung:{st:"–",why:""},stimme:{st:"–",why:""},mikro:{st:"–",why:""}},DPLOG=[];
+function dpSet(k,st,why){try{dpSet0(k,st,why)}catch{}}
+function dpSet0(k,st,why){const o=DP[k];if(!o)return;const ch=o.st!==st||o.why!==(why||"");o.st=st;o.why=why||"";o.at=Date.now();if(ch){DPLOG.push({at:o.at,t:k+": "+st+(why?" – "+why:"")});while(DPLOG.length>14)DPLOG.shift()}}
+let camFrames=0,camFps=0,camFpsAt=Date.now();
+function camCount(){const v=$("cam");if(!v||!stream)return;if(v.requestVideoFrameCallback){const f=()=>{if(!stream)return;camFrames++;v.requestVideoFrameCallback(f)};v.requestVideoFrameCallback(f)}}
+setInterval(()=>{const dt=(Date.now()-camFpsAt)/1000;camFps=dt>0?camFrames/dt:0;camFrames=0;camFpsAt=Date.now()},3000);
 let camSt="aus",camWhy="",camErrAt=0,mLevel=0,mThr=0,mHitAt=0,mSeenAt=0,greetAt=ls.get("lastGreetAt",0),greetTest=false,frameSig=0,frameSame=0,camRestarts=0,greetPend=0,camRecAt=0;
 const motionMinMs=()=>[1000,1500,2000,3000].includes(+S.motionMin)?+S.motionMin:1500;
 const wakeHits=()=>Math.max(2,Math.ceil(motionMinMs()/motionMs())+1);   // Treffer in Folge, die zusammen mind. die Mindestdauer abdecken
-function camSet(st,why){if(camSt===st&&camWhy===(why||""))return;camSt=st;camWhy=why||"";diag("kamera: "+st+(why?" ("+why+")":""));roomBtnPaint();if(typeof rpStatus==="function")rpStatus()}
+function camSet(st,why){dpSet("kamera",st==="aktiv"?"aktiv":"inaktiv",st==="aktiv"?"":st+(why?" ("+why+")":""));if(camSt===st&&camWhy===(why||""))return;camSt=st;camWhy=why||"";diag("kamera: "+st+(why?" ("+why+")":""));roomBtnPaint();if(typeof rpStatus==="function")rpStatus()}
 // Hauptbildschirm bleibt ruhig: Leiste nur, während Atlas zuhört, oder wenn die Kamera fehlt/steht
-function roomBarPaint(){const b=$("roomBar");if(!b)return;const hear=vis.mode==="listen",bad=S.motionOn&&camAllowed()&&!ls.get("roomOff",false)&&["zugriff fehlt","angehalten","fehler"].includes(camSt);
+function roomBarPaint(){const b=$("roomBar");if(!b)return;const hear=vis.mode==="listen",mute=ttsBlocked,bad=mute||S.motionOn&&camAllowed()&&!ls.get("roomOff",false)&&["zugriff fehlt","angehalten","fehler"].includes(camSt);
   b.classList.toggle("hear",hear);b.classList.toggle("bad",!hear&&bad);
-  b.textContent=hear?"● Atlas hört zu":camSt==="zugriff fehlt"?"Kamera nicht erlaubt – Atlas reagiert nicht auf Bewegung · antippen für Hilfe":camSt==="angehalten"?"Kamera angehalten – startet neu, sobald Atlas vorne ist · antippen für Details":"Kamera startet nicht · antippen für Details";
+  b.textContent=hear?"● Atlas hört zu":mute?"Atlas wollte sprechen – iOS erlaubt das erst nach einem Tipp: bitte einmal auf die Kugel tippen":camSt==="zugriff fehlt"?"Kamera nicht erlaubt – Atlas reagiert nicht auf Bewegung · antippen für Hilfe":camSt==="angehalten"?"Kamera angehalten – startet neu, sobald Atlas vorne ist · antippen für Details":"Kamera startet nicht · antippen für Details";
   b.hidden=!(hear||bad)}
 function roomBtnPaint(){roomBarPaint();const b=$("roomBtn");if(!b)return;const t=camSt==="aktiv"?"Raum-Modus an":camSt==="zugriff fehlt"?"Raum-Modus · Kamera nicht erlaubt":camSt==="angehalten"?"Raum-Modus · Kamera angehalten":"Raum-Modus";
   b.textContent=t;b.classList.toggle("on",camSt==="aktiv");b.classList.toggle("primary",camSt!=="aktiv")}
@@ -2101,7 +2111,7 @@ async function startRoom(){if(!S.motionOn&&!away){setStatus("Bewegungserkennung 
   ls.del("roomOff");if(await camState()==="prompt")setStatus("Gleich fragt das Gerät nach der Kamera. "+CAM_WHY);
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play();ls.del("roomOff");
     const tr=stream.getVideoTracks()[0];if(tr){tr.onended=()=>{camSet("angehalten","vom System beendet");if(!document.hidden)setTimeout(()=>camRecover("spur beendet"),800)};tr.onmute=()=>camSet("angehalten","vom System unterbrochen");tr.onunmute=()=>{if(stream)camSet("aktiv")}}
-    camSet("aktiv");showErr("")}
+    camSet("aktiv");showErr("");camCount();$("cam").onpause=()=>{if(stream&&!document.hidden){diag("kamera: video pausiert – weiter");$("cam").play().catch(()=>{})}}}
   catch(err){const nm=err&&err.name||"";diag("kamera: "+(nm||"fehler"));stream=null;camErrAt=Date.now();camSet(/NotAllowed|Security/.test(nm)?"zugriff fehlt":"fehler",nm||"unbekannt");
     const msg=/NotAllowed|Security/.test(nm)?"Die Kamera ist nicht freigegeben. "+CAM_WHY+" "+CAM_HOW+" Bis dahin: Kugel antippen oder „Atlas“ sagen."
       :/NotFound|Overconstrained|NotSupported/.test(nm)?"Ich finde keine Kamera an diesem Gerät. Atlas funktioniert trotzdem: Kugel antippen oder „Atlas“ sagen."
@@ -2133,10 +2143,11 @@ function leaveRest(greetNow){resting=false;ls.del("restUntil");sleeping=false;la
 const sleepMs=()=>Math.max(1,+S.sleepMin||20)*60000;
 function goSleep(){if(sleeping)return;sleeping=true;if(convo)endConvo();setMode("sleep",stream?"Schläft":"Schläft · Kugel antippen")}
 function wakeUp(){if(!sleeping)return false;sleeping=false;setMode("idle",idleLabel());return true}
-function checkMotion(){if(!stream||document.hidden||!S.motionOn)return;roomTick();
+function checkMotion(){if(!stream||document.hidden||!S.motionOn){if(document.hidden)dpSet("begruessung","blockiert","Atlas im Hintergrund / Bildschirm gesperrt");return}roomTick();
   sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,n=48*36,g=new Float32Array(n);let m=0,sig=0;for(let i=0;i<n;i++){g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;m+=g[i];sig=(sig*31+(g[i]|0))|0}m/=n;
   // Kamerabild steht komplett still (kein Sensorrauschen) = Kamera liefert nichts mehr -> nach ca. 8 s neu starten
   // (sehr dunkler Raum liefert ebenfalls ein gleiches Bild – dann nicht neu starten; höchstens ein Neustart pro Minute)
+  {const v=$("cam");dpSet("bild",sig!==frameSig?"läuft":"steht",`${v.videoWidth}×${v.videoHeight}, Helligkeit ${m|0}`+(v.requestVideoFrameCallback?`, ${camFps.toFixed(0)} Bilder/s`:""))}
   if(sig===frameSig&&m>8){if(++frameSame*motionMs()>=8000){frameSame=0;if(Date.now()-camRecAt>60000){camRecAt=Date.now();camSet("angehalten","Bild steht");camRecover("bild steht");return}}}else{frameSame=0;frameSig=sig;if(camSt!=="aktiv"&&camAlive())camSet("aktiv")}
   const now=Date.now(),idleFor=now-lastMotion;
   if(resting&&Date.now()>ls.get("restUntil",0)){resting=false;ls.del("restUntil")}
@@ -2146,7 +2157,7 @@ function checkMotion(){if(!stream||document.hidden||!S.motionOn)return;roomTick(
   // Median der Helligkeitsänderung = gleichmäßige Lichtänderung (eine Person verändert nur einen Teil des Bildes)
   const raw=new Float32Array(n);for(let i=0;i<n;i++)raw[i]=g[i]-prevFrame[i];const sorted=Float32Array.from(raw).sort(),shift=sorted[n>>1];
   prevFrame=g;prevMean=m;
-  if(Math.abs(shift)>15){lightHold=now+2500;hits=0;return}   // Licht an/aus
+  if(Math.abs(shift)>15){lightHold=now+2500;hits=0;dpSet("bewegung","ignoriert","Lichtwechsel (ganzes Bild heller/dunkler)");return}   // Licht an/aus
   if(now<lightHold){hits=0;return}                           // Kamera regelt Belichtung nach
   // Zeilenweise Helligkeit ausgleichen (Flimmern von Lampen, langsame Belichtungsänderung der Kamera)
   for(let y=0;y<36;y++){const row=Array.from(raw.subarray(y*48,y*48+48)).sort((a,b)=>a-b),rm=row[24];for(let x=0;x<48;x++)raw[y*48+x]-=rm}
@@ -2154,24 +2165,26 @@ function checkMotion(){if(!stream||document.hidden||!S.motionOn)return;roomTick(
   // Nur zusammenhängende Veränderungen zählen (eine Person ist ein Fleck, Bildrauschen sind Einzelpunkte)
   let ch=0;for(let y=1;y<35;y++)for(let x=1;x<47;x++){const i=y*48+x;if(!chg[i])continue;const nb=chg[i-1]+chg[i+1]+chg[i-48]+chg[i+48]+chg[i-49]+chg[i-47]+chg[i+47]+chg[i+49];if(nb>=3)ch++}
   const f=ch/n;mLevel=f;
-  if(f>0.6){hits=0;lightHold=now+1500;return}                 // fast alles auf einmal = Licht/Wackeln
+  if(f>0.6){hits=0;lightHold=now+1500;dpSet("bewegung","ignoriert","fast ganzes Bild verändert (Licht/Wackeln)");return}                 // fast alles auf einmal = Licht/Wackeln
+  dpSet("bewegung",f>mThr?(hits+1>=WAKE_HITS?"erkannt":"kurz – zählt noch"):"keine",`Stärke ${(f*100).toFixed(1)} % / Schwelle ${(mThr*100).toFixed(1)} % · ${f>mThr?hits+1:0}/${WAKE_HITS} Treffer`);
   if(f>mThr){hits++;mHitAt=now;if(hits>=WAKE_HITS)mSeenAt=now;if(hits===2)arriving=now-lastMotion>ARRIVE_MS&&now-lastActivity>ARRIVE_MS;if(hits<2)return}else{hits=0;return}
-  if(resting)return;   // Ruhemodus nach "Gute Nacht": Bewegung weckt nicht (nur "Atlas" oder Antippen)
+  if(resting){dpSet("begruessung","blockiert","Ruhemodus nach „Gute Nacht“ bis "+new Date(ls.get("restUntil",0)).toLocaleTimeString("de-AT",{hour:"2-digit",minute:"2-digit"})+" – nur Antippen oder „Atlas“ weckt");return}   // Ruhemodus nach "Gute Nacht": Bewegung weckt nicht (nur "Atlas" oder Antippen)
   lastMotion=now;roomPresence(now,hits>=WAKE_HITS);if(hits<WAKE_HITS)return;   // Sitzung beginnt erst nach ca. 1,5 s anhaltender Bewegung
   // Gespräch läuft, Atlas hört zu, denkt oder spricht: Bewegung zählt nur als Anwesenheit, keine Begrüßung
-  if(convo||busy||listening||finishing||speaking()||sessText){roomNew=false;return}
-  if(S.urlaub){if(sleeping)wakeUp();roomNew=false;return}   // Urlaubsmodus: still, nur Protokoll
-  if(away){if(now-lastGreet>60000){lastGreet=now;wakeUp();awayVisitor()}return}
+  if(convo||busy||listening||finishing||speaking()||sessText){roomNew=false;if(now-greetAt>30000)dpSet("begruessung","blockiert",listening?"Atlas hört gerade zu":speaking()?"Atlas spricht gerade":busy||finishing?"Atlas denkt gerade":"Gespräch läuft noch");return}
+  if(S.urlaub){if(sleeping)wakeUp();roomNew=false;dpSet("begruessung","blockiert","Urlaubsmodus");return}   // Urlaubsmodus: still, nur Protokoll
+  if(away){dpSet("begruessung","blockiert","Abwesenheitsmodus (Besucher-Hinweis statt Begrüßung)");if(now-lastGreet>60000){lastGreet=now;wakeUp();awayVisitor()}return}
   if(sleeping)wakeUp();arriving=false;
   // 2.27: Nur zu Beginn einer NEUEN Raum-Sitzung begrüßen – und nur, wenn die Begrüßungs-Pause vorbei ist. Weitere Bewegung = gleiche Sitzung, kein Sprechen.
   if(greetTest&&!greetPend){greetTest=false;roomNew=false;diag("test: begrüßung trotz pause");greetSoon(now);return}
-  if(!roomNew)return;roomNew=false;
-  if(now-lastGreet<S.cool*60000){diag("neue sitzung, begrüßungs-pause läuft");return}
+  if(!roomNew){if(room)dpSet("begruessung","blockiert",`gleiche Raum-Sitzung seit ${new Date(room.von).toLocaleTimeString("de-AT",{hour:"2-digit",minute:"2-digit"})} – neue Sitzung erst nach ${S.sessMin||20} min ohne Bewegung`);return}roomNew=false;
+  if(now-lastGreet<S.cool*60000){diag("neue sitzung, begrüßungs-pause läuft");dpSet("begruessung","blockiert",`Begrüßungs-Pause: noch ${Math.ceil((lastGreet+S.cool*60000-now)/60000)} min`);return}
   greetSoon(now)}
 // kurz warten (Person kommt erst herein), dann nur fragen, wenn Atlas noch frei, sichtbar und nicht im Ruhe-/Urlaubs-/Privatmodus ist
 function greetSoon(now){wokeAt=now;lastGreet=now;ls.set("lastGreet",now);clearTimeout(greetPend);
-  greetPend=setTimeout(()=>{greetPend=0;if(document.hidden||!stream||convo||busy||listening||finishing||speaking()||resting||S.urlaub||away){diag("begrüßung abgebrochen (atlas nicht frei)");return}
-    greetAt=Date.now();ls.set("lastGreetAt",greetAt);diag("neue raum-sitzung: begrüßung");rpStatus();greet(true)},1200)}
+  dpSet("begruessung","wird ausgelöst","in 1,2 s");
+  greetPend=setTimeout(()=>{greetPend=0;if(document.hidden||!stream||convo||busy||listening||finishing||speaking()||resting||S.urlaub||away){diag("begrüßung abgebrochen (atlas nicht frei)");dpSet("begruessung","blockiert",document.hidden?"Atlas im Hintergrund":"Atlas war in der Wartezeit beschäftigt");return}
+    greetAt=Date.now();dpSet("begruessung","ausgelöst","„Hallo! Wer ist im Raum?“");if(!gestured)dpSet("stimme","wartet","iOS: noch nicht angetippt – Stimme evtl. gesperrt");ls.set("lastGreetAt",greetAt);diag("neue raum-sitzung: begrüßung");rpStatus();greet(true)},1200)}
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"){clearTimeout(greetPend);if(stream)camSet("angehalten","Atlas im Hintergrund oder Bildschirm gesperrt");return}
   if(stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}prevFrame=null;hits=0;setTimeout(()=>camRecover("wieder im vordergrund"),600)});
 addEventListener("pageshow",e=>{if(e.persisted)setTimeout(()=>camRecover("seite zurück"),600)});
@@ -2330,6 +2343,7 @@ function renderSetup(){
   <section class="card" id="raumCard"><h2>Raum & Protokoll</h2>
     <div class="note">Alles läuft auf dem iPad. Die Kamera vergleicht nur winzige Graustufenbilder (48×36 Punkte) auf Bewegung – keine Fotos, keine Videos, keine Gesichtserkennung, nichts wird gesendet.</div>
     <div class="rpStat" id="rpStat" role="status" aria-live="polite"></div>
+    <details class="rpDiag" id="rpDiagBox"><summary>Diagnose (Entwicklung) – Schritt für Schritt</summary><div id="rpDiag"></div></details>
     <div class="row"><button class="btn small" id="rpCam" type="button">Kamera ein</button><button class="btn small" id="rpTest" type="button">Begrüßung testen</button></div>
     <div class="note" id="rpHint">So bleibt die Erkennung an: Atlas muss im Vordergrund offen sein, der Bildschirm darf nicht sperren. iPad/iPhone schalten die Kamera einer Web-App im Hintergrund und bei gesperrtem Bildschirm ab – das lässt sich in Safari nicht umgehen. Lösung: Gerät ans Ladekabel, Einstellungen → Anzeige & Helligkeit → Automatische Sperre → „Nie“, Atlas offen lassen. Optional: Einstellungen → Bedienungshilfen → Geführter Zugriff, dann bleibt Atlas sicher im Vordergrund. Ein externer Bewegungsmelder (z. B. HomeKit) kann Atlas als Web-App nicht direkt wecken.</div>
     <div class="rpSw" id="rpSw"></div>
@@ -2461,7 +2475,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261123-0617",ATLAS_REL="2.32";
+const APP_VERSION="20261123-0628",ATLAS_REL="2.33";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
@@ -2521,7 +2535,12 @@ function rpStatus(){const el=$("rpStat");if(!el)return;const now=Date.now(),ago=
    <div><b>Begrüßung:</b> zuletzt ausgelöst ${ago(greetAt)}${greetTest?' · <span class="ok">Test: nächste Bewegung fragt sofort</span>':pause?` · nächste frühestens in ${Math.ceil(pause/60000)} min (Begrüßungs-Pause)`:" · bereit"}${room?" · Raum-Sitzung läuft":""}</div>
    <small>Bewegung ≠ Person: Atlas weiß nur, dass sich etwas bewegt, und fragt deshalb, wer da ist.</small>`;
   const b=$("rpCam");if(b)b.textContent=stream?"Kamera aus":"Kamera ein";const t=$("rpTest");if(t&&stream)t.textContent=greetTest?"Test läuft – bitte bewegen":"Begrüßung testen"}
-setInterval(()=>{if(!document.hidden&&$("raumCard")&&!$("raumCard").closest("[hidden]"))rpStatus()},1000);
+setInterval(()=>{if(!document.hidden&&$("raumCard")&&!$("raumCard").closest("[hidden]")){rpStatus();rpDiag()}},1000);
+function rpDiag(){const el=$("rpDiag");if(!el||!$("rpDiagBox").open)return;const tm=t=>t?new Date(t).toLocaleTimeString("de-AT"):"",cls=st=>/aktiv$|läuft|erkannt|ausgelöst|gestartet|hört zu|bereit/.test(st)&&!/inaktiv/.test(st)?"ok":/blockiert|fehlgeschlagen|inaktiv|steht|ignoriert|wartet/.test(st)?"bad":"";
+  const R=[["1 Kamera","kamera"],["2 Videobilder","bild"],["3 Bewegung","bewegung"],["4 Begrüßung","begruessung"],["5 Sprachausgabe","stimme"],["6 Mikrofon danach","mikro"]];
+  el.innerHTML=R.map(([n,k])=>{const o=DP[k];return `<div><b>${n}:</b> <span class="${cls(o.st)}">${esc(o.st)}</span>${o.why?` – ${esc(o.why)}`:""} <small>${tm(o.at)}</small></div>`}).join("")+
+   `<div><b>Zustände:</b> sichtbar ${document.visibilityState==="visible"?"ja":"nein"} · angetippt ${gestured?"ja":"nein"} · Ruhemodus ${resting?"ja":"nein"} · Schlaf ${sleeping?"ja":"nein"} · Gespräch ${convo?"ja":"nein"} · hört zu ${listening?"ja":"nein"} · spricht ${speaking()?"ja":"nein"} · Raum-Sitzung ${room?"seit "+tm(room.von)+", letzte Bewegung "+tm(room.last):"keine"} · Begrüßungs-Pause ${Math.max(0,Math.ceil((lastGreet+S.cool*60000-Date.now())/60000))} min</div>`+
+   `<div class="rpLogD">${DPLOG.slice().reverse().map(x=>`<div><small>${tm(x.at)}</small> ${esc(x.t)}</div>`).join("")}</div>`}
 // ===== 2.26: Datenschutz – Kamera/Mikrofon/Cloud-Schalter, Privatmodus, Datenfluss-Übersicht, alles löschen =====
 // Jede Netzverbindung von Atlas läuft über netAllowed(); im Privatmodus verlässt nichts das Gerät.
 const PRIV_DEF={motionOn:true,raumLog:true,urlaub:false,urlaubHinweis:true,sessMin:20,logDays:30,motionMs:500,camOn:true,micOn:true,cloudOn:true,privat:false,wakeListen:false,sttLocalOnly:false,updConfirm:false,privStart:true};

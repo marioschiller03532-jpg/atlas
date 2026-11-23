@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.33 (23.11.2026) – Bewegung → Begrüßung: Ursachen behoben + Diagnose
+- Ursache 1 (Kamerabilder): Das Kamera-Video war unsichtbar (2×2 px, Deckkraft 0, verdeckt). iOS/WebKit liefert an ein unsichtbares oder verdecktes Video keine neuen Bilder (WebKit-Bug 206843) – Atlas verglich ein stehendes Bild und sah nie Bewegung. Jetzt: 8×6 px, Deckkraft 0,02, oberste Ebene (praktisch unsichtbar, aber für iOS „sichtbar“); pausiert iOS das Video, läuft es sofort weiter.
+- Ursache 2 (Sprachausgabe): iOS spricht erst nach einem Tipp in der Seite. Begrüßung durch Bewegung ohne vorherigen Tipp blieb stumm, der Hinweis stand in einer ausgeblendeten Zeile. Jetzt: Stimme wird beim ersten Tipp irgendwo freigeschaltet; bleibt sie gesperrt, zeigt die Leiste „bitte einmal auf die Kugel tippen“ und die Frage wird danach nachgeholt.
+- Ursache 3 (unsichtbare Sperren): gleiche Raum-Sitzung (erst nach 20 min ohne Bewegung neu) und Begrüßungs-Pause blockierten ohne Anzeige. Jetzt sichtbar mit Grund.
+- Diagnose (Entwicklung) in Einstellungen → Raum & Protokoll: 1 Kamera · 2 Videobilder (läuft/steht, Bilder/s) · 3 Bewegung (Stärke/Schwelle, Treffer) · 4 Begrüßung (ausgelöst/blockiert + Grund) · 5 Sprachausgabe (gestartet/fehlgeschlagen + Grund) · 6 Mikrofon danach; dazu Zustände und Ereignisliste.
+- Rückfall: /alt/2.32/.
+
 ## 2.32 (23.11.2026) – Bewegung erkennen und begrüßen: repariert
 - Ursache: iPad/iPhone beenden die Kamera einer Web-App, sobald Atlas im Hintergrund ist oder der Bildschirm sperrt. Atlas hielt den Stream trotzdem für „an“ und verglich danach nur noch stehende Bilder – Bewegung wurde nie mehr erkannt, bis Atlas neu geladen wurde. Außerdem startete die Kamera beim Öffnen nur, wenn iOS „erlaubt“ meldete (meist meldet iOS „fragen“).
 - Kamera-Zustand wird überwacht (Spur beendet/unterbrochen, Bild steht still > 8 s) und beim Zurückkehren in den Vordergrund automatisch neu gestartet; im dunklen Raum kein Neustart-Karussell.
