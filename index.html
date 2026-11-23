@@ -166,10 +166,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .heard{max-width:52ch;min-height:1.3em;color:var(--muted);font-size:14.5px}
 .err{color:var(--accent);font-size:14px;max-width:52ch}
 /* 2.27 Raum & Protokoll */
+.rpStat{display:flex;flex-direction:column;gap:4px;margin:10px 0;padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;font-size:14px;line-height:1.4}.rpStat .ok{color:#7fe0a8}.rpStat .bad{color:#ffb38a}.rpStat small{opacity:.7}
+.rpBar{display:inline-block;position:relative;width:90px;height:8px;border-radius:4px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 6px;overflow:hidden}.rpBar i{position:absolute;left:0;top:0;bottom:0;background:#7fe0a8}.rpBar em{position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;background:rgba(255,255,255,.7)}
 .rpSw{display:flex;flex-direction:column;gap:2px;margin:8px 0}.rpSw label{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px}
 .rpSw label small{display:block;color:var(--muted);font-size:12px}.rpSw input{width:22px;height:22px;flex:none}
 .rpLog{font-size:14px;line-height:1.5;max-height:320px;overflow:auto;margin:6px 0 10px}.rpLog b{display:block;margin-top:8px}.rpLog .run{color:var(--accent)}
-#urlaubBar{margin-bottom:8px}
+#urlaubBar{margin-bottom:8px}#roomBar{margin-bottom:8px;font-size:14px;cursor:pointer}#roomBar.hear{cursor:default;border-color:var(--accent);opacity:.9}#roomBar.bad{border-color:#ffb38a;color:#ffd9c4}
 /* 2.26 Datenschutz: Schalterleiste + Status */
 #privStrip{display:none}   /* 2.27.2: Statusleiste auf dem Hauptbildschirm ausgeblendet – Schalter und Status laufen weiter (🛡 Datenschutzstatus) */
 .pv{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;line-height:1.2;cursor:pointer}
@@ -278,6 +280,7 @@ h3{font-family:var(--f-display);font-size:15px;font-weight:500;margin:0}
     <div id="prodDet" hidden role="dialog" aria-modal="true" aria-labelledby="pdT"><div id="pdBox"><div class="pdHead"><div class="pdImg" id="pdImg"></div><div><h2 id="pdT"></h2><div class="pdB" id="pdB"></div></div><button type="button" id="pdClose" aria-label="Details schließen">✕</button></div><div id="pdBody"></div><div class="pdFoot" id="pdFoot"></div></div></div>
     <div id="privDet" hidden role="dialog" aria-modal="true" aria-labelledby="pvT"><div id="pvBox"><div class="pdHead"><h2 id="pvT">Datenschutzstatus</h2><button type="button" id="pvClose" aria-label="Schließen">✕</button></div><div id="pvBody"></div></div></div>
     <div class="awaybar" id="awayBar" hidden>Abwesenheitsmodus · Gesperrt</div>
+    <div class="setupbar" id="roomBar" hidden role="status" aria-live="polite"></div>
     <div class="setupbar" id="urlaubBar" hidden role="status">Urlaubsmodus aktiv · Atlas spricht nicht, Mikrofon aus, stilles Anwesenheitsprotokoll</div>
   </main>
   <div>
@@ -918,7 +921,7 @@ async function addNote(text){const t=String(text||"").trim();if(!t)return "leer"
 const vis=makeOrb($("vis"),{variant:S.orb,palette:S.palette,fx:S.fx});vis.label=S.aname.toUpperCase();applyTheme(S.palette,S.color);
 const MODE_TXT={idle:"Bereit",listen:"Hört zu",think:"Denkt nach",speak:"Spricht",sleep:"Ruhemodus"};let statusErr=false;
 function setStatus(txt,err){const el=$("stLbl");if(!el)return;el.textContent=txt;el.classList.toggle("err",!!err);statusErr=!!err}
-function setMode(m,label){if(m==="idle"&&typeof sleeping!=="undefined"&&sleeping)m="sleep";vis.mode=m;const s=$("state");s.textContent=label;s.classList.toggle("listen",m==="listen");
+function setMode(m,label){if(m==="idle"&&typeof sleeping!=="undefined"&&sleeping)m="sleep";vis.mode=m;if(typeof roomBarPaint==="function")roomBarPaint();const s=$("state");s.textContent=label;s.classList.toggle("listen",m==="listen");
   if(m!=="idle"||!statusErr)setStatus(m==="think"&&/Verbindung/.test(label||"")?label:m==="sleep"&&typeof resting!=="undefined"&&!resting?"Schläft":MODE_TXT[m]||"",false)}
 const idleLabel=()=>away?"Abwesenheitsmodus":stream?"Raum-Modus · wartet":"Bereit · Kugel antippen";
 
@@ -1247,7 +1250,7 @@ function slText(){const L=ls.get("sprachlog",[]),f=x=>x==null?"–":(x/1000).toF
 const HEAR_RE=/\b(hör|hoer|hör mal|hoer mal) (mir )?zu\b/i;
 const hearOnly=t=>{const n=norm(t).replace(wakeRe(),"").replace(/\b(bitte|mal|jetzt)\b/g,"").trim();return HEAR_RE.test(n)&&n.replace(HEAR_RE,"").trim()===""};
 // Zuhören beenden: sichtbar, Mikrofon zu (außer „Auf Zuruf hören“ ist eingeschaltet – dann nur noch auf den Namen achten)
-function closeListen(label,why){slClose(why||"ohne Text beendet");pzState=null;convo=false;listening=false;resetUtter();voiceSig="";$("heard").textContent="";clearTimeout(listenRetry);
+function closeListen(label,why){slClose(why||"ohne Text beendet");pzState=null;if(awaitingWho&&!sessText){awaitingWho=false;diag("begrüßung: keine antwort")}convo=false;listening=false;resetUtter();voiceSig="";$("heard").textContent="";clearTimeout(listenRetry);
   if(recActive&&!(stream&&S.wakeListen)){try{rec.abort()}catch{}}setMode("idle",label||idleLabel());diag("zuhören beendet")}
 let listenRetry=0;
 const listenLbl=()=>{const l=listenStart+maxListenMs()-Date.now();return l<=10000&&voiceWords(heardAll()).length?`Hört zu · noch ${Math.max(0,Math.ceil(l/1000))} s`:"Hört zu"};
@@ -2045,7 +2048,7 @@ function impulsFor(p){if(!KB||!Array.isArray(KB.eintraege))return null;const byI
 function morningImpuls(p){if(!morningNow())return null;const key=`impuls:${today}:${p&&p.id||"allg"}`;if(ls.get(key,false))return null;const r=impulsFor(p);if(r){ls.set(key,true);diag("impuls:"+r.id)}return r}
 // nach Begrüßung + Impuls wie gewohnt zum Tag überleiten (Claude kennt Routine, Supplements, Termine)
 function toDayPlan(name,imp){converse(`(System: Morgens. ${name} wurde gerade begrüßt${imp?" und hat einen kurzen Wissensimpuls zu "+imp.name+" gehört":""} – nicht erneut begrüßen, den Impuls nicht wiederholen oder vertiefen, außer er fragt. Geh jetzt wie gewohnt kurz zu dem über, was heute ansteht.)`,{internal:true,mode:"schnell"})}
-function askRoom(){const g=`Hallo, ich bin ${S.aname}. Wer ist gerade im Raum und wobei kann ich helfen?`;
+function askRoom(){const g="Hallo! Wer ist im Raum?";
   setUnknown();awaitingWho=true;whoTries=0;addLog("intern","(Atlas ist durch Bewegung oder Antippen aufgewacht. Wer im Raum ist, weiß Atlas nicht – nur aus der Antwort.)");addLog("assistent",g);convo=true;diag("begrüßung");speak(g,()=>setTimeout(listen,300))}
 function greet(fromWake){
   const M=main();
@@ -2068,6 +2071,25 @@ function greet(fromWake){
     pickFresh("g-abend",[`Guten Abend, ${N}! Wie war dein Tag?`,`Feierabend in Sicht? Wie geht's dir?`,`Abend, ${N}! Langer Tag gewesen, oder eh entspannt?`,`Servus ${N}! Zeit zum Runterkommen. Was brauchst du noch?`]);
   addLog("intern","(Jemand ist in den Raum gekommen. Begrüßt wurde zuerst "+M.name+".)");addLog("assistent",g);convo=true;speak(g,()=>setTimeout(listen,300))}
 let roomAsked=false,stream=null,lastMotion=0,lastGreet=0,prevFrame=null,motionTimer=null,wake=null;
+/* ===== 2.32: Kamera-Zustand, Selbstheilung, Status/Test =====
+   iPad/iPhone schalten die Kamera ab, sobald Atlas im Hintergrund ist oder der Bildschirm sperrt. Der Stream blieb bisher „an“,
+   lieferte aber nur noch ein stehendes Bild – Bewegung wurde nie mehr erkannt. Jetzt: Ende/Stillstand erkennen, beim Zurückkehren neu starten. */
+let camSt="aus",camWhy="",camErrAt=0,mLevel=0,mThr=0,mHitAt=0,mSeenAt=0,greetAt=ls.get("lastGreetAt",0),greetTest=false,frameSig=0,frameSame=0,camRestarts=0,greetPend=0,camRecAt=0;
+const motionMinMs=()=>[1000,1500,2000,3000].includes(+S.motionMin)?+S.motionMin:1500;
+const wakeHits=()=>Math.max(2,Math.ceil(motionMinMs()/motionMs())+1);   // Treffer in Folge, die zusammen mind. die Mindestdauer abdecken
+function camSet(st,why){if(camSt===st&&camWhy===(why||""))return;camSt=st;camWhy=why||"";diag("kamera: "+st+(why?" ("+why+")":""));roomBtnPaint();if(typeof rpStatus==="function")rpStatus()}
+// Hauptbildschirm bleibt ruhig: Leiste nur, während Atlas zuhört, oder wenn die Kamera fehlt/steht
+function roomBarPaint(){const b=$("roomBar");if(!b)return;const hear=vis.mode==="listen",bad=S.motionOn&&camAllowed()&&!ls.get("roomOff",false)&&["zugriff fehlt","angehalten","fehler"].includes(camSt);
+  b.classList.toggle("hear",hear);b.classList.toggle("bad",!hear&&bad);
+  b.textContent=hear?"● Atlas hört zu":camSt==="zugriff fehlt"?"Kamera nicht erlaubt – Atlas reagiert nicht auf Bewegung · antippen für Hilfe":camSt==="angehalten"?"Kamera angehalten – startet neu, sobald Atlas vorne ist · antippen für Details":"Kamera startet nicht · antippen für Details";
+  b.hidden=!(hear||bad)}
+function roomBtnPaint(){roomBarPaint();const b=$("roomBtn");if(!b)return;const t=camSt==="aktiv"?"Raum-Modus an":camSt==="zugriff fehlt"?"Raum-Modus · Kamera nicht erlaubt":camSt==="angehalten"?"Raum-Modus · Kamera angehalten":"Raum-Modus";
+  b.textContent=t;b.classList.toggle("on",camSt==="aktiv");b.classList.toggle("primary",camSt!=="aktiv")}
+// Kamera tot? (Spur beendet, stumm, Video steht) -> neu starten, wenn Atlas sichtbar ist und der Raum-Modus gewollt ist
+function camAlive(){const t=stream&&stream.getVideoTracks()[0];return !!t&&t.readyState==="live"&&!t.muted&&!$("cam").paused}
+async function camRecover(why){if(document.hidden||!S.motionOn||!camAllowed()||ls.get("roomOff",false)||away&&!stream)return;
+  if(stream&&camAlive())return;if(stream){try{await $("cam").play()}catch{}if(camAlive())return}
+  camRestarts++;diag("kamera: neu starten ("+why+")");if(stream)stopRoom(true,true);await startRoom()}
 const small=document.createElement("canvas");small.width=48;small.height=36;const sctx=small.getContext("2d",{willReadFrequently:true});
 async function camState(){try{return (await navigator.permissions.query({name:"camera"})).state}catch{return "unbekannt"}}
 const CAM_WHY="Atlas braucht die Kamera nur, um zu merken, wenn jemand den Raum betritt. Es werden keine Bilder gespeichert und keine Gesichter erkannt.";
@@ -2076,9 +2098,11 @@ const CAM_HOW=/iPad|iPhone|Macintosh/.test(navigator.userAgent)&&"ontouchend" in
   :"Freigeben am Laptop: links neben der Adresse auf das Schloss- bzw. Regler-Symbol klicken → Kamera → „Zulassen“, dann die Seite neu laden.";
 async function startRoom(){if(!S.motionOn&&!away){setStatus("Bewegungserkennung ist aus (Einstellungen → Raum & Protokoll)",true);return}if(!camAllowed()){setStatus(S.privat?"Privatmodus: Kamera bleibt aus":"Kamera ist ausgeschaltet (oben „Kamera“ antippen)",true);privPaint();return}unlockAudio();if(S.wakeListen)ensureRec();
   if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){diag("kamera: nicht verfügbar");showErr("Kamera ist in diesem Browser nicht verfügbar (Atlas muss über https geöffnet sein). Atlas funktioniert trotzdem: Kugel antippen.");return}
-  if(await camState()==="prompt")setStatus("Gleich fragt das Gerät nach der Kamera. "+CAM_WHY);
-  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play();ls.del("roomOff")}
-  catch(err){const nm=err&&err.name||"";diag("kamera: "+(nm||"fehler"));
+  ls.del("roomOff");if(await camState()==="prompt")setStatus("Gleich fragt das Gerät nach der Kamera. "+CAM_WHY);
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:320,height:240},audio:false});$("cam").srcObject=stream;await $("cam").play();ls.del("roomOff");
+    const tr=stream.getVideoTracks()[0];if(tr){tr.onended=()=>{camSet("angehalten","vom System beendet");if(!document.hidden)setTimeout(()=>camRecover("spur beendet"),800)};tr.onmute=()=>camSet("angehalten","vom System unterbrochen");tr.onunmute=()=>{if(stream)camSet("aktiv")}}
+    camSet("aktiv");showErr("")}
+  catch(err){const nm=err&&err.name||"";diag("kamera: "+(nm||"fehler"));stream=null;camErrAt=Date.now();camSet(/NotAllowed|Security/.test(nm)?"zugriff fehlt":"fehler",nm||"unbekannt");
     const msg=/NotAllowed|Security/.test(nm)?"Die Kamera ist nicht freigegeben. "+CAM_WHY+" "+CAM_HOW+" Bis dahin: Kugel antippen oder „Atlas“ sagen."
       :/NotFound|Overconstrained|NotSupported/.test(nm)?"Ich finde keine Kamera an diesem Gerät. Atlas funktioniert trotzdem: Kugel antippen oder „Atlas“ sagen."
       :/NotReadable|Abort/.test(nm)?"Die Kamera wird gerade von einer anderen App benutzt. Schließ die andere App und tippe dann auf „Raum-Modus“. Bis dahin: Kugel antippen."
@@ -2086,9 +2110,9 @@ async function startRoom(){if(!S.motionOn&&!away){setStatus("Bewegungserkennung 
     if(away)$("awayBar").textContent="Abwesenheitsmodus · Kugel antippen, um die Bewegungserkennung zu starten";else{showErr(msg);setMode(sleeping?"sleep":"idle",sleeping?"Schläft · Kugel antippen":"Bereit · Kugel antippen")}return}
   try{wake=await navigator.wakeLock?.request("screen")}catch{}
   $("roomBtn").textContent="Raum-Modus an";$("roomBtn").classList.add("on");$("roomBtn").classList.remove("primary");lastMotion=Date.now();lastGreet=ls.get("lastGreet",0);sleeping=false;prevFrame=null;hits=0;
-  setMode("idle",idleLabel());WAKE_HITS=Math.max(2,Math.round(1500/motionMs()));motionTimer=setInterval(checkMotion,motionMs())}
-function stopRoom(keepPref){if(!keepPref)ls.set("roomOff",true);if(typeof roomEnd==="function")roomEnd("Kamera aus");clearInterval(motionTimer);motionTimer=null;sleeping=false;prevFrame=null;stream?.getTracks().forEach(t=>t.stop());stream=null;try{wake?.release()}catch{}
-  $("roomBtn").textContent="Raum-Modus";$("roomBtn").classList.remove("on");$("roomBtn").classList.add("primary");setMode("idle",idleLabel())}
+  setMode("idle",idleLabel());frameSame=0;WAKE_HITS=wakeHits();motionTimer=setInterval(checkMotion,motionMs());roomBtnPaint()}
+function stopRoom(keepPref,keepSess){if(!keepPref)ls.set("roomOff",true);if(typeof roomEnd==="function"&&!keepSess)roomEnd("Kamera aus");clearInterval(motionTimer);motionTimer=null;sleeping=false;prevFrame=null;stream?.getTracks().forEach(t=>{t.onended=t.onmute=t.onunmute=null;t.stop()});stream=null;try{wake?.release()}catch{}
+  camSet("aus",keepPref?"":"von Hand ausgeschaltet");clearTimeout(greetPend);setMode("idle",idleLabel())}
 /* Bewegung statt Licht: Die App sieht nur Kamerabilder (keinen Lichtsensor, keine Personenerkennung).
    Darum: Helligkeit jedes Bildes ausgleichen, Lichtsprünge und Ganzbild-Änderungen verwerfen, Bewegung erst nach 2 Treffern in Folge zählen. */
 let sleeping=false,lightHold=0,hits=0,prevMean=0,resting=false,wokeAt=0;
@@ -2110,7 +2134,10 @@ const sleepMs=()=>Math.max(1,+S.sleepMin||20)*60000;
 function goSleep(){if(sleeping)return;sleeping=true;if(convo)endConvo();setMode("sleep",stream?"Schläft":"Schläft · Kugel antippen")}
 function wakeUp(){if(!sleeping)return false;sleeping=false;setMode("idle",idleLabel());return true}
 function checkMotion(){if(!stream||document.hidden||!S.motionOn)return;roomTick();
-  sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,n=48*36,g=new Float32Array(n);let m=0;for(let i=0;i<n;i++){g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;m+=g[i]}m/=n;
+  sctx.drawImage($("cam"),0,0,48,36);const d=sctx.getImageData(0,0,48,36).data,n=48*36,g=new Float32Array(n);let m=0,sig=0;for(let i=0;i<n;i++){g[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3;m+=g[i];sig=(sig*31+(g[i]|0))|0}m/=n;
+  // Kamerabild steht komplett still (kein Sensorrauschen) = Kamera liefert nichts mehr -> nach ca. 8 s neu starten
+  // (sehr dunkler Raum liefert ebenfalls ein gleiches Bild – dann nicht neu starten; höchstens ein Neustart pro Minute)
+  if(sig===frameSig&&m>8){if(++frameSame*motionMs()>=8000){frameSame=0;if(Date.now()-camRecAt>60000){camRecAt=Date.now();camSet("angehalten","Bild steht");camRecover("bild steht");return}}}else{frameSame=0;frameSig=sig;if(camSt!=="aktiv"&&camAlive())camSet("aktiv")}
   const now=Date.now(),idleFor=now-lastMotion;
   if(resting&&Date.now()>ls.get("restUntil",0)){resting=false;ls.del("restUntil")}
   const quietFor=now-Math.max(lastMotion,lastActivity);
@@ -2123,12 +2150,12 @@ function checkMotion(){if(!stream||document.hidden||!S.motionOn)return;roomTick(
   if(now<lightHold){hits=0;return}                           // Kamera regelt Belichtung nach
   // Zeilenweise Helligkeit ausgleichen (Flimmern von Lampen, langsame Belichtungsänderung der Kamera)
   for(let y=0;y<36;y++){const row=Array.from(raw.subarray(y*48,y*48+48)).sort((a,b)=>a-b),rm=row[24];for(let x=0;x<48;x++)raw[y*48+x]-=rm}
-  const th=40-S.sens*3,chg=new Uint8Array(n);for(let i=0;i<n;i++)if(Math.abs(raw[i])>th)chg[i]=1;
+  const th=40-S.sens*3,chg=new Uint8Array(n);mThr=0.05-S.sens*0.005;for(let i=0;i<n;i++)if(Math.abs(raw[i])>th)chg[i]=1;
   // Nur zusammenhängende Veränderungen zählen (eine Person ist ein Fleck, Bildrauschen sind Einzelpunkte)
   let ch=0;for(let y=1;y<35;y++)for(let x=1;x<47;x++){const i=y*48+x;if(!chg[i])continue;const nb=chg[i-1]+chg[i+1]+chg[i-48]+chg[i+48]+chg[i-49]+chg[i-47]+chg[i+47]+chg[i+49];if(nb>=3)ch++}
-  const f=ch/n;
+  const f=ch/n;mLevel=f;
   if(f>0.6){hits=0;lightHold=now+1500;return}                 // fast alles auf einmal = Licht/Wackeln
-  if(f>0.05-S.sens*0.005){hits++;if(hits===2)arriving=now-lastMotion>ARRIVE_MS&&now-lastActivity>ARRIVE_MS;if(hits<2)return}else{hits=0;return}
+  if(f>mThr){hits++;mHitAt=now;if(hits>=WAKE_HITS)mSeenAt=now;if(hits===2)arriving=now-lastMotion>ARRIVE_MS&&now-lastActivity>ARRIVE_MS;if(hits<2)return}else{hits=0;return}
   if(resting)return;   // Ruhemodus nach "Gute Nacht": Bewegung weckt nicht (nur "Atlas" oder Antippen)
   lastMotion=now;roomPresence(now,hits>=WAKE_HITS);if(hits<WAKE_HITS)return;   // Sitzung beginnt erst nach ca. 1,5 s anhaltender Bewegung
   // Gespräch läuft, Atlas hört zu, denkt oder spricht: Bewegung zählt nur als Anwesenheit, keine Begrüßung
@@ -2137,10 +2164,17 @@ function checkMotion(){if(!stream||document.hidden||!S.motionOn)return;roomTick(
   if(away){if(now-lastGreet>60000){lastGreet=now;wakeUp();awayVisitor()}return}
   if(sleeping)wakeUp();arriving=false;
   // 2.27: Nur zu Beginn einer NEUEN Raum-Sitzung begrüßen – und nur, wenn die Begrüßungs-Pause vorbei ist. Weitere Bewegung = gleiche Sitzung, kein Sprechen.
+  if(greetTest&&!greetPend){greetTest=false;roomNew=false;diag("test: begrüßung trotz pause");greetSoon(now);return}
   if(!roomNew)return;roomNew=false;
   if(now-lastGreet<S.cool*60000){diag("neue sitzung, begrüßungs-pause läuft");return}
-  wokeAt=now;lastGreet=now;ls.set("lastGreet",now);diag("neue raum-sitzung: begrüßung");greet(true)}
-document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="visible"&&stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}});
+  greetSoon(now)}
+// kurz warten (Person kommt erst herein), dann nur fragen, wenn Atlas noch frei, sichtbar und nicht im Ruhe-/Urlaubs-/Privatmodus ist
+function greetSoon(now){wokeAt=now;lastGreet=now;ls.set("lastGreet",now);clearTimeout(greetPend);
+  greetPend=setTimeout(()=>{greetPend=0;if(document.hidden||!stream||convo||busy||listening||finishing||speaking()||resting||S.urlaub||away){diag("begrüßung abgebrochen (atlas nicht frei)");return}
+    greetAt=Date.now();ls.set("lastGreetAt",greetAt);diag("neue raum-sitzung: begrüßung");rpStatus();greet(true)},1200)}
+document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"){clearTimeout(greetPend);if(stream)camSet("angehalten","Atlas im Hintergrund oder Bildschirm gesperrt");return}
+  if(stream){try{wake=await navigator.wakeLock?.request("screen")}catch{}}prevFrame=null;hits=0;setTimeout(()=>camRecover("wieder im vordergrund"),600)});
+addEventListener("pageshow",e=>{if(e.persisted)setTimeout(()=>camRecover("seite zurück"),600)});
 
 /* ================= Bedienung ================= */
 $("vis").onclick=()=>{unlockAudio();touch();
@@ -2295,11 +2329,15 @@ function renderSetup(){
     <div class="field" id="slBox"><label>Sprachprotokoll</label><div class="note" id="slInfo"></div><div class="row"><button class="btn small" id="slCopy" type="button">Kopieren</button><button class="btn small" id="slShare" type="button">Senden …</button><button class="btn small" id="slDel" type="button">Löschen</button></div><div class="note" id="slMsg"></div></div><div class="note" id="sDiag" style="white-space:pre-wrap;font-family:var(--f-mono);font-size:12px"></div></section>
   <section class="card" id="raumCard"><h2>Raum & Protokoll</h2>
     <div class="note">Alles läuft auf dem iPad. Die Kamera vergleicht nur winzige Graustufenbilder (48×36 Punkte) auf Bewegung – keine Fotos, keine Videos, keine Gesichtserkennung, nichts wird gesendet.</div>
+    <div class="rpStat" id="rpStat" role="status" aria-live="polite"></div>
+    <div class="row"><button class="btn small" id="rpCam" type="button">Kamera ein</button><button class="btn small" id="rpTest" type="button">Begrüßung testen</button></div>
+    <div class="note" id="rpHint">So bleibt die Erkennung an: Atlas muss im Vordergrund offen sein, der Bildschirm darf nicht sperren. iPad/iPhone schalten die Kamera einer Web-App im Hintergrund und bei gesperrtem Bildschirm ab – das lässt sich in Safari nicht umgehen. Lösung: Gerät ans Ladekabel, Einstellungen → Anzeige & Helligkeit → Automatische Sperre → „Nie“, Atlas offen lassen. Optional: Einstellungen → Bedienungshilfen → Geführter Zugriff, dann bleibt Atlas sicher im Vordergrund. Ein externer Bewegungsmelder (z. B. HomeKit) kann Atlas als Web-App nicht direkt wecken.</div>
     <div class="rpSw" id="rpSw"></div>
     <div class="grid2"><div class="field"><label for="sCool">Begrüßungs-Pause</label><select id="sCool"><option value="10">10 Minuten</option><option value="20">20 Minuten</option><option value="30">30 Minuten</option><option value="60">60 Minuten</option></select></div>
     <div class="field"><label for="rpSess">Sitzung endet nach … ohne Bewegung</label><select id="rpSess"><option value="10">10 Minuten</option><option value="20">20 Minuten</option><option value="30">30 Minuten</option></select></div>
     <div class="field"><label for="rpInt">Erkennungsintervall</label><select id="rpInt"><option value="500">0,5 s (schnell)</option><option value="1000">1 s (sparsam)</option><option value="2000">2 s (sehr sparsam)</option></select></div>
     <div class="field"><label for="sSens">Bewegungs-Empfindlichkeit</label><input type="range" id="sSens" min="1" max="10" step="1"></div>
+    <div class="field"><label for="rpMin">Bewegung muss mindestens so lange dauern</label><select id="rpMin"><option value="1000">1 Sekunde</option><option value="1500">1,5 Sekunden</option><option value="2000">2 Sekunden</option><option value="3000">3 Sekunden</option></select></div>
     <div class="field"><label for="sSleep">Bildschirm-Schlaf nach so vielen Minuten ohne Bewegung</label><input type="number" id="sSleep" min="1" max="240"></div>
     <div class="field"><label for="rpDays">Protokoll aufbewahren</label><select id="rpDays"><option value="7">7 Tage</option><option value="30">30 Tage</option><option value="90">90 Tage</option></select></div></div>
     <h3>Namentlich protokollieren (nur mit Einwilligung)</h3><div class="note">Nur bewusst angelegte Personen, die sich im Gespräch selbst nennen. Alle anderen erscheinen nur als „Unbekannte Anwesenheit“.</div><div class="rpSw" id="rpPers"></div>
@@ -2423,7 +2461,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261119-0648",ATLAS_REL="2.31";
+const APP_VERSION="20261123-0617",ATLAS_REL="2.32";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
@@ -2462,12 +2500,28 @@ function renderRaum(){if(!$("raumCard"))return;const sw=(k,t,sub)=>`<label><span
     S[k]=x.checked;saveSettings();if(k==="motionOn"&&!x.checked)roomEnd("Erkennung aus");if(k==="motionOn"&&x.checked&&!stream&&camAllowed())startRoom();urlaubPaint();renderRaum()});
   $("rpPers").innerHTML=profiles.map((p,i)=>`<label><span>${esc(p.name)}<small>${p.typ==="haupt"?"Hauptperson":p.typ==="kind"?"Kind":"Person"}</small></span><input type="checkbox" data-i="${i}"${(p.typ==="haupt"?p.protokoll!==false:p.protokoll===true)?" checked":""}></label>`).join("");
   $("rpPers").querySelectorAll("input").forEach(x=>x.onchange=()=>{profiles[+x.dataset.i].protokoll=x.checked;saveProfiles()});
-  for(const [id,k] of [["rpSess","sessMin"],["rpInt","motionMs"],["rpDays","logDays"]]){$(id).value=String(S[k]);$(id).onchange=()=>{S[k]=+$(id).value;saveSettings();if(k==="logDays")ls.set("raumlog",roomPurge(ls.get("raumlog",[])));if(k==="motionMs"&&stream){clearInterval(motionTimer);WAKE_HITS=Math.max(2,Math.round(1500/motionMs()));motionTimer=setInterval(checkMotion,motionMs())}renderRaum()}}
+  $("rpMin").value=String(motionMinMs());$("rpMin").onchange=()=>{S.motionMin=+$("rpMin").value;saveSettings();WAKE_HITS=wakeHits();rpStatus()};
+  $("sSens").oninput=()=>{S.sens=+$("sSens").value;rpStatus()};
+  $("rpCam").onclick=()=>{if(stream)stopRoom();else{if(!S.motionOn){S.motionOn=true;saveSettings()}if(!S.camOn)setPriv("camOn",true);startRoom()}setTimeout(renderRaum,500)};
+  $("rpTest").onclick=()=>{if(!stream){$("rpTest").textContent="Erst Kamera einschalten";setTimeout(rpStatus,1500);return}greetTest=true;diag("test: nächste bewegung begrüßt");rpStatus()};rpStatus();
+  for(const [id,k] of [["rpSess","sessMin"],["rpInt","motionMs"],["rpDays","logDays"]]){$(id).value=String(S[k]);$(id).onchange=()=>{S[k]=+$(id).value;saveSettings();if(k==="logDays")ls.set("raumlog",roomPurge(ls.get("raumlog",[])));if(k==="motionMs"&&stream){clearInterval(motionTimer);WAKE_HITS=wakeHits();motionTimer=setInterval(checkMotion,motionMs())}renderRaum()}}
   $("sCool").value=String(S.cool);
   const G=roomLines();$("rpLog").innerHTML=G.length?G.map(g=>`<b>${esc(g.d)}</b>`+g.zeilen.map(z=>`<div${/läuft/.test(z)?' class="run"':""}>– ${esc(z)}</div>`).join("")).join(""):'<span class="note">Noch keine Einträge.</span>';
   $("rpExp").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([roomText()],{type:"text/plain;charset=utf-8"}));a.download="Atlas-Tagesprotokoll-"+dayKey()+".txt";document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)};
   $("rpDel").onclick=()=>confirmBox("Alle Protokolldaten löschen?","Das Tagesprotokoll wird auf diesem iPad vollständig gelöscht. Das lässt sich nicht rückgängig machen.",()=>{ls.del("raumlog");room=null;ls.del("raumSess");roomNew=false;diag("protokoll gelöscht");renderRaum()})}
 urlaubPaint();
+$("roomBar").onclick=e=>{e.stopPropagation();if(vis.mode==="listen")return;openSheet("setup");setTimeout(()=>$("raumCard")&&$("raumCard").scrollIntoView({block:"start"}),300)};
+// Status/Test im Raum-Kärtchen: Kamera, Bewegung, Begrüßung – ehrlich: „Bewegung“ heißt nur Bewegung, keine Person erkannt
+function rpStatus(){const el=$("rpStat");if(!el)return;const now=Date.now(),ago=t=>!t?"noch nie":now-t<60000?`vor ${Math.max(1,Math.round((now-t)/1000))} s`:new Date(t).toLocaleTimeString("de-AT",{hour:"2-digit",minute:"2-digit"});
+  const camTxt=!S.motionOn?"aus – Bewegungserkennung ausgeschaltet":!camAllowed()?(S.privat?"aus – Privatmodus":"aus – Kamera-Schalter aus"):camSt==="aktiv"?"aktiv":camSt==="zugriff fehlt"?"Zugriff fehlt – Einstellungen → Apps → Safari → Kamera → „Erlauben“":camSt==="angehalten"?"angehalten ("+camWhy+") – startet neu, sobald Atlas wieder vorne ist":camSt==="fehler"?"startet nicht ("+camWhy+")":"aus";
+  const pct=mThr>0?Math.min(100,Math.round(mLevel/mThr*50)):0,live=camSt==="aktiv"&&now-mHitAt<1500;
+  const pause=Math.max(0,lastGreet+S.cool*60000-now);
+  el.innerHTML=`<div><b>Kamera:</b> <span class="${camSt==="aktiv"?"ok":"bad"}">${esc(camTxt)}</span></div>
+   <div><b>Bewegung:</b> ${camSt!=="aktiv"?"–":live?'<span class="ok">jetzt erkannt</span>':"keine"} <span class="rpBar" title="Bewegungsstärke"><i style="width:${pct}%"></i><em></em></span> <small>zuletzt anhaltend: ${ago(mSeenAt)}</small></div>
+   <div><b>Begrüßung:</b> zuletzt ausgelöst ${ago(greetAt)}${greetTest?' · <span class="ok">Test: nächste Bewegung fragt sofort</span>':pause?` · nächste frühestens in ${Math.ceil(pause/60000)} min (Begrüßungs-Pause)`:" · bereit"}${room?" · Raum-Sitzung läuft":""}</div>
+   <small>Bewegung ≠ Person: Atlas weiß nur, dass sich etwas bewegt, und fragt deshalb, wer da ist.</small>`;
+  const b=$("rpCam");if(b)b.textContent=stream?"Kamera aus":"Kamera ein";const t=$("rpTest");if(t&&stream)t.textContent=greetTest?"Test läuft – bitte bewegen":"Begrüßung testen"}
+setInterval(()=>{if(!document.hidden&&$("raumCard")&&!$("raumCard").closest("[hidden]"))rpStatus()},1000);
 // ===== 2.26: Datenschutz – Kamera/Mikrofon/Cloud-Schalter, Privatmodus, Datenfluss-Übersicht, alles löschen =====
 // Jede Netzverbindung von Atlas läuft über netAllowed(); im Privatmodus verlässt nichts das Gerät.
 const PRIV_DEF={motionOn:true,raumLog:true,urlaub:false,urlaubHinweis:true,sessMin:20,logDays:30,motionMs:500,camOn:true,micOn:true,cloudOn:true,privat:false,wakeListen:false,sttLocalOnly:false,updConfirm:false,privStart:true};
@@ -2601,7 +2655,7 @@ function tick(){const d=new Date();$("clock").textContent=hhmm(d);$("dateline").
   if(dayKey()!==today){const old=today,L=log.slice();clearTimeout(protoTimer);
     (async()=>{try{const t=await summarize(old,L);if(t)await saveProto(old,SESSION,t)}catch{}})();today=dayKey();log=[];protoLen=0;persistChain=Promise.resolve()}}
 loadBildMap();setInterval(tick,15000);tick();applyNames();renderPerson();renderLock();applyAway();if(!away)quickUnlock();if(away)startRoom();
-else if(S.key&&!ls.get("roomOff",false)&&camAllowed())camState().then(st=>{if(st==="granted"&&!stream){roomAsked=true;diag("kamera: automatisch gestartet");startRoom()}});
+else if(!ls.get("roomOff",false)&&camAllowed()&&S.motionOn)camState().then(st=>{if(st==="denied"){camSet("zugriff fehlt","in den Einstellungen verweigert");return}if(!stream&&!document.hidden){roomAsked=true;diag("kamera: automatisch gestartet");startRoom()}});
 if(!window.isSecureContext||!crypto.subtle)showErr("Dieses Gerät erlaubt hier keine Verschlüsselung. Bitte über eine https-Adresse öffnen.");
 if(!SR)$("state").textContent="Bereit · Spracheingabe nur in Safari oder Chrome";
 </script>

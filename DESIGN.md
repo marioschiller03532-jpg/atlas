@@ -46,6 +46,9 @@ Reduzierte Bewegung (Geräteeinstellung): Bewegungen auf ca. 30 %, statt Lichtwe
 ## Urlaubsmodus-Hinweis (ab 2.27)
 - Leiste im Stil der Einrichtungs-Leiste über der Kugel: „Urlaubsmodus aktiv · Atlas spricht nicht, Mikrofon aus, stilles Anwesenheitsprotokoll“ (abschaltbar).
 
+## Raum-Leiste (ab 2.32)
+- Gleicher Stil wie die Einrichtungs-Leiste, über der Kugel. Erscheint nur, während Atlas zuhört („● Atlas hört zu“) oder wenn die Kamera fehlt/angehalten ist (orange Rand, antippen öffnet Raum & Protokoll). Sonst bleibt der Hauptbildschirm nur die Kugel.
+
 ## Hintergrund (festgelegt 15.11.2026)
 - Dauerhaft der dunkle Hintergrund (Verlauf um #050c12). Kein weißer Hintergrund – von Mario so entschieden.
 

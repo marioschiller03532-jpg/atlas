@@ -1,5 +1,15 @@
 # Atlas – Änderungen
 
+## 2.32 (23.11.2026) – Bewegung erkennen und begrüßen: repariert
+- Ursache: iPad/iPhone beenden die Kamera einer Web-App, sobald Atlas im Hintergrund ist oder der Bildschirm sperrt. Atlas hielt den Stream trotzdem für „an“ und verglich danach nur noch stehende Bilder – Bewegung wurde nie mehr erkannt, bis Atlas neu geladen wurde. Außerdem startete die Kamera beim Öffnen nur, wenn iOS „erlaubt“ meldete (meist meldet iOS „fragen“).
+- Kamera-Zustand wird überwacht (Spur beendet/unterbrochen, Bild steht still > 8 s) und beim Zurückkehren in den Vordergrund automatisch neu gestartet; im dunklen Raum kein Neustart-Karussell.
+- Autostart beim Öffnen, außer die Kamera wurde von Hand ausgeschaltet oder verweigert.
+- Begrüßung durch Bewegung: 1,2 s Verzögerung, dann „Hallo! Wer ist im Raum?“ – nur wenn Atlas vorne, frei und nicht im Ruhe-/Urlaubs-/Privatmodus ist. Keine Antwort → nach der Stille-Grenze zurück in Bereitschaft, Frage verfällt.
+- Mindestdauer der Bewegung einstellbar (1 / 1,5 / 2 / 3 s, Standard 1,5 s) – die Bewegung muss die ganze Dauer abdecken.
+- Hauptbildschirm: schmale Leiste nur, während Atlas zuhört („● Atlas hört zu“) oder wenn die Kamera fehlt/angehalten ist (antippen → Hilfe).
+- Einstellungen → Raum & Protokoll: Live-Status (Kamera, Bewegung mit Stärke-Balken, letzte Begrüßung, Pause), Knöpfe „Kamera ein/aus“ und „Begrüßung testen“, Hinweis zu Hintergrund/Bildschirmsperre und Lösung.
+- Rückfall: /alt/2.31/.
+
 ## 2.31 (19.11.2026) – Paarzeit in der Morgenroutine (lokal)
 - Kleiner lokaler Dialog in der Morgenroutine einer bestimmten Person: höchstens einmal pro Kalendertag, in der ersten Gesprächspause nach ihrer eigenen Aussage zur Routine (4–12 Uhr), nie durch Bewegung oder Begrüßung.
 - Ja → eine Karte aus der lokalen Liste, dann weiter an derselben Stelle der Routine (offene Routinefrage wird wiederholt). Nein/Heute nicht → kurze Quittung, weiter. Stopp → sofort aus. Schweigen oder unklare Antwort → weiter ohne Karte und ohne Nachfrage.
