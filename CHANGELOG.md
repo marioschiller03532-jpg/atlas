@@ -1,5 +1,14 @@
 # Atlas – Änderungen
 
+## 2.35 (24.11.2026) – iPhone: Atlas hört und spricht wieder + Prüfmodus
+- Ursache 1 (Mikrofon startete nicht): Jeder Tipp auf die Kugel schickte zuerst eine stumme Ton-Freigabe an die Sprachausgabe. `listen()` wartete, bis diese „fertig“ war, und startete das Mikrofon erst danach – außerhalb des Tipps (iOS verlangt den Start direkt im Tipp) oder nie, wenn iOS die stumme Ausgabe hängen ließ. Jetzt: keine zusätzliche Freigabe pro Tipp; stumme Freigabe oder hängende Ausgabe ohne eigene Antwort wird abgebrochen, das Mikrofon startet sofort im Tipp.
+- Ursache 2 (iPhone stumm): Das Mikrofon blieb offen, während Atlas dachte und sprach. Auf dem iPhone leitet iOS den Ton dann an die Hörmuschel (kaum hörbar); das iPad hat keine Hörmuschel. Jetzt auf dem iPhone: Mikrofon zu, bevor Atlas spricht, danach wieder auf. Zusätzlich (iOS 17+): Audio-Sitzung „playback“ für die Stimme, „auto“ fürs Mikrofon. Folge: „Stopp“ per Stimme wirkt auf dem iPhone nicht während Atlas spricht – Kugel antippen oder Stopp-Taste.
+- Ursache 3 (stilles Hängen): Status „Hört zu/Denkt nach“ und Statuszeile sind im Design ausgeblendet; Fehler waren unsichtbar. Neuer, vorübergehender Prüfmodus oben am Bildschirm: Mikrofon bereit · Sprache erkannt · Person erkannt · Antwort wird erstellt · Sprache wird ausgegeben – je ✓/…/!/✗ mit Grund und Sekunden, Gerätezeile (iPhone/iPad, Safari-Tab oder Home-Bildschirm-App, Spracherkennung, Stimmen, Mikrofon-/Kamera-Recht, Ton freigeschaltet, Audio-Sitzung, Schlüssel, online), letzte Ereignisse, Knöpfe Ton-Test / Kopieren / einklappen / ausblenden.
+- Zeitgrenzen: Mikrofon 6 s, Sprachausgabe 6 s, Antwort 40 s – danach rot mit konkretem Hinweis statt Warten.
+- Konkrete iOS-Fehlertexte (not-allowed automatisch vs. nach Tipp, service-not-allowed, Home-Bildschirm-App, network, audio-capture, Sprache fehlt).
+- Kamera wird auf iOS 2,5 s nach dem Tipp angefragt, nicht gleichzeitig mit dem Mikrofon.
+- Design sonst unverändert. Rückfall: /alt/2.34/.
+
 ## 2.34 (23.11.2026) – Drahtkugel 3D
 - Neue Kugel „Drahtkugel 3D“ (Variante `drahtkugel` in `makeOrb`, Canvas, keine Bibliothek, kein Server): geodätisches Netz aus 480 gebogenen Linien und 162 Lichtpunkten, dreht sich wirklich räumlich (Perspektive, hintere Linien dunkler, vordere mit Schein). Wird einmalig als Kugel eingestellt; Ringkern und alle anderen Kugeln bleiben unter Einstellungen → Kugel wählbar.
 - Gekoppelt an Atlas' echte Zustände (`vis.mode`): Bereit langsam · Zuhören langsam + sanfter Puls (~2,4 s) · Denkt nach etwas schneller · Spricht lebhafter + gleichmäßiger Puls · Ruhemodus fast still, dunkel, nur 12 Bilder/s.
