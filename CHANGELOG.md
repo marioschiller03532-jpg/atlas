@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.37 (25.11.2026) – Atlas' Gesprächsweise zurück
+- Geprüft: Persönlichkeit (DEF_PERSONA), Stil-/Wortschatz-Regeln, Gesprächsregeln, Modelle und Gesprächsverlauf sind seit 2.28 unverändert – dort lag es nicht.
+- Ursache: Seit 2.32/2.33 funktioniert die Begrüßung per Bewegung wirklich. Damit beginnt jedes Gespräch mit festen Standardsätzen ohne Claude: „Hallo! Wer ist im Raum?“ (2.32 gekürzt, vorher „Hallo, ich bin Atlas. Wer ist gerade im Raum und wobei kann ich helfen?“) → „Hallo Mario. Was brauchst du?“. Keine Persönlichkeit, keine eigene Rückfrage, Gespräch klingt nach Formular.
+- Jetzt: Begrüßung wieder warm und abwechselnd (Text aus 2.31 + Varianten). Meldet sich der Hauptnutzer oder ein Erwachsener, begrüßt ihn Claude mit der Persönlichkeit: locker, mit Schmäh, einer kleinen Spitze aus der Situation und einer eigenen persönlichen Rückfrage. Offline lockere Standardsätze statt „Was brauchst du?“. Morgenimpuls, Kinder, unbekannte Personen unverändert.
+- Absicherung zu 2.36: Die Sicherung „Stimme startet nicht“ bricht keine laufende Antwort mehr ab, wenn iOS den Sprechbeginn nicht meldet, aber spricht (sonst konnten Schlusssätze und Rückfragen wegfallen).
+- Funktionen, Daten, Persönlichkeitstext unverändert. Rückfall: /alt/2.36/.
+
 ## 2.36 (25.11.2026) – Hänger nach „Wer ist im Raum?“ behoben
 - Ursache: iOS meldet nach dem letzten gesprochenen Wort oft weiter „spricht“. Atlas wartete darauf bis zu 2 Minuten (`whenAudioIdle`, 240 × 0,5 s), bevor er das Mikrofon öffnete – Kugel blieb auf „Spricht“, die Antwort des Nutzers ging ins Leere. Im Test mit nachgestellter iOS-Meldung reproduziert.
 - Jetzt: Haben alle eigenen Sätze ihr Ende gemeldet, wird höchstens 1,5 s gewartet, die hängende Meldung zurückgesetzt und das Mikrofon geöffnet (Prüfmodus zeigt „iOS-Meldung hing, zurückgesetzt“).

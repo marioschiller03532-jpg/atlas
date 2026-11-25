@@ -1070,7 +1070,7 @@ function speak(text,then){if(convo)lastHeard=Date.now();if(S.urlaub){diag("urlau
         if((lastTTSerr==="interrupted"||lastTTSerr==="canceled")&&!u._again){diag("tts: satz wiederholt");const u2=mkUtt(p);u2._again=true;u2.onstart=u.onstart;u2.onboundary=u.onboundary;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(u.voice&&!u._retry&&ev&&ev.error!=="interrupted"&&ev.error!=="canceled"){const u2=new SpeechSynthesisUtterance(u.text);u2.lang="de-DE";u2.rate=S.rate;u2._retry=true;u2.onstart=u.onstart;u2.onend=u.onend;u2.onerror=()=>{if(my!==gen)return;if(--pending<=0)finish()};speechSynthesis.speak(u2);return}if(--pending<=0)finish()};
       speechSynthesis.speak(u)}},wasBusy?150:0);
   // Absicherung: startet die Stimme nicht, geht es trotzdem weiter (Text steht ja da)
-  setTimeout(()=>{if(my===gen&&!started&&pending>0){diag("tts:startet nicht");if(!gestured){ttsBlocked=true;setStatus("Tipp einmal auf die Kugel, dann darf ich sprechen.",true);if(typeof dpSet==="function")dpSet("stimme","fehlgeschlagen","iOS lässt Atlas erst sprechen, nachdem einmal getippt wurde");if(typeof roomBarPaint==="function")roomBarPaint();finish();return}if(typeof dpSet==="function")dpSet("stimme","fehlgeschlagen","Stimme startet nicht (Lautstärke/Ausgabe prüfen)"+(lastTTSerr?" · "+lastTTSerr:""));if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
+  setTimeout(()=>{if(my===gen&&!started&&pending>0&&!(TTS&&speechSynthesis.speaking)){diag("tts:startet nicht");if(!gestured){ttsBlocked=true;setStatus("Tipp einmal auf die Kugel, dann darf ich sprechen.",true);if(typeof dpSet==="function")dpSet("stimme","fehlgeschlagen","iOS lässt Atlas erst sprechen, nachdem einmal getippt wurde");if(typeof roomBarPaint==="function")roomBarPaint();finish();return}if(typeof dpSet==="function")dpSet("stimme","fehlgeschlagen","Stimme startet nicht (Lautstärke/Ausgabe prüfen)"+(lastTTSerr?" · "+lastTTSerr:""));if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke am Gerät prüfen. Am Mac: Systemeinstellungen → Ton, richtiger Ausgang gewählt?")}finish()}},3000);
   // Notbremse, falls das Ende nie gemeldet wird
   setTimeout(()=>{if(my===gen&&pending>0)whenAudioIdle(my,finish0)},4000+text.length*90/Math.max(.5,S.rate))}
 let soundWarned=false,lastTTSerr="",gestured=false,ttsBlocked=false;
@@ -1824,7 +1824,8 @@ function handleUtterance(t){chk("answer","wait","Antwort wird erstellt …");if(
       if(a.rest){converse(t,{mode:modeOf(t)});return}   // Name plus Anliegen: gleich das Anliegen beantworten
       const names=a.known.map(x=>x.name),many=names.length>1,nm=many?names.slice(0,-1).join(", ")+" und "+names[names.length-1]:names[0];
       {const imp=morningImpuls(many?null:P[0]);if(imp){const msg=`Hallo ${nm}. ${imp.text}`;addLog("assistent",msg);speak(msg,()=>{ignoreUntil=Date.now()+350;toDayPlan(nm,imp)});return}}
-      const msg=many?`Hallo ${nm}. Was braucht ihr?`:(P[0].typ==="haupt"||P[0].typ==="erwachsen")?`Hallo ${nm}. Was brauchst du?`:`Hallo ${nm}. Was darf ich für dich tun?`;
+      if(!many&&(P[0].typ==="haupt"||P[0].typ==="erwachsen")&&navigator.onLine&&netAllowed("claude")&&S.key&&!S.urlaub){converse(`(System: ${nm} hat sich gerade gemeldet, nachdem du gefragt hast, wer im Raum ist. Begrüß ${nm} jetzt wie ein guter Freund: locker, warm, mit Schmäh und gern einer kleinen frechen Spitze aus der Situation – Uhrzeit, Tageszeit, Wochentag, sein Tag. Dann EINE eigene, persönliche Rückfrage, z. B. wie er geschlafen hat, wie das Training war oder was heute im Wirtshaus los ist. Nicht „Was brauchst du?“ oder „Wie kann ich helfen?“. Zwei, höchstens drei kurze Sätze.)`,{internal:true,mode:"schnell"});return}
+      const msg=many?pickFresh("hiMany",[`Hallo ${nm}! Gleich mehrere auf einmal, da wird's gemütlich. Was steht an?`,`Servus ${nm}! Was braucht ihr?`]):(P[0].typ==="haupt"||P[0].typ==="erwachsen")?pickFresh("hiMain",[`Servus ${nm}! Schön, dass du da bist. Wie schaut's aus?`,`Na, grüß dich ${nm}! Wie geht's dir heute?`,`Da ist ja der ${nm}! Was liegt an?`,`Hallo ${nm}! Ohren gespitzt, Kaffee brauch ich keinen. Was gibt's?`]):`Hallo ${nm}. Was darf ich für dich tun?`;
       addLog("assistent",msg);speak(msg,back);return}
     if(a&&a.name){awaitingWho=false;setPerson(a.name);touch();const imp=morningImpuls(null);const msg=`Hallo ${a.name}. ${imp?imp.text+" ":""}Was darf ich für dich tun?`;addLog("assistent",msg);speak(msg,back);return}
     // nicht verstanden: einmal höflich nachfragen, danach normal weiter (keine Endlosschleife)
@@ -2118,7 +2119,7 @@ function streamSpeaker(){const my=++gen;afterSpeak=null;pending=0;const pq=prevQ
       if(!started&&queued<=0&&!bundle&&buf.length>70){const c=buf.match(/^[\s\S]{40,}?[,;–](\s+)/);if(c){add(c[0]);buf=buf.slice(c[0].length)}}
       while((m=buf.match(/^[\s\S]*?[.!?…:](\s+|$)/))&&m[0].trim().length>1){if(!/\s$/.test(m[0])&&buf.length===m[0].length)break;add(m[0]);buf=buf.slice(m[0].length)}},
     end(cb){then=cb;if(buf.trim())bundle=bundle?bundle+" "+buf.trim():buf.trim();buf="";done=true;if(bundle)flush();if(queued<=0){finish();return}
-      setTimeout(()=>{if(my===gen&&!started){if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke und Tonausgabe am Gerät prüfen.")}finish()}},3500);
+      setTimeout(()=>{if(my===gen&&!started&&!(TTS&&speechSynthesis.speaking)){if(!soundWarned){soundWarned=true;showErr("Die Stimme startet hier nicht. Lautstärke und Tonausgabe am Gerät prüfen.")}finish()}},3500);
       setTimeout(()=>{if(my===gen)whenAudioIdle(my,finish0)},5000+all.length*90/Math.max(.5,S.rate))},
     get spoken(){return all.length>0}}}
 const textOf=res=>(res.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
@@ -2210,7 +2211,7 @@ function impulsFor(p){if(!KB||!Array.isArray(KB.eintraege))return null;const byI
 function morningImpuls(p){if(!morningNow())return null;const key=`impuls:${today}:${p&&p.id||"allg"}`;if(ls.get(key,false))return null;const r=impulsFor(p);if(r){ls.set(key,true);diag("impuls:"+r.id)}return r}
 // nach Begrüßung + Impuls wie gewohnt zum Tag überleiten (Claude kennt Routine, Supplements, Termine)
 function toDayPlan(name,imp){converse(`(System: Morgens. ${name} wurde gerade begrüßt${imp?" und hat einen kurzen Wissensimpuls zu "+imp.name+" gehört":""} – nicht erneut begrüßen, den Impuls nicht wiederholen oder vertiefen, außer er fragt. Geh jetzt wie gewohnt kurz zu dem über, was heute ansteht.)`,{internal:true,mode:"schnell"})}
-function askRoom(){const g="Hallo! Wer ist im Raum?";
+function askRoom(){const g=pickFresh("room",[`Hallo, ich bin ${S.aname}. Wer ist gerade im Raum, und was steht an?`,"Servus! Wer leistet mir Gesellschaft?","Na, grüß dich! Mit wem hab ich die Ehre?","Hallo! Gesehen hab ich dich schon, erkannt noch nicht. Wer bist du?","Servus! Sag mir kurz, wer da ist, dann leg ich los."]);
   lastHeard=Date.now();setUnknown();awaitingWho=true;whoTries=0;addLog("intern","(Atlas ist durch Bewegung oder Antippen aufgewacht. Wer im Raum ist, weiß Atlas nicht – nur aus der Antwort.)");addLog("assistent",g);convo=true;diag("begrüßung");speak(g,()=>setTimeout(listen,300))}
 function greet(fromWake){
   const M=main();
@@ -2638,7 +2639,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261125-1815",ATLAS_REL="2.36";
+const APP_VERSION="20261125-2015",ATLAS_REL="2.37";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}
