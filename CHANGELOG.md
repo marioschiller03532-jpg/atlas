@@ -1,5 +1,12 @@
 # Atlas – Änderungen
 
+## 2.36 (25.11.2026) – Hänger nach „Wer ist im Raum?“ behoben
+- Ursache: iOS meldet nach dem letzten gesprochenen Wort oft weiter „spricht“. Atlas wartete darauf bis zu 2 Minuten (`whenAudioIdle`, 240 × 0,5 s), bevor er das Mikrofon öffnete – Kugel blieb auf „Spricht“, die Antwort des Nutzers ging ins Leere. Im Test mit nachgestellter iOS-Meldung reproduziert.
+- Jetzt: Haben alle eigenen Sätze ihr Ende gemeldet, wird höchstens 1,5 s gewartet, die hängende Meldung zurückgesetzt und das Mikrofon geöffnet (Prüfmodus zeigt „iOS-Meldung hing, zurückgesetzt“).
+- iPhone: nach dem Sprechen starteten zwei Spracherkenner gleichzeitig (Neustart + Zuhören). Jetzt höchstens ein Start gleichzeitig.
+- Aufräum-Timer („90 s nichts gehört → Gespräch beenden“) beendete ein Gespräch, das Atlas per Begrüßung gerade selbst begonnen hatte. Jetzt zählt Atlas' eigene Ansprache als Aktivität.
+- Rückfall: /alt/2.35/.
+
 ## 2.35 (24.11.2026) – iPhone: Atlas hört und spricht wieder + Prüfmodus
 - Ursache 1 (Mikrofon startete nicht): Jeder Tipp auf die Kugel schickte zuerst eine stumme Ton-Freigabe an die Sprachausgabe. `listen()` wartete, bis diese „fertig“ war, und startete das Mikrofon erst danach – außerhalb des Tipps (iOS verlangt den Start direkt im Tipp) oder nie, wenn iOS die stumme Ausgabe hängen ließ. Jetzt: keine zusätzliche Freigabe pro Tipp; stumme Freigabe oder hängende Ausgabe ohne eigene Antwort wird abgebrochen, das Mikrofon startet sofort im Tipp.
 - Ursache 2 (iPhone stumm): Das Mikrofon blieb offen, während Atlas dachte und sprach. Auf dem iPhone leitet iOS den Ton dann an die Hörmuschel (kaum hörbar); das iPad hat keine Hörmuschel. Jetzt auf dem iPhone: Mikrofon zu, bevor Atlas spricht, danach wieder auf. Zusätzlich (iOS 17+): Audio-Sitzung „playback“ für die Stimme, „auto“ fürs Mikrofon. Folge: „Stopp“ per Stimme wirkt auf dem iPhone nicht während Atlas spricht – Kugel antippen oder Stopp-Taste.
