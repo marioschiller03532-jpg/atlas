@@ -1316,6 +1316,8 @@ const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="Mac
 const STANDALONE=!!(navigator.standalone||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches));
 const CHK_LIMIT={mic:6000,answer:40000,tts:6000};   // so lange darf ein Schritt „läuft …“ zeigen, dann gilt er als hängend
 addEventListener("pointerdown",()=>{CHK.tapAt=Date.now()},{capture:true,passive:true});
+let tapTurn=false;   // 2.38 iPhone: iOS öffnet das Mikrofon nach Atlas' Antwort nicht von selbst -> ein Tipp irgendwo genügt
+addEventListener("click",e=>{if(!tapTurn)return;const t=e.target;if(t&&t.closest&&t.closest("#vis,button,a,input,textarea,select,label,[role=button],.pane,dialog"))return;tapTurn=false;if(typeof busy!=="undefined"&&busy)return;touch();convo=true;listen()},{capture:true});
 function chk(k,st,txt,logTxt){try{const s=CHK.steps[k];if(!s)return;const ch=s.st!==st||s.txt!==(txt||"");s.st=st;s.txt=txt||"";s.at=Date.now();
   if(ch){CHK.log.push({at:s.at,k,st,t:logTxt!=null?logTxt:(txt||"")});if(CHK.log.length>40)CHK.log.shift();if(st==="err")diag("prüf "+k+": "+String(logTxt!=null?logTxt:txt).slice(0,48))}chkPaint()}catch{}}
 // iOS: Ton über den Lautsprecher (auch bei Stummschalter), Mikrofon mit normaler Einstellung – nur wenn das Gerät das kennt (iOS 17+)
@@ -1476,7 +1478,7 @@ function sendUtter(){if(!finishing)return;clearTimeout(finTimer);const t=heardAl
   lastFlush={t,at:Date.now()};handleUtterance(t)}
 function ensureRec(){if(!SR||away||!micAllowed()||(S.sttLocalOnly&&sttMode!=="lokal"))return false;if(recActive)return true;if(Date.now()-recStarting<2500)return true;if(IPHONE&&(busy||speaking())){recDeferred=true;return false}aSess("auto");
   rec=new SR();const me=rec;rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;if(sttMode==="lokal"&&"processLocally" in rec)rec.processLocally=true;   // Spracherkennung auf dem Gerät, wenn iOS das anbietet
-  rec.onstart=()=>{if(me!==rec)return;recStarting=0;recActive=true;flushed=false;sessText="";baseIdx=0;chk("mic","ok",listening?"Mikrofon bereit – jetzt sprechen":"Mikrofon bereit (hört auf „Atlas“)");if(listening){chk("stt","wait","warte auf Sprache …")}if(listening&&typeof dpSet==="function")dpSet("mikro","hört zu","")};
+  rec.onstart=()=>{if(me!==rec)return;recStarting=0;recActive=true;tapTurn=false;flushed=false;sessText="";baseIdx=0;chk("mic","ok",listening?"Mikrofon bereit – jetzt sprechen":"Mikrofon bereit (hört auf „Atlas“)");if(listening){chk("stt","wait","warte auf Sprache …")}if(listening&&typeof dpSet==="function")dpSet("mikro","hört zu","")};
   rec.onresult=e=>{if(me!==rec)return;   // verspätete Ergebnisse einer alten Aufnahme (z. B. Echo der letzten Antwort) ignorieren
     const last=e.results[e.results.length-1],iosFinal=!!(last&&last.isFinal);if(iosFinal&&listening&&!finishing)slCount("final");
     // gesamten Text dieser Aufnahme neu zusammensetzen (fertige + vorläufige Teile)
@@ -1507,6 +1509,7 @@ function ensureRec(){if(!SR||away||!micAllowed()||(S.sttLocalOnly&&sttMode!=="lo
     if(listening&&!busy&&!speaking()){setMode("listen",listenLbl());showDone(true)}
     recErrs=0;clearTimeout(silTimer);silTimer=setTimeout(()=>finishUtter(false,iosFinal?"Sprechpause (iOS-Satzende)":"Sprechpause"),iosFinal&&!OPEN_END.test(heardAll())?Math.max(900,pauseFor(heardAll())-700):pauseFor(heardAll()))};   // keine Zwischenfrage mehr: bei Denkpausen einfach länger still zuhören
   rec.onerror=e=>{if(me!==rec)return;recStarting=0;if(e.error==="no-speech"){if(listening)chk("stt","warn","Keine Sprache gehört – lauter/näher sprechen")}else if(e.error!=="aborted")chk("mic","err",sttErrText(e.error),"Fehler "+e.error);if(e.error!=="aborted"&&e.error!=="no-speech"&&typeof dpSet==="function")dpSet("mikro","fehlgeschlagen",e.error==="not-allowed"?"Mikrofon/Spracherkennung nicht erlaubt (iOS braucht einmal Antippen bzw. Freigabe)":"Fehler "+e.error);if(SL&&SL.ende==null&&e.error!=="aborted")SL.fehler.push(e.error);if(e.error!=="no-speech"&&e.error!=="aborted"){recErrs++;diag("stt:"+e.error)}if(e.error==="network")setStatus("Spracherkennung ohne Verbindung",true);else if(e.error==="audio-capture")setStatus("Mikrofon nicht verfügbar",true);
+    if(e.error==="not-allowed"&&IPHONE&&Date.now()-CHK.tapAt>4000){convo=false;listening=false;tapTurn=true;diag("iphone: du bist dran (tippen)");chk("mic","warn","iPhone: Mikrofon geht nach Atlas' Antwort nur per Tipp auf – irgendwo tippen");setMode("idle","Du bist dran – tippen");setStatus("Du bist dran – irgendwo tippen und sprechen.");return}
     if(e.error==="not-allowed"||e.error==="service-not-allowed"){convo=false;listening=false;showErr(sttErrText(e.error))}};
   rec.onend=()=>{if(me!==rec)return;recStarting=0;recActive=false;lastRecEnd=Date.now();const fresh=restartWanted;restartWanted=false;if(!fresh&&listening&&!finishing)slCount("neustarts");if(fresh){sessText="";utterPrev=carryText||(utterPrev&&!flushed?utterPrev:"");carryText=""}
     if(finishing){sendUtter()}
@@ -2639,7 +2642,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261125-2015",ATLAS_REL="2.37";
+const APP_VERSION="20261126-0630",ATLAS_REL="2.38";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}

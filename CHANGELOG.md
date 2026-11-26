@@ -1,5 +1,11 @@
 # Atlas – Änderungen
 
+## 2.38 (26.11.2026) – iPhone: „Du bist dran“ statt Fehlermeldung
+- Meldung „iOS hat den automatischen Mikrofon-Start abgelehnt“: Seit 2.35 schließt Atlas auf dem iPhone das Mikrofon, bevor er spricht (sonst Ton nur aus der Hörmuschel). Danach öffnet er es wieder – aber iOS erlaubt das Öffnen des Mikrofons nur direkt nach einem Tipp. Atlas brach dann das Gespräch mit roter Meldung ab.
+- Jetzt (nur iPhone): keine Fehlermeldung, Anzeige „Du bist dran – tippen“. Ein Tipp irgendwo auf den Bildschirm (nicht nur auf die Kugel) öffnet sofort das Mikrofon, das Gespräch läuft weiter. Knöpfe und Menüs bleiben unberührt.
+- iPad unverändert: Dort bleibt das Mikrofon offen, Gespräch ganz ohne Tippen.
+- Rückfall: /alt/2.37/.
+
 ## 2.37 (25.11.2026) – Atlas' Gesprächsweise zurück
 - Geprüft: Persönlichkeit (DEF_PERSONA), Stil-/Wortschatz-Regeln, Gesprächsregeln, Modelle und Gesprächsverlauf sind seit 2.28 unverändert – dort lag es nicht.
 - Ursache: Seit 2.32/2.33 funktioniert die Begrüßung per Bewegung wirklich. Damit beginnt jedes Gespräch mit festen Standardsätzen ohne Claude: „Hallo! Wer ist im Raum?“ (2.32 gekürzt, vorher „Hallo, ich bin Atlas. Wer ist gerade im Raum und wobei kann ich helfen?“) → „Hallo Mario. Was brauchst du?“. Keine Persönlichkeit, keine eigene Rückfrage, Gespräch klingt nach Formular.
