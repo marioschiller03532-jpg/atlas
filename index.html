@@ -1373,7 +1373,8 @@ let recStarting=0,recErrs=0,startFails=0,lastRecEnd=0,restartWanted=false,recDef
    Als Sprache zählt nur, wenn NEUE echte Wörter dazukommen. Rauschen, Füllgeräusche („äh“, „hm“) und Ergebnisse, die iOS unverändert
    noch einmal meldet, verlängern das Zuhören nicht. Spätestens nach S.vadSil Sekunden ohne neue Wörter endet die Aufnahme:
    mit Text → Atlas antwortet; ohne Text → Zuhören endet sichtbar, Mikrofon wird geschlossen. Pro Eingabe höchstens S.maxListen Sekunden. */
-let listenStart=0,lastVoice=0,voiceSig="",maxWarned=false;
+let listenStart=0,lastVoice=0,voiceSig="",maxWarned=false,recReadyAt=0;
+const FIRST_WORD_MS=12000;   // 2.39: so lange wartet Atlas nach seiner Antwort auf dein erstes Wort (gezählt ab Mikrofon bereit)
 const vadSilMs=()=>Math.round(1000*Math.min(8,Math.max(4,+S.vadSil||5.5)));
 const maxListenMs=()=>1000*Math.min(180,Math.max(20,+S.maxListen||60));
 const VAD_FILL=/^(äh|ähm|aeh|aehm|hm|hmm|mhm|öh|oeh|eh|ah|oh|uh|m|mm)$/i;
@@ -1478,7 +1479,7 @@ function sendUtter(){if(!finishing)return;clearTimeout(finTimer);const t=heardAl
   lastFlush={t,at:Date.now()};handleUtterance(t)}
 function ensureRec(){if(!SR||away||!micAllowed()||(S.sttLocalOnly&&sttMode!=="lokal"))return false;if(recActive)return true;if(Date.now()-recStarting<2500)return true;if(IPHONE&&(busy||speaking())){recDeferred=true;return false}aSess("auto");
   rec=new SR();const me=rec;rec.lang="de-DE";rec.continuous=true;rec.interimResults=true;if(sttMode==="lokal"&&"processLocally" in rec)rec.processLocally=true;   // Spracherkennung auf dem Gerät, wenn iOS das anbietet
-  rec.onstart=()=>{if(me!==rec)return;recStarting=0;recActive=true;tapTurn=false;flushed=false;sessText="";baseIdx=0;chk("mic","ok",listening?"Mikrofon bereit – jetzt sprechen":"Mikrofon bereit (hört auf „Atlas“)");if(listening){chk("stt","wait","warte auf Sprache …")}if(listening&&typeof dpSet==="function")dpSet("mikro","hört zu","")};
+  rec.onstart=()=>{if(me!==rec)return;recStarting=0;recActive=true;tapTurn=false;recReadyAt=Date.now();flushed=false;sessText="";baseIdx=0;chk("mic","ok",listening?"Mikrofon bereit – jetzt sprechen":"Mikrofon bereit (hört auf „Atlas“)");if(listening){chk("stt","wait","warte auf Sprache …")}if(listening&&typeof dpSet==="function")dpSet("mikro","hört zu","")};
   rec.onresult=e=>{if(me!==rec)return;   // verspätete Ergebnisse einer alten Aufnahme (z. B. Echo der letzten Antwort) ignorieren
     const last=e.results[e.results.length-1],iosFinal=!!(last&&last.isFinal);if(iosFinal&&listening&&!finishing)slCount("final");
     // gesamten Text dieser Aufnahme neu zusammensetzen (fertige + vorläufige Teile)
@@ -1538,7 +1539,8 @@ function listen(){if(!SR){chk("mic","err","Spracherkennung gibt es in diesem Bro
 function endConvo(label){closeListen(label)}
 // Stille-Wächter (4× pro Sekunde): beendet die Aufnahme verlässlich, auch wenn die Erkennung hängt oder sich ständig neu startet
 setInterval(()=>{if(!convo||!listening||busy||finishing||flushed||speaking()||away||resting)return;const now=Date.now(),txt=voiceWords(heardAll()).length?heardAll():"";   // nur Geräusche/„äh“ = nichts gesagt
-  if(now-lastVoice>=vadSilMs()){if(txt.length>=2){diag("stille: ende nach "+Math.round((now-lastVoice)/100)/10+" s");finishUtter(false,"Stille-Grenze")}else if(pzState==="frage"){slClose("nichts gesagt (Paarzeit)");listening=false;resetUtter();diag("paarzeit: schweigen");pzResume()}else closeListen(null,"nichts gesagt (Stille-Grenze)");return}
+  const noWords=txt.length<2,ref=noWords?Math.max(lastVoice,recReadyAt):lastVoice,lim=noWords?Math.max(vadSilMs(),FIRST_WORD_MS):vadSilMs();   // 2.39: erstes Wort darf auf sich warten lassen
+  if(now-ref>=lim){if(txt.length>=2){diag("stille: ende nach "+Math.round((now-lastVoice)/100)/10+" s");finishUtter(false,"Stille-Grenze")}else if(pzState==="frage"){slClose("nichts gesagt (Paarzeit)");listening=false;resetUtter();diag("paarzeit: schweigen");pzResume()}else closeListen(null,"nichts gesagt (Stille-Grenze)");return}
   const left=listenStart+maxListenMs()-now;if(left<=0){diag("zuhören: höchstdauer");if(txt.length>=2)finishUtter(false,"Höchstdauer");else closeListen(null,"nichts gesagt (Höchstdauer)");return}
   if(left<=10000&&txt.length>=2){if(vis.mode==="listen")setMode("listen",listenLbl());if(!maxWarned){maxWarned=true;setStatus("Noch 10 Sekunden – dann antworte ich");vis.energy=1}}},250);
 setInterval(()=>{if(speaking()||busy||finishing)touch();
@@ -1861,7 +1863,7 @@ let offerStudy=false;
 function studyUpdate(){if(away)return;unlockAudio();ls.set("study:"+today,1);if(!isMain())setPerson(main().name);convo=true;converse("Sag mir die neuen Studien.",{maxTokens:1600,pre:"Moment, ich schau, was es Neues gibt."})}
 // Schnell- oder Expertenmodus automatisch: Fachliches und Längeres -> volles Gedächtnis + Websuche, sonst schlank und sofort
 const EXPERT=/schwindel|schwindlig|müde|erschöpft|kopfweh|kopfschmerz|schmerz|übel|herzrasen|herz|blutdruck|krank|symptom|schlecht geschlafen|nervös|unruhig|studie|forschung|evidenz|wirk|dosis|dosier|wechselwirk|nebenwirk|warum|wieso|weshalb|erklär|analys|recherch|vergleich|supplement|medizin|blutwert|labor|hormon|libido|testo|mitochond|peptid|bioregul|protokoll|gestern|vorgestern|letzte woche|früher|erinner|weißt du noch|plan|konzept|strategie|glut|idee|schreib|formulier|rechne|kalorie|makro|neu(es|igkeit)|aktuell|news/i;
-const modeOf=t=>EXPERT.test(t)||t.split(/\s+/).length>18?"experte":"schnell";
+const modeOf=t=>EXPERT.test(t)||t.split(/\s+/).length>45?"experte":"schnell";   // 2.39: vorher schon ab 18 Wörtern (normales Reden) -> langsam
 function stopAll(){convo=false;listening=false;try{rec&&rec.abort()}catch{}hush();abortCtl?.abort();busy=false;setMode("idle",idleLabel())}
 
 /* ================= Claude ================= */
@@ -2145,22 +2147,24 @@ async function converse(text,{internal=false,maxTokens=700,pre="",mode="experte"
   addLog(internal?"intern":"mensch",text);
   setMode("think","Denkt nach");abortCtl=new AbortController();
   const brief=maxTokens>=1600;let quick=!brief&&mode==="schnell";perf.req=performance.now();
-  let usedTool=false;const tools=toolsFor().filter(t=>!(quick&&t===WEB)).map(t=>t===WEB?{...WEB,max_uses:brief?2:1}:t),msgs=historyMsgs(quick?8:14);let answer="";
+  let usedTool=false;const RESEARCH=/recherch|such (mal|im netz|im internet)|google|aktuell|news|nachrichten|neuigkeit|neueste|studie|forschung|evidenz|wetter|heute (in|im) /i;
+  const tools=toolsFor().filter(t=>!(t===WEB&&(quick||(!brief&&!RESEARCH.test(text))))).map(t=>t===WEB?{...WEB,max_uses:brief?2:1}:t),msgs=historyMsgs(quick?8:12);let answer="";
+  {const l=msgs[msgs.length-2];if(l&&typeof l.content==="string")msgs[msgs.length-2]={role:l.role,content:[{type:"text",text:l.content,cache_control:{type:"ephemeral"}}]}}   // 2.39: bisheriger Verlauf aus dem Zwischenspeicher -> Runde 3, 4, 5 nicht langsamer
   try{
     const sys0=systemPrompt(quick?"schnell":"experte"),P=systemPrompt.parts,
       sys=P?[{type:"text",text:P.stat,cache_control:{type:"ephemeral"}},{type:"text",text:P.dyn}]:brief?[{type:"text",text:sys0,cache_control:{type:"ephemeral"}}]:sys0,model=maxTokens>=1600?S.model:(S.fastModel||S.model),sp=streamSpeaker();if(pre)sp.feed(pre+" ");
-    let retried=false,gotText=false;
+    let retried=false,gotText=false,noThink400=false;
     for(let round=0;round<8;round++){
       let res;
       // Wächter: kommt 30 s lang nichts von Claude, gilt die Verbindung als hängend (statt ewig "denkt nach")
       let wd=0;const arm=()=>{clearTimeout(wd);wd=setTimeout(()=>{timedOut=true;try{abortCtl.abort()}catch{}},30000)};timedOut=false;arm();
-      try{res=await apiStream({model,max_tokens:quick?400:maxTokens,system:sys,tools,messages:msgs,...(quick?{thinking:{type:"disabled"}}:{})},abortCtl.signal,d=>{arm();if(!gotText)chk("answer","ok","Antwort kommt ("+((Date.now()-cT0)/1000).toFixed(1).replace(".",",")+" s)");gotText=true;if(!perf.tok)perf.tok=performance.now();sp.feed(d.replace(/[⟦⟧]/g,""))});clearTimeout(wd)}
+      try{res=await apiStream({model,max_tokens:quick?400:maxTokens,system:sys,tools,messages:msgs,...(!brief&&!noThink400?{thinking:{type:"disabled"}}:{})},abortCtl.signal,d=>{arm();if(!gotText)chk("answer","ok","Antwort kommt ("+((Date.now()-cT0)/1000).toFixed(1).replace(".",",")+" s)");gotText=true;if(!perf.tok)perf.tok=performance.now();sp.feed(d.replace(/[⟦⟧]/g,""))});clearTimeout(wd)}
       catch(e){clearTimeout(wd);
         // kurze Netz- oder Überlastungsfehler: einmal still neu versuchen (nur wenn noch nichts gesprochen wurde)
         const transient=timedOut||!e.status||[500,502,503,504,529].includes(e.status);
         if(transient&&!retried&&!gotText&&!(e.name==="AbortError"&&!timedOut)){retried=true;setMode("think","Verbindung wird wiederholt");if(timedOut)abortCtl=new AbortController();await new Promise(r=>setTimeout(r,1200));round--;continue}
         if(timedOut){const x=new Error("Zeitüberschreitung");x.timeout=true;throw x}
-        if(quick&&e.status===400&&/thinking/i.test(e.message||"")){quick=false;round--;continue}const wi=tools.findIndex(t=>t.name==="web_search");if(e.status===400&&/web_search/i.test(e.message)&&wi>=0){S.noSearch=true;saveSettings();tools.splice(wi,1);continue}throw e}
+        if(!noThink400&&e.status===400&&/thinking/i.test(e.message||"")){noThink400=true;round--;continue}const wi=tools.findIndex(t=>t.name==="web_search");if(e.status===400&&/web_search/i.test(e.message)&&wi>=0){S.noSearch=true;saveSettings();tools.splice(wi,1);continue}throw e}
       if(res.content.some(b=>b.type==="server_tool_use"))usedTool=true;
       answer+=" "+textOf(res);sp.feed(" ");
       if(res.stop_reason==="pause_turn"){msgs.push({role:"assistant",content:res.content});continue}
@@ -2642,7 +2646,7 @@ document.addEventListener("contextmenu",e=>{const t=e.target;if(away||!(t.closes
 document.addEventListener("dragstart",e=>e.preventDefault());
 
 /* ================= Automatische Updates ================= */
-const APP_VERSION="20261126-0630",ATLAS_REL="2.38";
+const APP_VERSION="20261127-0700",ATLAS_REL="2.39";
 async function checkUpdate(){if(S.privat)return;try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VERSION&&S.updConfirm){netShow("Neue Atlas-Version verfügbar.",{btn:true,label:"Aktualisieren",act:()=>location.replace(location.pathname+"?v="+j.v)});return}
   if(j.v&&j.v!==APP_VERSION&&!busy&&!speaking()&&!listening){try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();r&&r.update()}catch{}location.replace(location.pathname+"?v="+encodeURIComponent(j.v))}}catch{}}

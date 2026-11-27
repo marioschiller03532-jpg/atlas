@@ -1,5 +1,11 @@
 # Atlas – Änderungen
 
+## 2.39 (27.11.2026) – Gesprächsablauf: schneller, hört länger zu
+- Ursache „hört nicht weiter zu“: Nach Atlas' Antwort öffnete sich das Mikrofon, aber kam binnen 5,5 s (gezählt ab Aufruf, nicht ab Mikrofon bereit) kein Wort, beendete Atlas das ganze Gespräch. Jetzt: bis zu 12 s Zeit fürs erste Wort, gezählt ab „Mikrofon bereit“. Ende-Erkennung mitten im Reden unverändert.
+- Ursache „wird langsamer“: Ab 18 Wörtern schaltete Atlas auf den Experten-Modus (mehr Verlauf, Nachdenk-Vorlauf des Modells, mögliche Websuche). Bei normalem Erzählen passierte das ab Runde 2–3 ständig. Jetzt: Experten-Modus nur über die Themenliste oder ab 45 Wörtern; in Gesprächsrunden kein Nachdenk-Vorlauf (außer Studien-Briefing); Websuche nur bei echten Recherche-Fragen (aktuell, News, Studie, Wetter, „such mal“); Gesprächsverlauf wird zwischengespeichert (prompt caching), damit spätere Runden nicht langsamer werden.
+- Unverändert: Persönlichkeit, Begrüßung, Sprüche, Frage-Antwort-Spiele, Satz-für-Satz-Sprechen während die Antwort noch entsteht, iPhone-Mikrofon-Logik (zu beim Sprechen, „Du bist dran – tippen“), Unterbrechen per Tipp / „Stopp“ (iPad).
+- Rückfall: /alt/2.38/.
+
 ## 2.38 (26.11.2026) – iPhone: „Du bist dran“ statt Fehlermeldung
 - Meldung „iOS hat den automatischen Mikrofon-Start abgelehnt“: Seit 2.35 schließt Atlas auf dem iPhone das Mikrofon, bevor er spricht (sonst Ton nur aus der Hörmuschel). Danach öffnet er es wieder – aber iOS erlaubt das Öffnen des Mikrofons nur direkt nach einem Tipp. Atlas brach dann das Gespräch mit roter Meldung ab.
 - Jetzt (nur iPhone): keine Fehlermeldung, Anzeige „Du bist dran – tippen“. Ein Tipp irgendwo auf den Bildschirm (nicht nur auf die Kugel) öffnet sofort das Mikrofon, das Gespräch läuft weiter. Knöpfe und Menüs bleiben unberührt.
